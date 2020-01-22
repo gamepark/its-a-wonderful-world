@@ -1,0 +1,9 @@
+# Node dependencies
+node_modules/
+
+# Build folder
+/build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
