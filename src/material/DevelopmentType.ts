@@ -1,5 +1,5 @@
 enum DevelopmentType {
-  Structure = 'STRUCTURE', Vehicle = 'VEHICLE', Research = 'RESEARCH', Project = 'PROJECT', Discovery = 'DISCOVERY'
+  Structure = 'Structure', Vehicle = 'Vehicle', Research = 'Research', Project = 'Project', Discovery = 'Discovery'
 }
 
 export default DevelopmentType

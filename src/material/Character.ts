@@ -1,5 +1,5 @@
 enum Character {
-  Financier = 'FINANCIER', General = 'GENERAL'
+  Financier = 'Financier', General = 'General'
 }
 
 export default Character

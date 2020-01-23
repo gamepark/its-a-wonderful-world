@@ -1,4 +1,4 @@
-type Rules<Game, Move> = {
+type Rules<Game extends Object, Move extends Object | String> = {
   setup(): Game
 
   getPlayerIds(game: Game): string[]

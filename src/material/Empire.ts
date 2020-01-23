@@ -1,9 +1,9 @@
 enum Empire {
-  AztecEmpire = 'Aztec Empire',
-  FederationOfAsia = 'Federation of Asia',
-  NoramStates = 'Noram States',
-  PanafricanUnion = 'Panafrican Union',
-  RepublicOfEurope = 'Republic of Europe'
+  AztecEmpire = 'AztecEmpire',
+  FederationOfAsia = 'FederationOfAsia',
+  NoramStates = 'NoramStates',
+  PanafricanUnion = 'PanafricanUnion',
+  RepublicOfEurope = 'RepublicOfEurope'
 }
 
 export default Empire

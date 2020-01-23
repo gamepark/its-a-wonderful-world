@@ -19,16 +19,16 @@ type Player = {
   hand: Development[]
 }
 
-enum Phase {Draft, Planning, Production}
+enum Phase {Draft = 'Draft', Planning = 'Planning', Production = 'Production'}
 
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorldState, Move> = {
   setup() {
     return {
-      players: shuffle(Object.values(Empire)).slice(2).reduce<PlayersMap>((players, empire) => {
+      players: shuffle(Object.values(Empire)).slice(0, 2).reduce<PlayersMap>((players, empire) => {
         players[empire] = {hand: []}
         return players
       }, {}),
-      deck: shuffle(Developments.flatMap(development => Array(development.numberOfCopies || 1).fill(development))),
+      deck: shuffle(Object.entries(Developments).flatMap(([name, development]) => Array(development.numberOfCopies || 1).fill(name))),
       round: 1,
       phase: Phase.Draft
     }

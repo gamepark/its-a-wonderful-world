@@ -1,5 +1,5 @@
 enum Resource {
-  Materials = 'MATERIALS', Energy = 'ENERGY', Science = 'SCIENCE', Gold = 'GOLD', Exploration = 'EXPLORATION', Krystallium = 'KRYSTALLIUM'
+  Materials = 'Materials', Energy = 'Energy', Science = 'Science', Gold = 'Gold', Exploration = 'Exploration', Krystallium = 'Krystallium'
 }
 
 export default Resource
