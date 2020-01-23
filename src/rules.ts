@@ -9,7 +9,8 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorldState> = {
         players[empireCard.name] = {}
         return players
       }, {}),
-      deck: shuffle(Developments.flatMap(development => Array(development.numberOfCopies || 1).fill(development)))
+      deck: shuffle(Developments.flatMap(development => Array(development.numberOfCopies || 1).fill(development))),
+      round: 1
     }
   },
 
