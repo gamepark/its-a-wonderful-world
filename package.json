@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/game.js",
-  "files": ["dist/game.js", "dist/game.d.ts", "dist/rules.js", "dist/rules.d.ts"],
+  "files": [
+    "dist/game.js",
+    "dist/game.d.ts",
+    "dist/rules.js",
+    "dist/rules.d.ts"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production"
@@ -12,7 +17,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react": "^16.12.0"
+    "i18next": "^19.0.3",
+    "react": "^16.12.0",
+    "react-i18next": "^11.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.0",
