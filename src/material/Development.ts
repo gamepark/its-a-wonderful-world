@@ -1,6 +1,6 @@
-type Empire = {
-  name: string
-}
+import Character from './Character'
+import DevelopmentType from './DevelopmentType'
+import Resource from './Resource'
 
 type Development = {
   name: string,
@@ -13,14 +13,4 @@ type Development = {
   numberOfCopies?: number
 }
 
-declare enum DevelopmentType {
-  Structure = 'STRUCTURE', Vehicle = 'VEHICLE', Research = 'RESEARCH', Project = 'PROJECT', Discovery = 'DISCOVERY'
-}
-
-declare enum Resource {
-  Materials = 'MATERIALS', Energy = 'ENERGY', Science = 'SCIENCE', Gold = 'GOLD', Exploration = 'EXPLORATION', Krystallium = 'KRYSTALLIUM'
-}
-
-declare enum Character {
-  Financier = 'FINANCIER', General = 'GENERAL'
-}
+export default Development
