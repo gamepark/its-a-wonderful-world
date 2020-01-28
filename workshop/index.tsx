@@ -1,8 +1,6 @@
 import React from 'react'
-import {render} from 'react-dom'
+import {renderWorkshop} from 'tabletop-game-workshop'
 import ItsAWonderfulWorld from '../src/game'
+import ItsAWonderfulWorldRules from '../src/rules'
 
-const App = () => (
-  <ItsAWonderfulWorld/>
-)
-render(<App/>, document.getElementById('root'))
+renderWorkshop(ItsAWonderfulWorld, ItsAWonderfulWorldRules, 'its-a-wonderful-world')

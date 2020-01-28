@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    "module": "es6",
-    "target": "es6",
+    "module": "esnext",
+    "target": "esnext",
     "lib": [
       "es2019", "dom"
     ],
@@ -10,6 +10,7 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "declaration": true
+    "declaration": true,
+    "moduleResolution": "node"
   }
 }

@@ -1,5 +1,6 @@
 import Character from './Character'
 import Development from './Development'
+import DevelopmentAnatomy from './DevelopmentAnatomy'
 import DevelopmentType from './DevelopmentType'
 import Resource from './Resource'
 
@@ -7,376 +8,337 @@ const {Energy, Materials, Science, Gold, Exploration, Krystallium} = Resource
 const {Structure, Vehicle, Research, Project, Discovery} = DevelopmentType
 const {Financier, General} = Character
 
-export const FinancialCenter: Development = {
-  name: 'Financial center',
+const DevelopmentsAnatomy = new Map<Development, DevelopmentAnatomy>()
+
+DevelopmentsAnatomy.set(Development.FinancialCenter, {
   type: Structure,
   constructionCost: {[Materials]: 4, [Energy]: 1},
   constructionBonus: Financier,
   production: {[Gold]: 2},
   recyclingBonus: Gold,
   numberOfCopies: 5
-}
+})
 
-export const IndustrialComplex: Development = {
-  name: 'Industrial complex',
+DevelopmentsAnatomy.set(Development.IndustrialComplex, {
   type: Structure,
   constructionCost: {[Materials]: 3, [Energy]: 1},
   constructionBonus: Financier,
   production: {[Materials]: 1, [Gold]: 1},
   recyclingBonus: Gold,
   numberOfCopies: 6
-}
+})
 
-export const MilitaryBase: Development = {
-  name: 'Military base',
+DevelopmentsAnatomy.set(Development.MilitaryBase, {
   type: Structure,
   constructionCost: {[Materials]: 3, [Energy]: 1},
   constructionBonus: General,
   production: {[Materials]: 1, [Science]: 1},
   recyclingBonus: Materials,
   numberOfCopies: 6
-}
+})
 
-export const NuclearPlant: Development = {
-  name: 'Nuclear plant',
+DevelopmentsAnatomy.set(Development.NuclearPlant, {
   type: Structure,
   constructionCost: {[Materials]: 4, [Science]: 1},
   production: {[Energy]: 3},
   recyclingBonus: Energy,
   numberOfCopies: 5
-}
+})
 
-export const OffshoreOilRig: Development = {
-  name: 'Offshore oil rig',
+DevelopmentsAnatomy.set(Development.OffshoreOilRig, {
   type: Structure,
   constructionCost: {[Materials]: 3, [Exploration]: 1},
   constructionBonus: Financier,
   production: {[Energy]: 1, [Gold]: 1},
   recyclingBonus: Energy,
   numberOfCopies: 5
-}
+})
 
-export const RecyclingPlant: Development = {
-  name: 'Recycling plant',
+DevelopmentsAnatomy.set(Development.RecyclingPlant, {
   type: Structure,
   constructionCost: {[Materials]: 2},
   production: {[Materials]: 2},
   recyclingBonus: Materials,
   numberOfCopies: 7
-}
+})
 
-export const ResearchCenter: Development = {
-  name: 'Research center',
+DevelopmentsAnatomy.set(Development.ResearchCenter, {
   type: Structure,
   constructionCost: {[Materials]: 3, [Energy]: 1},
   production: {[Science]: 2},
   recyclingBonus: Science,
   numberOfCopies: 7
-}
+})
 
-export const TransportationNetwork: Development = {
-  name: 'Transportation network',
+DevelopmentsAnatomy.set(Development.TransportationNetwork, {
   type: Structure,
   constructionCost: {[Materials]: 3},
   victoryPoints: {[Vehicle]: 1},
   recyclingBonus: Materials,
   numberOfCopies: 2
-}
+})
 
-export const WindTurbines: Development = {
-  name: 'Wind turbines',
+DevelopmentsAnatomy.set(Development.WindTurbines, {
   type: Structure,
   constructionCost: {[Materials]: 2},
   production: Energy,
   recyclingBonus: Energy,
   numberOfCopies: 7
-}
+})
 
-export const AirborneLaboratory: Development = {
-  name: 'Airborne laboratory',
+DevelopmentsAnatomy.set(Development.AirborneLaboratory, {
   type: Vehicle,
   constructionCost: {[Energy]: 3},
   production: {[Science]: 1, [Exploration]: 1},
   recyclingBonus: Science,
   numberOfCopies: 3
-}
+})
 
-export const AircraftCarrier: Development = {
-  name: 'Aircraft carrier',
+DevelopmentsAnatomy.set(Development.AircraftCarrier, {
   type: Vehicle,
   constructionCost: {[Materials]: 3, [Energy]: 4},
   constructionBonus: {[General]: 2},
   production: {[Exploration]: Vehicle},
   recyclingBonus: Materials
-}
+})
 
-export const Icebreaker: Development = {
-  name: 'Icebreaker',
+DevelopmentsAnatomy.set(Development.Icebreaker, {
   type: Vehicle,
   constructionCost: {[Energy]: 3, [Science]: 1},
   production: {[Exploration]: 2},
   recyclingBonus: Exploration,
   numberOfCopies: 4
-}
+})
 
-export const Juggernaut: Development = {
-  name: 'Juggernaut',
+DevelopmentsAnatomy.set(Development.Juggernaut, {
   type: Vehicle,
   constructionCost: {[Materials]: 3, [Energy]: 3, [Krystallium]: 1},
   constructionBonus: {[General]: 2},
   production: {[Exploration]: 2},
   victoryPoints: {[Vehicle]: 1},
   recyclingBonus: Materials
-}
+})
 
-export const MegaDrill: Development = {
-  name: 'Mega-drill',
+DevelopmentsAnatomy.set(Development.MegaDrill, {
   type: Vehicle,
   constructionCost: {[Materials]: 1, [Energy]: 2},
   production: {[Materials]: 1, [Exploration]: 1},
   recyclingBonus: Materials,
   numberOfCopies: 4
-}
+})
 
-export const SaucerSquadron: Development = {
-  name: 'Saucer squadron',
+DevelopmentsAnatomy.set(Development.SaucerSquadron, {
   type: Vehicle,
   constructionCost: {[Energy]: 3, [Science]: 2},
   production: {[Exploration]: 3},
   recyclingBonus: Science,
   numberOfCopies: 2
-}
+})
 
-export const Submarine: Development = {
-  name: 'Submarine',
+DevelopmentsAnatomy.set(Development.Submarine, {
   type: Vehicle,
   constructionCost: {[Materials]: 2, [Energy]: 3},
   constructionBonus: General,
   production: {[Exploration]: 2},
   recyclingBonus: Materials,
   numberOfCopies: 3
-}
+})
 
-export const TankDivision: Development = {
-  name: 'Tank division',
+DevelopmentsAnatomy.set(Development.TankDivision, {
   type: Vehicle,
   constructionCost: {[Materials]: 1, [Energy]: 2},
   constructionBonus: General,
   production: Exploration,
   recyclingBonus: Materials,
   numberOfCopies: 7
-}
+})
 
-export const Zeppelin: Development = {
-  name: 'Zeppelin',
+DevelopmentsAnatomy.set(Development.Zeppelin, {
   type: Vehicle,
   constructionCost: {[Energy]: 2},
   production: Exploration,
   recyclingBonus: Exploration,
   numberOfCopies: 6
-}
+})
 
-export const Aquaculture: Development = {
-  name: 'Aquaculture',
+DevelopmentsAnatomy.set(Development.Aquaculture, {
   type: Research,
   constructionCost: {[Science]: 4, [Gold]: 2},
   constructionBonus: Financier,
   victoryPoints: {[Financier]: 1},
   recyclingBonus: Science
-}
+})
 
-export const BionicCrafts: Development = {
-  name: 'Bionic crafts',
+DevelopmentsAnatomy.set(Development.BionicCrafts, {
   type: Research,
   constructionCost: {[Science]: 5},
   constructionBonus: General,
   production: {[Materials]: 2},
   victoryPoints: 4,
   recyclingBonus: Materials
-}
+})
 
-export const ClimateControl: Development = {
-  name: 'Climate control',
+DevelopmentsAnatomy.set(Development.ClimateControl, {
   type: Research,
   constructionCost: {[Science]: 5},
   production: {[Energy]: 2, [Gold]: 1},
   victoryPoints: 2,
   recyclingBonus: Energy
-}
+})
 
-export const Cryopreservation: Development = {
-  name: 'Cryopreservation',
+DevelopmentsAnatomy.set(Development.Cryopreservation, {
   type: Research,
   constructionCost: {[Science]: 7},
   constructionBonus: Financier,
   victoryPoints: {[Financier]: 1},
   recyclingBonus: Gold
-}
+})
 
-export const GeneticUpgrades: Development = {
-  name: 'Genetic upgrades',
+DevelopmentsAnatomy.set(Development.GeneticUpgrades, {
   type: Research,
   constructionCost: {[Science]: 4},
   constructionBonus: {[Financier]: 2},
   victoryPoints: 3,
   recyclingBonus: Science
-}
+})
 
-export const GravityInverter: Development = {
-  name: 'Gravity inverter',
+DevelopmentsAnatomy.set(Development.GravityInverter, {
   type: Research,
   constructionCost: {[Energy]: 1, [Science]: 4, [Krystallium]: 1},
   constructionBonus: Financier,
   victoryPoints: {[Project]: 2},
   recyclingBonus: Science
-}
+})
 
-export const HumanCloning: Development = {
-  name: 'Human cloning',
+DevelopmentsAnatomy.set(Development.HumanCloning, {
   type: Research,
   constructionCost: {[Science]: 2, [Gold]: 1},
   constructionBonus: Financier,
   production: Gold,
   victoryPoints: 1,
   recyclingBonus: Gold
-}
+})
 
-export const MegaBomb: Development = {
-  name: 'Mega-bomb',
+DevelopmentsAnatomy.set(Development.MegaBomb, {
   type: Research,
   constructionCost: {[Energy]: 2, [Science]: 2},
   constructionBonus: {[General]: 2},
   victoryPoints: 3,
   recyclingBonus: Energy
-}
+})
 
-export const Neuroscience: Development = {
-  name: 'Neuroscience',
+DevelopmentsAnatomy.set(Development.Neuroscience, {
   type: Research,
   constructionCost: {[Science]: 3},
   production: {[Science]: Research},
   victoryPoints: 1,
   recyclingBonus: Science
-}
+})
 
-export const QuantumGenerator: Development = {
-  name: 'Quantum generator',
+DevelopmentsAnatomy.set(Development.QuantumGenerator, {
   type: Research,
   constructionCost: {[Science]: 5},
   production: {[Energy]: 3},
   victoryPoints: {[Vehicle]: 1},
   recyclingBonus: Energy
-}
+})
 
-export const RobotAssistants: Development = {
-  name: 'Robot assistants',
+DevelopmentsAnatomy.set(Development.RobotAssistants, {
   type: Research,
   constructionCost: {[Science]: 3},
   production: {[Materials]: Structure},
   victoryPoints: 1,
   recyclingBonus: Materials
-}
+})
 
-export const RoboticAnimals: Development = {
-  name: 'Robotic animals',
+DevelopmentsAnatomy.set(Development.RoboticAnimals, {
   type: Research,
   constructionCost: {[Energy]: 1, [Science]: 2},
   constructionBonus: General,
   production: Materials,
   victoryPoints: 2,
   recyclingBonus: Energy
-}
+})
 
-export const Satellites: Development = {
-  name: 'Satellites',
+DevelopmentsAnatomy.set(Development.Satellites, {
   type: Research,
   constructionCost: {[Energy]: 2, [Science]: 4},
   constructionBonus: General,
   production: {[Exploration]: 2},
   victoryPoints: 3,
   recyclingBonus: Exploration
-}
+})
 
-export const SecurityAutomatons: Development = {
-  name: 'Security automatons',
+DevelopmentsAnatomy.set(Development.SecurityAutomatons, {
   type: Research,
   constructionCost: {[Science]: 4, [Gold]: 1},
   victoryPoints: {[General]: 1},
   recyclingBonus: Gold
-}
+})
 
-export const SuperSoldiers: Development = {
-  name: 'Super-soldiers',
+DevelopmentsAnatomy.set(Development.SuperSoldiers, {
   type: Research,
   constructionCost: {[Science]: 7},
   constructionBonus: General,
   victoryPoints: {[General]: 1},
   recyclingBonus: Exploration
-}
+})
 
-export const SuperSonar: Development = {
-  name: 'Super-sonar',
+DevelopmentsAnatomy.set(Development.SuperSonar, {
   type: Research,
   constructionCost: {[Science]: 4},
   production: {[Exploration]: Vehicle},
   victoryPoints: 1,
   recyclingBonus: Exploration
-}
+})
 
-export const Supercomputer: Development = {
-  name: 'Supercomputer',
+DevelopmentsAnatomy.set(Development.Supercomputer, {
   type: Research,
   constructionCost: {[Science]: 4},
   production: Science,
   victoryPoints: {[Vehicle]: 1},
   recyclingBonus: Science
-}
+})
 
-export const TimeTravel: Development = {
-  name: 'Time travel',
+DevelopmentsAnatomy.set(Development.TimeTravel, {
   type: Research,
   constructionCost: {[Science]: 5, [Krystallium]: 3},
   victoryPoints: 15,
   recyclingBonus: Exploration
-}
+})
 
-export const Transmutation: Development = {
-  name: 'Transmutation',
+DevelopmentsAnatomy.set(Development.Transmutation, {
   type: Research,
   constructionCost: {[Science]: 3, [Gold]: 2},
   constructionBonus: Krystallium,
   production: {[Gold]: 3},
   victoryPoints: 1,
   recyclingBonus: Gold
-}
+})
 
-export const UniversalVaccine: Development = {
-  name: 'Universal vaccine',
+DevelopmentsAnatomy.set(Development.UniversalVaccine, {
   type: Research,
   constructionCost: {[Science]: 3},
   victoryPoints: {[Project]: 1},
   recyclingBonus: Gold
-}
+})
 
-export const UnknownTechnology: Development = {
-  name: 'Unknown technology',
+DevelopmentsAnatomy.set(Development.UnknownTechnology, {
   type: Research,
   constructionCost: {[Science]: 7, [Krystallium]: 1},
   victoryPoints: {[Research]: 3},
   recyclingBonus: Science
-}
+})
 
-export const VirtualReality: Development = {
-  name: 'Virtual reality',
+DevelopmentsAnatomy.set(Development.VirtualReality, {
   type: Research,
   constructionCost: {[Science]: 5},
   production: {[Gold]: Research},
   victoryPoints: 2,
   recyclingBonus: Gold
-}
+})
 
-export const CasinoCity: Development = {
-  name: 'Casino city',
+DevelopmentsAnatomy.set(Development.CasinoCity, {
   type: Project,
   constructionCost: {[Energy]: 3, [Gold]: 4},
   constructionBonus: Financier,
@@ -384,37 +346,33 @@ export const CasinoCity: Development = {
   victoryPoints: {[Financier]: 1},
   recyclingBonus: Gold,
   numberOfCopies: 2
-}
+})
 
-export const EspionageAgency: Development = {
-  name: 'Espionage agency',
+DevelopmentsAnatomy.set(Development.EspionageAgency, {
   type: Project,
   constructionCost: {[Energy]: 2, [Gold]: 2},
   production: {[Exploration]: 2},
   victoryPoints: 1,
   recyclingBonus: Exploration,
   numberOfCopies: 2
-}
+})
 
-export const GiantDam: Development = {
-  name: 'Giant dam',
+DevelopmentsAnatomy.set(Development.GiantDam, {
   type: Project,
   constructionCost: {[Materials]: 3, [Gold]: 2},
   production: {[Energy]: 4},
   victoryPoints: 1,
   recyclingBonus: Energy
-}
+})
 
-export const GiantTower: Development = {
-  name: 'Giant tower',
+DevelopmentsAnatomy.set(Development.GiantTower, {
   type: Project,
   constructionCost: {[Materials]: 2, [Gold]: 3, [Financier]: 1},
   victoryPoints: 10,
   recyclingBonus: Gold
-}
+})
 
-export const HarborZone: Development = {
-  name: 'Harbor zone',
+DevelopmentsAnatomy.set(Development.HarborZone, {
   type: Project,
   constructionCost: {[Gold]: 5},
   constructionBonus: {[Financier]: 2},
@@ -422,56 +380,50 @@ export const HarborZone: Development = {
   victoryPoints: 2,
   recyclingBonus: Gold,
   numberOfCopies: 2
-}
+})
 
-export const LunarBase: Development = {
-  name: 'Lunar base',
+DevelopmentsAnatomy.set(Development.LunarBase, {
   type: Project,
   constructionCost: {[Energy]: 2, [Science]: 2, [Gold]: 2, [Krystallium]: 1},
   constructionBonus: {[General]: 2},
   victoryPoints: 10,
   recyclingBonus: Exploration
-}
+})
 
-export const MagneticTrain: Development = {
-  name: 'Magnetic train',
+DevelopmentsAnatomy.set(Development.MagneticTrain, {
   type: Project,
   constructionCost: {[Energy]: 1, [Science]: 1, [Gold]: 3},
   constructionBonus: {[Financier]: 2},
   production: {[Gold]: Structure},
   victoryPoints: 2,
   recyclingBonus: Gold
-}
+})
 
-export const Museum: Development = {
-  name: 'Museum',
+DevelopmentsAnatomy.set(Development.Museum, {
   type: Project,
   constructionCost: {[Gold]: 3},
   victoryPoints: {[Discovery]: 2},
   recyclingBonus: Exploration,
   numberOfCopies: 2
-}
+})
 
-export const NationalMonument: Development = {
-  name: 'National monument',
+DevelopmentsAnatomy.set(Development.NationalMonument, {
   type: Project,
   constructionCost: {[Materials]: 5, [Gold]: 3},
   victoryPoints: {[Project]: 2},
   recyclingBonus: Gold
-}
+})
 
-export const PolarBase: Development = {
-  name: 'Polar base',
+DevelopmentsAnatomy.set(Development.PolarBase, {
   type: Project,
   constructionCost: {[Energy]: 3, [Gold]: 4},
   constructionBonus: General,
   production: {[Exploration]: 3},
   victoryPoints: {[Project]: 2},
   recyclingBonus: Exploration
-}
+})
 
-export const PropagandaCenter: Development = {
-  name: 'Propaganda center',
+DevelopmentsAnatomy.set(Development.PropagandaCenter, {
   type: Project,
   constructionCost: {[Gold]: 3},
   constructionBonus: General,
@@ -479,10 +431,9 @@ export const PropagandaCenter: Development = {
   victoryPoints: 1,
   recyclingBonus: Gold,
   numberOfCopies: 2
-}
+})
 
-export const SecretLaboratory: Development = {
-  name: 'Secret laboratory',
+DevelopmentsAnatomy.set(Development.SecretLaboratory, {
   type: Project,
   constructionCost: {[Materials]: 2, [Gold]: 3},
   constructionBonus: Krystallium,
@@ -490,37 +441,33 @@ export const SecretLaboratory: Development = {
   victoryPoints: {[Research]: 1},
   recyclingBonus: Science,
   numberOfCopies: 2
-}
+})
 
-export const SecretSociety: Development = {
-  name: 'Secret society',
+DevelopmentsAnatomy.set(Development.SecretSociety, {
   type: Project,
   constructionCost: {[Gold]: 3, [Krystallium]: 1},
   victoryPoints: {[Financier]: 1},
   recyclingBonus: Gold,
   numberOfCopies: 2
-}
+})
 
-export const SolarCannon: Development = {
-  name: 'Solar cannon',
+DevelopmentsAnatomy.set(Development.SolarCannon, {
   type: Project,
   constructionCost: {[Energy]: 2, [Science]: 1, [Gold]: 3},
   constructionBonus: General,
   victoryPoints: {[General]: 1},
   recyclingBonus: Energy
-}
+})
 
-export const SpaceElevator: Development = {
-  name: 'Space elevator',
+DevelopmentsAnatomy.set(Development.SpaceElevator, {
   type: Project,
   constructionCost: {[Energy]: 3, [Science]: 1, [Gold]: 2},
   constructionBonus: Financier,
   victoryPoints: {[Financier]: 1},
   recyclingBonus: Energy
-}
+})
 
-export const UndergroundCity: Development = {
-  name: 'Underground city',
+DevelopmentsAnatomy.set(Development.UndergroundCity, {
   type: Project,
   constructionCost: {[Materials]: 3, [Gold]: 3},
   constructionBonus: Krystallium,
@@ -528,204 +475,175 @@ export const UndergroundCity: Development = {
   victoryPoints: 3,
   recyclingBonus: Energy,
   numberOfCopies: 2
-}
+})
 
-export const UnderwaterCity: Development = {
-  name: 'Underwater city',
+DevelopmentsAnatomy.set(Development.UnderwaterCity, {
   type: Project,
   constructionCost: {[Energy]: 2, [Science]: 2, [Gold]: 2},
   production: {[Science]: 1, [Exploration]: 2},
   victoryPoints: 3,
   recyclingBonus: Exploration,
   numberOfCopies: 2
-}
+})
 
-export const UniversalExposition: Development = {
-  name: 'Universal exposition',
+DevelopmentsAnatomy.set(Development.UniversalExposition, {
   type: Project,
   constructionCost: {[Gold]: 3, [Financier]: 2},
   victoryPoints: {[Research]: 3},
   recyclingBonus: Gold
-}
+})
 
-export const University: Development = {
-  name: 'University',
+DevelopmentsAnatomy.set(Development.University, {
   type: Project,
   constructionCost: {[Science]: 1, [Gold]: 2},
   production: {[Science]: Project},
   victoryPoints: 2,
   recyclingBonus: Science
-}
+})
 
-export const WorldCongress: Development = {
-  name: 'World congress',
+DevelopmentsAnatomy.set(Development.WorldCongress, {
   type: Project,
   constructionCost: {[Gold]: 6, [Financier]: 2},
   victoryPoints: {[Project]: 3},
   recyclingBonus: Gold
-}
+})
 
-export const AlexandersTomb: Development = {
-  name: 'Alexander’s Tomb',
+DevelopmentsAnatomy.set(Development.AlexandersTomb, {
   type: Discovery,
   constructionCost: {[Exploration]: 7},
   constructionBonus: {[General]: 2},
   victoryPoints: 10,
   recyclingBonus: Gold
-}
+})
 
-export const AncientAstronauts: Development = {
-  name: 'Ancient astronauts',
+DevelopmentsAnatomy.set(Development.AncientAstronauts, {
   type: Discovery,
   constructionCost: {[Exploration]: 6, [General]: 1},
   constructionBonus: {[Krystallium]: 2},
   production: {[Science]: Discovery},
   victoryPoints: 10,
   recyclingBonus: Science
-}
+})
 
-export const ArkOfTheCovenant: Development = {
-  name: 'Ark of the Covenant',
+DevelopmentsAnatomy.set(Development.ArkOfTheCovenant, {
   type: Discovery,
   constructionCost: {[Exploration]: 4},
   constructionBonus: Krystallium,
   victoryPoints: 5,
   recyclingBonus: Exploration
-}
+})
 
-export const Atlantis: Development = {
-  name: 'Atlantis',
+DevelopmentsAnatomy.set(Development.Atlantis, {
   type: Discovery,
   constructionCost: {[Exploration]: 7, [Krystallium]: 1},
   victoryPoints: {[General]: 2},
   recyclingBonus: Gold
-}
+})
 
-export const BermudaTriangle: Development = {
-  name: 'Bermuda triangle',
+DevelopmentsAnatomy.set(Development.BermudaTriangle, {
   type: Discovery,
   constructionCost: {[Exploration]: 4},
   constructionBonus: Krystallium,
   production: Science,
   victoryPoints: 4,
   recyclingBonus: Science
-}
+})
 
-export const BlackBeardsTreasure: Development = {
-  name: 'BlackBeard’s treasure',
+DevelopmentsAnatomy.set(Development.BlackBeardsTreasure, {
   type: Discovery,
   constructionCost: {[Exploration]: 3},
   production: {[Gold]: 1, [Exploration]: 1},
   victoryPoints: 2,
   recyclingBonus: Gold
-}
+})
 
-export const CenterOfTheEarth: Development = {
-  name: 'Center of the Earth',
+DevelopmentsAnatomy.set(Development.CenterOfTheEarth, {
   type: Discovery,
   constructionCost: {[Exploration]: 5, [General]: 2},
   victoryPoints: 15,
   recyclingBonus: Exploration
-}
+})
 
-export const CitiesOfGold: Development = {
-  name: 'Cities of gold',
+DevelopmentsAnatomy.set(Development.CitiesOfGold, {
   type: Discovery,
   constructionCost: {[Exploration]: 4},
   production: {[Gold]: 3},
   victoryPoints: 3,
   recyclingBonus: Gold
-}
+})
 
-export const CityOfAgartha: Development = {
-  name: 'City of Agartha',
+DevelopmentsAnatomy.set(Development.CityOfAgartha, {
   type: Discovery,
   constructionCost: {[Exploration]: 4, [Krystallium]: 1},
   production: {[Exploration]: 2},
   victoryPoints: {[General]: 1},
   recyclingBonus: Exploration
-}
+})
 
-export const FountainOfYouth: Development = {
-  name: 'Fountain of youth',
+DevelopmentsAnatomy.set(Development.FountainOfYouth, {
   type: Discovery,
   constructionCost: {[Exploration]: 7},
   constructionBonus: {[Krystallium]: 3},
   victoryPoints: {[General]: 1},
   recyclingBonus: Energy
-}
+})
 
-export const GardensOfTheHesperides: Development = {
-  name: 'Gardens of the Hesperides',
+DevelopmentsAnatomy.set(Development.GardensOfTheHesperides, {
   type: Discovery,
   constructionCost: {[Exploration]: 5},
   victoryPoints: {[Project]: 2},
   recyclingBonus: Exploration
-}
+})
 
-export const IslandOfAvalon: Development = {
-  name: 'Island of Avalon',
+DevelopmentsAnatomy.set(Development.IslandOfAvalon, {
   type: Discovery,
   constructionCost: {[Exploration]: 5},
   production: Science,
   victoryPoints: 7,
   recyclingBonus: Science
-}
+})
 
-export const KingSolomonsMines: Development = {
-  name: 'King’ Solomon’s Mines',
+DevelopmentsAnatomy.set(Development.KingSolomonsMines, {
   type: Discovery,
   constructionCost: {[Exploration]: 4},
   production: {[Gold]: Structure},
   victoryPoints: 2,
   recyclingBonus: Gold
-}
+})
 
-export const LostContinentOfMu: Development = {
-  name: 'Lost continent of Mu',
+DevelopmentsAnatomy.set(Development.LostContinentOfMu, {
   type: Discovery,
   constructionCost: {[Exploration]: 6},
   constructionBonus: {[Krystallium]: 2},
   production: Gold,
   victoryPoints: {[Discovery]: 2},
   recyclingBonus: Gold
-}
+})
 
-export const ParallelDimension: Development = {
-  name: 'Parallel dimension',
+DevelopmentsAnatomy.set(Development.ParallelDimension, {
   type: Discovery,
   constructionCost: {[Science]: 3, [Exploration]: 4, [General]: 1},
   constructionBonus: {[Krystallium]: 3},
   victoryPoints: {[Research]: 3},
   recyclingBonus: Exploration
-}
+})
 
-export const Roswell: Development = {
-  name: 'Roswell',
+DevelopmentsAnatomy.set(Development.Roswell, {
   type: Discovery,
   constructionCost: {[Exploration]: 6},
   constructionBonus: General,
   production: Science,
   victoryPoints: {[General]: 1},
   recyclingBonus: Science
-}
+})
 
-export const TreasureOfTheTemplars: Development = {
-  name: 'Treasure of the Templars',
+DevelopmentsAnatomy.set(Development.TreasureOfTheTemplars, {
   type: Discovery,
   constructionCost: {[Exploration]: 5},
   constructionBonus: {[Krystallium]: 2},
   production: {[Gold]: 2},
   victoryPoints: 3,
   recyclingBonus: Gold
-}
+})
 
-export default {FinancialCenter, IndustrialComplex, MilitaryBase, NuclearPlant, OffshoreOilRig, RecyclingPlant, ResearchCenter, TransportationNetwork,
-  WindTurbines, AirborneLaboratory, AircraftCarrier, Icebreaker, Juggernaut, MegaDrill, SaucerSquadron, Submarine, TankDivision, Zeppelin,
-  Aquaculture, BionicCrafts, ClimateControl, Cryopreservation, GeneticUpgrades, GravityInverter, HumanCloning, MegaBomb, Neuroscience, QuantumGenerator,
-  RobotAssistants, RoboticAnimals, Satellites, SecurityAutomatons, SuperSoldiers, SuperSonar, Supercomputer, TimeTravel, Transmutation, UniversalVaccine,
-  UnknownTechnology, VirtualReality, CasinoCity, EspionageAgency, GiantDam, GiantTower, HarborZone, LunarBase, MagneticTrain, Museum, NationalMonument,
-  PolarBase, PropagandaCenter, SecretLaboratory, SecretSociety, SolarCannon, SpaceElevator, UndergroundCity, UnderwaterCity, UniversalExposition, University,
-  WorldCongress, AlexandersTomb, AncientAstronauts, ArkOfTheCovenant, Atlantis, BermudaTriangle, BlackBeardsTreasure, CenterOfTheEarth, CitiesOfGold,
-  CityOfAgartha, FountainOfYouth, GardensOfTheHesperides, IslandOfAvalon, KingSolomonsMines, LostContinentOfMu, ParallelDimension, Roswell,
-  TreasureOfTheTemplars}
+export default DevelopmentsAnatomy
