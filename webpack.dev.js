@@ -13,5 +13,14 @@ module.exports = merge(commonConfig, {
   plugins: [new HtmlWebpackPlugin({
     template: path.join(__dirname, 'workshop/index.html'),
     filename: './index.html'
-  })]
+  })],
+  module: {
+    rules: [
+      {
+        test: /\.(jpe?g|png|svg|gif|ico|webp)$/,
+        exclude: /node_modules/,
+        loader: 'file-loader'
+      }
+    ]
+  }
 })

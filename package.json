@@ -2,22 +2,18 @@
   "name": "its-a-wonderful-world",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/game.js",
-  "files": [
-    "dist/game.js",
-    "dist/game.d.ts",
-    "dist/rules.js",
-    "dist/rules.d.ts"
-  ],
+  "files": ["dist"],
   "scripts": {
     "dev": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "webpack --config webpack.build.js"
+    "build": "webpack --config webpack.build.js && tsc --emitDeclarationOnly"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@emotion/core": "^10.0.27",
+    "@emotion/core": "^10.0.27"
+  },
+  "peerDependencies": {
     "i18next": "^19.0.3",
     "react": "^16.12.0",
     "react-i18next": "^11.3.1"
@@ -31,6 +27,8 @@
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "file-loader": "^5.0.2",
     "html-webpack-plugin": "^3.2.0",
     "react-dom": "^16.12.0",
     "tabletop-game-workshop": "^1.0.0",

@@ -20,7 +20,6 @@ const empireFaceA = {
 const EmpireCard: FunctionComponent<{ empire: Empire, position: SerializedStyles }> = ({empire, position}) => {
   return (
     <div css={css`
-      position: absolute;
       ${position};
       height: ${cardWidth * 13 / 20}vh;
       width: ${cardWidth}vh;

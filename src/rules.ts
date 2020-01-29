@@ -38,10 +38,10 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire> = {
   },
 
   getView(game, playerId) {
-    game.deck = game.deck.map(() => ({}))
+    game.deck = game.deck.map(() => null)
     Object.entries(game.players).forEach(([key, player]) => {
       if (key !== playerId) {
-        player.hand = player.hand.map(() => ({}))
+        player.hand = player.hand.map(() => null)
       }
     })
     return game
