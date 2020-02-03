@@ -1,6 +1,9 @@
-import Move from './Move'
 import MoveType from './MoveType'
 
-const DealDevelopmentCards: Move = {type: MoveType.DealDevelopmentCards}
+type DealDevelopmentCards = { type: typeof MoveType.DealDevelopmentCards }
 
 export default DealDevelopmentCards
+
+export function dealDevelopmentCards(): DealDevelopmentCards {
+  return {type: MoveType.DealDevelopmentCards}
+}

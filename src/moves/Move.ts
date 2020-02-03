@@ -1,5 +1,6 @@
-import MoveType from './MoveType'
+import ChooseDevelopmentCard from './ChooseDevelopmentCard'
+import DealDevelopmentCards from './DealDevelopmentCards'
 
-type Move = { type: MoveType }
+type Move = DealDevelopmentCards | ChooseDevelopmentCard
 
 export default Move

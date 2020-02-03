@@ -13,7 +13,8 @@ export default ItsAWonderfulWorld
 export type PlayersMap = { [key in Empire]?: Player }
 
 export type Player = {
-  hand: Development[]
+  hand: Development[],
+  chosenCard?: Development | true
 }
 
 export enum Phase {Draft = 'Draft', Planning = 'Planning', Production = 'Production'}

@@ -3,11 +3,13 @@ import ItsAWonderfulWorld, {Phase, PlayersMap} from './ItsAWonderfulWorld'
 import Development from './material/Development'
 import DevelopmentsAnatomy from './material/Developments'
 import Empire from './material/Empire'
-import DealDevelopmentCards from './moves/DealDevelopmentCards'
+import {chooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
+import {dealDevelopmentCards} from './moves/DealDevelopmentCards'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import shuffle from './util/shuffle'
 
+// noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire> = {
   setup() {
     return {
@@ -27,13 +29,26 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire> = {
 
   getAutomaticMove(game) {
     if (game.phase === Phase.Draft && Object.values(game.players).every(player => !player.hand.length)) {
-      return DealDevelopmentCards
+      return dealDevelopmentCards()
     }
   },
 
+  getLegalMoves(game, empire) {
+    if (game.phase === Phase.Draft && !game.players[empire].chosenCard) {
+      return game.players[empire].hand.map((card, index) => chooseDevelopmentCard(empire, index))
+    }
+    return []
+  },
+
   play(move, game) {
-    if (move.type === MoveType.DealDevelopmentCards) {
-      Object.values(game.players).forEach(player => player.hand = game.deck.splice(0, 10))
+    switch (move.type) {
+      case MoveType.DealDevelopmentCards:
+        Object.values(game.players).forEach(player => player.hand = game.deck.splice(0, 10))
+        break
+      case MoveType.ChooseDevelopmentCard:
+        const player = game.players[move.playerId]
+        player.chosenCard = player.hand.splice(move.cardIndex, 1)[0]
+        break
     }
   },
 
@@ -42,6 +57,9 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire> = {
     Object.entries(game.players).forEach(([key, player]) => {
       if (key !== playerId) {
         player.hand = player.hand.map(() => null)
+        if (player.chosenCard) {
+          player.chosenCard = true
+        }
       }
     })
     return game
