@@ -15,11 +15,13 @@ export default function () {
   return (
     <Game style={{backgroundImage: `url(${artwork})`, backgroundSize: 'cover'}}>
       <Header/>
-      {Object.entries(game.players).map(([empire, player]) => {
-        return empire === playerId ?
-          <MyEmpire key={empire} empire={empire as Empire} player={player}/> :
-          <OtherPlayerEmpire key={empire} empire={empire as Empire} player={player}/>
-      })}
+      <div style={{width: 'calc(16 / 9 * 100vh)', height: '93vh', position: 'relative', margin: 'auto'}}>
+        {Object.entries(game.players).map(([empire, player]) => {
+          return empire === playerId ?
+            <MyEmpire key={empire} empire={empire as Empire} player={player}/> :
+            <OtherPlayerEmpire key={empire} empire={empire as Empire} player={player}/>
+        })}
+      </div>
     </Game>
   )
 }
