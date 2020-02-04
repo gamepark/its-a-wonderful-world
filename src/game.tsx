@@ -2,7 +2,6 @@ import React from 'react'
 import {Game, useGame, usePlayerId} from 'tabletop-game-workshop'
 import Header from './Header'
 import ItsAWonderfulWorld from './ItsAWonderfulWorld'
-import Empire from './material/Empire'
 import artwork from './material/its-cover-artwork.png'
 import MyEmpire from './players/MyEmpire'
 import OtherPlayerEmpire from './players/OtherPlayerEmpire'
@@ -16,10 +15,10 @@ export default function () {
     <Game style={{backgroundImage: `url(${artwork})`, backgroundSize: 'cover'}}>
       <Header/>
       <div style={{width: 'calc(16 / 9 * 100vh)', height: '93vh', position: 'relative', margin: 'auto'}}>
-        {Object.entries(game.players).map(([empire, player]) => {
-          return empire === playerId ?
-            <MyEmpire key={empire} empire={empire as Empire} player={player}/> :
-            <OtherPlayerEmpire key={empire} empire={empire as Empire} player={player}/>
+        {game.players.map(player => {
+          return player.empire === playerId ?
+            <MyEmpire key={player.empire} empire={player.empire} player={player}/> :
+            <OtherPlayerEmpire key={player.empire} empire={player.empire} player={player}/>
         })}
       </div>
     </Game>
