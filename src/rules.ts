@@ -4,13 +4,13 @@ import Development from './material/Development'
 import DevelopmentsAnatomy from './material/Developments'
 import Empire from './material/Empire'
 import {chooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
-import {dealDevelopmentCards} from './moves/DealDevelopmentCards'
-import Move from './moves/Move'
+import {dealDevelopmentCards, isDealDevelopmentCardsView} from './moves/DealDevelopmentCards'
+import Move, {MoveView} from './moves/Move'
 import MoveType from './moves/MoveType'
 import shuffle from './util/shuffle'
 
 // noinspection JSUnusedGlobalSymbols
-const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire> = {
+const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
   setup() {
     return {
       players: shuffle(Object.values(Empire)).slice(0, 2).reduce<PlayersMap>((players, empire) => {
@@ -44,6 +44,9 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire> = {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
         Object.values(game.players).forEach(player => player.hand = game.deck.splice(0, 10))
+        if (isDealDevelopmentCardsView<Empire>(move)) {
+          game.players[move.playerId].hand = move.playerCards
+        }
         break
       case MoveType.ChooseDevelopmentCard:
         const player = game.players[move.playerId]
@@ -63,6 +66,16 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire> = {
       }
     })
     return game
+  },
+
+  getMoveView(move, playerId, game) {
+    switch (move.type) {
+      case MoveType.DealDevelopmentCards:
+        return playerId ? {...move, playerCards: game.players[playerId].hand, playerId} : move
+      case MoveType.ChooseDevelopmentCard:
+        return playerId != move.playerId ? {...move, cardIndex: 0} : move
+    }
+    return move
   }
 }
 
