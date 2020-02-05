@@ -14,19 +14,20 @@ type ItsAWonderfulWorld = {
 export default ItsAWonderfulWorld
 
 export type Player = {
-  empire: Empire,
-  hand: Development[],
-  cardsToPass?: Development[],
-  chosenCard?: Development | true,
-  draftArea: Development[],
-  constructionArea: DevelopmentUnderConstruction[],
+  empire: Empire
+  hand: Development[]
+  cardsToPass?: Development[]
+  chosenCard?: Development | true
+  draftArea: Development[]
+  constructionArea: DevelopmentUnderConstruction[]
+  availableResources: Resource[]
+  empireCardResources: Resource[]
   constructedDevelopments: Development[]
 }
 
 export type DevelopmentUnderConstruction = {
   development: Development
-  resources: Resource[]
-  characters: Character[]
+  costSpaces: (Resource | Character)[]
 }
 
 export enum Phase {Draft = 'Draft', Planning = 'Planning', Production = 'Production'}

@@ -4,7 +4,12 @@ enum MoveType {
   RevealChosenCards = 'REVEAL_CHOSEN_CARDS',
   PassCards = 'PASS_CARDS',
   DiscardLeftoverCards = 'DISCARD_LEFTOVER_CARDS',
-  StartPhase = 'START_PHASE'
+  StartPhase = 'START_PHASE',
+  Recycle = 'RECYCLE',
+  SlateForConstruction = 'SLATE_FOR_CONSTRUCTION',
+  PlaceResource = 'PLACE_RESOURCE',
+  CompleteConstruction = 'COMPLETE_CONSTRUCTION',
+  TransformIntoKrystallium = 'TRANSFORM_INTO_KRYSTALLIUM'
 }
 
 export default MoveType
