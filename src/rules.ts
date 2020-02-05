@@ -5,9 +5,12 @@ import DevelopmentsAnatomy from './material/Developments'
 import Empire from './material/Empire'
 import {chooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
 import {dealDevelopmentCards, isDealDevelopmentCardsView} from './moves/DealDevelopmentCards'
+import {discardLeftoverCards, isDiscardLeftoverCardsView} from './moves/DiscardLeftoverCards'
 import Move, {MoveView} from './moves/Move'
 import MoveType from './moves/MoveType'
-import {isRevealChosenCardsAndPassTheRestView, revealChosenCardsAndPassTheRest} from './moves/RevealChosenCardsAndPassTheRest'
+import {isPassCardsView, passCards} from './moves/PassCards'
+import {isRevealChosenCardsView, revealChosenCards} from './moves/RevealChosenCards'
+import {startPhase} from './moves/StartPhase'
 import shuffle from './util/shuffle'
 
 // noinspection JSUnusedGlobalSymbols
@@ -16,6 +19,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
     return {
       players: shuffle(Object.values(Empire)).slice(0, 2).map(empire => ({empire, hand: [], draftArea: [], constructionArea: [], constructedDevelopments: []})),
       deck: shuffle(Object.values(Development).flatMap<Development>(development => Array(DevelopmentsAnatomy.get(development).numberOfCopies || 1).fill(development))),
+      discard: [],
       round: 1,
       phase: Phase.Draft
     }
@@ -30,9 +34,22 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       case Phase.Draft:
         if (!game.players[0].hand.length && !game.players[0].draftArea.length) {
           return dealDevelopmentCards()
-        }
-        if (game.players.every(player => player.chosenCard)) {
-          return revealChosenCardsAndPassTheRest()
+        } else if (game.players.every(player => player.chosenCard)) {
+          return revealChosenCards()
+        } else if (game.players[0].cardsToPass) {
+          if (game.players[0].draftArea.length < 7) {
+            return passCards()
+          } else if (game.players[0].cardsToPass.length) {
+            return discardLeftoverCards()
+          } else {
+            return startPhase(Phase.Planning)
+          }
+        } else {
+          for (const player of game.players) {
+            if (player.hand.length == 1) {
+              return chooseDevelopmentCard(player.empire, 0)
+            }
+          }
         }
         break
       case Phase.Planning:
@@ -62,28 +79,40 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         const player = getPlayer(game, move.playerId)
         player.chosenCard = player.hand.splice(move.cardIndex, 1)[0]
         break
-      case MoveType.RevealChosenCardsAndPassTheRest:
-        if (isRevealChosenCardsAndPassTheRestView(move)) {
-          const player = getPlayer(game, move.playerId)
-          player.hand = move.receivedCards
+      case MoveType.RevealChosenCards:
+        if (isRevealChosenCardsView(move)) {
           game.players.forEach(player => player.draftArea.push(move.revealedCards[player.empire]))
         } else {
           game.players.forEach(player => player.draftArea.push(player.chosenCard as Development))
-          if (game.round % 2) {
-            let firstPlayerHand = game.players[0].hand
-            for (let i = game.players.length - 1; i > 0; i--) {
-              game.players[i - 1].hand = game.players[i].hand
-            }
-            game.players[game.players.length - 1].hand = firstPlayerHand
-          } else {
-            let lastPlayerHand = game.players[game.players.length - 1].hand
-            for (let i = 1; i < game.players.length - 1; i++) {
-              game.players[i].hand = game.players[i - 1].hand
-            }
-            game.players[0].hand = lastPlayerHand
+        }
+        game.players.forEach(player => {
+          player.cardsToPass = player.hand
+          delete player.chosenCard
+        })
+        break
+      case MoveType.PassCards:
+        if (isPassCardsView(move)) {
+          const player = getPlayer(game, move.playerId)
+          player.hand = move.receivedCards
+        } else {
+          const draftDirection = game.round % 2 ? 1 : -1
+          for (let i = 0; i < game.players.length; i++) {
+            game.players[i].hand = game.players[(i + draftDirection) % game.players.length].cardsToPass
           }
         }
-        game.players.forEach(player => delete player.chosenCard)
+        game.players.forEach(player => delete player.cardsToPass)
+        break
+      case MoveType.DiscardLeftoverCards:
+        if (isDiscardLeftoverCardsView(move)) {
+          game.players.forEach(player => player.hand = [])
+          game.discard.push(...move.discardedCards)
+        } else {
+          game.players.forEach(player => game.discard.push(...player.hand.splice(0)))
+        }
+        break
+      case MoveType.StartPhase:
+        game.phase = move.phase
+        break
     }
   },
 
@@ -106,14 +135,19 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         return playerId ? {...move, playerCards: getPlayer(game, playerId).hand, playerId} : move
       case MoveType.ChooseDevelopmentCard:
         return playerId != move.playerId ? {...move, cardIndex: 0} : move
-      case MoveType.RevealChosenCardsAndPassTheRest:
+      case MoveType.RevealChosenCards:
+        console.log("getMoveView RevealChosenCards")
         return {
-          ...move, playerId, receivedCards: playerId ? getPlayer(game, playerId).hand : undefined,
-          revealedCards: game.players.reduce<{ [key in Empire]?: Development }>((revealedCards, player) => {
+          ...move, revealedCards: game.players.reduce<{ [key in Empire]?: Development }>((revealedCards, player) => {
+            console.log(player.draftArea[player.draftArea.length - 1])
             revealedCards[player.empire] = player.draftArea[player.draftArea.length - 1]
             return revealedCards
           }, {})
         }
+      case MoveType.PassCards:
+        return {...move, playerId, receivedCards: playerId ? getPlayer(game, playerId).hand : undefined}
+      case MoveType.DiscardLeftoverCards:
+        return {...move, discardedCards: game.discard.slice()}
     }
     return move
   }
