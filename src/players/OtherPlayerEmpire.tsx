@@ -8,7 +8,7 @@ import EmpireCard from '../material/empire-cards/EmpireCard'
 
 const topLeft = css`
   position: absolute;
-  top: 8vh;
+  top: 1vh;
   left: 1vh;
   transform: rotate(180deg);
 `
@@ -16,11 +16,17 @@ const topLeft = css`
 const OtherPlayerEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire, player}) => {
   return (
     <Fragment>
-      <EmpireCard empire={empire as Empire} position={topLeft}/>
+      <EmpireCard empire={empire} position={topLeft}/>
+      {player.draftArea.map((development, index) => <DevelopmentCard key={index} development={development} position={css`
+        position: absolute;
+        top: 1vh;
+        left: ${index * 15.3 + 24}vh;
+        transform: rotate(180deg);
+      `}/>)}
       <Hand rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={65 / 100} position={css`
-            transform: rotate(180deg) scale(0.5);
-            top: 10vh;
-            left: calc(50% - 10vh);
+            transform: rotate(180deg);
+            top: 3vh;
+            right: ${player.hand.length * 7 - 6}vh;
           `}>
         {player.hand.map((development, index) => <DevelopmentCard key={index} development={development}/>)}
       </Hand>

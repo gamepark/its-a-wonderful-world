@@ -1,7 +1,7 @@
 import React, {CSSProperties} from 'react'
 
 const style = {
-  height: `6vh`,
+  height: `7vh`,
   padding: `0.5vh`,
   textAlign: `center`
 } as CSSProperties

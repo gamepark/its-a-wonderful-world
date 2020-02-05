@@ -28,12 +28,10 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
   getAutomaticMove(game) {
     switch (game.phase) {
       case Phase.Draft:
-        const players = Object.values(game.players)
-        const player1 = players[0]
-        if (!player1.hand.length && !player1.draftArea.length) {
+        if (!game.players[0].hand.length && !game.players[0].draftArea.length) {
           return dealDevelopmentCards()
         }
-        if (players.every(player => player.chosenCard)) {
+        if (game.players.every(player => player.chosenCard)) {
           return revealChosenCardsAndPassTheRest()
         }
         break
@@ -55,7 +53,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
   play(move, game) {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
-        Object.values(game.players).forEach(player => player.hand = game.deck.splice(0, 10))
+        game.players.forEach(player => player.hand = game.deck.splice(0, 10))
         if (isDealDevelopmentCardsView<Empire>(move)) {
           getPlayer(game, move.playerId).hand = move.playerCards
         }
@@ -111,8 +109,8 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       case MoveType.RevealChosenCardsAndPassTheRest:
         return {
           ...move, playerId, receivedCards: playerId ? getPlayer(game, playerId).hand : undefined,
-          revealedCards: Object.entries(game.players).reduce<{ [key in Empire]?: Development }>((revealedCards, [empire, player]) => {
-            revealedCards[empire as Empire] = player.draftArea[player.draftArea.length - 1]
+          revealedCards: game.players.reduce<{ [key in Empire]?: Development }>((revealedCards, player) => {
+            revealedCards[player.empire] = player.draftArea[player.draftArea.length - 1]
             return revealedCards
           }, {})
         }

@@ -18,11 +18,16 @@ const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire
   return (
     <Fragment>
       <EmpireCard empire={empire as Empire} position={bottomRight}/>
+      {player.draftArea.map((development, index) => <DevelopmentCard key={index} development={development} position={css`
+        position: absolute;
+        bottom: 1vh;
+        right: ${index * 15.3 + 24}vh;
+      `}/>)}
       <Hand rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={65 / 100}
             onItemClick={index => play(chooseDevelopmentCard(empire, index))}
             position={css`
               bottom: 3vh;
-              left: calc(50% - 20vh);
+              left: ${player.hand.length * 7 - 6}vh;
             `}>
         {player.hand.map((development, index) => <DevelopmentCard key={index} development={development}/>)}
       </Hand>

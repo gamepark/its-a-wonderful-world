@@ -1,4 +1,4 @@
-import {css} from '@emotion/core'
+import {css, SerializedStyles} from '@emotion/core'
 import React, {FunctionComponent, MouseEventHandler} from 'react'
 import Development from '../Development'
 import CardBack from './back.png'
@@ -80,9 +80,12 @@ import Submarine from './vehicle/submarine.png'
 import TankDivision from './vehicle/tank-division.png'
 import Zeppelin from './vehicle/zeppelin.png'
 
-const DevelopmentCard: FunctionComponent<{ development: Development, onClick?: MouseEventHandler }> = ({development, onClick}) => {
+type Props = { development: Development, position?: SerializedStyles, onClick?: MouseEventHandler }
+
+const DevelopmentCard: FunctionComponent<Props> = ({development, position, onClick}) => {
   return (
     <div onClick={onClick} css={css`
+      ${position};
       height: 22vh;
       width: 14.3vh;
       background-image: url('${images[development] || CardBack}');
