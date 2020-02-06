@@ -7,12 +7,6 @@ import Empire from '../material/Empire'
 import EmpireCard from '../material/empire-cards/EmpireCard'
 import {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 
-const bottomLeft = css`
-  position: absolute;
-  bottom: 1vh;
-  left: 1vh;
-`
-
 const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire, player}) => {
   const play = usePlay()
   return (
@@ -27,7 +21,9 @@ const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire
         background-color: rgba(0, 255, 0, 0.1);
         border: 0.3vh dashed green;
         border-radius: 1vh;
+        min-width: 16.3vh;
       `}>
+        {!player.draftArea.length && <span css={draftAreaText}>Draft Area</span>}
         {player.draftArea.map((development, index) => <DevelopmentCard key={index} development={development} position={css`
           position: absolute;
           bottom: 1vh;
@@ -44,6 +40,7 @@ const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire
         border: 0.3vh dashed red;
         border-radius: 1vh;
       `}>
+        {!player.constructionArea.length && <span css={constructionAreaText}>Construction Area</span>}
         {player.constructionArea.map((construction, index) => <DevelopmentCard key={index} development={construction.development} position={css`
           position:absolute;
           top: 1vh;
@@ -66,5 +63,30 @@ const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire
     </Fragment>
   )
 }
+
+const bottomLeft = css`
+  position: absolute;
+  bottom: 1vh;
+  left: 1vh;
+`
+
+const centerText = css`
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0 1vh;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: darkgreen;
+  font-size: 3vh;`
+
+const draftAreaText = css`
+  ${centerText};
+  color: darkgreen;`
+
+const constructionAreaText = css`
+  ${centerText};
+  color: darkred;`
 
 export default MyEmpire
