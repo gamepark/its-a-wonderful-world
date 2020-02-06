@@ -80,7 +80,7 @@ import Submarine from './vehicle/submarine.png'
 import TankDivision from './vehicle/tank-division.png'
 import Zeppelin from './vehicle/zeppelin.png'
 
-type Props = { development: Development, position?: SerializedStyles, onClick?: MouseEventHandler }
+type Props = { development?: Development, position?: SerializedStyles, onClick?: MouseEventHandler }
 
 const DevelopmentCard: FunctionComponent<Props> = ({development, position, onClick}) => {
   return (
@@ -91,7 +91,7 @@ const DevelopmentCard: FunctionComponent<Props> = ({development, position, onCli
       background-image: url('${images[development] || CardBack}');
       background-size: cover;
       border-radius: 1vh;
-      box-shadow: 0 0 0.1vh white;
+      box-shadow: 0 0 0.2vh black;
       `}>
       <h3 style={{display: 'none'}}>Zeppelin</h3>
     </div>
