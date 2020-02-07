@@ -22,13 +22,13 @@ const DraftArea: FunctionComponent<{ empire: Empire, player: Player }> = ({empir
     <div ref={ref} css={css`
         position: absolute;
         height: 24.6vh;
-        width: ${player.draftArea.length * 15.3 + 1.6}vh;
+        width: ${(player.draftArea.length + (player.chosenCard ? 1 : 0)) * 15.3 + 1.6}vh;
         bottom: 1vh;
         left: 26vh;
         background-color: rgba(0, 255, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
         border: 0.3vh dashed green;
         border-radius: 1vh;
-        min-width: 16.3vh;
+        min-width: 16.9vh;
       `}>
       {!player.draftArea.length && <span css={draftAreaText}>Draft Area</span>}
       {player.draftArea.map((development, index) => <DevelopmentCard key={index} development={development} position={css`
@@ -36,6 +36,11 @@ const DraftArea: FunctionComponent<{ empire: Empire, player: Player }> = ({empir
           bottom: 1vh;
           left: ${index * 15.3 + 1}vh;
         `}/>)}
+      {player.chosenCard && <DevelopmentCard development={player.chosenCard != true ? player.chosenCard : null} position={css`
+          position: absolute;
+          bottom: 1vh;
+          left: ${player.draftArea.length * 15.3 + 1}vh;
+        `}/> }
     </div>
   )
 }
