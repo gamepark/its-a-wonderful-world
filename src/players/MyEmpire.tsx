@@ -9,6 +9,7 @@ import EmpireCard from '../material/empire-cards/EmpireCard'
 import {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import ConstructionArea from './ConstructionArea'
 import DraftArea from './DraftArea'
+import RecyclingDropArea from './RecyclingDropArea'
 
 const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire, player}) => {
   const play = usePlay()
@@ -17,6 +18,7 @@ const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire
       <EmpireCard empire={empire as Empire} position={bottomLeft}/>
       <DraftArea empire={empire} player={player}/>
       <ConstructionArea empire={empire} player={player}/>
+      <RecyclingDropArea empire={empire}/>
       {player.constructedDevelopments.map((development, index) => <DevelopmentCard key={index} development={development} position={css`
         position:absolute;
         bottom: ${index * 2.6 + 14}vh;
