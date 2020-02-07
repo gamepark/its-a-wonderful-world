@@ -1,35 +1,20 @@
 import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {Hand, usePlay} from 'tabletop-game-workshop/dist'
+import {Hand, usePlay} from 'tabletop-game-workshop'
+import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard from '../material/development-cards/DevelopmentCard'
 import Empire from '../material/Empire'
 import EmpireCard from '../material/empire-cards/EmpireCard'
 import {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
+import DraftArea from './DraftArea'
 
 const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire, player}) => {
   const play = usePlay()
   return (
     <Fragment>
       <EmpireCard empire={empire as Empire} position={bottomLeft}/>
-      <div css={css`
-        position: absolute;
-        height: 24.6vh;
-        width: ${player.draftArea.length * 15.3 + 1.6}vh;
-        bottom: 1vh;
-        left: 26vh;
-        background-color: rgba(0, 255, 0, 0.1);
-        border: 0.3vh dashed green;
-        border-radius: 1vh;
-        min-width: 16.3vh;
-      `}>
-        {!player.draftArea.length && <span css={draftAreaText}>Draft Area</span>}
-        {player.draftArea.map((development, index) => <DevelopmentCard key={index} development={development} position={css`
-          position: absolute;
-          bottom: 1vh;
-          left: ${index * 15.3 + 1}vh;
-        `}/>)}
-      </div>
+      <DraftArea empire={empire} player={player}/>
       <div css={css`
         position: absolute;
         height: 24.6vh;
@@ -54,6 +39,7 @@ const MyEmpire: FunctionComponent<{ empire: Empire, player: Player }> = ({empire
       `}/>)}
       <Hand rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={65 / 100}
             onItemClick={index => play(chooseDevelopmentCard(empire, index))}
+            draggable={index => ({item: developmentFromHand(index)})}
             position={css`
               bottom: 3vh;
               right: ${player.hand.length * 7 - 6}vh;
@@ -70,7 +56,7 @@ const bottomLeft = css`
   left: 1vh;
 `
 
-const centerText = css`
+const constructionAreaText = css`
   position: absolute;
   width: 100%;
   margin: 0;
@@ -78,15 +64,7 @@ const centerText = css`
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
-  color: darkgreen;
-  font-size: 3vh;`
-
-const draftAreaText = css`
-  ${centerText};
-  color: darkgreen;`
-
-const constructionAreaText = css`
-  ${centerText};
+  font-size: 3vh;
   color: darkred;`
 
 export default MyEmpire
