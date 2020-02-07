@@ -1,6 +1,7 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {usePlay, useDrop} from 'tabletop-game-workshop'
+import {Draggable, useDrop, usePlay} from 'tabletop-game-workshop'
+import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
 import {Player} from '../ItsAWonderfulWorld'
@@ -31,16 +32,20 @@ const DraftArea: FunctionComponent<{ empire: Empire, player: Player }> = ({empir
         min-width: 16.9vh;
       `}>
       {!player.draftArea.length && <span css={draftAreaText}>Draft Area</span>}
-      {player.draftArea.map((development, index) => <DevelopmentCard key={index} development={development} position={css`
+      {player.draftArea.map((development, index) => (
+        <Draggable key={index} item={developmentFromDraftArea(index)} css={css`
           position: absolute;
-          bottom: 1vh;
+          top: 1vh;
           left: ${index * 15.3 + 1}vh;
-        `}/>)}
+        `}>
+          <DevelopmentCard development={development}/>
+        </Draggable>
+      ))}
       {player.chosenCard && <DevelopmentCard development={player.chosenCard != true ? player.chosenCard : null} position={css`
           position: absolute;
           bottom: 1vh;
           left: ${player.draftArea.length * 15.3 + 1}vh;
-        `}/> }
+        `}/>}
     </div>
   )
 }
