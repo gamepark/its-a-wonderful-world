@@ -9,7 +9,11 @@ enum MoveType {
   SlateForConstruction = 'SLATE_FOR_CONSTRUCTION',
   PlaceResource = 'PLACE_RESOURCE',
   CompleteConstruction = 'COMPLETE_CONSTRUCTION',
-  TransformIntoKrystallium = 'TRANSFORM_INTO_KRYSTALLIUM'
+  TransformIntoKrystallium = 'TRANSFORM_INTO_KRYSTALLIUM',
+  TellYouAreReady = 'TELL_YOU_ARE_READY',
+  Produce = 'PRODUCE',
+  ReceiveCharacter = 'RECEIVE_CHARACTER',
+  PlaceCharacter = 'PLACE_CHARACTER'
 }
 
 export default MoveType

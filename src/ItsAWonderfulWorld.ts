@@ -1,14 +1,15 @@
-import Character from './material/Character'
+import Character, {ChooseCharacter} from './material/Character'
 import Development from './material/Development'
 import Empire from './material/Empire'
 import Resource from './material/Resource'
 
 type ItsAWonderfulWorld = {
-  players: Player[],
-  deck: Development[],
-  discard: Development[],
-  round: number,
+  players: Player[]
+  deck: Development[]
+  discard: Development[]
+  round: number
   phase: Phase
+  productionStep?: Resource
 }
 
 export default ItsAWonderfulWorld
@@ -23,6 +24,9 @@ export type Player = {
   availableResources: Resource[]
   empireCardResources: Resource[]
   constructedDevelopments: Development[]
+  ready: boolean
+  characters: { [Character.Financier]: number, [Character.General]: number }
+  bonuses: (Resource.Krystallium | Character | typeof ChooseCharacter)[]
 }
 
 export type DevelopmentUnderConstruction = {

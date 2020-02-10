@@ -1,8 +1,9 @@
 import {Rules} from 'tabletop-game-workshop'
-import ItsAWonderfulWorld, {DevelopmentUnderConstruction, Phase} from './ItsAWonderfulWorld'
-import Character from './material/Character'
+import ItsAWonderfulWorld, {DevelopmentUnderConstruction, Phase, Player} from './ItsAWonderfulWorld'
+import Character, {ChooseCharacter, isCharacter} from './material/Character'
 import Development from './material/Development'
 import DevelopmentsAnatomy from './material/Developments'
+import {isDevelopmentType} from './material/DevelopmentType'
 import Empire from './material/Empire'
 import Resource, {isResource} from './material/Resource'
 import {chooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
@@ -12,11 +13,15 @@ import {discardLeftoverCards, isDiscardLeftoverCardsView} from './moves/DiscardL
 import Move, {MoveView} from './moves/Move'
 import MoveType from './moves/MoveType'
 import {isPassCardsView, passCards} from './moves/PassCards'
+import {placeCharacter} from './moves/PlaceCharacter'
 import {placeResource} from './moves/PlaceResource'
+import {produce} from './moves/Produce'
+import {receiveCharacter} from './moves/ReceiveCharacter'
 import {recycle} from './moves/Recycle'
 import {isRevealChosenCardsView, revealChosenCards} from './moves/RevealChosenCards'
 import {slateForConstruction} from './moves/SlateForConstruction'
 import {startPhase} from './moves/StartPhase'
+import {tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
 import shuffle from './util/shuffle'
 
@@ -24,8 +29,9 @@ import shuffle from './util/shuffle'
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
   setup() {
     return {
-      players: shuffle(Object.values(Empire)).slice(0, 2).map(empire => ({
-        empire, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [], constructedDevelopments: []
+      players: shuffle(Object.values(Empire)).slice(0, 2).map<Player>(empire => ({
+        empire, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [], constructedDevelopments: [], ready: false,
+        characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
       })),
       deck: shuffle(Object.values(Development).flatMap<Development>(development => Array(DevelopmentsAnatomy.get(development).numberOfCopies || 1).fill(development))),
       discard: [],
@@ -62,8 +68,19 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         }
         break
       case Phase.Planning:
+        if (game.players.every(player => player.ready)) {
+          return startPhase(Phase.Production)
+        }
         break
       case Phase.Production:
+        if (game.players.every(player => player.ready)) {
+          const nextProductionStep = getNextProductionStep(game)
+          if (nextProductionStep) {
+            return produce(nextProductionStep)
+          } else if (game.round < 4) {
+            return startPhase(Phase.Draft)
+          }
+        }
         break
     }
     for (const player of game.players) {
@@ -74,6 +91,12 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       }
       if (player.empireCardResources.filter(resource => resource != Resource.Krystallium).length >= 5) {
         return transformIntoKrystallium(player.empire)
+      }
+      const bonus = player.bonuses.find(bonus => bonus != ChooseCharacter)
+      if (bonus == Resource.Krystallium) {
+        return placeResource(player.empire, Resource.Krystallium)
+      } else if (isCharacter(bonus)) {
+        return receiveCharacter(player.empire, bonus)
       }
     }
   },
@@ -89,6 +112,14 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         break
       case Phase.Planning:
         player.draftArea.forEach((development, index) => moves.push(slateForConstruction(empire, index), recycle(empire, index)))
+        if (!player.draftArea.length && !player.availableResources.length) {
+          moves.push(tellYourAreReady(empire))
+        }
+        break
+      case Phase.Production:
+        if (player.bonuses.length && !player.availableResources.length) {
+          moves.push(tellYourAreReady(empire))
+        }
         break
     }
     player.availableResources.forEach(resource => {
@@ -98,10 +129,23 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       })
       moves.push(placeResource(empire, resource))
     })
-    if (player.empireCardResources.some(resource => resource == Resource.Krystallium)) {
-      player.constructionArea.forEach((developmentUnderConstruction, constructionIndex) => {
-        getSpacesMissingItem(developmentUnderConstruction, item => isResource(item))
-          .forEach(space => moves.push(placeResource(empire, Resource.Krystallium, constructionIndex, space)))
+    if (player.bonuses.some(bonus => bonus == ChooseCharacter)) {
+      Object.values(Character).forEach(character => moves.push(receiveCharacter(empire, character)))
+    }
+    if (moves.length) {
+      if (player.empireCardResources.some(resource => resource == Resource.Krystallium)) {
+        player.constructionArea.forEach((developmentUnderConstruction, constructionIndex) => {
+          getSpacesMissingItem(developmentUnderConstruction, item => isResource(item))
+            .forEach(space => moves.push(placeResource(empire, Resource.Krystallium, constructionIndex, space)))
+        })
+      }
+      Object.values(Character).forEach(character => {
+        if (player.characters[character]) {
+          player.constructionArea.forEach((developmentUnderConstruction, constructionIndex) => {
+            getSpacesMissingItem(developmentUnderConstruction, item => item == character)
+              .forEach(space => moves.push(placeCharacter(empire, character, constructionIndex, space)))
+          })
+        }
       })
     }
     return moves
@@ -157,6 +201,11 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       }
       case MoveType.StartPhase: {
         game.phase = move.phase
+        game.players.forEach(player => player.ready = false)
+        if (move.phase == Phase.Draft) {
+          delete game.productionStep
+          game.round++
+        }
         break
       }
       case MoveType.SlateForConstruction: {
@@ -183,7 +232,16 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       }
       case MoveType.CompleteConstruction: {
         const player = getPlayer(game, move.playerId)
-        player.constructedDevelopments.push(player.constructionArea.splice(move.constructionIndex, 1)[0].development)
+        let development = player.constructionArea.splice(move.constructionIndex, 1)[0].development
+        player.constructedDevelopments.push(development)
+        const bonus = DevelopmentsAnatomy.get(development).constructionBonus
+        if (bonus) {
+          if (isResource(bonus) || isCharacter(bonus)) {
+            player.bonuses.push(bonus)
+          } else {
+            Object.keys(bonus).forEach((bonusType: Resource.Krystallium | Character) => player.bonuses.push(...new Array(bonus[bonusType]).fill(bonusType)))
+          }
+        }
         break
       }
       case MoveType.TransformIntoKrystallium: {
@@ -192,6 +250,55 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
           player.empireCardResources.splice(player.empireCardResources.findIndex(resource => resource != Resource.Krystallium), 1)
         }
         player.empireCardResources.push(Resource.Krystallium)
+        break
+      }
+      case MoveType.TellYouAreReady: {
+        getPlayer(game, move.playerId).ready = true
+        break
+      }
+      case MoveType.Produce: {
+        game.productionStep = move.resource
+        let highestProduction = 0
+        let singleMostPlayer: Player = null
+        game.players.forEach(player => {
+          player.availableResources = new Array(getProduction(player, move.resource)).fill(move.resource)
+          player.ready = false
+          if (player.availableResources.length > highestProduction) {
+            singleMostPlayer = player
+            highestProduction = player.availableResources.length
+          } else if (player.availableResources.length == highestProduction) {
+            singleMostPlayer = null
+          }
+        })
+        switch (move.resource) {
+          case Resource.Materials:
+          case Resource.Gold:
+            singleMostPlayer.bonuses.push(Character.Financier)
+            break
+          case Resource.Energy:
+          case Resource.Exploration:
+            singleMostPlayer.bonuses.push(Character.General)
+            break
+          default:
+            singleMostPlayer.bonuses.push(ChooseCharacter)
+            break
+        }
+        break
+      }
+      case MoveType.ReceiveCharacter: {
+        const player = getPlayer(game, move.playerId)
+        player.characters[move.character]++
+        let bonusIndex = player.bonuses.indexOf(move.character)
+        if (bonusIndex == -1) {
+          bonusIndex = player.bonuses.indexOf(ChooseCharacter)
+        }
+        player.bonuses.splice(bonusIndex, 1)
+        break
+      }
+      case MoveType.PlaceCharacter: {
+        const player = getPlayer(game, move.playerId)
+        player.characters[move.character]--
+        player.constructionArea[move.constructionIndex].costSpaces[move.space] = move.character
         break
       }
     }
@@ -254,6 +361,41 @@ function getSpacesMissingItem(developmentUnderConstruction: DevelopmentUnderCons
     }
   })
   return spaces
+}
+
+function getNextProductionStep(game: ItsAWonderfulWorld): Resource {
+  switch (game.productionStep) {
+    case Resource.Materials:
+      return Resource.Energy
+    case Resource.Energy:
+      return Resource.Science
+    case Resource.Science:
+      return Resource.Gold
+    case Resource.Gold:
+      return Resource.Exploration
+    case Resource.Exploration:
+      return undefined
+    default:
+      return Resource.Materials
+  }
+}
+
+function getProduction(player: Player, resource: Resource): number {
+  return player.constructedDevelopments.reduce((sum, development) => sum + getDevelopmentProduction(player, development, resource), 0)
+}
+
+function getDevelopmentProduction(player: Player, development: Development, resource: Resource): number {
+  const developmentAnatomy = DevelopmentsAnatomy.get(development)
+  if (isResource(developmentAnatomy.production)) {
+    return developmentAnatomy.production == resource ? 1 : 0
+  } else {
+    const production = developmentAnatomy.production[resource]
+    if (isDevelopmentType(production)) {
+      return player.constructedDevelopments.filter(development => DevelopmentsAnatomy.get(development).type == production).length
+    } else {
+      return production | 0
+    }
+  }
 }
 
 // noinspection JSUnusedGlobalSymbols
