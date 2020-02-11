@@ -5,10 +5,9 @@ import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard from '../material/development-cards/DevelopmentCard'
-import Empire from '../material/Empire'
 import {slateForConstruction} from '../moves/SlateForConstruction'
 
-const ConstructionArea: FunctionComponent<{ empire: Empire, player: Player }> = ({empire, player}) => {
+const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
@@ -16,7 +15,7 @@ const ConstructionArea: FunctionComponent<{ empire: Empire, player: Player }> = 
       isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(empire, item.index))
+    drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.index))
   })
   return (
     <div ref={ref} css={css`

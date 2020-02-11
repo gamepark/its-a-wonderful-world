@@ -1,35 +1,42 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {Draggable, useDrop, usePlay} from 'tabletop-game-workshop'
+import {Draggable, useDrop, usePlay, useAnimation} from 'tabletop-game-workshop'
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
 import {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard from '../material/development-cards/DevelopmentCard'
-import Empire from '../material/Empire'
-import {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
+import ChooseDevelopmentCard, {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
+import MoveType from '../moves/MoveType'
 
-const DraftArea: FunctionComponent<{ empire: Empire, player: Player }> = ({empire, player}) => {
+const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
   const play = usePlay()
+  const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type == MoveType.ChooseDevelopmentCard && animation.move.playerId == player.empire)
+  let slots = player.draftArea.length
+  if (player.chosenCard || choosingDevelopment) {
+    slots++
+  }
+  slots = Math.max(slots, 1)
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_HAND,
     collect: (monitor) => ({
       isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_HAND,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(empire, item.index))
+    drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.index))
   })
   return (
     <div ref={ref} css={css`
         position: absolute;
         height: 24.6vh;
-        width: ${(player.draftArea.length + (player.chosenCard ? 1 : 0)) * 15.3 + 1.6}vh;
+        width: ${slots * 15.3 + 1.6}vh;
         bottom: 1vh;
         left: 26vh;
         background-color: rgba(0, 255, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
         border: 0.3vh dashed green;
         border-radius: 1vh;
-        min-width: 16.9vh;
+        will-change: width;
+        transition: width ${choosingDevelopment?.duration || 0}s ease-in-out;
       `}>
       {!player.draftArea.length && <span css={draftAreaText}>Draft Area</span>}
       {player.draftArea.map((development, index) => (
