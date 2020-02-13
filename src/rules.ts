@@ -1,4 +1,4 @@
-import {Rules} from 'tabletop-game-workshop'
+import Rules from 'tabletop-game-workshop/dist/types/Rules'
 import ItsAWonderfulWorld, {DevelopmentUnderConstruction, Phase, Player} from './ItsAWonderfulWorld'
 import Character, {ChooseCharacter, isCharacter} from './material/Character'
 import Development from './material/Development'

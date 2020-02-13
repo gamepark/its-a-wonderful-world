@@ -2,6 +2,7 @@
   "name": "its-a-wonderful-world",
   "version": "1.0.0",
   "description": "",
+  "main": "dist/game.js",
   "files": [
     "dist"
   ],
