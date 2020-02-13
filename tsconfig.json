@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    "module": "esnext",
-    "target": "esnext",
+    "module": "commonjs",
+    "target": "es5",
     "lib": [
       "es2019", "dom"
     ],
@@ -12,7 +12,8 @@
     "esModuleInterop": true,
     "declaration": true,
     "moduleResolution": "node",
-    "outDir": "dist"
+    "outDir": "dist",
+    "downlevelIteration": true
   },
   "include": ["src"]
 }
