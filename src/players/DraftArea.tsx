@@ -38,7 +38,7 @@ const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
         will-change: width;
         transition: width ${choosingDevelopment?.duration || 0}s ease-in-out;
       `}>
-      {!player.draftArea.length && <span css={draftAreaText}>Draft Area</span>}
+      {!player.draftArea.length && <span css={draftAreaText}>Zone de draft</span>}
       {player.draftArea.map((development, index) => (
         <Draggable key={index} item={developmentFromDraftArea(index)} css={css`
           position: absolute;
@@ -66,7 +66,7 @@ top: 50%;
 transform: translateY(-50%);
 text-align: center;
 color: darkgreen;
-font-size: 3vh;
+font-size: 4vh;
 `
 
 export default DraftArea

@@ -25,10 +25,10 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
         left: 26vh;
         right: 1vh;
         background-color: rgba(255, 0, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
-        border: 0.3vh dashed red;
+        border: 0.3vh dashed crimson;
         border-radius: 1vh;
       `}>
-      {!player.constructionArea.length && <span css={constructionAreaText}>Construction Area</span>}
+      {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
       {player.constructionArea.map((construction, index) => <DevelopmentCard key={index} development={construction.development} position={css`
           position:absolute;
           top: 1vh;
@@ -46,7 +46,7 @@ const constructionAreaText = css`
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
-  font-size: 3vh;
-  color: darkred;`
+  font-size: 4vh;
+  color: crimson;`
 
 export default ConstructionArea
