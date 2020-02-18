@@ -4,7 +4,7 @@ import {useDrop, usePlay} from 'tabletop-game-workshop'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import {Player} from '../ItsAWonderfulWorld'
-import DevelopmentCard from '../material/development-cards/DevelopmentCard'
+import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {slateForConstruction} from '../moves/SlateForConstruction'
 
 const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {

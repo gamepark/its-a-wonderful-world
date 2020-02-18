@@ -1,6 +1,6 @@
 import {css, SerializedStyles} from '@emotion/core'
 import React, {FunctionComponent, MouseEventHandler} from 'react'
-import Development from '../Development'
+import Development from './Development'
 import CardBack from './back.png'
 import AlexandersTomb from './discovery/alexanders-tomb.png'
 import AncientAstronauts from './discovery/ancient-astronauts.png'

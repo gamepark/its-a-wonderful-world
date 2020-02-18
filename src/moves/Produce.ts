@@ -1,4 +1,4 @@
-import Resource from '../material/Resource'
+import Resource from '../material/resources/Resource'
 import MoveType from './MoveType'
 
 export default interface Produce {

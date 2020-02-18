@@ -1,5 +1,5 @@
-import Empire from '../material/Empire'
-import Resource from '../material/Resource'
+import Empire from '../material/empires/Empire'
+import Resource from '../material/resources/Resource'
 import MoveType from './MoveType'
 
 export default interface PlaceResource {

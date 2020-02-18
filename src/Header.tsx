@@ -4,7 +4,7 @@ import React from 'react'
 import {useTranslation} from 'react-i18next'
 import {useGame, usePlayerId} from 'tabletop-game-workshop'
 import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
-import Empire from './material/Empire'
+import Empire from './material/empires/Empire'
 
 const headerStyle = css`
   height: 7vh;

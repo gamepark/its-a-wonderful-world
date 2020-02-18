@@ -1,6 +1,6 @@
-import Character from './Character'
+import Character from '../characters/Character'
 import DevelopmentType from './DevelopmentType'
-import Resource from './Resource'
+import Resource from '../resources/Resource'
 
 type DevelopmentAnatomy = {
   type: DevelopmentType

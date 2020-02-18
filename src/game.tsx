@@ -2,9 +2,9 @@ import React from 'react'
 import {Game, useGame, usePlayerId} from 'tabletop-game-workshop'
 import Header from './Header'
 import ItsAWonderfulWorld from './ItsAWonderfulWorld'
-import Board from './material/Board'
+import Board from './material/board/Board'
 import artwork from './material/its-cover-artwork.png'
-import MyEmpire from './players/MyEmpire'
+import DisplayedEmpire from './players/DisplayedEmpire'
 import OtherPlayerEmpire from './players/OtherPlayerEmpire'
 
 export default function () {
@@ -18,7 +18,7 @@ export default function () {
       <Board/>
       {game.players.map(player => {
         return player.empire === playerId ?
-          <MyEmpire key={player.empire} player={player}/> :
+          <DisplayedEmpire key={player.empire} player={player}/> :
           <OtherPlayerEmpire key={player.empire} empire={player.empire} player={player}/>
       })}
     </Game>

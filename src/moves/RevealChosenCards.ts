@@ -1,5 +1,5 @@
-import Development from '../material/Development'
-import Empire from '../material/Empire'
+import Development from '../material/developments/Development'
+import Empire from '../material/empires/Empire'
 import MoveType from './MoveType'
 
 type RevealChosenCards = { type: typeof MoveType.RevealChosenCards }

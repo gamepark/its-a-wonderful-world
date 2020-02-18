@@ -1,8 +1,8 @@
-import Character from './Character'
+import Character from '../characters/Character'
 import Development from './Development'
 import DevelopmentAnatomy from './DevelopmentAnatomy'
 import DevelopmentType from './DevelopmentType'
-import Resource from './Resource'
+import Resource from '../resources/Resource'
 
 const {Energy, Materials, Science, Gold, Exploration, Krystallium} = Resource
 const {Structure, Vehicle, Research, Project, Discovery} = DevelopmentType

@@ -1,6 +1,6 @@
 import {css, SerializedStyles} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import Empire from '../Empire'
+import Empire from './Empire'
 import AztecEmpireA from './aztec-empire-A.png'
 import FederationOfAsiaA from './federation-of-asia-A.png'
 import NoramStatesA from './noram-states-A.png'

@@ -1,7 +1,7 @@
-import Character, {ChooseCharacter} from './material/Character'
-import Development from './material/Development'
-import Empire from './material/Empire'
-import Resource from './material/Resource'
+import Character, {ChooseCharacter} from './material/characters/Character'
+import Development from './material/developments/Development'
+import Empire from './material/empires/Empire'
+import Resource from './material/resources/Resource'
 
 type ItsAWonderfulWorld = {
   players: Player[]

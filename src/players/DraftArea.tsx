@@ -5,7 +5,7 @@ import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
 import {Player} from '../ItsAWonderfulWorld'
-import DevelopmentCard from '../material/development-cards/DevelopmentCard'
+import DevelopmentCard from '../material/developments/DevelopmentCard'
 import ChooseDevelopmentCard, {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
 

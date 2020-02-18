@@ -1,4 +1,4 @@
-import Empire from '../material/Empire'
+import Empire from '../material/empires/Empire'
 import MoveType from './MoveType'
 
 export default interface Recycle {

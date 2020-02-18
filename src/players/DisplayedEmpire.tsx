@@ -1,10 +1,10 @@
 import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {Hand, useAnimation, usePlay} from 'tabletop-game-workshop'
+import {Hand, useAnimation, useGame, usePlay} from 'tabletop-game-workshop'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
-import {Player} from '../ItsAWonderfulWorld'
-import DevelopmentCard from '../material/development-cards/DevelopmentCard'
-import EmpireCard from '../material/empire-cards/EmpireCard'
+import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
+import DevelopmentCard from '../material/developments/DevelopmentCard'
+import EmpireCard from '../material/empires/EmpireCard'
 import ChooseDevelopmentCard, {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import {DiscardLeftoverCardsView} from '../moves/DiscardLeftoverCards'
 import MoveType from '../moves/MoveType'
@@ -12,7 +12,8 @@ import ConstructionArea from './ConstructionArea'
 import DraftArea from './DraftArea'
 import RecyclingDropArea from './RecyclingDropArea'
 
-const MyEmpire: FunctionComponent<{ player: Player }> = ({player}) => {
+const DisplayedEmpire: FunctionComponent<{ player: Player }> = ({player}) => {
+  const game = useGame<ItsAWonderfulWorld>()
   const play = usePlay()
   const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type == MoveType.ChooseDevelopmentCard && animation.move.playerId == player.empire)
   const discardingLeftoverCards = useAnimation<DiscardLeftoverCardsView>(animation => animation.move.type == MoveType.DiscardLeftoverCards)
@@ -20,7 +21,7 @@ const MyEmpire: FunctionComponent<{ player: Player }> = ({player}) => {
     <Fragment>
       <EmpireCard empire={player.empire} position={bottomLeft}/>
       <DraftArea player={player}/>
-      <ConstructionArea player={player}/>
+      {(game.round > 1 || game.phase != Phase.Draft) && <ConstructionArea player={player}/>}
       <RecyclingDropArea empire={player.empire}/>
       {player.constructedDevelopments.map((development, index) => <DevelopmentCard key={index} development={development} position={css`
         position:absolute;
@@ -36,7 +37,8 @@ const MyEmpire: FunctionComponent<{ player: Player }> = ({player}) => {
               bottom: 3vh;
               right: ${player.hand.length * 7 - 6}vh;
             `}>
-        {player.hand.map((development, index) => <DevelopmentCard key={[player.hand.length, index].join('-')} development={development} position={choosingDevelopment && choosingDevelopment.move.cardIndex == index && css`
+        {player.hand.map((development, index) => <DevelopmentCard key={[player.hand.length, index].join('-')} development={development}
+                                                                  position={choosingDevelopment && choosingDevelopment.move.cardIndex == index && css`
           transform: translate(calc(-100vw + ${player.hand.length * 7 + 21 + (player.draftArea.length + 1) * 15.3}vh), 1vh);
           transition: transform ${choosingDevelopment.duration}s ease-in-out;
         ` || discardingLeftoverCards && css`
@@ -54,4 +56,4 @@ const bottomLeft = css`
   left: 1vh;
 `
 
-export default MyEmpire
+export default DisplayedEmpire

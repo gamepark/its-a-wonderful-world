@@ -1,8 +1,8 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {Player} from '../ItsAWonderfulWorld'
-import Empire from '../material/Empire'
-import EmpireCard from '../material/empire-cards/EmpireCard'
+import Empire from '../material/empires/Empire'
+import EmpireCard from '../material/empires/EmpireCard'
 
 const topRight = css`
   position: absolute;

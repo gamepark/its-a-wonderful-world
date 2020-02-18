@@ -1,9 +1,9 @@
 import {css} from '@emotion/core'
 import React from 'react'
 import {useGame} from 'tabletop-game-workshop'
-import ItsAWonderfulWorld from '../ItsAWonderfulWorld'
+import ItsAWonderfulWorld from '../../ItsAWonderfulWorld'
 import board from './board.png'
-import DevelopmentCard from './development-cards/DevelopmentCard'
+import DevelopmentCard from '../developments/DevelopmentCard'
 import roundTracker1 from './round-tracker-1-3.png'
 import roundTracker2 from './round-tracker-2-4.png'
 

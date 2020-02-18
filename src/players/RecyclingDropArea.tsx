@@ -3,7 +3,7 @@ import React, {FunctionComponent} from 'react'
 import {useDrop, usePlay} from 'tabletop-game-workshop'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
-import Empire from '../material/Empire'
+import Empire from '../material/empires/Empire'
 import {recycle} from '../moves/Recycle'
 
 const RecyclingDropArea: FunctionComponent<{ empire: Empire }> = ({empire}) => {

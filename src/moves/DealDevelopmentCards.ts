@@ -1,4 +1,4 @@
-import Development from '../material/Development'
+import Development from '../material/developments/Development'
 import MoveType from './MoveType'
 
 type DealDevelopmentCards = { type: typeof MoveType.DealDevelopmentCards }
