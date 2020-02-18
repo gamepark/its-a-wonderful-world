@@ -16,11 +16,9 @@ export default function () {
     <Game style={{backgroundImage: `url(${artwork})`, backgroundSize: 'cover'}}>
       <Header/>
       <Board/>
-      {game.players.map(player => {
-        return player.empire === playerId ?
-          <DisplayedEmpire key={player.empire} player={player}/> :
-          <OtherPlayerEmpire key={player.empire} empire={player.empire} player={player}/>
-      })}
+      {game.players.map(player => player.empire === playerId ?
+        <DisplayedEmpire key={player.empire} player={player}/> :
+        <OtherPlayerEmpire key={player.empire} player={player}/>)}
     </Game>
   )
 }

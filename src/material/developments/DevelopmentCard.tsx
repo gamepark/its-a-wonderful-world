@@ -1,7 +1,7 @@
-import {css, SerializedStyles} from '@emotion/core'
+import {css} from '@emotion/core'
 import React, {FunctionComponent, MouseEventHandler} from 'react'
-import Development from './Development'
 import CardBack from './back.png'
+import Development from './Development'
 import AlexandersTomb from './discovery/alexanders-tomb.png'
 import AncientAstronauts from './discovery/ancient-astronauts.png'
 import ArkOfTheCovenant from './discovery/ark-of-the-covenant.png'
@@ -80,22 +80,30 @@ import Submarine from './vehicle/submarine.png'
 import TankDivision from './vehicle/tank-division.png'
 import Zeppelin from './vehicle/zeppelin.png'
 
-type Props = { development?: Development, position?: SerializedStyles, onClick?: MouseEventHandler }
+type Props = {
+  development?: Development
+  onClick?: MouseEventHandler
+} & React.HTMLAttributes<HTMLDivElement>
 
-const DevelopmentCard: FunctionComponent<Props> = ({development, position, onClick}) => {
-  return (
-    <div onClick={onClick} css={css`
-      ${position};
-      height: 22vh;
-      width: 14.3vh;
-      background-image: url('${images[development] || CardBack}');
-      background-size: cover;
-      border-radius: 1vh;
-      box-shadow: 0 0 0.2vh black;
-      `}>
-      <h3 style={{display: 'none'}}>Zeppelin</h3>
-    </div>
-  )
+export const height = 23
+export const width = 14.95
+
+const DevelopmentCard: FunctionComponent<Props> = ({development, ...props}) => (
+  <div css={css`${style}; ${backgroundImage(development)};`} {...props}>
+    <h3 style={{display: 'none'}}>Zeppelin</h3>
+  </div>
+)
+
+const style = css`
+  height: ${height}vh;
+  width: ${width}vh;
+  background-size: cover;
+  border-radius: 1vh;
+  box-shadow: 0 0 0.2vh black;
+`
+
+function backgroundImage(development?: Development) {
+  return css`background-image: url('${images[development] || CardBack}')`
 }
 
 const images = {

@@ -1,4 +1,5 @@
 import {css, SerializedStyles} from '@emotion/core'
+import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import Empire from './Empire'
 import AztecEmpireA from './aztec-empire-A.png'
@@ -7,7 +8,9 @@ import NoramStatesA from './noram-states-A.png'
 import PanafricanUnionA from './panafrican-union-A.png'
 import RepublicOfEuropeA from './republic-of-europe-A.png'
 
-const cardWidth = 22
+export const width = 23
+export const sizeRatio = 65 / 100
+export const height = width * sizeRatio
 
 const empireFaceA = {
   [Empire.AztecEmpire]: AztecEmpireA,
@@ -21,8 +24,8 @@ const EmpireCard: FunctionComponent<{ empire: Empire, position: SerializedStyles
   return (
     <div css={css`
       ${position};
-      height: ${cardWidth * 13 / 20}vh;
-      width: ${cardWidth}vh;
+      height: ${height}vh;
+      width: ${width}vh;
       background-image: url('${empireFaceA[empire]}');
       background-size: cover;
       border-radius: 1vh;
@@ -31,6 +34,21 @@ const EmpireCard: FunctionComponent<{ empire: Empire, position: SerializedStyles
       <h3 style={{display: 'none'}}>Zeppelin</h3>
     </div>
   )
+}
+
+export function getEmpireName(t: TFunction, empire: Empire) {
+  switch (empire) {
+    case Empire.AztecEmpire:
+      return t('Empire d’Azteca')
+    case Empire.FederationOfAsia:
+      return t('Fédération d’Asie')
+    case Empire.NoramStates:
+      return t('États du Noram')
+    case Empire.PanafricanUnion:
+      return t('Union Panafricaine')
+    case Empire.RepublicOfEurope:
+      return t('République d’Europa')
+  }
 }
 
 export default EmpireCard

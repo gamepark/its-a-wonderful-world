@@ -30,13 +30,13 @@ const Board = () => {
         top: 1vh;
         left: ${game.round == 1 ? 30.7 : game.round == 2 ? 34 : game.round == 3 ? 42.4 : 45.7}vh;
       `}/>
-      {game.deck.slice(-8).map((development, index) => <DevelopmentCard key={index} position={css`
+      {game.deck.slice(-8).map((development, index) => <DevelopmentCard key={index} css={css`
         position: absolute;
         top: -${14.8 + index * 0.1}vh;
         left: ${13.8 + index * 0.1}vh;
         transform: rotate(90deg) scale(0.66);
       `}/>)}
-      {game.discard.slice(-8).map((development, index) => <DevelopmentCard key={index} development={development} position={css`
+      {game.discard.slice(-8).map((development, index) => <DevelopmentCard key={index} development={development} css={css`
         position: absolute;
         top: -${14.8 + index * 0.1}vh;
         left: ${52 + index * 0.1}vh;

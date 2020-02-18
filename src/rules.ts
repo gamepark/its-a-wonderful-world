@@ -25,6 +25,9 @@ import {tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
 import shuffle from './util/shuffle'
 
+export const numberOfCardsDrafted = 7
+const numberOfCardsDeal2Players = 10
+
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
   setup() {
@@ -52,7 +55,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         } else if (game.players.every(player => player.chosenCard)) {
           return revealChosenCards()
         } else if (game.players[0].cardsToPass) {
-          if (game.players[0].draftArea.length < 7) {
+          if (game.players[0].draftArea.length < numberOfCardsDrafted) {
             return passCards()
           } else if (game.players[0].cardsToPass.length) {
             return discardLeftoverCards()
@@ -154,7 +157,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
   play(move, game) {
     switch (move.type) {
       case MoveType.DealDevelopmentCards: {
-        game.players.forEach(player => player.hand = game.deck.splice(0, 10))
+        game.players.forEach(player => player.hand = game.deck.splice(0, game.players.length == 2 ? numberOfCardsDeal2Players : numberOfCardsDrafted))
         if (isDealDevelopmentCardsView<Empire>(move)) {
           getPlayer(game, move.playerId).hand = move.playerCards
         }
@@ -162,7 +165,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       }
       case MoveType.ChooseDevelopmentCard: {
         const player = getPlayer(game, move.playerId)
-        player.chosenCard = player.hand.splice(move.cardIndex, 1)[0]
+        player.chosenCard = player.hand.splice(move.cardIndex, 1)[0] || true
         break
       }
       case MoveType.RevealChosenCards: {
@@ -341,7 +344,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
   getAnimationDuration(move) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
-        return [0.2]
+        return [0.5]
       case MoveType.DiscardLeftoverCards:
         return [0.5]
       default:

@@ -1,4 +1,4 @@
-import {css} from '@emotion/core'
+import {css, SerializedStyles} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useDrop, usePlay} from 'tabletop-game-workshop'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
@@ -7,7 +7,12 @@ import {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {slateForConstruction} from '../moves/SlateForConstruction'
 
-const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
+type Props = {
+  player: Player
+  getAreaCardPosition: (index: number) => SerializedStyles
+} & React.HTMLAttributes<HTMLDivElement>
+
+const ConstructionArea: FunctionComponent<Props> = ({player, getAreaCardPosition, ...props}) => {
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
@@ -18,22 +23,13 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
     drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.index))
   })
   return (
-    <div ref={ref} css={css`
-        position: absolute;
-        height: 24.6vh;
-        bottom: 26.6vh;
-        left: 26vh;
-        right: 1vh;
+    <div ref={ref} {...props} css={css`
         background-color: rgba(255, 0, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
-        border: 0.3vh dashed crimson;
-        border-radius: 1vh;
+        border-color: crimson;
       `}>
       {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
-      {player.constructionArea.map((construction, index) => <DevelopmentCard key={index} development={construction.development} position={css`
-          position:absolute;
-          top: 1vh;
-          left: ${index * 15.3 + 1}vh;
-        `}/>)}
+      {player.constructionArea.map((construction, index) => <DevelopmentCard key={index} development={construction.development}
+                                                                             css={getAreaCardPosition(index)}/>)}
     </div>
   )
 }
