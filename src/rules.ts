@@ -345,8 +345,8 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return [0.5]
-      case MoveType.DiscardLeftoverCards:
-        return [0.5]
+      /*case MoveType.DiscardLeftoverCards:
+        return [0.5]*/
       default:
         return 0
     }

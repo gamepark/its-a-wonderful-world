@@ -52,6 +52,8 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
           return t('Les joueurs doivent choisir une carte développment')
         }
       }
+    case Phase.Planning:
+      return 'Fin de la démo, merci de l’avoir testée !'
   }
 }
 

@@ -13,7 +13,7 @@ export default function () {
   if (!game)
     return null
   return (
-    <Game style={{backgroundImage: `url(${artwork})`, backgroundSize: 'cover'}}>
+    <Game style={{backgroundImage: `url(${artwork})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
       <Header/>
       <Board/>
       {game.players.map(player => player.empire === playerId ?

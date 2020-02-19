@@ -28,7 +28,7 @@ const DisplayedEmpire: FunctionComponent<{ player: Player }> = ({player}) => {
     left: ${constructedCardLeftMargin + cardWidth + margin * 2}vh;
     right: ${margin}vh;
     will-change: transform;
-    transform: translateY(-${cardHeight + handBottomMargin}vh);
+    transform: translateY(-${game.phase == Phase.Draft ? cardHeight + handBottomMargin : 0}vh);
     transition: transform ${discardingLeftoverCards?.duration || 0}s ease-in-out;
     border-radius: 1vh;
     border-style: dashed;
@@ -45,7 +45,7 @@ const DisplayedEmpire: FunctionComponent<{ player: Player }> = ({player}) => {
   const getAreaCardPosition = (index: number) => css`
     position: absolute;
     top: ${margin}vh;
-    left: ${margin + index * cardWidth}vh;
+    left: ${margin + index * (cardWidth + margin)}vh;
   `
   return (
     <Fragment>
