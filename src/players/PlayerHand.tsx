@@ -16,7 +16,9 @@ const PlayerHand: FunctionComponent<{ player: Player, margin: number, areaBorder
   const discardingLeftoverCards = useAnimation<DiscardLeftoverCardsView>(animation => animation.move.type == MoveType.DiscardLeftoverCards)
   return (
     <Hand rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={cardHeight / cardWidth}
-          draggable={index => ({item: developmentFromHand(index), transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2})}
+          draggable={index => ({
+            item: developmentFromHand(index), canDrag: !player.chosenCard, transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2
+          })}
           removing={index => choosingDevelopment && choosingDevelopment.move.cardIndex == index || discardingLeftoverCards != null}
           transition={choosingDevelopment?.duration || discardingLeftoverCards?.duration}
           itemHoverStyle={css`transform: scale(1.5);`}

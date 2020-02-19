@@ -36,6 +36,7 @@ module.exports = merge(commonConfig, {
     alias: {
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+      'react-i18next': path.resolve(__dirname, './node_modules/react-i18next'),
       'tabletop-game-workshop': path.resolve(__dirname, './node_modules/tabletop-game-workshop')
     }
   },
@@ -53,6 +54,7 @@ module.exports = merge(commonConfig, {
       amd: 'ReactDOM',
       root: 'ReactDOM'
     },
+    'react-i18next': 'react-i18next',
     'tabletop-game-workshop': 'tabletop-game-workshop'
   }
 })
