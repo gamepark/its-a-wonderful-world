@@ -54,7 +54,7 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
         }
       }
     case Phase.Planning:
-      return 'Fin de la démo, merci de l’avoir testée !'
+      return t('Vous devez mettre en construction ou recycler chacune des cartes draftées')
   }
 }
 

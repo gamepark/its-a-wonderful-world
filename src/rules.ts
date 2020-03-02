@@ -116,12 +116,12 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         break
       case Phase.Planning:
         player.draftArea.forEach((development, index) => moves.push(slateForConstruction(empire, index), recycle(empire, index)))
-        if (!player.draftArea.length && !player.availableResources.length) {
+        if (!player.draftArea.length && !player.availableResources.length && !player.ready) {
           moves.push(tellYourAreReady(empire))
         }
         break
       case Phase.Production:
-        if (player.bonuses.length && !player.availableResources.length) {
+        if (player.bonuses.length && !player.availableResources.length && !player.ready) {
           moves.push(tellYourAreReady(empire))
         }
         break

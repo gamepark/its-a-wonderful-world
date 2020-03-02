@@ -30,10 +30,10 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight = fa
   const {t} = useTranslation()
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
-      <img src={empireAvatar[player.empire]} css={avatarStyle}/>
+      <img src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       <h3 css={nameStyle}>{getEmpireName(t, player.empire)}</h3>
       {Object.values(Resource).flatMap(resource => Array(getProduction(player, resource)).fill(resource)).map((resource, index) =>
-        <img key={index} src={resourceIcon[resource]} css={productionStyle(index)}/>)}
+        <img key={index} src={resourceIcon[resource]} css={productionStyle(index)} draggable="false"/>)}
     </div>
   )
 }

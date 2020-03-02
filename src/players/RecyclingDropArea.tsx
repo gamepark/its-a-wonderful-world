@@ -5,6 +5,9 @@ import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
 import Empire from '../material/empires/Empire'
 import {recycle} from '../moves/Recycle'
+import {numberOfCardsToDraft} from '../rules'
+import screenRatio from '../util/screenRatio'
+import {areasLeftPosition, cardsShift} from './DraftArea'
 
 const RecyclingDropArea: FunctionComponent<{ empire: Empire }> = ({empire}) => {
   const play = usePlay()
@@ -17,22 +20,25 @@ const RecyclingDropArea: FunctionComponent<{ empire: Empire }> = ({empire}) => {
     drop: (item: DevelopmentFromHand) => play(recycle(empire, item.index))
   })
   return (
-    <div ref={ref} css={css`
-        position: absolute;
-        display: ${isValidTarget ? 'block' : 'none'};
-        height: 40vh;
-        width: 85vh;
-        top: 7.5vh;
-        left: 50%;
-        transform: translateX(calc(2vh - 50%));
-        background-color: rgba(0, 0, 0, ${isOver ? 0.5 : 0.3});
-        border: 0.3vh dashed grey;
-        border-radius: 1vh;
-      `}>
+    <div ref={ref} css={getStyle(isValidTarget, isOver)}>
       <span css={text}>Recycle</span>
     </div>
   )
 }
+
+const border = 0.3
+
+const getStyle = (isValidTarget: boolean, isOver: boolean) => css`
+  position: absolute;
+  display: ${isValidTarget ? 'block' : 'none'};
+  height: 36%;
+  width: ${cardsShift * numberOfCardsToDraft + 1}%;
+  left: calc(${areasLeftPosition}% - ${border * 5 / screenRatio}%);
+  top: 8%;
+  background-color: rgba(0, 0, 0, ${isOver ? 0.5 : 0.3});
+  border: 0.3vh dashed grey;
+  border-radius: 1vh;
+`
 
 const text = css`
 position: absolute;

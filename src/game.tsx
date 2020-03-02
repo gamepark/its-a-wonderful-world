@@ -14,6 +14,7 @@ export default function () {
   const game = useGame<ItsAWonderfulWorld>()
   const playerId = usePlayerId()
   const [displayedEmpire, setDisplayedEmpire] = useState(playerId || game.players[0].empire)
+  const displayedPlayer = game.players.find(player => player.empire == displayedEmpire)
   let playersStartingWithMyself = game.players
   if (playerId) {
     const playerIndex = game.players.findIndex(player => player.empire == playerId)
@@ -23,10 +24,10 @@ export default function () {
     <Game css={style}>
       <Header/>
       <Letterbox>
-        <Board/>
+        <Board availableResources={displayedPlayer.availableResources}/>
         <DrawPile/>
         <DiscardPile/>
-        <DisplayedEmpire player={game.players.find(player => player.empire == displayedEmpire)}/>
+        <DisplayedEmpire player={displayedPlayer}/>
         {playersStartingWithMyself.map((player, index) =>
           <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
                        highlight={player.empire == displayedEmpire}/>

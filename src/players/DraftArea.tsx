@@ -53,9 +53,9 @@ export const cardsShift = cardHeight * cardRatio / screenRatio + 1
 
 export const getAreasStyle = (row: number, fullWidth: boolean) => css`
   position: absolute;
-  height: calc(${cardHeight}% + ${border * 10}%);
-  bottom: calc(${getAreaCardBottom(row)}% - ${border * 5}%);
-  left: calc(${areasLeftPosition}% - ${border * 5 / screenRatio}%);
+  height: ${cardHeight + border * 10}%;
+  bottom: ${getAreaCardBottom(row) - border * 5}%;
+  left: ${areasLeftPosition - border * 5 / screenRatio}%;
   right: ${fullWidth ? '1%' : 'auto'};
   width: ${fullWidth ? 'auto' : (cardsShift * numberOfCardsToDraft + 1) + '%'};
   border-radius: ${border * 5}vh;

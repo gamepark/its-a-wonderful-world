@@ -89,7 +89,7 @@ export const width = height * ratio / screenRatio // percentage of playing area 
 
 const DevelopmentCard: FunctionComponent<Props> = ({development, ...props}) => (
   <div {...props}>
-    <img src={development ? images[development] : CardBack} css={imgStyle}/>
+    <img src={development ? images[development] : CardBack} css={imgStyle} draggable="false"/>
     <h3 style={{display: 'none'}}>Zeppelin</h3>
   </div>
 )
@@ -97,7 +97,7 @@ const DevelopmentCard: FunctionComponent<Props> = ({development, ...props}) => (
 const imgStyle = css`
   height: 100%;
   border-radius: 6% / ${65 / 100 * 6}%;
-  box-shadow: 0 0 2px black;
+  box-shadow: 0 0 5px black;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;

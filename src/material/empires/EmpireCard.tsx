@@ -47,7 +47,7 @@ type Props = { empire: Empire } & React.HTMLAttributes<HTMLDivElement>
 const EmpireCard: FunctionComponent<Props> = ({empire, ...props}) => {
   return (
     <div {...props}>
-      <img src={empireFaceA[empire]} css={imgStyle}/>
+      <img src={empireFaceA[empire]} css={imgStyle} draggable="false"/>
     </div>
   )
 }
