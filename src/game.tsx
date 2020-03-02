@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import React from 'react'
+import React, {useState} from 'react'
 import {Game, Letterbox, useGame, usePlayerId} from 'tabletop-game-workshop'
 import Header from './Header'
 import ItsAWonderfulWorld from './ItsAWonderfulWorld'
@@ -13,8 +13,12 @@ import PlayerPanel from './players/PlayerPanel'
 export default function () {
   const game = useGame<ItsAWonderfulWorld>()
   const playerId = usePlayerId()
-  if (!game)
-    return null
+  const [displayedEmpire, setDisplayedEmpire] = useState(playerId || game.players[0].empire)
+  let playersStartingWithMyself = game.players
+  if (playerId) {
+    const playerIndex = game.players.findIndex(player => player.empire == playerId)
+    playersStartingWithMyself = [...game.players.slice(playerIndex, game.players.length), ...game.players.slice(0, playerIndex)]
+  }
   return (
     <Game css={style}>
       <Header/>
@@ -22,8 +26,11 @@ export default function () {
         <Board/>
         <DrawPile/>
         <DiscardPile/>
-        <DisplayedEmpire player={game.players.find(player => player.empire == playerId)}/>
-        {game.players.map((player, index) => <PlayerPanel key={player.empire} player={player} position={index}/>)}
+        <DisplayedEmpire player={game.players.find(player => player.empire == displayedEmpire)}/>
+        {playersStartingWithMyself.map((player, index) =>
+          <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
+                       highlight={player.empire == displayedEmpire}/>
+        )}
       </Letterbox>
     </Game>
   )

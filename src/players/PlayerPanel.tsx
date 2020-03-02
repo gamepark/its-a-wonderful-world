@@ -20,10 +20,16 @@ const resourceIcon = {
   [Resource.Exploration]: Exploration
 }
 
-const PlayerPanel: FunctionComponent<{ player: Player, position: number }> = ({player, position}) => {
+type Props = {
+  player: Player
+  position: number
+  highlight?: boolean
+} & React.HTMLAttributes<HTMLDivElement>
+
+const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight = false, ...props}) => {
   const {t} = useTranslation()
   return (
-    <div css={style(player.empire, position)}>
+    <div css={style(player.empire, position, highlight)} {...props}>
       <img src={empireAvatar[player.empire]} css={avatarStyle}/>
       <h3 css={nameStyle}>{getEmpireName(t, player.empire)}</h3>
       {Object.values(Resource).flatMap(resource => Array(getProduction(player, resource)).fill(resource)).map((resource, index) =>
@@ -32,18 +38,30 @@ const PlayerPanel: FunctionComponent<{ player: Player, position: number }> = ({p
   )
 }
 
-const style = (empire: Empire, position: number) => css`
+const style = (empire: Empire, position: number, highlight: boolean) => css`
   position: absolute;
   top: ${8.5 + position * 18.5}%;
   right: 1%;
   width: 20%;
   height: 17%;
-  border: 2px solid lightslategrey;
   border-radius: 5px;
   background-image: url(${empireBackground[empire]});
   background-size: cover;
   background-position: center;
+  ${borderStyle(highlight)};
+`
+
+const borderStyle = (highlight: boolean) => highlight ? css`
+  border: 2px solid gold;
+  box-shadow: -1px 3px 10px gold;
+` : css`
+  border: 2px solid lightslategrey;
   box-shadow: -1px 3px 10px black;
+  cursor: pointer;
+  &:hover {
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 5px gold;
+  }
 `
 
 const avatarStyle = css`
