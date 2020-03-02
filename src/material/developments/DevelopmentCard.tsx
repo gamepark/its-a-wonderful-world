@@ -1,5 +1,6 @@
 import {css} from '@emotion/core'
-import React, {FunctionComponent, MouseEventHandler} from 'react'
+import React, {FunctionComponent} from 'react'
+import screenRatio from '../../util/screenRatio'
 import CardBack from './back.png'
 import Development from './Development'
 import AlexandersTomb from './discovery/alexanders-tomb.png'
@@ -80,31 +81,28 @@ import Submarine from './vehicle/submarine.png'
 import TankDivision from './vehicle/tank-division.png'
 import Zeppelin from './vehicle/zeppelin.png'
 
-type Props = {
-  development?: Development
-  onClick?: MouseEventHandler
-} & React.HTMLAttributes<HTMLDivElement>
+type Props = { development?: Development } & React.HTMLAttributes<HTMLDivElement>
 
-export const height = 23
-export const width = 14.95
+export const height = 23 // percentage of playing area height
+export const ratio = 65 / 100
+export const width = height * ratio / screenRatio // percentage of playing area width
 
 const DevelopmentCard: FunctionComponent<Props> = ({development, ...props}) => (
-  <div css={css`${style}; ${backgroundImage(development)};`} {...props}>
+  <div {...props}>
+    <img src={development ? images[development] : CardBack} css={imgStyle}/>
     <h3 style={{display: 'none'}}>Zeppelin</h3>
   </div>
 )
 
-const style = css`
-  height: ${height}vh;
-  width: ${width}vh;
-  background-size: cover;
-  border-radius: 1vh;
-  box-shadow: 0 0 0.2vh black;
+const imgStyle = css`
+  height: 100%;
+  border-radius: 6% / ${65 / 100 * 6}%;
+  box-shadow: 0 0 2px black;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
 `
-
-function backgroundImage(development?: Development) {
-  return css`background-image: url('${images[development] || CardBack}')`
-}
 
 const images = {
   [Development.FinancialCenter]: FinancialCenter,

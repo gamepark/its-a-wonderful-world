@@ -11,15 +11,16 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 
 const headerStyle = css`
-  height: 7vh;
-  padding: 0.5vh;
   text-align: center;
   background: rgba(255, 255, 255, 0.5);
 `
 
 const textStyle = css`
-    margin: 1vh;
-    font-size: 4vh;
+  color: #333333;
+  padding: 1vh;
+  margin: 0;
+  line-height: 1.25;
+  font-size: 4vh;
 `
 
 const Header = () => {

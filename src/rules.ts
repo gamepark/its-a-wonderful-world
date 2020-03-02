@@ -5,6 +5,7 @@ import Development from './material/developments/Development'
 import DevelopmentsAnatomy from './material/developments/Developments'
 import {isDevelopmentType} from './material/developments/DevelopmentType'
 import Empire from './material/empires/Empire'
+import EmpiresProductionA from './material/empires/EmpiresProduction'
 import Resource, {isResource} from './material/resources/Resource'
 import {chooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
 import {completeConstruction} from './moves/CompleteConstruction'
@@ -25,7 +26,7 @@ import {tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
 import shuffle from './util/shuffle'
 
-export const numberOfCardsDrafted = 7
+export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
 
 // noinspection JSUnusedGlobalSymbols
@@ -55,7 +56,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         } else if (game.players.every(player => player.chosenCard)) {
           return revealChosenCards()
         } else if (game.players[0].cardsToPass) {
-          if (game.players[0].draftArea.length < numberOfCardsDrafted) {
+          if (game.players[0].draftArea.length < numberOfCardsToDraft) {
             return passCards()
           } else if (game.players[0].cardsToPass.length) {
             return discardLeftoverCards()
@@ -157,7 +158,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
   play(move, game) {
     switch (move.type) {
       case MoveType.DealDevelopmentCards: {
-        game.players.forEach(player => player.hand = game.deck.splice(0, game.players.length == 2 ? numberOfCardsDeal2Players : numberOfCardsDrafted))
+        game.players.forEach(player => player.hand = game.deck.splice(0, game.players.length == 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft))
         if (isDealDevelopmentCardsView<Empire>(move)) {
           getPlayer(game, move.playerId).hand = move.playerCards
         }
@@ -394,8 +395,12 @@ function getNextProductionStep(game: ItsAWonderfulWorld): Resource {
   }
 }
 
-function getProduction(player: Player, resource: Resource): number {
-  return player.constructedDevelopments.reduce((sum, development) => sum + getDevelopmentProduction(player, development, resource), 0)
+export function getProduction(player: Player, resource: Resource): number {
+  return getBaseProduction(player.empire, resource) + player.constructedDevelopments.reduce((sum, development) => sum + getDevelopmentProduction(player, development, resource), 0)
+}
+
+function getBaseProduction(empire: Empire, resource: Resource): number {
+  return EmpiresProductionA.get(empire)[resource] || 0
 }
 
 function getDevelopmentProduction(player: Player, development: Development, resource: Resource): number {
@@ -407,7 +412,7 @@ function getDevelopmentProduction(player: Player, development: Development, reso
     if (isDevelopmentType(production)) {
       return player.constructedDevelopments.filter(development => DevelopmentsAnatomy.get(development).type == production).length
     } else {
-      return production | 0
+      return production || 0
     }
   }
 }
