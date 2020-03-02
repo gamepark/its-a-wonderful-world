@@ -1,6 +1,11 @@
 import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
+import {useDrop, usePlay} from 'tabletop-game-workshop'
+import DragObjectType from '../../drag-objects/DragObjectType'
+import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
+import {placeResource} from '../../moves/PlaceResource'
+import {glow} from '../board/ResourceArea'
 import AztecEmpireA from './aztec-empire-A.png'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
 import AztecEmpireBackground from './aztec-empire-background.png'
@@ -42,15 +47,53 @@ export const empireAvatar = {
   [Empire.RepublicOfEurope]: RepublicOfEuropeAvatar
 }
 
-type Props = { empire: Empire } & React.HTMLAttributes<HTMLDivElement>
+type Props = {
+  empire: Empire
+  withResourceDrop?: boolean
+} & React.HTMLAttributes<HTMLDivElement>
 
-const EmpireCard: FunctionComponent<Props> = ({empire, ...props}) => {
+const EmpireCard: FunctionComponent<Props> = ({empire, withResourceDrop = false, ...props}) => {
+  const play = usePlay()
+  const [{isValidTarget, isOver}, ref] = useDrop({
+    accept: DragObjectType.RESOURCE,
+    canDrop: () => withResourceDrop,
+    collect: (monitor) => ({
+      isValidTarget: monitor.getItemType() == DragObjectType.RESOURCE,
+      isOver: monitor.isOver()
+    }),
+    drop: (item: ResourceFromBoard) => play(placeResource(empire, item.resource))
+  })
   return (
-    <div {...props}>
+    <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)}>
       <img src={empireFaceA[empire]} css={imgStyle} draggable="false"/>
     </div>
   )
 }
+
+const getStyle = (isValidTarget: boolean, isOver: boolean) => css`
+  transform-origin: bottom left;
+  border-radius: 5%;
+  transition: transform 0.2s ease-in-out;
+  ${isValidTarget && validTargetStyle};
+  ${isOver && overStyle};
+`
+
+const validTargetStyle = css`
+  z-index: 1;
+  animation: ${glow('green')} 1s ease-in-out infinite alternate;
+  transform: scale(1.1);
+`
+
+const overStyle = css`
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(0, 128, 0, 0.3);
+  }
+`
 
 const imgStyle = css`
   height: 100%;

@@ -1,4 +1,4 @@
-import {css, keyframes} from '@emotion/core'
+import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useGame} from 'tabletop-game-workshop'
 import ItsAWonderfulWorld from '../../ItsAWonderfulWorld'
@@ -10,6 +10,7 @@ import Materials from '../resources/materials-cube.png'
 import Resource from '../resources/Resource'
 import Science from '../resources/science-cube.png'
 import board from './board.png'
+import ResourceArea from './ResourceArea'
 import roundTracker1 from './round-tracker-1-3.png'
 import roundTracker2 from './round-tracker-2-4.png'
 
@@ -35,14 +36,14 @@ const Board: FunctionComponent<Props> = ({availableResources}) => {
         left: ${game.round == 1 ? 36.65 : game.round == 2 ? 40.6 : game.round == 3 ? 50.4 : 54.35}%;
       `}/>
       {availableResources.map((resource, index) => <img key={index} src={resourceCube[resource]} css={getResourceStyle(index, resource)}/>)}
-      {resources.map((resource) => <div key={resource} css={getResourceAreaHighlight(resource, availableResources.some(r => r == resource))}/>)}
+      {resources.filter(resource => availableResources.indexOf(resource) != -1).map((resource) => <ResourceArea key={resource} resource={resource}/>)}
     </div>
   )
 }
 
 const resources = Object.values(Resource)
 
-const resourceCube = {
+export const resourceCube = {
   [Resource.Materials]: Materials,
   [Resource.Energy]: Energy,
   [Resource.Science]: Science,
@@ -71,35 +72,5 @@ const cubesDispersion = [
   [4, -2],
   [3, 10]
 ]
-
-const getResourceAreaHighlight = (resource:Resource, displayed: boolean) => css`
-  position: absolute;
-  width: 10%;
-  height: 29%;
-  left: ${resources.indexOf(resource) * 18.95 + 4.5}%;
-  top: 22%;
-  border-radius: 100%;
-  display: ${displayed ? 'block' : 'none'};
-  cursor: grab;
-  animation: ${glow(resourceColor[resource])} 1s ease-in-out infinite alternate;
-`
-
-const resourceColor = {
-  [Resource.Materials]: 'white',
-  [Resource.Energy]: 'black',
-  [Resource.Science]: 'green',
-  [Resource.Gold]: 'gold',
-  [Resource.Exploration]: 'blue',
-  [Resource.Krystallium]: 'red'
-}
-
-const glow = (color: string) => keyframes`
-  from {
-    box-shadow: 0 0 5px ${color};
-  }
-  to {
-    box-shadow: 0 0 30px ${color};
-  }
-`
 
 export default Board

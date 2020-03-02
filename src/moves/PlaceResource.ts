@@ -11,5 +11,10 @@ export default interface PlaceResource {
 }
 
 export function placeResource(playerId: Empire, resource: Resource, constructionIndex?: number, space?: number): PlaceResource {
-  return {type: MoveType.PlaceResource, playerId, resource, constructionIndex, space}
+  const move: PlaceResource = {type: MoveType.PlaceResource, playerId, resource}
+  if (constructionIndex && space) {
+    move.constructionIndex = constructionIndex
+    move.space = space
+  }
+  return move
 }
