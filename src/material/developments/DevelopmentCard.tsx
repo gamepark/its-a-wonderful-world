@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import React, {FunctionComponent} from 'react'
+import React, {forwardRef} from 'react'
 import screenRatio from '../../util/screenRatio'
 import CardBack from './back.png'
 import Development from './Development'
@@ -87,12 +87,12 @@ export const height = 23 // percentage of playing area height
 export const ratio = 65 / 100
 export const width = height * ratio / screenRatio // percentage of playing area width
 
-const DevelopmentCard: FunctionComponent<Props> = ({development, ...props}) => (
-  <div {...props}>
+const DevelopmentCard = forwardRef<HTMLDivElement, Props>(({development, ...props}, ref) => (
+  <div ref={ref} {...props}>
     <img src={development ? images[development] : CardBack} css={imgStyle} draggable="false"/>
     <h3 style={{display: 'none'}}>Zeppelin</h3>
   </div>
-)
+))
 
 const imgStyle = css`
   height: 100%;

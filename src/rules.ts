@@ -227,10 +227,10 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       case MoveType.PlaceResource: {
         const player = getPlayer(game, move.playerId)
         player.availableResources.splice(player.availableResources.indexOf(move.resource), 1)
-        if (move.constructionIndex && move.space) {
-          player.constructionArea[move.constructionIndex].costSpaces[move.space] = move.resource
-        } else {
+        if (isNaN(move.constructionIndex) || isNaN(move.space)) {
           player.empireCardResources.push(move.resource)
+        } else {
+          player.constructionArea[move.constructionIndex].costSpaces[move.space] = move.resource
         }
         break
       }

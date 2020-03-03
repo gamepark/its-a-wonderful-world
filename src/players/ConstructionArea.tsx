@@ -4,8 +4,8 @@ import {useDrop, useGame, usePlay} from 'tabletop-game-workshop'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
-import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {slateForConstruction} from '../moves/SlateForConstruction'
+import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
@@ -26,7 +26,7 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
         {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
       </div>
       {player.constructionArea.map((construction, index) => (
-        <DevelopmentCard key={index} development={construction.development} css={getAreaCardStyle(row, index)}/>)
+        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction} constructionIndex={index} css={getAreaCardStyle(row, index)}/>)
       )}
     </Fragment>
   )
