@@ -77,7 +77,9 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         }
         break
       case Phase.Production:
-        if (game.players.every(player => player.ready)) {
+        if (!game.productionStep) {
+          return produce(Resource.Materials)
+        } else if (game.players.every(player => player.ready)) {
           const nextProductionStep = getNextProductionStep(game)
           if (nextProductionStep) {
             return produce(nextProductionStep)
@@ -388,10 +390,8 @@ function getNextProductionStep(game: ItsAWonderfulWorld): Resource {
       return Resource.Gold
     case Resource.Gold:
       return Resource.Exploration
-    case Resource.Exploration:
-      return undefined
     default:
-      return Resource.Materials
+      return undefined
   }
 }
 

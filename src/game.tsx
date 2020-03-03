@@ -22,7 +22,6 @@ export default function () {
   }
   return (
     <Game css={style}>
-      <Header/>
       <Letterbox>
         <Board availableResources={displayedPlayer.availableResources}/>
         <DrawPile/>
@@ -33,6 +32,7 @@ export default function () {
                        highlight={player.empire == displayedEmpire}/>
         )}
       </Letterbox>
+      <Header/>
     </Game>
   )
 }
