@@ -15,7 +15,7 @@ const DisplayedEmpire: FunctionComponent<{ player: Player }> = ({player}) => {
   const playerId = usePlayerId<Empire>()
   return (
     <Fragment>
-      <EmpireCard empire={player.empire} css={empireCardStyle} withResourceDrop={playerId == player.empire}/>
+      <EmpireCard player={player} css={empireCardStyle} withResourceDrop={playerId == player.empire}/>
       <DraftArea player={player}/>
       {(game.round > 1 || game.phase != Phase.Draft) && <ConstructionArea player={player}/>}
       <RecyclingDropArea empire={player.empire}/>

@@ -7,6 +7,8 @@ import ItsAWonderfulWorld, {DevelopmentUnderConstruction} from '../ItsAWonderful
 import {glow} from '../material/board/ResourceArea'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import Empire from '../material/empires/Empire'
+import {isResource} from '../material/resources/Resource'
+import ResourceCube from '../material/resources/ResourceCube'
 import MoveType from '../moves/MoveType'
 import PlaceResource, {placeResource} from '../moves/PlaceResource'
 import ItsAWonderfulWorldRules from '../rules'
@@ -30,7 +32,17 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
     }),
     drop: (item: ResourceFromBoard) => play(placeResource(empire, item.resource, constructionIndex, Math.min(...legalMoves.filter(move => move.resource == item.resource).map(move => move.space))))
   })
-  return <DevelopmentCard ref={ref} development={developmentUnderConstruction.development} css={getStyle(canDrop, isOver)} {...props}/>
+  return (
+    <div {...props}>
+      <DevelopmentCard ref={ref} development={developmentUnderConstruction.development} css={getStyle(canDrop, isOver)}/>
+      {developmentUnderConstruction.costSpaces.map((resource, index) => {
+        if (!isResource(resource)) {
+          return null
+        }
+        return <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>
+      })}
+    </div>
+  )
 }
 
 const getStyle = (canDrop: boolean, isOver: boolean) => css`
@@ -55,6 +67,13 @@ const overStyle = css`
     z-index: 1;
     background-color: rgba(0, 128, 0, 0.3);
   }
+`
+
+const getResourceStyle = (index: number) => css`
+  position: absolute;
+  width: 13%;
+  left: 3.5%;
+  top: ${index * 9 + 1.5}%;
 `
 
 export default DevelopmentCardUnderConstruction

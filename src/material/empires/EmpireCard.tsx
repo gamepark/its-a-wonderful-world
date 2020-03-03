@@ -4,8 +4,11 @@ import React, {FunctionComponent} from 'react'
 import {useDrop, usePlay} from 'tabletop-game-workshop'
 import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
+import {Player} from '../../ItsAWonderfulWorld'
 import {placeResource} from '../../moves/PlaceResource'
 import {glow} from '../board/ResourceArea'
+import Resource from '../resources/Resource'
+import ResourceCube from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.png'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
 import AztecEmpireBackground from './aztec-empire-background.png'
@@ -48,11 +51,11 @@ export const empireAvatar = {
 }
 
 type Props = {
-  empire: Empire
+  player: Player
   withResourceDrop?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const EmpireCard: FunctionComponent<Props> = ({empire, withResourceDrop = false, ...props}) => {
+const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false, ...props}) => {
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.RESOURCE,
@@ -61,11 +64,12 @@ const EmpireCard: FunctionComponent<Props> = ({empire, withResourceDrop = false,
       isValidTarget: monitor.getItemType() == DragObjectType.RESOURCE,
       isOver: monitor.isOver()
     }),
-    drop: (item: ResourceFromBoard) => play(placeResource(empire, item.resource))
+    drop: (item: ResourceFromBoard) => play(placeResource(player.empire, item.resource))
   })
   return (
     <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)}>
-      <img src={empireFaceA[empire]} css={imgStyle} draggable="false"/>
+      <img src={empireFaceA[player.empire]} css={imgStyle} draggable="false"/>
+      {player.empireCardResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
     </div>
   )
 }
@@ -104,6 +108,21 @@ const imgStyle = css`
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
 `
+
+const getResourceStyle = (index: number) => css`
+  position: absolute;
+  width: 10%;
+  right: ${resourcePosition[index][0]}%;
+  top: ${resourcePosition[index][1]}%;
+`
+
+const resourcePosition = [
+  [12, 32],
+  [2, 47],
+  [5, 66],
+  [18, 66],
+  [22, 47],
+]
 
 export function getEmpireName(t: TFunction, empire: Empire) {
   switch (empire) {

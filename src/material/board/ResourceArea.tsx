@@ -4,7 +4,7 @@ import {DragPreviewImage} from 'react-dnd'
 import {useDrag} from 'tabletop-game-workshop'
 import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
 import Resource from '../resources/Resource'
-import {resourceCube} from './Board'
+import {images as resourceCubeImages} from '../resources/ResourceCube'
 
 const ResourceArea: FunctionComponent<{ resource: Resource }> = ({resource}) => {
   const [{}, ref, preview] = useDrag({
@@ -15,7 +15,7 @@ const ResourceArea: FunctionComponent<{ resource: Resource }> = ({resource}) => 
   })
   return (
     <Fragment>
-      <DragPreviewImage connect={preview} src={resourceCube[resource]}/>
+      <DragPreviewImage connect={preview} src={resourceCubeImages[resource]}/>
       <div ref={ref} key={resource} css={getResourceAreaHighlight(resource)}/>
     </Fragment>
   )
