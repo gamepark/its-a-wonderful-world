@@ -1,14 +1,16 @@
 import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
 import React from 'react'
-import {useTranslation, Trans} from 'react-i18next'
+import {Trans, useTranslation} from 'react-i18next'
 import {useAnimation, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import Animation from 'tabletop-game-workshop/dist/types/Animation'
 import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
+import Character from './material/characters/Character'
 import Empire from './material/empires/Empire'
 import {getEmpireName} from './material/empires/EmpireCard'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
+import {receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
 
 const headerStyle = css`
@@ -69,6 +71,8 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
     case Phase.Production:
       if (player.availableResources.length) {
         return t('Placez les ressources produites sur vos dévelopments en construction ou votre carte Empire')
+      } else if (player.bonuses.some(bonus => bonus == 'CHOOSE_CHARACTER')) {
+        return <Trans>Vous pouvez récupérer un <a onClick={() => play(receiveCharacter(empire, Character.Financier))} css={buttonStyle}>Financier</a> ou un <a onClick={() => play(receiveCharacter(empire, Character.General))} css={buttonStyle}>Général</a></Trans>
       } else {
         return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a> si vous êtes prêt à passer à la phase de production suivante</Trans>
       }

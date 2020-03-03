@@ -56,9 +56,9 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         } else if (game.players.every(player => player.chosenCard)) {
           return revealChosenCards()
         } else if (game.players[0].cardsToPass) {
-          if (game.players[0].draftArea.length < numberOfCardsToDraft) {
-            return passCards()
-          } else if (game.players[0].cardsToPass.length) {
+          return passCards()
+        } else if (game.players[0].draftArea.length == numberOfCardsToDraft) {
+          if (game.players[0].hand.length) {
             return discardLeftoverCards()
           } else {
             return startPhase(Phase.Planning)
@@ -178,7 +178,9 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
           game.players.forEach(player => player.draftArea.push(player.chosenCard as Development))
         }
         game.players.forEach(player => {
-          player.cardsToPass = player.hand
+          if (player.draftArea.length < numberOfCardsToDraft) {
+            player.cardsToPass = player.hand
+          }
           delete player.chosenCard
         })
         break
