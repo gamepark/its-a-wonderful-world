@@ -33,8 +33,8 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
     drop: (item: ResourceFromBoard) => play(placeResource(empire, item.resource, constructionIndex, Math.min(...legalMoves.filter(move => move.resource == item.resource).map(move => move.space))))
   })
   return (
-    <div {...props}>
-      <DevelopmentCard ref={ref} development={developmentUnderConstruction.development} css={getStyle(canDrop, isOver)}/>
+    <div ref={ref} {...props} css={getStyle(canDrop, isOver)}>
+      <DevelopmentCard development={developmentUnderConstruction.development}/>
       {developmentUnderConstruction.costSpaces.map((resource, index) => {
         if (!isResource(resource)) {
           return null
@@ -52,7 +52,6 @@ const getStyle = (canDrop: boolean, isOver: boolean) => css`
 `
 
 const canDropStyle = css`
-  z-index: 1;
   transition: transform 0.2s ease-in-out !important;
   animation: ${glow('green')} 1s ease-in-out infinite alternate;
   transform: scale(1.05);

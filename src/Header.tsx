@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import {useTranslation, Trans} from 'react-i18next'
 import {useAnimation, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import Animation from 'tabletop-game-workshop/dist/types/Animation'
 import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
@@ -62,9 +62,15 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
       if (player.draftArea.length) {
         return t('Vous devez mettre en construction ou recycler chacune des cartes draftées')
       } else if (player.availableResources.length) {
-        return t('Placez vos ressources sur vos dévelopement en construction ou votre carte Empire')
+        return t('Placez vos ressources sur vos dévelopements en construction ou votre carte Empire')
       } else {
-        return <>{t('Vous avez terminé votre planification')}<a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>{t('Valider')}</a></>
+        return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a> pour terminer votre planification</Trans>
+      }
+    case Phase.Production:
+      if (player.availableResources.length) {
+        return t('Placez les ressources produites sur vos dévelopments en construction ou votre carte Empire')
+      } else {
+        return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a> si vous êtes prêt à passer à la phase de production suivante</Trans>
       }
   }
 }
@@ -78,7 +84,7 @@ const buttonStyle = css`
   font-size: 3.4vh;
   font-weight: bold;
   padding: 0 1vh;
-  margin: 0 2vh;
+  margin: 0 1vh;
   text-decoration: none;
   text-transform: uppercase;
   text-shadow: 1px 1px 3px darkslategrey;

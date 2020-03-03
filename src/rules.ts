@@ -123,7 +123,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         }
         break
       case Phase.Production:
-        if (player.bonuses.length && !player.availableResources.length && !player.ready) {
+        if (!player.bonuses.length && !player.availableResources.length && !player.ready) {
           moves.push(tellYourAreReady(empire))
         }
         break
@@ -276,18 +276,20 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
             singleMostPlayer = null
           }
         })
-        switch (move.resource) {
-          case Resource.Materials:
-          case Resource.Gold:
-            singleMostPlayer.bonuses.push(Character.Financier)
-            break
-          case Resource.Energy:
-          case Resource.Exploration:
-            singleMostPlayer.bonuses.push(Character.General)
-            break
-          default:
-            singleMostPlayer.bonuses.push(ChooseCharacter)
-            break
+        if (singleMostPlayer) {
+          switch (move.resource) {
+            case Resource.Materials:
+            case Resource.Gold:
+              singleMostPlayer.bonuses.push(Character.Financier)
+              break
+            case Resource.Energy:
+            case Resource.Exploration:
+              singleMostPlayer.bonuses.push(Character.General)
+              break
+            default:
+              singleMostPlayer.bonuses.push(ChooseCharacter)
+              break
+          }
         }
         break
       }
