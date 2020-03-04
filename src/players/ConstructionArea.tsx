@@ -35,6 +35,7 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
 const getConstructionAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(255, 0, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
   border-color: crimson;
+  z-index: ${isValidTarget ? 1 : 'auto'};
   ${getAreasStyle(row, fullWidth)};
 `
 

@@ -192,7 +192,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         } else {
           const draftDirection = game.round % 2 ? 1 : -1
           for (let i = 0; i < game.players.length; i++) {
-            game.players[i].hand = game.players[(i + draftDirection) % game.players.length].cardsToPass
+            game.players[i].hand = game.players[(i + game.players.length + draftDirection) % game.players.length].cardsToPass
           }
         }
         game.players.forEach(player => delete player.cardsToPass)
@@ -409,7 +409,9 @@ function getBaseProduction(empire: Empire, resource: Resource): number {
 
 function getDevelopmentProduction(player: Player, development: Development, resource: Resource): number {
   const developmentAnatomy = DevelopmentsAnatomy.get(development)
-  if (isResource(developmentAnatomy.production)) {
+  if (!developmentAnatomy.production) {
+    return 0
+  } else if (isResource(developmentAnatomy.production)) {
     return developmentAnatomy.production == resource ? 1 : 0
   } else {
     const production = developmentAnatomy.production[resource]
