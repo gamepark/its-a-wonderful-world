@@ -2,6 +2,8 @@ import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {Player} from '../ItsAWonderfulWorld'
+import Character from '../material/characters/Character'
+import DevelopmentType from '../material/developments/DevelopmentType'
 import Empire from '../material/empires/Empire'
 import {empireAvatar, empireBackground, getEmpireName} from '../material/empires/EmpireCard'
 import Energy from '../material/resources/energy.png'
@@ -10,7 +12,8 @@ import Gold from '../material/resources/gold.png'
 import Materials from '../material/resources/materials.png'
 import Resource from '../material/resources/Resource'
 import Science from '../material/resources/science.png'
-import {getProduction} from '../rules'
+import {getProduction, getVictoryPointsMultiplier} from '../rules'
+import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 
 const resourceIcon = {
   [Resource.Materials]: Materials,
@@ -28,12 +31,26 @@ type Props = {
 
 const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight = false, ...props}) => {
   const {t} = useTranslation()
+  const victoryPointsMultipliers: { item: Character | DevelopmentType, multiplier: number }[] = []
+  const completeVictoryPointsMultiplier = (item: Character | DevelopmentType) => {
+    const multiplier = getVictoryPointsMultiplier(player, item)
+    if (multiplier > 0) {
+      victoryPointsMultipliers.push({item, multiplier})
+    }
+  }
+  Object.values(Character).forEach(completeVictoryPointsMultiplier)
+  Object.values(DevelopmentType).forEach(completeVictoryPointsMultiplier)
+  victoryPointsMultipliers.sort((item1, item2) => item2.multiplier - item1.multiplier)
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
       <img src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       <h3 css={nameStyle}>{getEmpireName(t, player.empire)}</h3>
       {Object.values(Resource).flatMap(resource => Array(getProduction(player, resource)).fill(resource)).map((resource, index) =>
-        <img key={index} src={resourceIcon[resource]} css={productionStyle(index)} draggable="false"/>)}
+        <img key={index} src={resourceIcon[resource]} css={productionStyle(index)} draggable="false"/>
+      )}
+      {victoryPointsMultipliers.slice(0, 3).map((victoryPointsMultiplier, index) =>
+        <VictoryPointsMultiplier item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier} css={victoryPointsMultiplierStyle(index)}/>
+      )}
     </div>
   )
 }
@@ -85,6 +102,14 @@ const nameStyle = css`
   margin: 0;
   font-size: 2.9vh;
   font-weight: bold;
+`
+
+const victoryPointsMultiplierStyle = (index: number) => css`
+  position: absolute;
+  top: ${index * 22 + 33}%;
+  left: 3%;
+  width: 15%;
+  height: 20%;
 `
 
 const productionStyle = (index: number) => {

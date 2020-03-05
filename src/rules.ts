@@ -3,9 +3,9 @@ import ItsAWonderfulWorld, {DevelopmentUnderConstruction, Phase, Player} from '.
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Development from './material/developments/Development'
 import DevelopmentsAnatomy from './material/developments/Developments'
-import {isDevelopmentType} from './material/developments/DevelopmentType'
+import DevelopmentType, {isDevelopmentType} from './material/developments/DevelopmentType'
 import Empire from './material/empires/Empire'
-import EmpiresProductionA from './material/empires/EmpiresProduction'
+import EmpiresFaceA from './material/empires/EmpiresProduction'
 import Resource, {isResource} from './material/resources/Resource'
 import {chooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
 import {completeConstruction} from './moves/CompleteConstruction'
@@ -404,7 +404,7 @@ export function getProduction(player: Player, resource: Resource): number {
 }
 
 function getBaseProduction(empire: Empire, resource: Resource): number {
-  return EmpiresProductionA.get(empire)[resource] || 0
+  return EmpiresFaceA.get(empire)[resource] || 0
 }
 
 function getDevelopmentProduction(player: Player, development: Development, resource: Resource): number {
@@ -421,6 +421,16 @@ function getDevelopmentProduction(player: Player, development: Development, reso
       return production || 0
     }
   }
+}
+
+function getCardVictoryPointsMultiplier(victoryPoints: number | { [key in DevelopmentType | Character]?: number }, item: DevelopmentType | Character) {
+  return victoryPoints && typeof victoryPoints != 'number' && victoryPoints[item] ? victoryPoints[item] : 0
+}
+
+export function getVictoryPointsMultiplier(player: Player, item: DevelopmentType | Character): number {
+  return getCardVictoryPointsMultiplier(EmpiresFaceA.get(player.empire).victoryPoints, item) +
+    player.constructedDevelopments.map(development => DevelopmentsAnatomy.get(development)).map(anatomy => anatomy.victoryPoints)
+      .reduce<number>((sum, victoryPoints) => sum + getCardVictoryPointsMultiplier(victoryPoints, item), 0)
 }
 
 // noinspection JSUnusedGlobalSymbols
