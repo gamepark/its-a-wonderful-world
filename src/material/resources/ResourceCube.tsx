@@ -8,7 +8,7 @@ import Materials from './materials-cube.png'
 import Resource from './Resource'
 import Science from './science-cube.png'
 
-type Props = { resource: Resource } & React.HTMLAttributes<HTMLDivElement>
+type Props = { resource: Resource } & React.HTMLAttributes<HTMLImageElement>
 
 const ResourceCube: FunctionComponent<Props> = ({resource, ...props}) => <img src={images[resource]} css={style} {...props}/>
 

@@ -7,7 +7,8 @@ import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {Player} from '../../ItsAWonderfulWorld'
 import {placeResource} from '../../moves/PlaceResource'
 import {glow} from '../board/ResourceArea'
-import Resource from '../resources/Resource'
+import Character from '../characters/Character'
+import CharacterTokenPile from '../characters/CharacterTokenPile'
 import ResourceCube from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.png'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
@@ -70,6 +71,8 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
     <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)}>
       <img src={empireFaceA[player.empire]} css={imgStyle} draggable="false"/>
       {player.empireCardResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
+      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition}/>
+      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition}/>
     </div>
   )
 }
@@ -121,8 +124,22 @@ const resourcePosition = [
   [2, 47],
   [5, 66],
   [18, 66],
-  [22, 47],
+  [22, 47]
 ]
+
+const financiersPilePosition = css`
+  position: absolute;
+  left: 40%;
+  top: 30%;
+  width: 20%;
+`
+
+const generalsPilePosition = css`
+  position: absolute;
+  left: 47%;
+  top: 67%;
+  width: 20%;
+`
 
 export function getEmpireName(t: TFunction, empire: Empire) {
   switch (empire) {
