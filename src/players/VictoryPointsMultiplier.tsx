@@ -31,14 +31,6 @@ const style = css`
   padding: 0 0.5vh;
 `
 
-const scoreIconStyle = css`
-  position: absolute;
-  width: 50%;
-  left: 5%;
-  top: 20%;
-  filter: drop-shadow(0 0 1px black);
-`
-
 const developmentTypeImage = {
   [DevelopmentType.Structure]: Structure,
   [DevelopmentType.Vehicle]: Vehicle,
@@ -61,7 +53,7 @@ const numberStyle = css`
   font-size: 2.5vh;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 5px black;
+  text-shadow: 0 0 3px black;
 `
 
 const multiplierStyle = css`
@@ -69,7 +61,7 @@ const multiplierStyle = css`
   font-size: 1.5vh;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 5px black;
+  text-shadow: 0 0 3px black;
   position: absolute;
   right: 45%;
   top: 20%;

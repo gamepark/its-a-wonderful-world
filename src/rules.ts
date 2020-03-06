@@ -404,7 +404,7 @@ export function getProduction(player: Player, resource: Resource): number {
 }
 
 function getBaseProduction(empire: Empire, resource: Resource): number {
-  return EmpiresFaceA.get(empire)[resource] || 0
+  return EmpiresFaceA.get(empire).production[resource] || 0
 }
 
 function getDevelopmentProduction(player: Player, development: Development, resource: Resource): number {

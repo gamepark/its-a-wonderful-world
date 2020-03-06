@@ -6,22 +6,9 @@ import Character from '../material/characters/Character'
 import DevelopmentType from '../material/developments/DevelopmentType'
 import Empire from '../material/empires/Empire'
 import {empireAvatar, empireBackground, getEmpireName} from '../material/empires/EmpireCard'
-import Energy from '../material/resources/energy.png'
-import Exploration from '../material/resources/exploration.png'
-import Gold from '../material/resources/gold.png'
-import Materials from '../material/resources/materials.png'
-import Resource from '../material/resources/Resource'
-import Science from '../material/resources/science.png'
-import {getProduction, getVictoryPointsMultiplier} from '../rules'
+import {getVictoryPointsMultiplier} from '../rules'
+import PlayerResourceProduction from './PlayerResourceProduction'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
-
-const resourceIcon = {
-  [Resource.Materials]: Materials,
-  [Resource.Energy]: Energy,
-  [Resource.Science]: Science,
-  [Resource.Gold]: Gold,
-  [Resource.Exploration]: Exploration
-}
 
 type Props = {
   player: Player
@@ -45,11 +32,9 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight = fa
     <div css={style(player.empire, position, highlight)} {...props}>
       <img src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       <h3 css={nameStyle}>{getEmpireName(t, player.empire)}</h3>
-      {Object.values(Resource).flatMap(resource => Array(getProduction(player, resource)).fill(resource)).map((resource, index) =>
-        <img key={index} src={resourceIcon[resource]} css={productionStyle(index)} draggable="false"/>
-      )}
+      <PlayerResourceProduction player={player}/>
       {victoryPointsMultipliers.slice(0, 3).map((victoryPointsMultiplier, index) =>
-        <VictoryPointsMultiplier item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier} css={victoryPointsMultiplierStyle(index)}/>
+        <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier} css={victoryPointsMultiplierStyle(index)}/>
       )}
     </div>
   )
@@ -111,25 +96,5 @@ const victoryPointsMultiplierStyle = (index: number) => css`
   width: 15%;
   height: 20%;
 `
-
-const productionStyle = (index: number) => {
-  if (index < 6) {
-    return css`
-      position: absolute;
-      top: 35%;
-      left: ${18 + index * 13}%;
-      width: 12%;
-      filter: drop-shadow(1px 1px 3px black);
-    `
-  } else {
-    return css`
-      position: absolute;
-      top: 60%;
-      left: ${24 + (index - 6) * 13}%;
-      width: 12%;
-      filter: drop-shadow(1px 1px 3px black);
-    `
-  }
-}
 
 export default PlayerPanel
