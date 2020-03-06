@@ -1,5 +1,7 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
+import {Draggable} from 'tabletop-game-workshop'
+import {krystalliumFromEmpire} from '../../drag-objects/KrystalliumCube'
 import Energy from './energy-cube.png'
 import Exploration from './exploration-cube.png'
 import Gold from './gold-cube.png'
@@ -8,9 +10,22 @@ import Materials from './materials-cube.png'
 import Resource from './Resource'
 import Science from './science-cube.png'
 
-type Props = { resource: Resource } & React.HTMLAttributes<HTMLImageElement>
+type Props = {
+  resource: Resource
+  draggable?: boolean
+} & React.HTMLAttributes<HTMLElement>
 
-const ResourceCube: FunctionComponent<Props> = ({resource, ...props}) => <img src={images[resource]} css={style} {...props}/>
+const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ...props}) => {
+  if (draggable) {
+    return (
+      <Draggable item={krystalliumFromEmpire} {...props} css={style}>
+        <img src={images[resource]} css={css`width: 100%;`}/>
+      </Draggable>
+    )
+  } else {
+    return <img src={images[resource]} css={style} {...props}/>
+  }
+}
 
 const style = css`
   filter: drop-shadow(0 0 5px black);

@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
-import {useDrop, usePlay} from 'tabletop-game-workshop'
+import {useDrop, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {Player} from '../../ItsAWonderfulWorld'
@@ -59,6 +59,7 @@ type Props = {
 
 const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false, ...props}) => {
   const play = usePlay()
+  const playerId = usePlayerId<Empire>()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.RESOURCE,
     canDrop: () => withResourceDrop,
@@ -74,7 +75,7 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
       {player.empireCardResources.filter(resource => resource != Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource == Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)}/>)}
+        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire == playerId}/>)}
       <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition}/>
       <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition}/>
     </div>
