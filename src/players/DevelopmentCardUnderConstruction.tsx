@@ -70,7 +70,7 @@ const overStyle = css`
 
 const getResourceStyle = (index: number) => css`
   position: absolute;
-  width: 13%;
+  height: 10%;
   left: 3.5%;
   top: ${index * 9 + 1.5}%;
 `
