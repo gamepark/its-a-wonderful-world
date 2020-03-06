@@ -9,6 +9,7 @@ import {placeResource} from '../../moves/PlaceResource'
 import {glow} from '../board/ResourceArea'
 import Character from '../characters/Character'
 import CharacterTokenPile from '../characters/CharacterTokenPile'
+import Resource from '../resources/Resource'
 import ResourceCube from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.png'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
@@ -70,7 +71,10 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
   return (
     <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)}>
       <img src={empireFaceA[player.empire]} css={imgStyle} draggable="false"/>
-      {player.empireCardResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
+      {player.empireCardResources.filter(resource => resource != Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
+      {player.empireCardResources.filter(resource => resource == Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)}/>)}
       <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition}/>
       <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition}/>
     </div>
@@ -117,6 +121,13 @@ const getResourceStyle = (index: number) => css`
   width: 10%;
   right: ${resourcePosition[index][0]}%;
   top: ${resourcePosition[index][1]}%;
+`
+
+const getKrystalliumStyle = (index: number) => css`
+  position: absolute;
+  width: 10%;
+  right: -15%;
+  bottom: ${index * 10}%;
 `
 
 const resourcePosition = [
