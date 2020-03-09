@@ -442,5 +442,24 @@ export function getVictoryPointsMultiplier(player: Player, item: DevelopmentType
       .reduce<number>((sum, victoryPoints) => sum + getCardVictoryPointsMultiplier(victoryPoints, item), 0)
 }
 
+export function getScore(player: Player): number {
+  return getFlatVictoryPoints(player)
+    + Object.values(DevelopmentType).reduce((sum, developmentType) => sum + getComboVictoryPoints(player, developmentType), 0)
+    + Object.values(Character).reduce((sum, characterType) => sum + getComboVictoryPoints(player, characterType), 0)
+
+}
+
+export function getFlatVictoryPoints(player: Player): number {
+  return player.constructedDevelopments.map(development => DevelopmentsAnatomy.get(development)).map(anatomy => anatomy.victoryPoints)
+    .reduce<number>((sum, victoryPoints) => sum + (typeof victoryPoints == 'number' ? victoryPoints : 0), 0)
+}
+
+export function getComboVictoryPoints(player: Player, item: DevelopmentType | Character): number {
+  const itemQuantity = isDevelopmentType(item) ? player.constructedDevelopments.filter(development => DevelopmentsAnatomy.get(development).type == item).length :
+    player.characters[item]
+  const multiplier = isDevelopmentType(item) ? getVictoryPointsMultiplier(player, item) : getVictoryPointsMultiplier(player, item) + 1
+  return itemQuantity * multiplier
+}
+
 // noinspection JSUnusedGlobalSymbols
 export default ItsAWonderfulWorldRules

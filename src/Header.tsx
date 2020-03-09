@@ -13,7 +13,7 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
-import {getNextProductionStep, numberOfRounds} from './rules'
+import {getNextProductionStep, getScore, numberOfRounds} from './rules'
 
 const headerStyle = css`
   position: absolute;
@@ -63,32 +63,72 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
         }
       }
     case Phase.Planning:
+      if (!player) {
+        return t('Les joueurs doivent faire leur planification')
+      }
       if (player.draftArea.length) {
         return t('Vous devez mettre en construction ou recycler chacune des cartes draftées')
       } else if (player.availableResources.length) {
         return t('Placez vos ressources sur vos dévelopements en construction ou votre carte Empire')
-      } else {
+      } else if (!player.ready) {
         return <Trans values={{resource: Resource.Materials}}
-                      defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, MATERIALS{de matériaux} ENERGY{d’énergie} SCIENCE{de science} GOLD{d’or} EXPLORATION{d’exploration}}"
-                      components={[<a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a>]}/>
-      }
-    case Phase.Production:
-      if (player.availableResources.length) {
-        return t('Placez les ressources produites sur vos dévelopments en construction ou votre carte Empire')
-      } else if (player.bonuses.some(bonus => bonus == 'CHOOSE_CHARACTER')) {
-        return <Trans>Vous pouvez récupérer un <a onClick={() => play(receiveCharacter(empire, Character.Financier))} css={buttonStyle}>Financier</a> ou un <a
-          onClick={() => play(receiveCharacter(empire, Character.General))} css={buttonStyle}>Général</a></Trans>
-      } else if (game.productionStep != Resource.Exploration) {
-        return <Trans values={{resource: getNextProductionStep(game)}}
-                      defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, MATERIALS{de matériaux} ENERGY{d’énergie} SCIENCE{de science} GOLD{d’or} other{d’exploration}}"
+                      defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
                       components={[<a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a>]}>
           Cliquez sur <a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a> pour continuer
         </Trans>
-      } else if (game.round < numberOfRounds) {
-        return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(empire))}
-                                     css={buttonStyle}>Valider</a> si vous êtes prêt à passer au tour suivant</Trans>
       } else {
-        return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a> pour passer au calcul des scores</Trans>
+        const players = game.players.filter(player => !player.ready)
+        if (players.length == 1) {
+          return t('{player} doit faire sa planification', {player: getEmpireName(t, players[0].empire)})
+        } else {
+          return t('Les autres joueurs doivent faire leur planification')
+        }
+      }
+    case Phase.Production:
+      if (player && !player.ready) {
+        if (player.availableResources.length) {
+          return t('Placez les ressources produites sur vos dévelopments en construction ou votre carte Empire')
+        } else if (player.bonuses.some(bonus => bonus == 'CHOOSE_CHARACTER')) {
+          return <Trans>Vous pouvez récupérer un <a onClick={() => play(receiveCharacter(empire, Character.Financier))} css={buttonStyle}>Financier</a> ou un <a
+            onClick={() => play(receiveCharacter(empire, Character.General))} css={buttonStyle}>Général</a></Trans>
+        } else if (game.productionStep != Resource.Exploration) {
+          return <Trans values={{resource: getNextProductionStep(game)}}
+                        defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
+                        components={[<a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a>]}>
+            Cliquez sur <a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a> pour continuer
+          </Trans>
+        } else if (game.round < numberOfRounds) {
+          return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(empire))}
+                                       css={buttonStyle}>Valider</a> si vous êtes prêt à passer au tour suivant</Trans>
+        } else {
+          return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(empire))} css={buttonStyle}>Valider</a> pour passer au calcul des scores</Trans>
+        }
+      } else {
+        const players = game.players.filter(player => !player.ready)
+        if (players.length) {
+          if (players.length == 1) {
+            return t('{player} doit utiliser les ressources produites', {player: getEmpireName(t, players[0].empire)})
+          } else if (player) {
+            return t('Les autres joueurs doivent utiliser les ressources produites')
+          } else {
+            return t('Les joueurs doivent utiliser les ressources produites')
+          }
+        } else if (game.productionStep == Resource.Exploration && game.round == numberOfRounds) {
+          const scores = game.players.reduce<{ [key in Empire]?: number }>((map, player) => {
+            map[player.empire] = getScore(player)
+            return map
+          }, {})
+          const highestScore = Math.max(...Object.values(scores))
+          const bestEmpire = Object.keys(scores).filter((empire: Empire) => scores[empire] == highestScore) as Empire[]
+          if (bestEmpire.length == 1) {
+            if (player.empire == bestEmpire[0]) {
+              return t('Victoire ! Vous gagnez la partie avec {score} points', {score: highestScore})
+            } else {
+              return t('{player} gagne la partie avec {score} points', {player: getEmpireName(t, bestEmpire[0]), score: highestScore})
+            }
+          }
+          return t('Égalité ! Les joueurs ont chacun {score} points', {score: highestScore})
+        }
       }
   }
 }
