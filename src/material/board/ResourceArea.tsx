@@ -1,7 +1,6 @@
 import {css, keyframes} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {DragPreviewImage} from 'react-dnd'
-import {useDrag} from 'tabletop-game-workshop'
+import {useDrag, DragPreviewImage} from 'tabletop-game-workshop'
 import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
 import Resource from '../resources/Resource'
 import {images as resourceCubeImages} from '../resources/ResourceCube'
