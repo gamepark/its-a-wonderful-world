@@ -9,7 +9,7 @@ import ItsAWonderfulWorld, {DevelopmentUnderConstruction} from '../ItsAWonderful
 import {glow} from '../material/board/ResourceArea'
 import {isCharacter} from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
-import DevelopmentCard from '../material/developments/DevelopmentCard'
+import DevelopmentCard, {height} from '../material/developments/DevelopmentCard'
 import Empire from '../material/empires/Empire'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
@@ -61,7 +61,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
   })
   return (
     <div ref={ref} {...props} css={getStyle(canDrop, isOver)}>
-      <DevelopmentCard development={developmentUnderConstruction.development}/>
+      <DevelopmentCard development={developmentUnderConstruction.development} css={css`height: 100%;`}/>
       {developmentUnderConstruction.costSpaces.map((item, index) => {
         if (isResource(item)) {
           return <ResourceCube key={index} resource={item} css={getResourceStyle(index)}/>
@@ -76,7 +76,6 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
 }
 
 const getStyle = (canDrop: boolean, isOver: boolean) => css`
-  height: 100%;
   border-radius: 5%;
   ${canDrop && canDropStyle};
   ${canDrop && isOver && overStyle};
