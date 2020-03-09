@@ -18,6 +18,15 @@ const position = css`
   height: ${cardHeight}%;
   bottom: ${bottomMargin}%;
   left: ${handLeftPosition}%;
+  & > div {
+    height: 100%;
+    & > div {
+      height: 100%;
+      & > div {
+        height: 100%;
+      }
+    }
+  }
 `
 
 const translateToDraftArea = (index: number, transitionDuration: number) => css`
