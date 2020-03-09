@@ -30,7 +30,7 @@ const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
       </div>
       {player.draftArea.map((development, index) => (
         <Draggable key={index} item={developmentFromDraftArea(index)} css={getAreaCardStyle(row, index)}>
-          <DevelopmentCard development={development}/>
+          <DevelopmentCard development={development} css={css`height: 100%;`}/>
         </Draggable>
       ))}
       {player.chosenCard && <DevelopmentCard development={player.chosenCard != true ? player.chosenCard : null}
