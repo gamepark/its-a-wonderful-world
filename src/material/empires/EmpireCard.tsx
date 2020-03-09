@@ -76,8 +76,8 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource == Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire == playerId}/>)}
-      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition}/>
-      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition}/>
+      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition} draggable={player.empire == playerId}/>
+      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition} draggable={player.empire == playerId}/>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
+import CharacterTokenFromEmpire from '../drag-objects/CharacterTokenFromEmpire'
 import DragObjectType from '../drag-objects/DragObjectType'
 import KrystalliumFromEmpire from '../drag-objects/KrystalliumCube'
 import ResourceFromBoard from '../drag-objects/ResourceFromBoard'
@@ -11,6 +12,7 @@ import Empire from '../material/empires/Empire'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
 import MoveType from '../moves/MoveType'
+import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import PlaceResource, {placeResource} from '../moves/PlaceResource'
 import ItsAWonderfulWorldRules from '../rules'
 
@@ -23,18 +25,36 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
   const game = useGame<ItsAWonderfulWorld>()
   const empire = usePlayerId<Empire>()
   const play = usePlay()
-  const legalMoves: PlaceResource[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceResource && move.constructionIndex == constructionIndex) as PlaceResource[]
+  const placeResourceMoves: PlaceResource[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceResource && move.constructionIndex == constructionIndex) as PlaceResource[]
+  const placeCharacterMoves: PlaceCharacter[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceCharacter && move.constructionIndex == constructionIndex) as PlaceCharacter[]
   const [{canDrop, isOver}, ref] = useDrop({
-    accept: [DragObjectType.RESOURCE_FROM_BOARD, DragObjectType.KRYSTALLIUM_FROM_EMPIRE],
-    canDrop: (item: ResourceFromBoard | KrystalliumFromEmpire) => legalMoves.some(move => item.type == DragObjectType.KRYSTALLIUM_FROM_EMPIRE || move.resource == item.resource),
+    accept: [DragObjectType.RESOURCE_FROM_BOARD, DragObjectType.KRYSTALLIUM_FROM_EMPIRE, DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE],
+    canDrop: (item: ResourceFromBoard | KrystalliumFromEmpire | CharacterTokenFromEmpire) => {
+      switch (item.type) {
+        case DragObjectType.RESOURCE_FROM_BOARD:
+          return placeResourceMoves.some(move => move.resource == item.resource)
+        case DragObjectType.KRYSTALLIUM_FROM_EMPIRE:
+          return placeResourceMoves.length > 0
+        case DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE:
+          return placeCharacterMoves.some(move => move.character == item.character)
+      }
+    },
     collect: monitor => ({
       canDrop: monitor.canDrop(),
       isOver: monitor.isOver()
     }),
-    drop: (item: ResourceFromBoard | KrystalliumFromEmpire) => {
-      const resource = item.type == DragObjectType.KRYSTALLIUM_FROM_EMPIRE ? Resource.Krystallium : item.resource
-      const validMoves = item.type == DragObjectType.KRYSTALLIUM_FROM_EMPIRE ? legalMoves : legalMoves.filter(move => move.resource == resource)
-      play(placeResource(empire, resource, constructionIndex, Math.min(...validMoves.map(move => move.space))))
+    drop: (item: ResourceFromBoard | KrystalliumFromEmpire | CharacterTokenFromEmpire) => {
+      switch (item.type) {
+        case DragObjectType.RESOURCE_FROM_BOARD:
+          play(placeResource(empire, item.resource, constructionIndex, Math.min(...placeResourceMoves.filter(move => move.resource == item.resource).map(move => move.space))))
+          break
+        case DragObjectType.KRYSTALLIUM_FROM_EMPIRE:
+          play(placeResource(empire, Resource.Krystallium, constructionIndex, Math.min(...placeResourceMoves.map(move => move.space))))
+          break
+        case DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE:
+          play(placeCharacter(empire, item.character, constructionIndex, Math.min(...placeCharacterMoves.map(move => move.space))))
+          break
+      }
     }
   })
   return (
