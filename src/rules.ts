@@ -28,6 +28,7 @@ import shuffle from './util/shuffle'
 
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
+export const numberOfRounds = 4
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
@@ -83,7 +84,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
           const nextProductionStep = getNextProductionStep(game)
           if (nextProductionStep) {
             return produce(nextProductionStep)
-          } else if (game.round < 4) {
+          } else if (game.round < numberOfRounds) {
             return startPhase(Phase.Draft)
           }
         }
@@ -231,7 +232,11 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       case MoveType.PlaceResource: {
         const player = getPlayer(game, move.playerId)
         if (move.resource == Resource.Krystallium) {
-          player.empireCardResources.splice(player.empireCardResources.indexOf(move.resource), 1)
+          if (isNaN(move.constructionIndex) || isNaN(move.space)) {
+            player.bonuses.splice(player.bonuses.indexOf(Resource.Krystallium), 1)
+          } else {
+            player.empireCardResources.splice(player.empireCardResources.indexOf(move.resource), 1)
+          }
         } else {
           player.availableResources.splice(player.availableResources.indexOf(move.resource), 1)
         }
@@ -388,7 +393,7 @@ function getSpacesMissingItem(developmentUnderConstruction: DevelopmentUnderCons
   return spaces
 }
 
-function getNextProductionStep(game: ItsAWonderfulWorld): Resource {
+export function getNextProductionStep(game: ItsAWonderfulWorld): Resource {
   switch (game.productionStep) {
     case Resource.Materials:
       return Resource.Energy
