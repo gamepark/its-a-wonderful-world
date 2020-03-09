@@ -1,8 +1,8 @@
 import Character from '../characters/Character'
+import Resource from '../resources/Resource'
 import Development from './Development'
 import DevelopmentAnatomy from './DevelopmentAnatomy'
 import DevelopmentType from './DevelopmentType'
-import Resource from '../resources/Resource'
 
 const {Energy, Materials, Science, Gold, Exploration, Krystallium} = Resource
 const {Structure, Vehicle, Research, Project, Discovery} = DevelopmentType
@@ -419,7 +419,7 @@ DevelopmentsAnatomy.set(Development.PolarBase, {
   constructionCost: {[Energy]: 3, [Gold]: 4},
   constructionBonus: General,
   production: {[Exploration]: 3},
-  victoryPoints: {[Project]: 2},
+  victoryPoints: {[Discovery]: 2},
   recyclingBonus: Exploration
 })
 
@@ -479,7 +479,7 @@ DevelopmentsAnatomy.set(Development.UndergroundCity, {
 
 DevelopmentsAnatomy.set(Development.UnderwaterCity, {
   type: Project,
-  constructionCost: {[Energy]: 2, [Science]: 2, [Gold]: 2},
+  constructionCost: {[Energy]: 2, [Science]: 1, [Gold]: 2},
   production: {[Science]: 1, [Exploration]: 2},
   victoryPoints: 3,
   recyclingBonus: Exploration,
