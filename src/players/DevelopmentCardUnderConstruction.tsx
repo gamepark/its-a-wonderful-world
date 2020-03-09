@@ -7,6 +7,8 @@ import KrystalliumFromEmpire from '../drag-objects/KrystalliumCube'
 import ResourceFromBoard from '../drag-objects/ResourceFromBoard'
 import ItsAWonderfulWorld, {DevelopmentUnderConstruction} from '../ItsAWonderfulWorld'
 import {glow} from '../material/board/ResourceArea'
+import {isCharacter} from '../material/characters/Character'
+import CharacterToken from '../material/characters/CharacterToken'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import Empire from '../material/empires/Empire'
 import Resource, {isResource} from '../material/resources/Resource'
@@ -60,11 +62,14 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
   return (
     <div ref={ref} {...props} css={getStyle(canDrop, isOver)}>
       <DevelopmentCard development={developmentUnderConstruction.development}/>
-      {developmentUnderConstruction.costSpaces.map((resource, index) => {
-        if (!isResource(resource)) {
+      {developmentUnderConstruction.costSpaces.map((item, index) => {
+        if (isResource(item)) {
+          return <ResourceCube key={index} resource={item} css={getResourceStyle(index)}/>
+        } else if (isCharacter(item)) {
+          return <CharacterToken key={index} character={item} css={getCharacterTokenStyle(index)}/>
+        } else {
           return null
         }
-        return <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>
       })}
     </div>
   )
@@ -98,6 +103,13 @@ const getResourceStyle = (index: number) => css`
   height: 10%;
   left: 3.5%;
   top: ${index * 9 + 1.5}%;
+`
+
+const getCharacterTokenStyle = (index: number) => css`
+  position: absolute;
+  height: 10%;
+  left: 2.5%;
+  top: ${index * 9 + 3}%;
 `
 
 export default DevelopmentCardUnderConstruction
