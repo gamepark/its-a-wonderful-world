@@ -230,7 +230,11 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       }
       case MoveType.PlaceResource: {
         const player = getPlayer(game, move.playerId)
-        player.availableResources.splice(player.availableResources.indexOf(move.resource), 1)
+        if (move.resource == Resource.Krystallium) {
+          player.empireCardResources.splice(player.empireCardResources.indexOf(move.resource), 1)
+        } else {
+          player.availableResources.splice(player.availableResources.indexOf(move.resource), 1)
+        }
         if (isNaN(move.constructionIndex) || isNaN(move.space)) {
           player.empireCardResources.push(move.resource)
         } else {

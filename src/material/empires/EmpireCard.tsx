@@ -61,10 +61,10 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
   const play = usePlay()
   const playerId = usePlayerId<Empire>()
   const [{isValidTarget, isOver}, ref] = useDrop({
-    accept: DragObjectType.RESOURCE,
+    accept: DragObjectType.RESOURCE_FROM_BOARD,
     canDrop: () => withResourceDrop,
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() == DragObjectType.RESOURCE,
+      isValidTarget: monitor.getItemType() == DragObjectType.RESOURCE_FROM_BOARD,
       isOver: monitor.isOver()
     }),
     drop: (item: ResourceFromBoard) => play(placeResource(player.empire, item.resource))

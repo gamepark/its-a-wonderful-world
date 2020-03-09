@@ -2,12 +2,13 @@ import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import DragObjectType from '../drag-objects/DragObjectType'
+import KrystalliumFromEmpire from '../drag-objects/KrystalliumCube'
 import ResourceFromBoard from '../drag-objects/ResourceFromBoard'
 import ItsAWonderfulWorld, {DevelopmentUnderConstruction} from '../ItsAWonderfulWorld'
 import {glow} from '../material/board/ResourceArea'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import Empire from '../material/empires/Empire'
-import {isResource} from '../material/resources/Resource'
+import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
 import MoveType from '../moves/MoveType'
 import PlaceResource, {placeResource} from '../moves/PlaceResource'
@@ -24,13 +25,17 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
   const play = usePlay()
   const legalMoves: PlaceResource[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceResource && move.constructionIndex == constructionIndex) as PlaceResource[]
   const [{canDrop, isOver}, ref] = useDrop({
-    accept: DragObjectType.RESOURCE,
-    canDrop: (item: ResourceFromBoard) => legalMoves.some(move => move.resource == item.resource),
+    accept: [DragObjectType.RESOURCE_FROM_BOARD, DragObjectType.KRYSTALLIUM_FROM_EMPIRE],
+    canDrop: (item: ResourceFromBoard | KrystalliumFromEmpire) => legalMoves.some(move => item.type == DragObjectType.KRYSTALLIUM_FROM_EMPIRE || move.resource == item.resource),
     collect: monitor => ({
       canDrop: monitor.canDrop(),
       isOver: monitor.isOver()
     }),
-    drop: (item: ResourceFromBoard) => play(placeResource(empire, item.resource, constructionIndex, Math.min(...legalMoves.filter(move => move.resource == item.resource).map(move => move.space))))
+    drop: (item: ResourceFromBoard | KrystalliumFromEmpire) => {
+      const resource = item.type == DragObjectType.KRYSTALLIUM_FROM_EMPIRE ? Resource.Krystallium : item.resource
+      const validMoves = item.type == DragObjectType.KRYSTALLIUM_FROM_EMPIRE ? legalMoves : legalMoves.filter(move => move.resource == resource)
+      play(placeResource(empire, resource, constructionIndex, Math.min(...validMoves.map(move => move.space))))
+    }
   })
   return (
     <div ref={ref} {...props} css={getStyle(canDrop, isOver)}>
