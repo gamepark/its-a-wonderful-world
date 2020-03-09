@@ -83,12 +83,15 @@ const roundTextStyle = (reducedSize = false) => css`
   transition: opacity 0.5s ease-in-out;
 `
 
-const getResourceStyle = (index: number, resource: Resource) => css`
-  position: absolute;
-  width: 2%;
-  left: ${resources.indexOf(resource) * 18.95 + 8.5 + cubesDispersion[index][0]}%;
-  top: ${32 + cubesDispersion[index][1]}%;
-`
+const getResourceStyle = (index: number, resource: Resource) => {
+  const cubeDispersion = cubesDispersion[index] || [0, 0]
+  return css`
+    position: absolute;
+    width: 2%;
+    left: ${resources.indexOf(resource) * 18.95 + 8.5 + cubeDispersion[0]}%;
+    top: ${32 + cubeDispersion[1]}%;
+  `
+}
 
 const cubesDispersion = [
   [-2.5, -4],
