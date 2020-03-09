@@ -10,7 +10,7 @@ EmpiresFaceA.set(Empire.AztecEmpire, {
   victoryPoints: {[DevelopmentType.Discovery]: 3},
   production: {
     [Resource.Energy]: 2,
-    [Resource.Exploration]: 2
+    [Resource.Exploration]: 1
   }
 })
 
