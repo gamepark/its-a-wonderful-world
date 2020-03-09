@@ -44,10 +44,11 @@ const numberStyle = css`
   filter: drop-shadow(0 0 1px black);
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: bottom;
+  background-position: center;
   position: absolute;
   left: 2%;
   top: 3%;
+  height: 100%;
   width: 50%;
   text-align: center;
   font-size: 2.5vh;
