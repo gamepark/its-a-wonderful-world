@@ -11,6 +11,7 @@ import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
   const game = useGame<ItsAWonderfulWorld>()
   const row = game.phase == Phase.Draft ? 2 : 1
+  const fullWidth = game.players.length == 2 && game.phase != Phase.Draft
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
@@ -22,11 +23,12 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
   })
   return (
     <Fragment>
-      <div ref={ref} css={getConstructionAreaStyle(row, game.players.length == 2 && game.phase != Phase.Draft, isValidTarget, isOver)}>
+      <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
         {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
       </div>
       {player.constructionArea.map((construction, index) => (
-        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction} constructionIndex={index} css={getAreaCardStyle(row, index)}/>)
+        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction} constructionIndex={index}
+                                          css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth)}/>)
       )}
     </Fragment>
   )
@@ -35,8 +37,7 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
 const getConstructionAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(255, 0, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
   border-color: crimson;
-  z-index: ${isValidTarget ? 1 : 'auto'};
-  ${getAreasStyle(row, fullWidth)};
+  ${getAreasStyle(row, fullWidth, isValidTarget)};
 `
 
 const constructionAreaText = css`

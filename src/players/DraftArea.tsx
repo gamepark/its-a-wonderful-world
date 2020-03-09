@@ -44,14 +44,14 @@ export const areasLeftPosition = constructedCardLeftMargin + cardHeight * cardRa
 const getDraftAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(0, 255, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
   border-color: green;
-  ${getAreasStyle(row, fullWidth)};
+  ${getAreasStyle(row, fullWidth, isValidTarget)};
 `
 
 const border = 0.3
 
 export const cardsShift = cardHeight * cardRatio / screenRatio + 1
 
-export const getAreasStyle = (row: number, fullWidth: boolean) => css`
+export const getAreasStyle = (row: number, fullWidth: boolean, isValidTarget = false) => css`
   position: absolute;
   height: ${cardHeight + border * 10}%;
   bottom: ${getAreaCardBottom(row) - border * 5}%;
@@ -61,19 +61,29 @@ export const getAreasStyle = (row: number, fullWidth: boolean) => css`
   border-radius: ${border * 5}vh;
   border-style: dashed;
   border-width: ${border}vh;
+  z-index: ${isValidTarget ? 1 : 'auto'};
 
 `
 
-export const getAreaCardStyle = (row: number, index: number) => css`
+export const getAreaCardStyle = (row: number, index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => css`
   position: absolute;
   height: ${cardHeight}%;
   ${getAreaCardBottomPosition(row)}
-  ${getAreaCardLeftPosition(index)};
+  ${getAreaCardLeftPosition(index, totalCards, fullWidth)};
 `
 
-export const getAreaCardLeftPosition = (index: number) => css`
-  left: ${areasLeftPosition + index * cardsShift}%;
-`
+export const getAreaCardLeftPosition = (index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => {
+  let leftShift = cardsShift
+  if (fullWidth && totalCards > 9) {
+    const width = 100 - areasLeftPosition - cardHeight * cardRatio / screenRatio - 2
+    leftShift = width / (totalCards - 1)
+  } else if (totalCards > numberOfCardsToDraft) {
+    leftShift = cardsShift * (numberOfCardsToDraft - 1) / (totalCards - 1)
+  }
+  return css`
+    left: ${(areasLeftPosition + index * leftShift)}%;
+  `
+}
 
 export const getAreaCardBottomPosition = (row: number) => css`
   bottom: ${getAreaCardBottom(row)}%;
