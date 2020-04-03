@@ -17,7 +17,7 @@ const RecyclingDropArea: FunctionComponent<{ empire: Empire }> = ({empire}) => {
       isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromHand) => play(recycle(empire, item.index))
+    drop: (item: DevelopmentFromHand) => play(recycle(empire, item.card))
   })
   return (
     <div ref={ref} css={getStyle(isValidTarget, isOver)}>

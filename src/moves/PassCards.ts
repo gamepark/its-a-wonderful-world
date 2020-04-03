@@ -1,4 +1,3 @@
-import Development from '../material/developments/Development'
 import MoveType from './MoveType'
 
 type PassCards = { type: typeof MoveType.PassCards }
@@ -6,7 +5,7 @@ type PassCards = { type: typeof MoveType.PassCards }
 export default PassCards
 
 export type PassCardsView<P> = PassCards
-  & { playerId?: P, receivedCards?: Development[] }
+  & { playerId?: P, receivedCards?: number[] }
 
 export function passCards(): PassCards {
   return {type: MoveType.PassCards}

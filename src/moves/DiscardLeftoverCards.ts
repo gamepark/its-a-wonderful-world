@@ -1,11 +1,10 @@
-import Development from '../material/developments/Development'
 import MoveType from './MoveType'
 
 type DiscardLeftoverCards = { type: typeof MoveType.DiscardLeftoverCards }
 
 export default DiscardLeftoverCards
 
-export type DiscardLeftoverCardsView = DiscardLeftoverCards & { discardedCards: Development[] }
+export type DiscardLeftoverCardsView = DiscardLeftoverCards & { discardedCards: number[] }
 
 export function discardLeftoverCards(): DiscardLeftoverCards {
   return {type: MoveType.DiscardLeftoverCards}

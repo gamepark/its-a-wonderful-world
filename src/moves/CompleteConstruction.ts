@@ -4,9 +4,9 @@ import MoveType from './MoveType'
 export default interface CompleteConstruction {
   type: typeof MoveType.CompleteConstruction
   playerId: Empire
-  constructionIndex: number
+  card: number
 }
 
-export function completeConstruction(playerId: Empire, constructionIndex: number): CompleteConstruction {
-  return {type: MoveType.CompleteConstruction, playerId, constructionIndex}
+export function completeConstruction(playerId: Empire, card: number): CompleteConstruction {
+  return {type: MoveType.CompleteConstruction, playerId, card}
 }

@@ -6,12 +6,12 @@ export default interface PlaceResource {
   type: typeof MoveType.PlaceResource
   playerId: Empire
   resource: Resource
-  constructionIndex?: number
+  card?: number
   space?: number
 }
 
-export function placeResource(playerId: Empire, resource: Resource, constructionIndex?: number, space?: number): PlaceResource {
-  return isNaN(constructionIndex) || isNaN(space) ?
+export function placeResource(playerId: Empire, resource: Resource, card?: number, space?: number): PlaceResource {
+  return isNaN(card) || isNaN(space) ?
     {type: MoveType.PlaceResource, playerId, resource} :
-    {type: MoveType.PlaceResource, playerId, resource, constructionIndex, space}
+    {type: MoveType.PlaceResource, playerId, resource, card, space}
 }

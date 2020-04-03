@@ -9,7 +9,8 @@ import ItsAWonderfulWorld, {DevelopmentUnderConstruction} from '../ItsAWonderful
 import {glow} from '../material/board/ResourceArea'
 import {isCharacter} from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
-import DevelopmentCard, {height} from '../material/developments/DevelopmentCard'
+import DevelopmentCard from '../material/developments/DevelopmentCard'
+import {developmentCards} from '../material/developments/Developments'
 import Empire from '../material/empires/Empire'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
@@ -20,15 +21,14 @@ import ItsAWonderfulWorldRules from '../rules'
 
 type Props = {
   developmentUnderConstruction: DevelopmentUnderConstruction
-  constructionIndex: number
 } & React.HTMLAttributes<HTMLDivElement>
 
-const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({developmentUnderConstruction, constructionIndex, ...props}) => {
+const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({developmentUnderConstruction, ...props}) => {
   const game = useGame<ItsAWonderfulWorld>()
   const empire = usePlayerId<Empire>()
   const play = usePlay()
-  const placeResourceMoves: PlaceResource[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceResource && move.constructionIndex == constructionIndex) as PlaceResource[]
-  const placeCharacterMoves: PlaceCharacter[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceCharacter && move.constructionIndex == constructionIndex) as PlaceCharacter[]
+  const placeResourceMoves: PlaceResource[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceResource && move.card == developmentUnderConstruction.card) as PlaceResource[]
+  const placeCharacterMoves: PlaceCharacter[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceCharacter && move.card == developmentUnderConstruction.card) as PlaceCharacter[]
   const [{canDrop, isOver}, ref] = useDrop({
     accept: [DragObjectType.RESOURCE_FROM_BOARD, DragObjectType.KRYSTALLIUM_FROM_EMPIRE, DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE],
     canDrop: (item: ResourceFromBoard | KrystalliumFromEmpire | CharacterTokenFromEmpire) => {
@@ -48,20 +48,20 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
     drop: (item: ResourceFromBoard | KrystalliumFromEmpire | CharacterTokenFromEmpire) => {
       switch (item.type) {
         case DragObjectType.RESOURCE_FROM_BOARD:
-          play(placeResource(empire, item.resource, constructionIndex, Math.min(...placeResourceMoves.filter(move => move.resource == item.resource).map(move => move.space))))
+          play(placeResource(empire, item.resource, developmentUnderConstruction.card, Math.min(...placeResourceMoves.filter(move => move.resource == item.resource).map(move => move.space))))
           break
         case DragObjectType.KRYSTALLIUM_FROM_EMPIRE:
-          play(placeResource(empire, Resource.Krystallium, constructionIndex, Math.min(...placeResourceMoves.map(move => move.space))))
+          play(placeResource(empire, Resource.Krystallium, developmentUnderConstruction.card, Math.min(...placeResourceMoves.map(move => move.space))))
           break
         case DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE:
-          play(placeCharacter(empire, item.character, constructionIndex, Math.min(...placeCharacterMoves.map(move => move.space))))
+          play(placeCharacter(empire, item.character, developmentUnderConstruction.card, Math.min(...placeCharacterMoves.map(move => move.space))))
           break
       }
     }
   })
   return (
     <div ref={ref} {...props} css={getStyle(canDrop, isOver)}>
-      <DevelopmentCard development={developmentUnderConstruction.development} css={css`height: 100%;`}/>
+      <DevelopmentCard development={developmentCards[developmentUnderConstruction.card]} css={css`height: 100%;`}/>
       {developmentUnderConstruction.costSpaces.map((item, index) => {
         if (isResource(item)) {
           return <ResourceCube key={index} resource={item} css={getResourceStyle(index)}/>

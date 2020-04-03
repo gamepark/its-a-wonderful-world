@@ -4,12 +4,13 @@ import {useGame} from 'tabletop-game-workshop'
 import ItsAWonderfulWorld from '../../ItsAWonderfulWorld'
 import {areasLeftPosition} from '../../players/DraftArea'
 import DevelopmentCard, {height as cardHeight} from '../developments/DevelopmentCard'
+import {developmentCards} from './Developments'
 
 const DiscardPile = () => {
   const game = useGame<ItsAWonderfulWorld>()
   return (
     <Fragment>
-      {game.discard.slice(-8).map((development, index) => <DevelopmentCard key={index} development={development} css={css`
+      {game.discard.slice(-8).map((card, index) => <DevelopmentCard key={index} development={developmentCards[card]} css={css`
         position: absolute;
         height: ${cardHeight}%;
         top: ${8 + index * 0.05}%;

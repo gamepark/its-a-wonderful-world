@@ -1,9 +1,9 @@
-import ChooseDevelopmentCard from './ChooseDevelopmentCard'
+import ChooseDevelopmentCard, {ChooseDevelopmentCardView} from './ChooseDevelopmentCard'
 import CompleteConstruction from './CompleteConstruction'
 import DealDevelopmentCards, {DealDevelopmentCardsView} from './DealDevelopmentCards'
 import DiscardLeftoverCards, {DiscardLeftoverCardsView} from './DiscardLeftoverCards'
-import PlaceCharacter from './PlaceCharacter'
 import PassCards, {PassCardsView} from './PassCards'
+import PlaceCharacter from './PlaceCharacter'
 import PlaceResource from './PlaceResource'
 import Produce from './Produce'
 import ReceiveCharacter from './ReceiveCharacter'
@@ -19,6 +19,6 @@ type Move = DealDevelopmentCards | ChooseDevelopmentCard | RevealChosenCards | P
 
 export default Move
 
-export type MoveView<P> = DealDevelopmentCardsView<P> | ChooseDevelopmentCard | RevealChosenCardsView<P> | PassCardsView<P> | DiscardLeftoverCardsView
+export type MoveView<P> = DealDevelopmentCardsView<P> | ChooseDevelopmentCardView | RevealChosenCardsView<P> | PassCardsView<P> | DiscardLeftoverCardsView
   | StartPhase | SlateForConstruction | Recycle | PlaceResource | CompleteConstruction | TransformIntoKrystallium | TellYouAreReady | Produce | ReceiveCharacter
   | PlaceCharacter

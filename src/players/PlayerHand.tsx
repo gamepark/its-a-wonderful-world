@@ -4,6 +4,7 @@ import {Hand, useAnimation} from 'tabletop-game-workshop'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard, {height as cardHeight, width as cardWidth, ratio as cardRatio} from '../material/developments/DevelopmentCard'
+import {developmentCards} from '../material/developments/Developments'
 import ChooseDevelopmentCard from '../moves/ChooseDevelopmentCard'
 import {DiscardLeftoverCardsView} from '../moves/DiscardLeftoverCards'
 import MoveType from '../moves/MoveType'
@@ -44,8 +45,8 @@ const hoverScaleFromBottom = css`transform-origin: bottom;`
 const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
   const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type == MoveType.ChooseDevelopmentCard && animation.move.playerId == player.empire)
   const discardingLeftoverCards = useAnimation<DiscardLeftoverCardsView>(animation => animation.move.type == MoveType.DiscardLeftoverCards)
-  const getDevelopmentCardCSS = (index: number) => {
-    if (choosingDevelopment && choosingDevelopment.move.cardIndex == index) {
+  const getDevelopmentCardCSS = (card: number) => {
+    if (choosingDevelopment && choosingDevelopment.move.card == card) {
       return translateToDraftArea(player.draftArea.length, choosingDevelopment.duration)
     } else if (discardingLeftoverCards) {
       return translateToDiscard(discardingLeftoverCards.duration)
@@ -56,14 +57,14 @@ const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
   return (
     <Hand position={position} rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={cardRatio}
           draggable={index => ({
-            item: developmentFromHand(index), canDrag: !player.chosenCard, transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2
+            item: developmentFromHand(player.hand[index]), canDrag: !player.chosenCard, transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2
           })}
-          removing={index => choosingDevelopment && choosingDevelopment.move.cardIndex == index || discardingLeftoverCards != null}
+          removing={index => choosingDevelopment && choosingDevelopment.move.card == player.hand[index] || discardingLeftoverCards != null}
           transition={choosingDevelopment?.duration || discardingLeftoverCards?.duration}
           itemHoverStyle={css`transform: scale(1.5);`}>
-      {player.hand.map((development, index) =>
-        <DevelopmentCard key={[player.hand.length, index].join('-')} development={development}
-                         css={getDevelopmentCardCSS(index)}/>)}
+      {player.hand.map((card, index) =>
+        <DevelopmentCard key={[player.hand.length, index].join('-')} development={developmentCards[card]}
+                         css={getDevelopmentCardCSS(card)}/>)}
     </Hand>
   )
 }

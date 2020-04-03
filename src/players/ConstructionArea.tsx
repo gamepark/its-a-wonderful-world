@@ -19,7 +19,7 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
       isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.index))
+    drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.card))
   })
   return (
     <Fragment>
@@ -27,7 +27,7 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
         {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
       </div>
       {player.constructionArea.map((construction, index) => (
-        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction} constructionIndex={index}
+        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction}
                                           css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth)}/>)
       )}
     </Fragment>

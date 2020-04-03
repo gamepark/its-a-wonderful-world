@@ -2,6 +2,7 @@ import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
 import {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard, {height as cardHeight, ratio as cardRatio} from '../material/developments/DevelopmentCard'
+import {developmentCards} from '../material/developments/Developments'
 import screenRatio from '../util/screenRatio'
 
 const empireCardHorizontalShift = 0.44
@@ -19,7 +20,7 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player }> = ({player}) =
     `
   return (
     <Fragment>
-      {player.constructedDevelopments.map((development, index) => <DevelopmentCard key={index} development={development} css={style(index)}/>)}
+      {player.constructedDevelopments.map((card, index) => <DevelopmentCard key={index} development={developmentCards[card]} css={style(index)}/>)}
     </Fragment>
   )
 }

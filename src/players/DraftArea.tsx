@@ -6,6 +6,7 @@ import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
 import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard, {height as cardHeight, ratio as cardRatio} from '../material/developments/DevelopmentCard'
+import {developmentCards} from '../material/developments/Developments'
 import {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import {numberOfCardsToDraft} from '../rules'
 import screenRatio from '../util/screenRatio'
@@ -21,19 +22,19 @@ const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
       isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_HAND,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.index))
+    drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.card))
   })
   return (
     <Fragment>
       <div ref={ref} css={getDraftAreaStyle(row, game.players.length == 2, isValidTarget, isOver)}>
         {!player.draftArea.length && <span css={draftAreaText}>Zone de draft</span>}
       </div>
-      {player.draftArea.map((development, index) => (
-        <Draggable key={index} item={developmentFromDraftArea(index)} css={getAreaCardStyle(row, index)}>
-          <DevelopmentCard development={development} css={css`height: 100%;`}/>
+      {player.draftArea.map((card, index) => (
+        <Draggable key={index} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index)}>
+          <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`}/>
         </Draggable>
       ))}
-      {player.chosenCard && <DevelopmentCard development={player.chosenCard != true ? player.chosenCard : null}
+      {player.chosenCard && <DevelopmentCard development={player.chosenCard != true ? developmentCards[player.chosenCard] : null}
                                              css={getAreaCardStyle(row, player.draftArea.length)}/>}
     </Fragment>
   )

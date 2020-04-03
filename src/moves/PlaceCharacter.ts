@@ -6,10 +6,10 @@ export default interface PlaceCharacter {
   type: typeof MoveType.PlaceCharacter
   playerId: Empire
   character: Character
-  constructionIndex: number
+  card: number
   space: number
 }
 
-export function placeCharacter(playerId: Empire, character: Character, constructionIndex: number, space: number): PlaceCharacter {
-  return {type: MoveType.PlaceCharacter, playerId, character, constructionIndex, space}
+export function placeCharacter(playerId: Empire, character: Character, card: number, space: number): PlaceCharacter {
+  return {type: MoveType.PlaceCharacter, playerId, character, card, space}
 }
