@@ -14,7 +14,7 @@ type Props = {
 const CharacterTokenPile: FunctionComponent<Props> = ({character, quantity, draggable = false, ...props}) => {
   const [{}, ref, preview] = useDrag({
     item: characterTokenFromEmpire(character),
-    canDrag: quantity > 1,
+    canDrag: quantity > 0,
     collect: monitor => ({
       dragging: monitor.isDragging()
     })
