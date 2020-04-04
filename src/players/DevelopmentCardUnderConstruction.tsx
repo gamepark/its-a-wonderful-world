@@ -1,7 +1,8 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
+import {Draggable, useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import CharacterTokenFromEmpire from '../drag-objects/CharacterTokenFromEmpire'
+import {developmentFromConstructionArea} from '../drag-objects/DevelopmentFromConstructionArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import KrystalliumFromEmpire from '../drag-objects/KrystalliumCube'
 import ResourceFromBoard from '../drag-objects/ResourceFromBoard'
@@ -21,9 +22,10 @@ import ItsAWonderfulWorldRules from '../rules'
 
 type Props = {
   developmentUnderConstruction: DevelopmentUnderConstruction
+  canRecycle: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({developmentUnderConstruction, ...props}) => {
+const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({developmentUnderConstruction, canRecycle, ...props}) => {
   const game = useGame<ItsAWonderfulWorld>()
   const empire = usePlayerId<Empire>()
   const play = usePlay()
@@ -60,18 +62,20 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
     }
   })
   return (
-    <div ref={ref} {...props} css={getStyle(canDrop, isOver)}>
-      <DevelopmentCard development={developmentCards[developmentUnderConstruction.card]} css={css`height: 100%;`}/>
-      {developmentUnderConstruction.costSpaces.map((item, index) => {
-        if (isResource(item)) {
-          return <ResourceCube key={index} resource={item} css={getResourceStyle(index)}/>
-        } else if (isCharacter(item)) {
-          return <CharacterToken key={index} character={item} css={getCharacterTokenStyle(index)}/>
-        } else {
-          return null
-        }
-      })}
-    </div>
+    <Draggable item={developmentFromConstructionArea(developmentUnderConstruction.card)} draggable={canRecycle && !canDrop} {...props}>
+      <div ref={ref} css={getStyle(canDrop, isOver)}>
+        <DevelopmentCard development={developmentCards[developmentUnderConstruction.card]} css={css`height: 100%;`}/>
+        {developmentUnderConstruction.costSpaces.map((item, index) => {
+          if (isResource(item)) {
+            return <ResourceCube key={index} resource={item} css={getResourceStyle(index)}/>
+          } else if (isCharacter(item)) {
+            return <CharacterToken key={index} character={item} css={getCharacterTokenStyle(index)}/>
+          } else {
+            return null
+          }
+        })}
+      </div>
+    </Draggable>
   )
 }
 

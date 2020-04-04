@@ -25,7 +25,7 @@ export type Player = {
   constructedDevelopments: number[]
   ready: boolean
   characters: { [Character.Financier]: number, [Character.General]: number }
-  bonuses: (Resource.Krystallium | Character | typeof ChooseCharacter)[]
+  bonuses: (Resource | Character | typeof ChooseCharacter)[]
 }
 
 export type DevelopmentUnderConstruction = {

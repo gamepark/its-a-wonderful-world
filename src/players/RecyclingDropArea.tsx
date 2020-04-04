@@ -1,7 +1,8 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useDrop, usePlay} from 'tabletop-game-workshop'
-import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
+import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
+import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import Empire from '../material/empires/Empire'
 import {recycle} from '../moves/Recycle'
@@ -12,12 +13,12 @@ import {areasLeftPosition, cardsShift} from './DraftArea'
 const RecyclingDropArea: FunctionComponent<{ empire: Empire }> = ({empire}) => {
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
-    accept: DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
+    accept: [DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
+      isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA || monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromHand) => play(recycle(empire, item.card))
+    drop: (item: DevelopmentFromDraftArea | DevelopmentFromConstructionArea) => play(recycle(empire, item.card))
   })
   return (
     <div ref={ref} css={getStyle(isValidTarget, isOver)}>

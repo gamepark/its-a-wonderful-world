@@ -100,8 +100,8 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         return transformIntoKrystallium(player.empire)
       }
       const bonus = player.bonuses.find(bonus => bonus != ChooseCharacter)
-      if (bonus == Resource.Krystallium) {
-        return placeResource(player.empire, Resource.Krystallium)
+      if (isResource(bonus)) {
+        return placeResource(player.empire, bonus)
       } else if (isCharacter(bonus)) {
         return receiveCharacter(player.empire, bonus)
       }
@@ -140,6 +140,9 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       Object.values(Character).forEach(character => moves.push(receiveCharacter(empire, character)))
     }
     if (moves.length) {
+      player.constructionArea.forEach(developmentUnderConstruction => {
+        moves.push(recycle(empire, developmentUnderConstruction.card))
+      })
       if (player.empireCardResources.some(resource => resource == Resource.Krystallium)) {
         player.constructionArea.forEach(developmentUnderConstruction => {
           getSpacesMissingItem(developmentUnderConstruction, item => isResource(item))
@@ -231,20 +234,25 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       }
       case MoveType.Recycle: {
         const player = getPlayer(game, move.playerId)
-        player.draftArea = player.draftArea.filter(card => card != move.card)
-        player.availableResources.push(developmentCards[move.card].recyclingBonus)
+        const indexInDraftArea = player.draftArea.findIndex(card => card == move.card)
+        if (indexInDraftArea != -1) {
+          player.draftArea.splice(indexInDraftArea, 1)
+          player.availableResources.push(developmentCards[move.card].recyclingBonus)
+        } else {
+          player.constructionArea = player.constructionArea.filter(developmentUnderConstruction => developmentUnderConstruction.card != move.card)
+          player.bonuses.push(developmentCards[move.card].recyclingBonus)
+        }
         break
       }
       case MoveType.PlaceResource: {
         const player = getPlayer(game, move.playerId)
-        if (move.resource == Resource.Krystallium) {
-          if (isNaN(move.card) || isNaN(move.space)) {
-            player.bonuses.splice(player.bonuses.indexOf(Resource.Krystallium), 1)
-          } else {
-            player.empireCardResources.splice(player.empireCardResources.indexOf(move.resource), 1)
-          }
-        } else {
+        const bonusIndex = player.bonuses.findIndex(bonus => bonus == move.resource)
+        if (bonusIndex != -1) {
+          player.bonuses.splice(bonusIndex, 1)
+        } else if (move.resource != Resource.Krystallium) {
           player.availableResources.splice(player.availableResources.indexOf(move.resource), 1)
+        } else {
+          player.empireCardResources.splice(player.empireCardResources.indexOf(move.resource), 1)
         }
         if (isNaN(move.card) || isNaN(move.space)) {
           player.empireCardResources.push(move.resource)

@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {useDrop, useGame, usePlay} from 'tabletop-game-workshop'
+import {useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
@@ -10,6 +10,7 @@ import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
   const game = useGame<ItsAWonderfulWorld>()
+  const playerId = usePlayerId()
   const row = game.phase == Phase.Draft ? 2 : 1
   const fullWidth = game.players.length == 2 && game.phase != Phase.Draft
   const play = usePlay()
@@ -27,7 +28,7 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
         {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
       </div>
       {player.constructionArea.map((construction, index) => (
-        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction}
+        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction} canRecycle={player.empire == playerId}
                                           css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth)}/>)
       )}
     </Fragment>
