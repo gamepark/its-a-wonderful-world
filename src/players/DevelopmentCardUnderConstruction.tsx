@@ -18,14 +18,16 @@ import ResourceCube from '../material/resources/ResourceCube'
 import MoveType from '../moves/MoveType'
 import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import PlaceResource, {placeResource} from '../moves/PlaceResource'
-import ItsAWonderfulWorldRules from '../rules'
+import ItsAWonderfulWorldRules, {getRemainingCost} from '../rules'
 
 type Props = {
   developmentUnderConstruction: DevelopmentUnderConstruction
   canRecycle: boolean
+  focused: boolean
+  setFocus: () => void
 } & React.HTMLAttributes<HTMLDivElement>
 
-const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({developmentUnderConstruction, canRecycle, ...props}) => {
+const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({developmentUnderConstruction, canRecycle, focused, setFocus, ...props}) => {
   const game = useGame<ItsAWonderfulWorld>()
   const empire = usePlayerId<Empire>()
   const play = usePlay()
@@ -53,7 +55,18 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
           play(placeResource(empire, item.resource, developmentUnderConstruction.card, Math.min(...placeResourceMoves.filter(move => move.resource == item.resource).map(move => move.space))))
           break
         case DragObjectType.KRYSTALLIUM_FROM_EMPIRE:
-          play(placeResource(empire, Resource.Krystallium, developmentUnderConstruction.card, Math.min(...placeResourceMoves.map(move => move.space))))
+          const remainingCost = getRemainingCost(developmentUnderConstruction)
+          const krystalliumCost = remainingCost.find(cost => cost.item == Resource.Krystallium)
+          if (krystalliumCost) {
+            play(placeResource(empire, Resource.Krystallium, developmentUnderConstruction.card, krystalliumCost.space))
+          } else {
+            const remainingResourcesRequired = new Set(remainingCost.filter(cost => isResource(cost.item)).map(cost => cost.item))
+            if (remainingResourcesRequired.size == 1) {
+              play(placeResource(empire, Resource.Krystallium, developmentUnderConstruction.card, Math.min(...placeResourceMoves.map(move => move.space))))
+            } else {
+              setFocus()
+            }
+          }
           break
         case DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE:
           play(placeCharacter(empire, item.character, developmentUnderConstruction.card, Math.min(...placeCharacterMoves.map(move => move.space))))
@@ -62,7 +75,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
     }
   })
   return (
-    <Draggable item={developmentFromConstructionArea(developmentUnderConstruction.card)} draggable={canRecycle && !canDrop} {...props}>
+    <Draggable item={developmentFromConstructionArea(developmentUnderConstruction.card)} canDrag={canRecycle && !canDrop && !focused} {...props}>
       <div ref={ref} css={getStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[developmentUnderConstruction.card]} css={css`height: 100%;`}/>
         {developmentUnderConstruction.costSpaces.map((item, index) => {
@@ -70,8 +83,6 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
             return <ResourceCube key={index} resource={item} css={getResourceStyle(index)}/>
           } else if (isCharacter(item)) {
             return <CharacterToken key={index} character={item} css={getCharacterTokenStyle(index)}/>
-          } else {
-            return null
           }
         })}
       </div>

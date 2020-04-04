@@ -66,14 +66,22 @@ export const getAreasStyle = (row: number, fullWidth: boolean, isValidTarget = f
 
 `
 
-export const getAreaCardStyle = (row: number, index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => css`
+export const getAreaCardStyle = (row: number, index: number, totalCards = numberOfCardsToDraft, fullWidth = false, focused = false) => css`
   position: absolute;
   height: ${cardHeight}%;
+  will-change: bottom, left, transform !important;
+  transition-property: bottom, left, transform, z-index;
+  z-index: 0;
   ${getAreaCardBottomPosition(row)}
   ${getAreaCardLeftPosition(index, totalCards, fullWidth)};
+  ${focused && getFocusTransform()}
 `
 
-export const getAreaCardLeftPosition = (index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => {
+export const getAreaCardLeftPosition = (index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => css`
+  left: ${getAreaCardLeft(index, totalCards, fullWidth)}%;
+`
+
+const getAreaCardLeft = (index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => {
   let leftShift = cardsShift
   if (fullWidth && totalCards > 9) {
     const width = 100 - areasLeftPosition - cardHeight * cardRatio / screenRatio - 2
@@ -81,15 +89,18 @@ export const getAreaCardLeftPosition = (index: number, totalCards = numberOfCard
   } else if (totalCards > numberOfCardsToDraft) {
     leftShift = cardsShift * (numberOfCardsToDraft - 1) / (totalCards - 1)
   }
-  return css`
-    left: ${(areasLeftPosition + index * leftShift)}%;
-  `
+  return areasLeftPosition + index * leftShift
 }
 
 export const getAreaCardBottomPosition = (row: number) => css`
   bottom: ${getAreaCardBottom(row)}%;
-  will-change: bottom;
-  transition: bottom 1s ease-in-out;
+`
+
+const getFocusTransform = () => css`
+  bottom: 50%;
+  left: 50%;
+  z-index: 100 !important;
+  transform: translate(-50%, 50%) scale(3) !important;
 `
 
 export const getAreaCardBottom = (row: number) => (cardHeight + 4) * row + 3

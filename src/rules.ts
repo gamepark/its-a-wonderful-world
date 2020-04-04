@@ -394,19 +394,16 @@ function costSpaces(development: Development) {
   return Object.values(development.constructionCost).reduce((sum, cost) => sum + cost)
 }
 
+export function getRemainingCost(developmentUnderConstruction: DevelopmentUnderConstruction): { item: Resource | Character, space: number }[] {
+  const development = developmentCards[developmentUnderConstruction.card]
+  return Array.of<Resource | Character>(...Object.values(Resource), ...Object.values(Character))
+    .flatMap(item => Array(development.constructionCost[item] || 0).fill(item))
+    .map((item, index) => ({item, space: index}))
+    .filter(item => !developmentUnderConstruction.costSpaces[item.space])
+}
+
 function getSpacesMissingItem(developmentUnderConstruction: DevelopmentUnderConstruction, predicate: (item: Resource | Character) => boolean) {
-  const cost = developmentCards[developmentUnderConstruction.card].constructionCost
-  let space = 0
-  let spaces: number[] = []
-  Array.of<Resource | Character>(...Object.values(Resource), ...Object.values(Character)).forEach(item => {
-    for (let i = 0; i < cost[item] || 0; i++) {
-      if (!developmentUnderConstruction.costSpaces[space] && predicate(item)) {
-        spaces.push(space)
-      }
-      space++
-    }
-  })
-  return spaces
+  return getRemainingCost(developmentUnderConstruction).filter(cost => predicate(cost.item)).map(cost => cost.space)
 }
 
 export function getNextProductionStep(game: ItsAWonderfulWorld): Resource {

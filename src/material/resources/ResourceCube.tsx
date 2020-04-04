@@ -23,7 +23,7 @@ const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ..
       </Draggable>
     )
   } else {
-    return <img src={images[resource]} css={style} {...props}/>
+    return <img src={images[resource]} css={style} {...props} draggable={false}/>
   }
 }
 

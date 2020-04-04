@@ -1,16 +1,21 @@
 import {css} from '@emotion/core'
-import React, {Fragment, FunctionComponent} from 'react'
+import React, {Fragment, FunctionComponent, useState} from 'react'
 import {useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
+import Resource, {isResource} from '../material/resources/Resource'
+import ResourceCube from '../material/resources/ResourceCube'
+import PlaceResource, {placeResource} from '../moves/PlaceResource'
 import {slateForConstruction} from '../moves/SlateForConstruction'
+import {getRemainingCost} from '../rules'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
   const game = useGame<ItsAWonderfulWorld>()
   const playerId = usePlayerId()
+  const [focusedCard, setFocusedCard] = useState<number>()
   const row = game.phase == Phase.Draft ? 2 : 1
   const fullWidth = game.players.length == 2 && game.phase != Phase.Draft
   const play = usePlay()
@@ -24,15 +29,48 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
   })
   return (
     <Fragment>
+      {focusedCard && <Fragment>
+        <div css={popupBackgroundStyle} onClick={() => setFocusedCard(null)}/>
+        {getSmartPlaceResourceMoves(player, focusedCard).map(move =>
+          <a key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
+            <ResourceCube resource={move.resource} css={buttonResourceStyle}/>⇒
+          </a>
+        )}
+      </Fragment>}
       <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
         {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
       </div>
       {player.constructionArea.map((construction, index) => (
-        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction} canRecycle={player.empire == playerId}
-                                          css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth)}/>)
+        <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction} setFocus={() => setFocusedCard(construction.card)}
+                                          canRecycle={player.empire == playerId && focusedCard != construction.card}
+                                          onClick={() => setFocusedCard(construction.card)} focused={focusedCard == construction.card}
+                                          css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth, focusedCard == construction.card)}/>)
       )}
     </Fragment>
   )
+}
+
+function getSmartPlaceResourceMoves(player: Player, card: number) {
+  const moves: PlaceResource[] = []
+  const construction = player.constructionArea.find(construction => construction.card == card)
+  const availableResource = JSON.parse(JSON.stringify(player.availableResources))
+  const krystalliumAvailable = player.empireCardResources.filter(resource => resource == Resource.Krystallium).length
+  const availableKrystalliumPerResource = Object.values(Resource).reduce<{ [key in Resource]?: number }>((map, resource) => {
+    map[resource] = krystalliumAvailable
+    return map
+  }, {})
+  getRemainingCost(construction).forEach(cost => {
+    if (isResource(cost.item)) {
+      if (availableResource[cost.item] > 0) {
+        moves.push(placeResource(player.empire, cost.item, construction.card, cost.space))
+        availableResource[cost.item]--
+      } else if (availableKrystalliumPerResource[cost.item] > 0) {
+        moves.push(placeResource(player.empire, Resource.Krystallium, construction.card, cost.space))
+        availableKrystalliumPerResource[cost.item]--
+      }
+    }
+  })
+  return moves
 }
 
 const getConstructionAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
@@ -51,6 +89,46 @@ const constructionAreaText = css`
   text-align: center;
   font-size: 4vh;
   color: crimson;
+`
+
+const popupBackgroundStyle = css`
+  position: fixed;
+  top: -100%;
+  bottom: -100%;
+  left: -100%;
+  right: -100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+`
+
+const getPlaceResourceButtonStyle = (index: number) => css`
+  position: absolute;
+  z-index: 100;
+  top: ${index * 6.5 + 16.5}%;
+  left: 29%;
+  display: inline-flex;
+  box-shadow: inset 0 0.1vh 0 0 #ffffff;
+  background: #ededed linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+  border-radius: 2vh;
+  border: 0.1vh solid #dcdcdc;
+  color: #333333;
+  padding: 0 2vh;
+  align-items: center;
+  font-size: 4.8vh;
+  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  &:hover {
+    background: #dfdfdf linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+  }
+  &:active {
+    position:relative;
+    transform: translateY(1px);
+  }
+`
+
+const buttonResourceStyle = css`
+  display: inline;
+  height: 3.5vh;
+  margin: 0 1.5vh 0 0.5vh;
 `
 
 export default ConstructionArea
