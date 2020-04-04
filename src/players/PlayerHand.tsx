@@ -1,24 +1,32 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {Hand, useAnimation} from 'tabletop-game-workshop'
+import {useGame} from 'tabletop-game-workshop/dist'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
-import {Player} from '../ItsAWonderfulWorld'
-import DevelopmentCard, {height as cardHeight, width as cardWidth, ratio as cardRatio} from '../material/developments/DevelopmentCard'
+import ItsAWonderfulWorld, {Player} from '../ItsAWonderfulWorld'
+import DevelopmentCard, {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import ChooseDevelopmentCard from '../moves/ChooseDevelopmentCard'
 import {DiscardLeftoverCardsView} from '../moves/DiscardLeftoverCards'
 import MoveType from '../moves/MoveType'
 import {constructedCardLeftMargin} from './ConstructedCardsArea'
 import {areasLeftPosition, cardsShift, getAreaCardBottom} from './DraftArea'
+import {playerPanelWidth} from './PlayerPanel'
 
 export const bottomMargin = 3
 
-const handLeftPosition = 50 + (constructedCardLeftMargin + 1) / 2
+const handLeftPosition = (players: number) => {
+  if (players <= 2) {
+    return 50 + (constructedCardLeftMargin + 1) / 2
+  } else {
+    return 50 + (constructedCardLeftMargin + 1) / 2 - (playerPanelWidth + 1) / 2
+  }
+}
 
-const position = css`
+const position = (players: number) => css`
   height: ${cardHeight}%;
   bottom: ${bottomMargin}%;
-  left: ${handLeftPosition}%;
+  left: ${handLeftPosition(players)}%;
   & > div {
     height: 100%;
     & > div {
@@ -30,8 +38,8 @@ const position = css`
   }
 `
 
-const translateToDraftArea = (index: number, transitionDuration: number) => css`
-  transform: translate(${(areasLeftPosition + index * cardsShift - handLeftPosition) * 100 / cardWidth}%, ${bottomMargin - getAreaCardBottom(1)}vh);
+const translateToDraftArea = (index: number, transitionDuration: number, players: number) => css`
+  transform: translate(${(areasLeftPosition + index * cardsShift - handLeftPosition(players)) * 100 / cardWidth}%, ${bottomMargin - getAreaCardBottom(1)}vh);
   transition: transform ${transitionDuration}s ease-in-out;
 `
 
@@ -43,11 +51,12 @@ const translateToDiscard = (transitionDuration: number) => css`
 const hoverScaleFromBottom = css`transform-origin: bottom;`
 
 const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
+  const players = useGame<ItsAWonderfulWorld>().players.length
   const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type == MoveType.ChooseDevelopmentCard && animation.move.playerId == player.empire)
   const discardingLeftoverCards = useAnimation<DiscardLeftoverCardsView>(animation => animation.move.type == MoveType.DiscardLeftoverCards)
   const getDevelopmentCardCSS = (card: number) => {
     if (choosingDevelopment && choosingDevelopment.move.card == card) {
-      return translateToDraftArea(player.draftArea.length, choosingDevelopment.duration)
+      return translateToDraftArea(player.draftArea.length, choosingDevelopment.duration, players)
     } else if (discardingLeftoverCards) {
       return translateToDiscard(discardingLeftoverCards.duration)
     } else {
@@ -55,9 +64,10 @@ const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
     }
   }
   return (
-    <Hand position={position} rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={cardRatio}
+    <Hand position={position(players)} rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={cardRatio}
           draggable={index => ({
-            item: developmentFromHand(player.hand[index]), canDrag: !player.chosenCard, transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2
+            item: developmentFromHand(player.hand[index]), canDrag: !player.chosenCard,
+            transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2
           })}
           removing={index => choosingDevelopment && choosingDevelopment.move.card == player.hand[index] || discardingLeftoverCards != null}
           transition={choosingDevelopment?.duration || discardingLeftoverCards?.duration}

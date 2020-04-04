@@ -40,11 +40,13 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight = fa
   )
 }
 
+export const playerPanelWidth = 20
+
 const style = (empire: Empire, position: number, highlight: boolean) => css`
   position: absolute;
   top: ${8.5 + position * 18.5}%;
   right: 1%;
-  width: 20%;
+  width: ${playerPanelWidth}%;
   height: 17%;
   border-radius: 5px;
   background-image: url(${empireBackground[empire]});

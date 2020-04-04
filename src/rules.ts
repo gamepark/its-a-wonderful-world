@@ -34,7 +34,7 @@ export const numberOfRounds = 4
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
   setup() {
     return {
-      players: shuffle(Object.values(Empire)).slice(0, 2).map<Player>(empire => ({
+      players: shuffle(Object.values(Empire)).slice(0, 4).map<Player>(empire => ({
         empire, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [], constructedDevelopments: [], ready: false,
         characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
       })),
@@ -66,7 +66,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
           }
         } else {
           for (const player of game.players) {
-            if (player.hand.length == 1) {
+            if (!player.chosenCard && player.hand.length == 1) {
               return chooseDevelopmentCard(player.empire, player.hand[0])
             }
           }
