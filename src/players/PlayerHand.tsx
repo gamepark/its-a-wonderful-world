@@ -1,7 +1,6 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {Hand, useAnimation} from 'tabletop-game-workshop'
-import {useGame} from 'tabletop-game-workshop/dist'
+import {Hand, useAnimation, useGame} from 'tabletop-game-workshop'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import ItsAWonderfulWorld, {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard, {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
