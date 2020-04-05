@@ -50,10 +50,10 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
     case Phase.Draft:
       if (animation && animation.move.type == MoveType.PassCards) {
         return t('Les joueurs passent les cartes à gauche')
-      } else if (player && !player.chosenCard) {
+      } else if (player && player.chosenCard == undefined) {
         return t('Choisissez une carte et placez-la dans votre zone de draft')
       } else {
-        const players = game.players.filter(player => !player.chosenCard)
+        const players = game.players.filter(player => player.chosenCard == undefined)
         if (players.length == 1) {
           return t('{player} doit choisir une carte dévelopement', {player: getEmpireName(t, players[0].empire)})
         } else if (player) {

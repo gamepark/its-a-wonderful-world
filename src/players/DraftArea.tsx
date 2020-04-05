@@ -34,8 +34,8 @@ const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`}/>
         </Draggable>
       ))}
-      {player.chosenCard && <DevelopmentCard development={player.chosenCard != true ? developmentCards[player.chosenCard] : null}
-                                             css={getAreaCardStyle(row, player.draftArea.length)}/>}
+      {player.chosenCard != undefined && <DevelopmentCard development={player.chosenCard != true ? developmentCards[player.chosenCard] : null}
+                                                          css={getAreaCardStyle(row, player.draftArea.length)}/>}
     </Fragment>
   )
 }

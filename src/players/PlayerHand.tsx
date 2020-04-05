@@ -65,7 +65,7 @@ const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
   return (
     <Hand position={position(players)} rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={cardRatio}
           draggable={index => ({
-            item: developmentFromHand(player.hand[index]), canDrag: !player.chosenCard,
+            item: developmentFromHand(player.hand[index]), canDrag: player.chosenCard == undefined,
             transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2
           })}
           removing={index => choosingDevelopment && choosingDevelopment.move.card == player.hand[index] || discardingLeftoverCards != null}

@@ -54,7 +54,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       case Phase.Draft:
         if (!game.players[0].hand.length && !game.players[0].draftArea.length) {
           return dealDevelopmentCards()
-        } else if (game.players.every(player => player.chosenCard)) {
+        } else if (game.players.every(player => player.chosenCard != undefined)) {
           return revealChosenCards()
         } else if (game.players[0].cardsToPass) {
           return passCards()
@@ -66,7 +66,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
           }
         } else {
           for (const player of game.players) {
-            if (!player.chosenCard && player.hand.length == 1) {
+            if (player.chosenCard == undefined && player.hand.length == 1) {
               return chooseDevelopmentCard(player.empire, player.hand[0])
             }
           }
@@ -113,7 +113,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
     const moves: Move[] = []
     switch (game.phase) {
       case Phase.Draft:
-        if (!player.chosenCard) {
+        if (player.chosenCard == undefined) {
           player.hand.forEach(card => moves.push(chooseDevelopmentCard(empire, card)))
         }
         break
@@ -342,7 +342,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
     game.players.forEach(player => {
       if (player.empire != playerId) {
         player.hand = player.hand.map(() => null)
-        if (player.chosenCard) {
+        if (player.chosenCard != undefined) {
           player.chosenCard = true
         }
       }
