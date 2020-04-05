@@ -92,6 +92,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({development
 
 const getStyle = (canDrop: boolean, isOver: boolean) => css`
   border-radius: 5%;
+  height: 100%;
   ${canDrop && canDropStyle};
   ${canDrop && isOver && overStyle};
 `
