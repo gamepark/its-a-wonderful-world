@@ -34,10 +34,7 @@ export const numberOfRounds = 4
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
   setup() {
     return {
-      players: shuffle(Object.values(Empire)).slice(0, 4).map<Player>(empire => ({
-        empire, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [], constructedDevelopments: [], ready: false,
-        characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
-      })),
+      players: setupPlayers(),
       deck: shuffle(Array.from(developmentCards.keys())),
       discard: [],
       round: 1,
@@ -383,6 +380,24 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       default:
         return 0
     }
+  }
+}
+
+function setupPlayers(players?: number | [{ empire?: Empire }]) {
+  if (Array.isArray(players) && players.length >= 2 && players.length <= 4) {
+    const empiresLeft = shuffle(Object.values(Empire).filter(empire => players.some(player => player.empire == empire)))
+    return players.map<Player>(player => setupPlayer(player.empire || empiresLeft.pop()))
+  } else if (typeof players == 'number' && Number.isInteger(players) && players >= 2 && players <= 4) {
+    return shuffle(Object.values(Empire)).slice(0, players).map<Player>(setupPlayer)
+  } else {
+    return shuffle(Object.values(Empire)).slice(0, 2).map<Player>(setupPlayer)
+  }
+}
+
+function setupPlayer(empire: Empire): Player {
+  return {
+    empire, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [], constructedDevelopments: [], ready: false,
+    characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
   }
 }
 

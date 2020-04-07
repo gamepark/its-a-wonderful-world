@@ -55,11 +55,11 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
       } else {
         const players = game.players.filter(player => player.chosenCard == undefined)
         if (players.length == 1) {
-          return t('{player} doit choisir une carte dévelopement', {player: getEmpireName(t, players[0].empire)})
+          return t('{player} doit choisir une carte développement', {player: getEmpireName(t, players[0].empire)})
         } else if (player) {
-          return t('Les autres joueurs doivent choisir une carte développment')
+          return t('Les autres joueurs doivent choisir une carte développement')
         } else {
-          return t('Les joueurs doivent choisir une carte développment')
+          return t('Les joueurs doivent choisir une carte développement')
         }
       }
     case Phase.Planning:
@@ -69,7 +69,7 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
       if (player.draftArea.length) {
         return t('Vous devez mettre en construction ou recycler chacune des cartes draftées')
       } else if (player.availableResources.length) {
-        return t('Placez vos ressources sur vos dévelopements en construction ou votre carte Empire')
+        return t('Placez vos ressources sur vos développements en construction ou votre carte Empire')
       } else if (!player.ready) {
         return <Trans values={{resource: Resource.Materials}}
                       defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
@@ -87,7 +87,7 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
     case Phase.Production:
       if (player && !player.ready) {
         if (player.availableResources.length) {
-          return t('Placez les ressources produites sur vos dévelopments en construction ou votre carte Empire')
+          return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')
         } else if (player.bonuses.some(bonus => bonus == 'CHOOSE_CHARACTER')) {
           return <Trans>Vous pouvez récupérer un <a onClick={() => play(receiveCharacter(empire, Character.Financier))} css={buttonStyle}>Financier</a> ou un <a
             onClick={() => play(receiveCharacter(empire, Character.General))} css={buttonStyle}>Général</a></Trans>
