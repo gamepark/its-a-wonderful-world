@@ -28,7 +28,7 @@ import shuffle from './util/shuffle'
 
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
-export const numberOfRounds = 2
+export const numberOfRounds = 4
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
