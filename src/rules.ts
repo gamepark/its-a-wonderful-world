@@ -28,13 +28,13 @@ import shuffle from './util/shuffle'
 
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
-export const numberOfRounds = 4
+export const numberOfRounds = 2
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
   setup() {
     return {
-      players: setupPlayers(),
+      players: setupPlayers(4),
       deck: shuffle(Array.from(developmentCards.keys())),
       discard: [],
       round: 1,
