@@ -120,8 +120,8 @@ const imgStyle = css`
 const getResourceStyle = (index: number) => css`
   position: absolute;
   width: 10%;
-  right: ${resourcePosition[index][0]}%;
-  top: ${resourcePosition[index][1]}%;
+  right: ${resourcePosition[index % 5][0]}%;
+  top: ${resourcePosition[index % 5][1]}%;
 `
 
 const getKrystalliumStyle = (index: number) => css`

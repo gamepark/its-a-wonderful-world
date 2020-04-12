@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {Hand, useAnimation, useGame} from 'tabletop-game-workshop'
+import {Hand, useAnimation, useGame, usePlayerId} from 'tabletop-game-workshop'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import ItsAWonderfulWorld, {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard, {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
@@ -51,6 +51,7 @@ const hoverScaleFromBottom = css`transform-origin: bottom;`
 
 const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
   const players = useGame<ItsAWonderfulWorld>().players.length
+  const playerId = usePlayerId()
   const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type == MoveType.ChooseDevelopmentCard && animation.move.playerId == player.empire)
   const discardingLeftoverCards = useAnimation<DiscardLeftoverCardsView>(animation => animation.move.type == MoveType.DiscardLeftoverCards)
   const getDevelopmentCardCSS = (card: number) => {
@@ -65,7 +66,7 @@ const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
   return (
     <Hand position={position(players)} rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={cardRatio}
           draggable={index => ({
-            item: developmentFromHand(player.hand[index]), canDrag: player.chosenCard == undefined,
+            item: developmentFromHand(player.hand[index]), canDrag: player.empire == playerId && player.chosenCard == undefined && player.hand.length > 1,
             transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2
           })}
           removing={index => choosingDevelopment && choosingDevelopment.move.card == player.hand[index] || discardingLeftoverCards != null}

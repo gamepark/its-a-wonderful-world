@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {Draggable, useDrop, useGame, usePlay} from 'tabletop-game-workshop'
+import {Draggable, useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
@@ -15,6 +15,7 @@ import {constructedCardLeftMargin} from './ConstructedCardsArea'
 const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
   const game = useGame<ItsAWonderfulWorld>()
   const row = game.phase == Phase.Draft ? 1 : 0
+  const playerId = usePlayerId()
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_HAND,
@@ -30,7 +31,8 @@ const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
         {!player.draftArea.length && <span css={draftAreaText}>Zone de draft</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={index} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index)}>
+        <Draggable key={index} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index)}
+                   canDrag={game.phase == Phase.Planning && playerId == player.empire}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`}/>
         </Draggable>
       ))}

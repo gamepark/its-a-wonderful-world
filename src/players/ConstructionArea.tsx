@@ -42,7 +42,7 @@ const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
       </div>
       {player.constructionArea.map((construction, index) => (
         <DevelopmentCardUnderConstruction key={index} developmentUnderConstruction={construction} setFocus={() => setFocusedCard(construction.card)}
-                                          canRecycle={player.empire == playerId && focusedCard != construction.card}
+                                          canRecycle={player.empire == playerId && focusedCard != construction.card && row != 2}
                                           onClick={() => setFocusedCard(construction.card)} focused={focusedCard == construction.card}
                                           css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth, focusedCard == construction.card)}/>)
       )}

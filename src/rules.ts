@@ -34,7 +34,7 @@ export const numberOfRounds = 4
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
   setup() {
     return {
-      players: setupPlayers(4),
+      players: setupPlayers(),
       deck: shuffle(Array.from(developmentCards.keys())),
       discard: [],
       round: 1,
@@ -239,6 +239,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
           player.constructionArea = player.constructionArea.filter(developmentUnderConstruction => developmentUnderConstruction.card != move.card)
           player.bonuses.push(developmentCards[move.card].recyclingBonus)
         }
+        game.discard.push(move.card)
         break
       }
       case MoveType.PlaceResource: {
