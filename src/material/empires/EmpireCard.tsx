@@ -6,6 +6,7 @@ import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {Player} from '../../ItsAWonderfulWorld'
 import {placeResource} from '../../moves/PlaceResource'
+import {tellYourAreReady} from '../../moves/TellYouAreReady'
 import {glow} from '../board/ResourceArea'
 import Character from '../characters/Character'
 import CharacterTokenPile from '../characters/CharacterTokenPile'
@@ -70,7 +71,7 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
     drop: (item: ResourceFromBoard) => play(placeResource(player.empire, item.resource))
   })
   return (
-    <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)}>
+    <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)} onClick={() => play(tellYourAreReady(playerId))}>
       <img src={empireFaceA[player.empire]} css={imgStyle} draggable="false"/>
       {player.empireCardResources.filter(resource => resource != Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}

@@ -32,9 +32,9 @@ export const numberOfRounds = 4
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
-  setup({players = 2}) {
+  setup(options) {
     return {
-      players: setupPlayers(players),
+      players: setupPlayers(options?.players),
       deck: shuffle(Array.from(developmentCards.keys())),
       discard: [],
       round: 1,
@@ -155,6 +155,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         }
       })
     }
+    moves.push(tellYourAreReady(player.empire))
     return moves
   },
 
