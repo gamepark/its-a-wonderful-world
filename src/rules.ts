@@ -155,7 +155,6 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         }
       })
     }
-    moves.push(tellYourAreReady(player.empire))
     return moves
   },
 
