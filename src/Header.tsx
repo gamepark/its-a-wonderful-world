@@ -2,7 +2,7 @@ import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
 import React from 'react'
 import {Trans, useTranslation} from 'react-i18next'
-import {useAnimation, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
+import {useAnimations, useGame, usePlay, usePlayerId, useUndo} from 'tabletop-game-workshop'
 import Animation from 'tabletop-game-workshop/dist/types/Animation'
 import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
 import Character from './material/characters/Character'
@@ -13,7 +13,9 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
-import {getNextProductionStep, getScore, numberOfRounds} from './rules'
+import ItsAWonderfulWorldRules, {getNextProductionStep, getScore, numberOfRounds} from './rules'
+import IconButton from './util/IconButton'
+import UndoIcon from './util/UndoIcon'
 
 const headerStyle = css`
   position: absolute;
@@ -31,24 +33,34 @@ const textStyle = css`
   font-size: 4vh;
 `
 
+const undoButtonStyle = css`
+  position: absolute;
+  top: 1vh;
+  left: 1vh;
+  font-size: 3vh;
+  padding: 0.33em;
+`
+
 const Header = () => {
   const game = useGame<ItsAWonderfulWorld>()
   const empire = usePlayerId<Empire>()
-  const animation = useAnimation<Move>()
+  const animations = useAnimations<Move>()
   const play = usePlay<Move>()
+  const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const {t} = useTranslation()
   return (
     <header css={headerStyle}>
-      <h1 css={textStyle}>{getText(t, game, empire, animation, play)}</h1>
+      <IconButton css={undoButtonStyle} title={'Annuler mon dernier coup'} aria-label={'Annuler mon dernier coup'} onClick={undo} disabled={!canUndo}><UndoIcon/></IconButton>
+      <h1 css={textStyle}>{getText(t, game, empire, animations, play)}</h1>
     </header>
   )
 }
 
-function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animation: Animation<Move>, play: (move: Move) => void) {
+function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animations: Animation<Move>[], play: (move: Move) => void) {
   const player = game.players.find(player => player.empire == empire)
   switch (game.phase) {
     case Phase.Draft:
-      if (animation && animation.move.type == MoveType.PassCards) {
+      if (animations.some(animation => animation.move.type == MoveType.PassCards)) {
         return t('Les joueurs passent les cartes à gauche')
       } else if (player && player.chosenCard == undefined) {
         return t('Choisissez une carte et placez-la dans votre zone de draft')

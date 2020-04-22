@@ -31,7 +31,7 @@ const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
         {!player.draftArea.length && <span css={draftAreaText}>Zone de draft</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={index} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index)}
+        <Draggable key={card} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index)}
                    canDrag={game.phase == Phase.Planning && playerId == player.empire}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`}/>
         </Draggable>

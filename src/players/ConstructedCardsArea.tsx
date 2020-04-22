@@ -20,7 +20,7 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player }> = ({player}) =
     `
   return (
     <Fragment>
-      {player.constructedDevelopments.map((card, index) => <DevelopmentCard key={index} development={developmentCards[card]} css={style(index)}/>)}
+      {player.constructedDevelopments.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]} css={style(index)}/>)}
     </Fragment>
   )
 }

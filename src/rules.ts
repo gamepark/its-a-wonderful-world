@@ -49,6 +49,9 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
   getAutomaticMove(game) {
     switch (game.phase) {
       case Phase.Draft:
+        if (isGameView(game)) {
+          return // There is hidden information during Draft phase, so consequences of actions cannot be predicted on client side
+        }
         if (!game.players[0].hand.length && !game.players[0].draftArea.length) {
           return dealDevelopmentCards()
         } else if (game.players.every(player => player.chosenCard != undefined)) {
@@ -158,12 +161,12 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
     return moves
   },
 
-  play(move, game) {
+  play(move, game, playerId) {
     switch (move.type) {
       case MoveType.DealDevelopmentCards: {
         game.players.forEach(player => player.hand = game.deck.splice(0, game.players.length == 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft))
         if (isDealDevelopmentCardsView<Empire>(move)) {
-          getPlayer(game, move.playerId).hand = move.playerCards
+          getPlayer(game, playerId).hand = move.playerCards
         }
         break
       }
@@ -194,7 +197,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
       }
       case MoveType.PassCards: {
         if (isPassCardsView(move)) {
-          const player = getPlayer(game, move.playerId)
+          const player = getPlayer(game, playerId)
           player.hand = move.receivedCards
         } else {
           const draftDirection = game.round % 2 ? 1 : -1
@@ -335,6 +338,30 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
     }
   },
 
+  canUndo(move, consecutiveMoves) {
+    switch (move.type) {
+      case MoveType.ChooseDevelopmentCard:
+        return !consecutiveMoves.some(move => move.type == MoveType.RevealChosenCards)
+      case MoveType.SlateForConstruction:
+        return !consecutiveMoves.some(m => m.type == MoveType.TellYouAreReady && m.playerId == move.playerId
+          || m.type == MoveType.PlaceCharacter && m.card == move.card
+          || m.type == MoveType.PlaceResource && m.card == move.card)
+      case MoveType.Recycle:
+        return !consecutiveMoves.some(m => m.type == MoveType.TellYouAreReady && m.playerId == move.playerId
+          || m.type == MoveType.PlaceResource && m.playerId == move.playerId)
+      case MoveType.PlaceCharacter:
+      case MoveType.PlaceResource:
+      case MoveType.ReceiveCharacter:
+        return !consecutiveMoves.some(m => m.type == MoveType.TellYouAreReady && m.playerId == move.playerId
+          || m.type == MoveType.PlaceResource && m.playerId == move.playerId && m.resource == Resource.Krystallium
+          || m.type == MoveType.PlaceCharacter && m.playerId == move.playerId)
+      case MoveType.TellYouAreReady:
+        return !consecutiveMoves.some(m => m.type == MoveType.StartPhase || m.type == MoveType.Produce)
+      default:
+        return false
+    }
+  },
+
   getView(game, playerId) {
     game.deck = game.deck.map(() => null)
     game.players.forEach(player => {
@@ -351,7 +378,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
   getMoveView(move, playerId, game) {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
-        return playerId ? {...move, playerCards: getPlayer(game, playerId).hand, playerId} : move
+        return playerId ? {...move, playerCards: getPlayer(game, playerId).hand} : move
       case MoveType.ChooseDevelopmentCard:
         if (playerId != move.playerId) {
           delete move.card
@@ -365,17 +392,17 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
           }, {})
         }
       case MoveType.PassCards:
-        return {...move, playerId, receivedCards: playerId ? getPlayer(game, playerId).hand : undefined}
+        return {...move, receivedCards: playerId ? getPlayer(game, playerId).hand : undefined}
       case MoveType.DiscardLeftoverCards:
         return {...move, discardedCards: game.discard.slice()}
     }
     return move
   },
 
-  getAnimationDuration(move) {
+  getAnimationDuration(move, playerId, game, undo) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
-        return [0.5]
+        return undo ? 0 : [0.5]
       /*case MoveType.DiscardLeftoverCards:
         return [0.5]*/
       default:
@@ -404,6 +431,10 @@ function setupPlayer(empire: Empire): Player {
 
 function getPlayer(game: ItsAWonderfulWorld, empire: Empire) {
   return game.players.find(player => player.empire == empire)
+}
+
+function isGameView(game: ItsAWonderfulWorld) {
+  return game.deck[0] === null
 }
 
 function costSpaces(development: Development) {

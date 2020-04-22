@@ -72,9 +72,7 @@ const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
           removing={index => choosingDevelopment && choosingDevelopment.move.card == player.hand[index] || discardingLeftoverCards != null}
           transition={choosingDevelopment?.duration || discardingLeftoverCards?.duration}
           itemHoverStyle={css`transform: scale(1.5);`}>
-      {player.hand.map((card, index) =>
-        <DevelopmentCard key={[player.hand.length, index].join('-')} development={developmentCards[card]}
-                         css={getDevelopmentCardCSS(card)}/>)}
+      {player.hand.map(card => <DevelopmentCard key={card} development={developmentCards[card]} css={getDevelopmentCardCSS(card)}/>)}
     </Hand>
   )
 }
