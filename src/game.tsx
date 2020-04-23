@@ -8,13 +8,14 @@ import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
 import DiscardPile from './material/developments/DiscardPile'
 import DrawPile from './material/developments/DrawPile'
 import artwork from './material/its-cover-artwork.png'
+import Resource from './material/resources/Resource'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
-import ItsAWonderfulWorldRules from './rules'
+import {numberOfRounds} from './rules'
 
 export default function () {
   const game = useGame<ItsAWonderfulWorld>()
-  const gameOver = !game.players.some(player => ItsAWonderfulWorldRules.getLegalMoves(game, player.empire).length > 0)
+  const gameOver = game.round == numberOfRounds && game.phase == Phase.Production && game.productionStep == Resource.Exploration && game.players.every(player => player.ready)
   const playerId = usePlayerId()
   const [displayedEmpire, setDisplayedEmpire] = useState(playerId || game.players[0].empire)
   const displayedPlayer = game.players.find(player => player.empire == displayedEmpire)
