@@ -29,6 +29,8 @@ import shuffle from './util/shuffle'
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
 export const numberOfRounds = 4
+const defaultNumberOfPlayers = 2
+const defaultEmpireCardsSide = EmpireSide.A
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, EmpireName, ItsAWonderfulWorld, MoveView<EmpireName>, Options> = {
@@ -200,7 +202,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, EmpireName, ItsAW
           const player = getPlayer(game, playerId)
           player.hand = move.receivedCards
         } else {
-          const draftDirection = game.round % 2 ? 1 : -1
+          const draftDirection = game.round % 2 ? -1 : 1
           for (let i = 0; i < game.players.length; i++) {
             game.players[i].hand = game.players[(i + game.players.length + draftDirection) % game.players.length].cardsToPass
           }
@@ -418,13 +420,13 @@ function setupPlayers(players?: number | [{ empire?: EmpireName }], empireSide?:
   } else if (typeof players == 'number' && Number.isInteger(players) && players >= 2 && players <= 4) {
     return shuffle(Object.values(EmpireName)).slice(0, players).map<Player>(empire => setupPlayer(empire, empireSide))
   } else {
-    return shuffle(Object.values(EmpireName)).slice(0, 2).map<Player>(empire => setupPlayer(empire, empireSide))
+    return shuffle(Object.values(EmpireName)).slice(0, defaultNumberOfPlayers).map<Player>(empire => setupPlayer(empire, empireSide))
   }
 }
 
 function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
   return {
-    empire, empireSide: empireSide || EmpireSide.A, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [],
+    empire, empireSide: empireSide || defaultEmpireCardsSide, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [],
     constructedDevelopments: [], ready: false, characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
   }
 }

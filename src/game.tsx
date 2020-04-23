@@ -2,8 +2,9 @@ import {css} from '@emotion/core'
 import React, {useState} from 'react'
 import {Game, Letterbox, useGame, usePlayerId} from 'tabletop-game-workshop'
 import Header from './Header'
-import ItsAWonderfulWorld from './ItsAWonderfulWorld'
+import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
 import Board from './material/board/Board'
+import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
 import DiscardPile from './material/developments/DiscardPile'
 import DrawPile from './material/developments/DrawPile'
 import artwork from './material/its-cover-artwork.png'
@@ -27,6 +28,7 @@ export default function () {
         <DrawPile/>
         <DiscardPile/>
         <DisplayedEmpire player={displayedPlayer}/>
+        {game.players.length > 2 && game.phase == Phase.Draft && <DraftDirectionIndicator clockwise={game.round % 2 == 1} players={playersStartingWithMyself}/>}
         {playersStartingWithMyself.map((player, index) =>
           <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
                        highlight={player.empire == displayedEmpire}/>

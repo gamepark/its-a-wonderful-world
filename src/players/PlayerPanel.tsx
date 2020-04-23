@@ -56,15 +56,15 @@ const style = (empire: EmpireName, position: number, highlight: boolean) => css`
 `
 
 const borderStyle = (highlight: boolean) => highlight ? css`
-  border: 2px solid gold;
-  box-shadow: -1px 3px 10px gold;
+  border: 0.2vh solid gold;
+  box-shadow: 0.2vh 0.2vh 1vh gold;
 ` : css`
-  border: 2px solid lightslategrey;
-  box-shadow: -1px 3px 10px black;
+  border: 0.2vh solid lightslategrey;
+  box-shadow: 0.2vh 0.2vh 1vh black;
   cursor: pointer;
   &:hover {
-    border: 2px solid rgba(255, 215, 0, 0.5);
-    box-shadow: 0 0 5px gold;
+    border: 0.2vh solid rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 0.5vh gold;
   }
 `
 
