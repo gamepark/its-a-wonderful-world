@@ -12,7 +12,7 @@ import {isCharacter} from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
-import Empire from '../material/empires/Empire'
+import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
 import MoveType from '../moves/MoveType'
@@ -29,7 +29,7 @@ type Props = {
 
 const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({developmentUnderConstruction, canRecycle, focused, setFocus, ...props}) => {
   const game = useGame<ItsAWonderfulWorld>()
-  const empire = usePlayerId<Empire>()
+  const empire = usePlayerId<EmpireName>()
   const play = usePlay()
   const placeResourceMoves: PlaceResource[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceResource && move.card == developmentUnderConstruction.card) as PlaceResource[]
   const placeCharacterMoves: PlaceCharacter[] = ItsAWonderfulWorldRules.getLegalMoves(game, empire).filter(move => move.type == MoveType.PlaceCharacter && move.card == developmentUnderConstruction.card) as PlaceCharacter[]

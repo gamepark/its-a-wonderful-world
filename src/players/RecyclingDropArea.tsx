@@ -4,13 +4,13 @@ import {useDrop, usePlay} from 'tabletop-game-workshop'
 import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
-import Empire from '../material/empires/Empire'
+import EmpireName from '../material/empires/EmpireName'
 import {recycle} from '../moves/Recycle'
 import {numberOfCardsToDraft} from '../rules'
 import screenRatio from '../util/screenRatio'
 import {areasLeftPosition, cardsShift} from './DraftArea'
 
-const RecyclingDropArea: FunctionComponent<{ empire: Empire }> = ({empire}) => {
+const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) => {
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: [DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],

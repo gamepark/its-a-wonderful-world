@@ -1,12 +1,12 @@
-import Empire from '../material/empires/Empire'
+import EmpireName from '../material/empires/EmpireName'
 import MoveType from './MoveType'
 
 export default interface CompleteConstruction {
   type: typeof MoveType.CompleteConstruction
-  playerId: Empire
+  playerId: EmpireName
   card: number
 }
 
-export function completeConstruction(playerId: Empire, card: number): CompleteConstruction {
+export function completeConstruction(playerId: EmpireName, card: number): CompleteConstruction {
   return {type: MoveType.CompleteConstruction, playerId, card}
 }

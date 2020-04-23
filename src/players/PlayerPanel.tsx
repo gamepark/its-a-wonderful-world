@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next'
 import {Player} from '../ItsAWonderfulWorld'
 import Character from '../material/characters/Character'
 import DevelopmentType from '../material/developments/DevelopmentType'
-import Empire from '../material/empires/Empire'
+import EmpireName from '../material/empires/EmpireName'
 import {empireAvatar, empireBackground, getEmpireName} from '../material/empires/EmpireCard'
 import {getVictoryPointsMultiplier} from '../rules'
 import PlayerResourceProduction from './PlayerResourceProduction'
@@ -42,7 +42,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight = fa
 
 export const playerPanelWidth = 20
 
-const style = (empire: Empire, position: number, highlight: boolean) => css`
+const style = (empire: EmpireName, position: number, highlight: boolean) => css`
   position: absolute;
   top: ${8.5 + position * 18.5}%;
   right: 1%;

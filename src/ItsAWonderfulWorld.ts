@@ -1,5 +1,5 @@
 import Character, {ChooseCharacter} from './material/characters/Character'
-import Empire from './material/empires/Empire'
+import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
 
 type ItsAWonderfulWorld = {
@@ -14,7 +14,8 @@ type ItsAWonderfulWorld = {
 export default ItsAWonderfulWorld
 
 export type Player = {
-  empire: Empire
+  empire: EmpireName
+  empireSide: EmpireSide
   hand: number[]
   cardsToPass?: number[]
   chosenCard?: number | true
@@ -34,3 +35,10 @@ export type DevelopmentUnderConstruction = {
 }
 
 export enum Phase {Draft = 'Draft', Planning = 'Planning', Production = 'Production'}
+
+export type Options = {
+  players?: number
+  empiresSide?: EmpireSide
+}
+
+export enum EmpireSide {A = 'A', B = 'B'}

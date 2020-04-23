@@ -1,13 +1,13 @@
 import Character from '../material/characters/Character'
-import Empire from '../material/empires/Empire'
+import EmpireName from '../material/empires/EmpireName'
 import MoveType from './MoveType'
 
 export default interface ReceiveCharacter {
   type: typeof MoveType.ReceiveCharacter
-  playerId: Empire
+  playerId: EmpireName
   character: Character
 }
 
-export function receiveCharacter(playerId: Empire, character: Character): ReceiveCharacter {
+export function receiveCharacter(playerId: EmpireName, character: Character): ReceiveCharacter {
   return {type: MoveType.ReceiveCharacter, playerId, character}
 }

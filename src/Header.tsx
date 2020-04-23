@@ -6,7 +6,7 @@ import {useAnimations, useGame, usePlay, usePlayerId, useUndo} from 'tabletop-ga
 import Animation from 'tabletop-game-workshop/dist/types/Animation'
 import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
 import Character from './material/characters/Character'
-import Empire from './material/empires/Empire'
+import EmpireName from './material/empires/EmpireName'
 import {getEmpireName} from './material/empires/EmpireCard'
 import Resource from './material/resources/Resource'
 import Move from './moves/Move'
@@ -43,7 +43,7 @@ const undoButtonStyle = css`
 
 const Header = () => {
   const game = useGame<ItsAWonderfulWorld>()
-  const empire = usePlayerId<Empire>()
+  const empire = usePlayerId<EmpireName>()
   const animations = useAnimations<Move>()
   const play = usePlay<Move>()
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
@@ -56,7 +56,7 @@ const Header = () => {
   )
 }
 
-function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animations: Animation<Move>[], play: (move: Move) => void) {
+function getText(t: TFunction, game: ItsAWonderfulWorld, empire: EmpireName, animations: Animation<Move>[], play: (move: Move) => void) {
   const player = game.players.find(player => player.empire == empire)
   switch (game.phase) {
     case Phase.Draft:
@@ -126,12 +126,12 @@ function getText(t: TFunction, game: ItsAWonderfulWorld, empire: Empire, animati
             return t('Les joueurs doivent utiliser les ressources produites')
           }
         } else if (game.productionStep == Resource.Exploration && game.round == numberOfRounds) {
-          const scores = game.players.reduce<{ [key in Empire]?: number }>((map, player) => {
+          const scores = game.players.reduce<{ [key in EmpireName]?: number }>((map, player) => {
             map[player.empire] = getScore(player)
             return map
           }, {})
           const highestScore = Math.max(...Object.values(scores))
-          const bestEmpire = Object.keys(scores).filter((empire: Empire) => scores[empire] == highestScore) as Empire[]
+          const bestEmpire = Object.keys(scores).filter((empire: EmpireName) => scores[empire] == highestScore) as EmpireName[]
           if (bestEmpire.length == 1) {
             if (player.empire == bestEmpire[0]) {
               return t('Victoire ! Vous gagnez la partie avec {score} points', {score: highestScore})

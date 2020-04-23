@@ -1,11 +1,11 @@
 import Rules from 'tabletop-game-workshop/dist/types/Rules'
-import ItsAWonderfulWorld, {DevelopmentUnderConstruction, Phase, Player} from './ItsAWonderfulWorld'
+import ItsAWonderfulWorld, {DevelopmentUnderConstruction, EmpireSide, Options, Phase, Player} from './ItsAWonderfulWorld'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Development from './material/developments/Development'
 import {developmentCards} from './material/developments/Developments'
 import DevelopmentType, {isDevelopmentType} from './material/developments/DevelopmentType'
-import Empire from './material/empires/Empire'
-import EmpiresFaceA from './material/empires/EmpiresProduction'
+import EmpireName from './material/empires/EmpireName'
+import Empires from './material/empires/Empires'
 import Resource, {isResource} from './material/resources/Resource'
 import {chooseDevelopmentCard, isChooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
 import {completeConstruction} from './moves/CompleteConstruction'
@@ -31,10 +31,10 @@ const numberOfCardsDeal2Players = 10
 export const numberOfRounds = 4
 
 // noinspection JSUnusedGlobalSymbols
-const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonderfulWorld, MoveView<Empire>> = {
+const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, EmpireName, ItsAWonderfulWorld, MoveView<EmpireName>, Options> = {
   setup(options) {
     return {
-      players: setupPlayers(options?.players),
+      players: setupPlayers(options?.players, options?.empiresSide),
       deck: shuffle(Array.from(developmentCards.keys())),
       discard: [],
       round: 1,
@@ -165,7 +165,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
     switch (move.type) {
       case MoveType.DealDevelopmentCards: {
         game.players.forEach(player => player.hand = game.deck.splice(0, game.players.length == 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft))
-        if (isDealDevelopmentCardsView<Empire>(move)) {
+        if (isDealDevelopmentCardsView<EmpireName>(move)) {
           getPlayer(game, playerId).hand = move.playerCards
         }
         break
@@ -386,7 +386,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
         return move
       case MoveType.RevealChosenCards:
         return {
-          ...move, revealedCards: game.players.reduce<{ [key in Empire]?: number }>((revealedCards, player) => {
+          ...move, revealedCards: game.players.reduce<{ [key in EmpireName]?: number }>((revealedCards, player) => {
             revealedCards[player.empire] = player.draftArea[player.draftArea.length - 1]
             return revealedCards
           }, {})
@@ -411,25 +411,25 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, Empire, ItsAWonde
   }
 }
 
-function setupPlayers(players?: number | [{ empire?: Empire }]) {
+function setupPlayers(players?: number | [{ empire?: EmpireName }], empireSide?: EmpireSide) {
   if (Array.isArray(players) && players.length >= 2 && players.length <= 4) {
-    const empiresLeft = shuffle(Object.values(Empire).filter(empire => players.some(player => player.empire == empire)))
-    return players.map<Player>(player => setupPlayer(player.empire || empiresLeft.pop()))
+    const empiresLeft = shuffle(Object.values(EmpireName).filter(empire => players.some(player => player.empire == empire)))
+    return players.map<Player>(player => setupPlayer(player.empire || empiresLeft.pop(), empireSide))
   } else if (typeof players == 'number' && Number.isInteger(players) && players >= 2 && players <= 4) {
-    return shuffle(Object.values(Empire)).slice(0, players).map<Player>(setupPlayer)
+    return shuffle(Object.values(EmpireName)).slice(0, players).map<Player>(empire => setupPlayer(empire, empireSide))
   } else {
-    return shuffle(Object.values(Empire)).slice(0, 2).map<Player>(setupPlayer)
+    return shuffle(Object.values(EmpireName)).slice(0, 2).map<Player>(empire => setupPlayer(empire, empireSide))
   }
 }
 
-function setupPlayer(empire: Empire): Player {
+function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
   return {
-    empire, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [], constructedDevelopments: [], ready: false,
-    characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
+    empire, empireSide: empireSide || EmpireSide.A, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [],
+    constructedDevelopments: [], ready: false, characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
   }
 }
 
-function getPlayer(game: ItsAWonderfulWorld, empire: Empire) {
+function getPlayer(game: ItsAWonderfulWorld, empire: EmpireName) {
   return game.players.find(player => player.empire == empire)
 }
 
@@ -469,11 +469,11 @@ export function getNextProductionStep(game: ItsAWonderfulWorld): Resource {
 }
 
 export function getProduction(player: Player, resource: Resource): number {
-  return getBaseProduction(player.empire, resource) + player.constructedDevelopments.reduce((sum, card) => sum + getDevelopmentProduction(player, developmentCards[card], resource), 0)
+  return getBaseProduction(player, resource) + player.constructedDevelopments.reduce((sum, card) => sum + getDevelopmentProduction(player, developmentCards[card], resource), 0)
 }
 
-function getBaseProduction(empire: Empire, resource: Resource): number {
-  return EmpiresFaceA.get(empire).production[resource] || 0
+function getBaseProduction(player: Player, resource: Resource): number {
+  return Empires[player.empire][player.empireSide].production[resource] || 0
 }
 
 function getDevelopmentProduction(player: Player, development: Development, resource: Resource): number {
@@ -496,7 +496,7 @@ function getCardVictoryPointsMultiplier(victoryPoints: number | { [key in Develo
 }
 
 export function getVictoryPointsMultiplier(player: Player, item: DevelopmentType | Character): number {
-  return getCardVictoryPointsMultiplier(EmpiresFaceA.get(player.empire).victoryPoints, item) +
+  return getCardVictoryPointsMultiplier(Empires[player.empire][player.empireSide].victoryPoints, item) +
     player.constructedDevelopments.map(card => developmentCards[card].victoryPoints)
       .reduce<number>((sum, victoryPoints) => sum + getCardVictoryPointsMultiplier(victoryPoints, item), 0)
 }

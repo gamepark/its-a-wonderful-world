@@ -14,7 +14,7 @@ import ResourceCube from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.png'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
 import AztecEmpireBackground from './aztec-empire-background.png'
-import Empire from './Empire'
+import EmpireName from './EmpireName'
 import FederationOfAsiaA from './federation-of-asia-A.png'
 import FederationOfAsiaAvatar from './federation-of-asia-avatar.png'
 import FederationOfAsiaBackground from './federation-of-asia-background.png'
@@ -29,27 +29,27 @@ import RepublicOfEuropeAvatar from './republic-of-europe-avatar.png'
 import RepublicOfEuropeBackground from './republic-of-europe-background.png'
 
 const empireFaceA = {
-  [Empire.AztecEmpire]: AztecEmpireA,
-  [Empire.FederationOfAsia]: FederationOfAsiaA,
-  [Empire.NoramStates]: NoramStatesA,
-  [Empire.PanafricanUnion]: PanafricanUnionA,
-  [Empire.RepublicOfEurope]: RepublicOfEuropeA
+  [EmpireName.AztecEmpire]: AztecEmpireA,
+  [EmpireName.FederationOfAsia]: FederationOfAsiaA,
+  [EmpireName.NoramStates]: NoramStatesA,
+  [EmpireName.PanafricanUnion]: PanafricanUnionA,
+  [EmpireName.RepublicOfEurope]: RepublicOfEuropeA
 }
 
 export const empireBackground = {
-  [Empire.AztecEmpire]: AztecEmpireBackground,
-  [Empire.FederationOfAsia]: FederationOfAsiaBackground,
-  [Empire.NoramStates]: NoramStatesBackground,
-  [Empire.PanafricanUnion]: PanafricanUnionBackground,
-  [Empire.RepublicOfEurope]: RepublicOfEuropeBackground
+  [EmpireName.AztecEmpire]: AztecEmpireBackground,
+  [EmpireName.FederationOfAsia]: FederationOfAsiaBackground,
+  [EmpireName.NoramStates]: NoramStatesBackground,
+  [EmpireName.PanafricanUnion]: PanafricanUnionBackground,
+  [EmpireName.RepublicOfEurope]: RepublicOfEuropeBackground
 }
 
 export const empireAvatar = {
-  [Empire.AztecEmpire]: AztecEmpireAvatar,
-  [Empire.FederationOfAsia]: FederationOfAsiaAvatar,
-  [Empire.NoramStates]: NoramStatesAvatar,
-  [Empire.PanafricanUnion]: PanafricanUnionAvatar,
-  [Empire.RepublicOfEurope]: RepublicOfEuropeAvatar
+  [EmpireName.AztecEmpire]: AztecEmpireAvatar,
+  [EmpireName.FederationOfAsia]: FederationOfAsiaAvatar,
+  [EmpireName.NoramStates]: NoramStatesAvatar,
+  [EmpireName.PanafricanUnion]: PanafricanUnionAvatar,
+  [EmpireName.RepublicOfEurope]: RepublicOfEuropeAvatar
 }
 
 type Props = {
@@ -59,7 +59,7 @@ type Props = {
 
 const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false, ...props}) => {
   const play = usePlay()
-  const playerId = usePlayerId<Empire>()
+  const playerId = usePlayerId<EmpireName>()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.RESOURCE_FROM_BOARD,
     canDrop: () => withResourceDrop,
@@ -153,17 +153,17 @@ const generalsPilePosition = css`
   width: 20%;
 `
 
-export function getEmpireName(t: TFunction, empire: Empire) {
+export function getEmpireName(t: TFunction, empire: EmpireName) {
   switch (empire) {
-    case Empire.AztecEmpire:
+    case EmpireName.AztecEmpire:
       return t('Empire d’Azteca')
-    case Empire.FederationOfAsia:
+    case EmpireName.FederationOfAsia:
       return t('Fédération d’Asie')
-    case Empire.NoramStates:
+    case EmpireName.NoramStates:
       return t('États du Noram')
-    case Empire.PanafricanUnion:
+    case EmpireName.PanafricanUnion:
       return t('Union Panafricaine')
-    case Empire.RepublicOfEurope:
+    case EmpireName.RepublicOfEurope:
       return t('République d’Europa')
   }
 }

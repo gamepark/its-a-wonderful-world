@@ -1,12 +1,12 @@
-import Empire from '../material/empires/Empire'
+import EmpireName from '../material/empires/EmpireName'
 import MoveType from './MoveType'
 
 export default interface Recycle {
   type: typeof MoveType.Recycle
-  playerId: Empire
+  playerId: EmpireName
   card: number
 }
 
-export function recycle(playerId: Empire, card: number): Recycle {
+export function recycle(playerId: EmpireName, card: number): Recycle {
   return {type: MoveType.Recycle, playerId, card}
 }

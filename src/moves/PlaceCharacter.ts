@@ -1,15 +1,15 @@
 import Character from '../material/characters/Character'
-import Empire from '../material/empires/Empire'
+import EmpireName from '../material/empires/EmpireName'
 import MoveType from './MoveType'
 
 export default interface PlaceCharacter {
   type: typeof MoveType.PlaceCharacter
-  playerId: Empire
+  playerId: EmpireName
   character: Character
   card: number
   space: number
 }
 
-export function placeCharacter(playerId: Empire, character: Character, card: number, space: number): PlaceCharacter {
+export function placeCharacter(playerId: EmpireName, character: Character, card: number, space: number): PlaceCharacter {
   return {type: MoveType.PlaceCharacter, playerId, character, card, space}
 }

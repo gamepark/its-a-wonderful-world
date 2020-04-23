@@ -2,7 +2,7 @@ import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
 import {useGame, usePlayerId} from 'tabletop-game-workshop'
 import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
-import Empire from '../material/empires/Empire'
+import EmpireName from '../material/empires/EmpireName'
 import EmpireCard from '../material/empires/EmpireCard'
 import ConstructedCardsArea from './ConstructedCardsArea'
 import ConstructionArea from './ConstructionArea'
@@ -12,7 +12,7 @@ import RecyclingDropArea from './RecyclingDropArea'
 
 const DisplayedEmpire: FunctionComponent<{ player: Player }> = ({player}) => {
   const game = useGame<ItsAWonderfulWorld>()
-  const playerId = usePlayerId<Empire>()
+  const playerId = usePlayerId<EmpireName>()
   return (
     <Fragment>
       <EmpireCard player={player} css={empireCardStyle} withResourceDrop={playerId == player.empire}/>
