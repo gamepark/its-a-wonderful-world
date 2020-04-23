@@ -497,10 +497,14 @@ function getCardVictoryPointsMultiplier(victoryPoints: number | { [key in Develo
   return victoryPoints && typeof victoryPoints != 'number' && victoryPoints[item] ? victoryPoints[item] : 0
 }
 
-export function getVictoryPointsMultiplier(player: Player, item: DevelopmentType | Character): number {
+export function getVictoryPointsBonusMultiplier(player: Player, item: DevelopmentType | Character): number {
   return getCardVictoryPointsMultiplier(Empires[player.empire][player.empireSide].victoryPoints, item) +
     player.constructedDevelopments.map(card => developmentCards[card].victoryPoints)
       .reduce<number>((sum, victoryPoints) => sum + getCardVictoryPointsMultiplier(victoryPoints, item), 0)
+}
+
+export function getVictoryPointsMultiplier(player: Player, item: DevelopmentType | Character): number {
+  return isDevelopmentType(item) ? getVictoryPointsBonusMultiplier(player, item) : getVictoryPointsBonusMultiplier(player, item) + 1
 }
 
 export function getScore(player: Player): number {
@@ -516,10 +520,11 @@ export function getFlatVictoryPoints(player: Player): number {
 }
 
 export function getComboVictoryPoints(player: Player, item: DevelopmentType | Character): number {
-  const itemQuantity = isDevelopmentType(item) ? player.constructedDevelopments.filter(card => developmentCards[card].type == item).length :
-    player.characters[item]
-  const multiplier = isDevelopmentType(item) ? getVictoryPointsMultiplier(player, item) : getVictoryPointsMultiplier(player, item) + 1
-  return itemQuantity * multiplier
+  return getItemQuantity(player, item) * getVictoryPointsMultiplier(player, item)
+}
+
+export function getItemQuantity(player: Player, item: DevelopmentType | Character): number {
+  return isDevelopmentType(item) ? player.constructedDevelopments.filter(card => developmentCards[card].type == item).length : player.characters[item]
 }
 
 // noinspection JSUnusedGlobalSymbols

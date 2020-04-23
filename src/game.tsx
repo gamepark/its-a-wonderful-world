@@ -10,9 +10,11 @@ import DrawPile from './material/developments/DrawPile'
 import artwork from './material/its-cover-artwork.png'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
+import ItsAWonderfulWorldRules from './rules'
 
 export default function () {
   const game = useGame<ItsAWonderfulWorld>()
+  const gameOver = !game.players.some(player => ItsAWonderfulWorldRules.getLegalMoves(game, player.empire).length > 0)
   const playerId = usePlayerId()
   const [displayedEmpire, setDisplayedEmpire] = useState(playerId || game.players[0].empire)
   const displayedPlayer = game.players.find(player => player.empire == displayedEmpire)
@@ -24,14 +26,14 @@ export default function () {
   return (
     <Game css={style}>
       <Letterbox>
-        <Board availableResources={displayedPlayer.availableResources}/>
-        <DrawPile/>
-        <DiscardPile/>
-        <DisplayedEmpire player={displayedPlayer}/>
+        {!gameOver && <Board availableResources={displayedPlayer.availableResources}/>}
+        {!gameOver && <DrawPile/>}
+        {!gameOver && <DiscardPile/>}
+        <DisplayedEmpire player={displayedPlayer} showAreas={!gameOver}/>
         {game.players.length > 2 && game.phase == Phase.Draft && <DraftDirectionIndicator clockwise={game.round % 2 == 1} players={playersStartingWithMyself}/>}
         {playersStartingWithMyself.map((player, index) =>
           <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
-                       highlight={player.empire == displayedEmpire}/>
+                       highlight={player.empire == displayedEmpire} showScore={gameOver}/>
         )}
       </Letterbox>
       <Header/>

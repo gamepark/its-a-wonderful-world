@@ -4,23 +4,25 @@ import {useTranslation} from 'react-i18next'
 import {Player} from '../ItsAWonderfulWorld'
 import Character from '../material/characters/Character'
 import DevelopmentType from '../material/developments/DevelopmentType'
-import EmpireName from '../material/empires/EmpireName'
 import {empireAvatar, empireBackground, getEmpireName} from '../material/empires/EmpireCard'
-import {getVictoryPointsMultiplier} from '../rules'
+import EmpireName from '../material/empires/EmpireName'
+import {getVictoryPointsBonusMultiplier} from '../rules'
 import PlayerResourceProduction from './PlayerResourceProduction'
+import PlayerScore from './score/PlayerScore'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 
 type Props = {
   player: Player
   position: number
-  highlight?: boolean
+  highlight: boolean
+  showScore: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight = false, ...props}) => {
+const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, showScore, ...props}) => {
   const {t} = useTranslation()
   const victoryPointsMultipliers: { item: Character | DevelopmentType, multiplier: number }[] = []
   const completeVictoryPointsMultiplier = (item: Character | DevelopmentType) => {
-    const multiplier = getVictoryPointsMultiplier(player, item)
+    const multiplier = getVictoryPointsBonusMultiplier(player, item)
     if (multiplier > 0) {
       victoryPointsMultipliers.push({item, multiplier})
     }
@@ -34,8 +36,10 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight = fa
       <h3 css={nameStyle}>{getEmpireName(t, player.empire)}</h3>
       <PlayerResourceProduction player={player}/>
       {victoryPointsMultipliers.slice(0, 3).map((victoryPointsMultiplier, index) =>
-        <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier} css={victoryPointsMultiplierStyle(index)}/>
+        <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier}
+                                 css={victoryPointsMultiplierStyle(index)}/>
       )}
+      {showScore && <PlayerScore player={player}/>}
     </div>
   )
 }

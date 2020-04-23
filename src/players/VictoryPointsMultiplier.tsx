@@ -14,12 +14,14 @@ import ScoreIcon from '../material/score-icon.png'
 type Props = {
   item: DevelopmentType | Character
   multiplier: number
+  quantity?: number
 } & React.HTMLAttributes<HTMLDivElement>
 
-const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, ...props}) => (
+const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, quantity, ...props}) => (
   <div {...props} css={style}>
     <span css={numberStyle}>{multiplier}</span><span css={multiplierStyle}>x</span>
     {isCharacter(item) ? <CharacterToken character={item} css={imageStyle}/> : <img src={developmentTypeImage[item]} css={imageShadowStyle}/>}
+    {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
   </div>
 )
 
@@ -28,7 +30,9 @@ const style = css`
   background-size: cover;
   border-radius: 0.8vh;
   box-shadow: 0 0 2px black;
-  padding: 0 0.5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const developmentTypeImage = {
@@ -45,13 +49,10 @@ const numberStyle = css`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  position: absolute;
-  left: 2%;
-  top: 3%;
-  height: 100%;
-  width: 50%;
   text-align: center;
   font-size: 2.5vh;
+  flex-shrink: 0;
+  width: 2.5vh;
   font-weight: bold;
   color: white;
   text-shadow: 0 0 3px black;
@@ -69,16 +70,26 @@ const multiplierStyle = css`
 `
 
 const imageStyle = css`
-  width: 43%;
-  position: absolute;
-  top: 15%;
-  right: 5%;
+  height: 70%;
   border-radius: 0.5vh;
 `
 
 const imageShadowStyle = css`
   box-shadow: 0 0 1px black;
   ${imageStyle};
+`
+
+const quantityStyle = css`
+  filter: drop-shadow(0 0 1px black);
+  position: absolute;
+  left: 60%;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  font-size: 2.5vh;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 3px black;
 `
 
 export default VictoryPointsMultiplier
