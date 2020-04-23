@@ -27,7 +27,7 @@ const CharacterTokenPile: FunctionComponent<Props> = ({character, quantity, drag
   return (
     <div ref={ref} {...props}>
       {tokens}
-      {quantity > 5 && <div css={tokenQuantityStyle}>{quantity}</div>}
+      {quantity > 1 && <div css={tokenQuantityStyle}>{quantity}</div>}
       <DragPreviewImage connect={preview} src={characterTokenImages[character]} css={characterTokenDraggingStyle}/>
     </div>
   )
@@ -46,7 +46,7 @@ const tokenQuantityStyle = css`
   font-weight: bold;
   color: white;
   text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
-  left: 3px;
+  top: 0.5vh;
 `
 
 const characterTokenDraggingStyle = css`
