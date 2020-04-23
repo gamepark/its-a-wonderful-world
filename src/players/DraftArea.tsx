@@ -85,9 +85,11 @@ export const getAreaCardLeftPosition = (index: number, totalCards = numberOfCard
 
 const getAreaCardLeft = (index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => {
   let leftShift = cardsShift
-  if (fullWidth && totalCards > 9) {
-    const width = 100 - areasLeftPosition - cardHeight * cardRatio / screenRatio - 2
-    leftShift = width / (totalCards - 1)
+  if (fullWidth) {
+    if (totalCards > 9) {
+      const width = 100 - areasLeftPosition - cardHeight * cardRatio / screenRatio - 2
+      leftShift = width / (totalCards - 1)
+    }
   } else if (totalCards > numberOfCardsToDraft) {
     leftShift = cardsShift * (numberOfCardsToDraft - 1) / (totalCards - 1)
   }
