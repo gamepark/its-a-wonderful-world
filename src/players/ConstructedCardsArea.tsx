@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
 import {Player} from '../ItsAWonderfulWorld'
-import DevelopmentCard, {height as cardHeight, ratio as cardRatio} from '../material/developments/DevelopmentCard'
+import DevelopmentCard, {height as cardHeight, width as cardWidth, ratio as cardRatio} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import screenRatio from '../util/screenRatio'
 
@@ -13,6 +13,7 @@ export const constructedCardLeftMargin = cardHeight * empireCardHorizontalShift 
 const ConstructedCardsArea: FunctionComponent<{ player: Player }> = ({player}) => {
   const style = (index: number) => css`
       position:absolute;
+      width: ${cardWidth}%;
       height: ${cardHeight}%;
       transform: translateY(-${index * developmentCardVerticalShift * 100}%);
       bottom: ${2 + cardHeight * cardRatio * empireCardVerticalShift}%;

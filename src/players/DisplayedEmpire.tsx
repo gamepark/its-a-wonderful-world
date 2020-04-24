@@ -4,11 +4,13 @@ import {useGame, usePlayerId} from 'tabletop-game-workshop'
 import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
 import EmpireName from '../material/empires/EmpireName'
 import EmpireCard from '../material/empires/EmpireCard'
+import screenRatio from '../util/screenRatio'
 import ConstructedCardsArea from './ConstructedCardsArea'
 import ConstructionArea from './ConstructionArea'
 import DraftArea from './DraftArea'
 import PlayerHand from './PlayerHand'
 import RecyclingDropArea from './RecyclingDropArea'
+import {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
 
 const DisplayedEmpire: FunctionComponent<{ player: Player, showAreas: boolean }> = ({player, showAreas}) => {
   const game = useGame<ItsAWonderfulWorld>()
@@ -29,7 +31,8 @@ const empireCardStyle = css`
   position: absolute;
   bottom: 2%;
   left: -4%;
-  height: 14.95%;
+  height: ${cardHeight * cardRatio}%;
+  width: ${cardWidth / cardRatio}%;
 `
 
 export default DisplayedEmpire

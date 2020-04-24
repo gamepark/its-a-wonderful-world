@@ -23,18 +23,15 @@ const handLeftPosition = (players: number) => {
 }
 
 const position = (players: number) => css`
+  width: ${cardWidth}%;
   height: ${cardHeight}%;
   bottom: ${bottomMargin}%;
   left: ${handLeftPosition(players)}%;
-  & > div {
-    height: 100%;
-    & > div {
-      height: 100%;
-      & > div {
-        height: 100%;
-      }
-    }
-  }
+`
+
+const developmentCardStyle = css`
+  height: 100%;
+  width: 100%;
 `
 
 const translateToDraftArea = (index: number, transitionDuration: number, players: number) => css`
@@ -55,13 +52,15 @@ const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
   const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type == MoveType.ChooseDevelopmentCard && animation.move.playerId == player.empire)
   const discardingLeftoverCards = useAnimation<DiscardLeftoverCardsView>(animation => animation.move.type == MoveType.DiscardLeftoverCards)
   const getDevelopmentCardCSS = (card: number) => {
+    const css = [developmentCardStyle]
     if (choosingDevelopment && choosingDevelopment.move.card == card) {
-      return translateToDraftArea(player.draftArea.length, choosingDevelopment.duration, players)
+      css.push(translateToDraftArea(player.draftArea.length, choosingDevelopment.duration, players))
     } else if (discardingLeftoverCards) {
-      return translateToDiscard(discardingLeftoverCards.duration)
+      css.push(translateToDiscard(discardingLeftoverCards.duration))
     } else {
-      return hoverScaleFromBottom
+      css.push(hoverScaleFromBottom)
     }
+    return css
   }
   return (
     <Hand position={position(players)} rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={cardRatio}

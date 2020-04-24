@@ -34,6 +34,7 @@ const resources = Object.values(Resource)
 const style = (reducedSize = false) => css`
   position: absolute;
   height: 34%;
+  width: 54%;
   top: 9%;
   left: 50%;
   transform: translateX(-50%);

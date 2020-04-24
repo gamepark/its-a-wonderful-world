@@ -5,7 +5,7 @@ import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
 import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
-import DevelopmentCard, {height as cardHeight, ratio as cardRatio} from '../material/developments/DevelopmentCard'
+import DevelopmentCard, {height as cardHeight, width as cardWidth, ratio as cardRatio} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import {numberOfCardsToDraft} from '../rules'
@@ -70,6 +70,7 @@ export const getAreasStyle = (row: number, fullWidth: boolean, isValidTarget = f
 
 export const getAreaCardStyle = (row: number, index: number, totalCards = numberOfCardsToDraft, fullWidth = false, focused = false) => css`
   position: absolute;
+  width: ${cardWidth}%;
   height: ${cardHeight}%;
   will-change: bottom, left, transform !important;
   transition-property: bottom, left, transform, z-index;
