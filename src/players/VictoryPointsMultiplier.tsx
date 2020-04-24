@@ -18,21 +18,24 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, quantity, ...props}) => (
-  <div {...props} css={style}>
+  <div {...props} css={[style, quantity == undefined ? backgroundStyle : '']}>
     <span css={numberStyle}>{multiplier}</span><span css={multiplierStyle}>x</span>
-    {isCharacter(item) ? <CharacterToken character={item} css={imageStyle}/> : <img src={developmentTypeImage[item]} css={imageShadowStyle}/>}
     {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
+    {isCharacter(item) ? <CharacterToken character={item} css={imageStyle}/> : <img src={developmentTypeImage[item]} css={imageShadowStyle}/>}
   </div>
 )
 
-const style = css`
+const backgroundStyle = css`
   background-image: url(${ScoreBackground});
   background-size: cover;
   border-radius: 0.8vh;
   box-shadow: 0 0 2px black;
+  padding: 0.2vh;
+`
+
+const style = css`
   display: flex;
   align-items: center;
-  justify-content: center;
 `
 
 const developmentTypeImage = {
@@ -64,13 +67,13 @@ const multiplierStyle = css`
   font-weight: bold;
   color: white;
   text-shadow: 0 0 3px black;
-  position: absolute;
-  right: 45%;
-  top: 20%;
+  position: relative;
+  transform: translateX(-0.4vh);
+  width: 0;
 `
 
 const imageStyle = css`
-  height: 70%;
+  height: 80%;
   border-radius: 0.5vh;
 `
 
@@ -81,10 +84,10 @@ const imageShadowStyle = css`
 
 const quantityStyle = css`
   filter: drop-shadow(0 0 1px black);
-  position: absolute;
-  left: 60%;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
+  width: 0;
+  left: 1vh;
+  z-index: 1;
   text-align: center;
   font-size: 2.5vh;
   font-weight: bold;

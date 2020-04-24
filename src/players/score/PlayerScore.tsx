@@ -23,7 +23,7 @@ const PlayerScore: FunctionComponent<Props> = ({player}) => (
 const style = css`
   position: absolute;
   right: 110%;
-  top: 50%;
+  top: 60%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: row;

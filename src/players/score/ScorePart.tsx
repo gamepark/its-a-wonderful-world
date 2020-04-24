@@ -62,9 +62,9 @@ const scoreStyle = css`
 const multiplierStyle = css`
   position: absolute;
   bottom: 100%;
-  width: 50%;
-  height: 45%;
+  height: 80%;
   right: 5%;
+  filter: drop-shadow(0 0 1px black);
 `
 
 export default ScorePart
