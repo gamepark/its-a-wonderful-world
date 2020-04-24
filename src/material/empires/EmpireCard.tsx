@@ -4,7 +4,7 @@ import React, {FunctionComponent} from 'react'
 import {useDrop, usePlay, usePlayerId} from 'tabletop-game-workshop'
 import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
-import {Player} from '../../ItsAWonderfulWorld'
+import {EmpireSide, Player} from '../../ItsAWonderfulWorld'
 import {placeResource} from '../../moves/PlaceResource'
 import {glow} from '../board/ResourceArea'
 import Character from '../characters/Character'
@@ -13,27 +13,47 @@ import Resource from '../resources/Resource'
 import ResourceCube from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.png'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
+import AztecEmpireB from './aztec-empire-B.png'
 import AztecEmpireBackground from './aztec-empire-background.png'
 import EmpireName from './EmpireName'
 import FederationOfAsiaA from './federation-of-asia-A.png'
 import FederationOfAsiaAvatar from './federation-of-asia-avatar.png'
+import FederationOfAsiaB from './federation-of-asia-B.png'
 import FederationOfAsiaBackground from './federation-of-asia-background.png'
 import NoramStatesA from './noram-states-A.png'
 import NoramStatesAvatar from './noram-states-avatar.png'
+import NoramStatesB from './noram-states-B.png'
 import NoramStatesBackground from './noram-states-background.png'
 import PanafricanUnionA from './panafrican-union-A.png'
 import PanafricanUnionAvatar from './panafrican-union-avatar.png'
+import PanafricanUnionB from './panafrican-union-B.png'
 import PanafricanUnionBackground from './panafrican-union-background.png'
 import RepublicOfEuropeA from './republic-of-europe-A.png'
 import RepublicOfEuropeAvatar from './republic-of-europe-avatar.png'
+import RepublicOfEuropeB from './republic-of-europe-B.png'
 import RepublicOfEuropeBackground from './republic-of-europe-background.png'
 
-const empireFaceA = {
-  [EmpireName.AztecEmpire]: AztecEmpireA,
-  [EmpireName.FederationOfAsia]: FederationOfAsiaA,
-  [EmpireName.NoramStates]: NoramStatesA,
-  [EmpireName.PanafricanUnion]: PanafricanUnionA,
-  [EmpireName.RepublicOfEurope]: RepublicOfEuropeA
+const empiresImages = {
+  [EmpireName.AztecEmpire]: {
+    [EmpireSide.A]: AztecEmpireA,
+    [EmpireSide.B]: AztecEmpireB
+  },
+  [EmpireName.FederationOfAsia]: {
+    [EmpireSide.A]: FederationOfAsiaA,
+    [EmpireSide.B]: FederationOfAsiaB
+  },
+  [EmpireName.NoramStates]: {
+    [EmpireSide.A]: NoramStatesA,
+    [EmpireSide.B]: NoramStatesB
+  },
+  [EmpireName.PanafricanUnion]: {
+    [EmpireSide.A]: PanafricanUnionA,
+    [EmpireSide.B]: PanafricanUnionB
+  },
+  [EmpireName.RepublicOfEurope]: {
+    [EmpireSide.A]: RepublicOfEuropeA,
+    [EmpireSide.B]: RepublicOfEuropeB
+  }
 }
 
 export const empireBackground = {
@@ -71,13 +91,15 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
   })
   return (
     <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)}>
-      <img src={empireFaceA[player.empire]} css={imgStyle} draggable="false"/>
+      <img src={empiresImages[player.empire][player.empireSide]} css={imgStyle} draggable="false"/>
       {player.empireCardResources.filter(resource => resource != Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource == Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire == playerId}/>)}
-      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition} draggable={player.empire == playerId}/>
-      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition} draggable={player.empire == playerId}/>
+      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition}
+                          draggable={player.empire == playerId}/>
+      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition}
+                          draggable={player.empire == playerId}/>
     </div>
   )
 }
