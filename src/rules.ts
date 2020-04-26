@@ -349,8 +349,9 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, EmpireName, ItsAW
           || m.type == MoveType.PlaceCharacter && m.card == move.card
           || m.type == MoveType.PlaceResource && m.card == move.card)
       case MoveType.Recycle:
+        // TODO: improve framework so we can distinguish between moves initiated by player and consequences of a move, because now there is no difference here between "Recycle from construction area" and "Recycle from draft area + place resource on empire card"
         return !consecutiveMoves.some(m => m.type == MoveType.TellYouAreReady && m.playerId == move.playerId
-          || m.type == MoveType.PlaceResource && m.playerId == move.playerId)
+          /*|| m.type == MoveType.PlaceResource && m.playerId == move.playerId*/)
       case MoveType.PlaceCharacter:
       case MoveType.PlaceResource:
       case MoveType.ReceiveCharacter:
