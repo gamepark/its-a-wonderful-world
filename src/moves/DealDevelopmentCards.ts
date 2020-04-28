@@ -4,12 +4,12 @@ type DealDevelopmentCards = { type: typeof MoveType.DealDevelopmentCards }
 
 export default DealDevelopmentCards
 
-export type DealDevelopmentCardsView<P> = DealDevelopmentCards & { playerCards?: number[] }
+export type DealDevelopmentCardsView = DealDevelopmentCards & { playerCards?: number[] }
 
 export function dealDevelopmentCards(): DealDevelopmentCards {
   return {type: MoveType.DealDevelopmentCards}
 }
 
-export function isDealDevelopmentCardsView<P>(move: DealDevelopmentCards | DealDevelopmentCardsView<P>): move is DealDevelopmentCardsView<P> {
-  return (move as DealDevelopmentCardsView<P>).playerCards !== undefined
+export function isDealDevelopmentCardsView(move: DealDevelopmentCards | DealDevelopmentCardsView): move is DealDevelopmentCardsView {
+  return (move as DealDevelopmentCardsView).playerCards !== undefined
 }

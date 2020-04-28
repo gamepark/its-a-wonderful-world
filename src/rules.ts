@@ -33,7 +33,7 @@ const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
 // noinspection JSUnusedGlobalSymbols
-const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, EmpireName, ItsAWonderfulWorld, MoveView<EmpireName>, Options> = {
+const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, EmpireName, ItsAWonderfulWorld, MoveView, Options> = {
   setup(options) {
     return {
       players: setupPlayers(options?.players, options?.empiresSide),
@@ -167,7 +167,7 @@ const ItsAWonderfulWorldRules: Rules<ItsAWonderfulWorld, Move, EmpireName, ItsAW
     switch (move.type) {
       case MoveType.DealDevelopmentCards: {
         game.players.forEach(player => player.hand = game.deck.splice(0, game.players.length == 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft))
-        if (isDealDevelopmentCardsView<EmpireName>(move)) {
+        if (isDealDevelopmentCardsView(move)) {
           getPlayer(game, playerId).hand = move.playerCards
         }
         break

@@ -19,6 +19,6 @@ type Move = DealDevelopmentCards | ChooseDevelopmentCard | RevealChosenCards | P
 
 export default Move
 
-export type MoveView<P> = DealDevelopmentCardsView<P> | ChooseDevelopmentCardView | RevealChosenCardsView<P> | PassCardsView<P> | DiscardLeftoverCardsView
+export type MoveView = DealDevelopmentCardsView | ChooseDevelopmentCardView | RevealChosenCardsView | PassCardsView | DiscardLeftoverCardsView
   | StartPhase | SlateForConstruction | Recycle | PlaceResource | CompleteConstruction | TransformIntoKrystallium | TellYouAreReady | Produce | ReceiveCharacter
   | PlaceCharacter
