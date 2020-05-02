@@ -1,14 +1,14 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {Player} from '../../ItsAWonderfulWorld'
+import {Player, PlayerView} from '../../ItsAWonderfulWorld'
 import Character from '../../material/characters/Character'
 import DevelopmentType from '../../material/developments/DevelopmentType'
 import ScoreIcon from '../../material/score-icon.png'
-import {getComboVictoryPoints, getFlatVictoryPoints, getItemQuantity, getVictoryPointsMultiplier} from '../../rules'
+import {getComboVictoryPoints, getFlatVictoryPoints, getItemQuantity, getVictoryPointsMultiplier} from '../../Rules'
 import VictoryPointsMultiplier from '../VictoryPointsMultiplier'
 
 type Props = {
-  player: Player
+  player: Player | PlayerView
   item?: DevelopmentType | Character
 } & React.HTMLAttributes<HTMLDivElement>
 

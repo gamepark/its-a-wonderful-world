@@ -1,64 +1,69 @@
 import {css} from '@emotion/core'
+import {usePlay, usePlayerId} from '@interlude-games/workshop'
 import React, {Fragment, FunctionComponent, useState} from 'react'
-import {useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
+import {useDrop} from 'react-dnd'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
-import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
+import {ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
-import PlaceResource, {placeResource} from '../moves/PlaceResource'
+import {placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import {slateForConstruction} from '../moves/SlateForConstruction'
-import {getRemainingCost} from '../rules'
+import {getRemainingCost} from '../Rules'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 
-const ConstructionArea: FunctionComponent<{ player: Player }> = ({player}) => {
-  const game = useGame<ItsAWonderfulWorld>()
+const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
   const playerId = usePlayerId()
   const [focusedCard, setFocusedCard] = useState<number>()
-  const row = game.phase == Phase.Draft ? 2 : 1
-  const fullWidth = game.players.length == 2 && game.phase != Phase.Draft
+  const row = game.phase === Phase.Draft ? 2 : 1
+  const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
+      isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
       isOver: monitor.isOver()
     }),
     drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.card))
   })
-  return (
-    <Fragment>
-      {focusedCard && <Fragment>
-        <div css={popupBackgroundStyle} onClick={() => setFocusedCard(null)}/>
-        {getSmartPlaceResourceMoves(player, focusedCard).map(move =>
-          <a key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
-            <ResourceCube resource={move.resource} css={buttonResourceStyle}/>⇒
-          </a>
-        )}
-      </Fragment>}
-      <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
-        {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
-      </div>
-      {player.constructionArea.map((construction, index) => (
-        <DevelopmentCardUnderConstruction key={construction.card} developmentUnderConstruction={construction} setFocus={() => setFocusedCard(construction.card)}
-                                          canRecycle={player.empire == playerId && focusedCard != construction.card && row != 2}
-                                          onClick={() => setFocusedCard(construction.card)} focused={focusedCard == construction.card}
-                                          css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth, focusedCard == construction.card)}/>)
+  return <>
+    {focusedCard && <Fragment>
+      <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
+      {getSmartPlaceResourceMoves(player, focusedCard).map(move =>
+        <a key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
+          <ResourceCube resource={move.resource} css={buttonResourceStyle}/>⇒
+        </a>
       )}
-    </Fragment>
-  )
+    </Fragment>}
+    <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
+      {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
+    </div>
+    {player.constructionArea.map((construction, index) => {
+        return <DevelopmentCardUnderConstruction key={construction.card} game={game} developmentUnderConstruction={construction}
+                                                 setFocus={() => setFocusedCard(construction.card)}
+                                                 canRecycle={player.empire === playerId && focusedCard !== construction.card && row !== 2}
+                                                 onClick={() => setFocusedCard(construction.card)}
+                                                 focused={focusedCard === construction.card}
+                                                 css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth, focusedCard === construction.card)}/>
+      }
+    )}
+  </>
 }
 
-function getSmartPlaceResourceMoves(player: Player, card: number) {
-  const moves: PlaceResource[] = []
-  const construction = player.constructionArea.find(construction => construction.card == card)
+function getSmartPlaceResourceMoves(player: Player | PlayerView, card: number) {
+  const moves: PlaceResourceOnConstruction[] = []
+  const construction = player.constructionArea.find(construction => construction.card === card)!
   const availableResource = JSON.parse(JSON.stringify(player.availableResources))
-  const krystalliumAvailable = player.empireCardResources.filter(resource => resource == Resource.Krystallium).length
-  const availableKrystalliumPerResource = Object.values(Resource).reduce<{ [key in Resource]?: number }>((map, resource) => {
-    map[resource] = krystalliumAvailable
-    return map
-  }, {})
+  const krystalliumAvailable = player.empireCardResources.filter(resource => resource === Resource.Krystallium).length
+  const availableKrystalliumPerResource: Record<Resource, number> = {
+    [Resource.Materials]: krystalliumAvailable,
+    [Resource.Energy]: krystalliumAvailable,
+    [Resource.Science]: krystalliumAvailable,
+    [Resource.Gold]: krystalliumAvailable,
+    [Resource.Exploration]: krystalliumAvailable,
+    [Resource.Krystallium]: krystalliumAvailable
+  }
   getRemainingCost(construction).forEach(cost => {
     if (isResource(cost.item)) {
       if (availableResource[cost.item] > 0) {

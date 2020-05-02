@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
+import {Draggable} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
-import {Draggable} from 'tabletop-game-workshop'
 import {krystalliumFromEmpire} from '../../drag-objects/KrystalliumCube'
 import Energy from './energy-cube.png'
 import Exploration from './exploration-cube.png'
@@ -18,7 +18,7 @@ type Props = {
 const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ...props}) => {
   if (draggable) {
     return (
-      <Draggable item={krystalliumFromEmpire} {...props} css={style}>
+      <Draggable item={krystalliumFromEmpire} css={style} {...props}>
         <img src={images[resource]} css={css`width: 100%;`}/>
       </Draggable>
     )

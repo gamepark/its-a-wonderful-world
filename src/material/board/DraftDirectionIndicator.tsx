@@ -1,12 +1,12 @@
 import {css, keyframes} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {Player} from '../../ItsAWonderfulWorld'
+import {Player, PlayerView} from '../../ItsAWonderfulWorld'
 import DownArrowIcon from '../../util/DownArrowIcon'
 import UpArrowIcon from '../../util/UpArrowIcon'
 
-const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: Player[] }> = ({clockwise, players}) => (
+const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: (Player | PlayerView)[] }> = ({clockwise, players}) => (
   <Fragment>
-    {players.slice(1).map((player, index) => clockwise ?
+    {players.slice(1).map((_, index) => clockwise ?
       <DescendingArrows key={index} color="forestgreen" css={css`top: ${25.2 + index * 18.5}%;`}
                         title={'Sens de passage des cartes'}/> :
       <AscendingArrows key={index} color="purple" css={css`top: ${25.2 + index * 18.5}%;`}

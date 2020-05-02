@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {DragPreviewImage, useDrag} from 'tabletop-game-workshop'
+import {DragPreviewImage, useDrag} from 'react-dnd'
 import {characterTokenFromEmpire} from '../../drag-objects/CharacterTokenFromEmpire'
 import Character from './Character'
 import CharacterToken, {images as characterTokenImages} from './CharacterToken'
@@ -12,7 +12,7 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const CharacterTokenPile: FunctionComponent<Props> = ({character, quantity, draggable = false, ...props}) => {
-  const [{}, ref, preview] = useDrag({
+  const [, ref, preview] = useDrag({
     item: characterTokenFromEmpire(character),
     canDrag: quantity > 0,
     collect: monitor => ({

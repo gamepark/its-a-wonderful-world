@@ -1,12 +1,13 @@
 import {css} from '@emotion/core'
+import {usePlay} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
-import {useDrop, usePlay} from 'tabletop-game-workshop'
+import {useDrop} from 'react-dnd'
 import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import EmpireName from '../material/empires/EmpireName'
 import {recycle} from '../moves/Recycle'
-import {numberOfCardsToDraft} from '../rules'
+import {numberOfCardsToDraft} from '../Rules'
 import screenRatio from '../util/screenRatio'
 import {areasLeftPosition, cardsShift} from './DraftArea'
 
@@ -15,7 +16,7 @@ const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) 
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: [DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA || monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
+      isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA || monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
       isOver: monitor.isOver()
     }),
     drop: (item: DevelopmentFromDraftArea | DevelopmentFromConstructionArea) => play(recycle(empire, item.card))

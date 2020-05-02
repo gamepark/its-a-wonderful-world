@@ -1,79 +1,73 @@
-import {css} from '@emotion/core'
+import {css, keyframes} from '@emotion/core'
+import {Hand, useAnimation} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
-import {Hand, useAnimation, useGame, usePlayerId} from 'tabletop-game-workshop'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
-import ItsAWonderfulWorld, {Player} from '../ItsAWonderfulWorld'
+import {Player} from '../ItsAWonderfulWorld'
 import DevelopmentCard, {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import ChooseDevelopmentCard from '../moves/ChooseDevelopmentCard'
-import {DiscardLeftoverCardsView} from '../moves/DiscardLeftoverCards'
 import MoveType from '../moves/MoveType'
-import {constructedCardLeftMargin} from './ConstructedCardsArea'
+import {bottomMargin} from './DisplayedEmpire'
 import {areasLeftPosition, cardsShift, getAreaCardBottom} from './DraftArea'
-import {playerPanelWidth} from './PlayerPanel'
 
-export const bottomMargin = 3
+type Props = { player: Player, leftPosition: number }
 
-const handLeftPosition = (players: number) => {
-  if (players <= 2) {
-    return 50 + (constructedCardLeftMargin + 1) / 2
-  } else {
-    return 50 + (constructedCardLeftMargin + 1) / 2 - (playerPanelWidth + 1) / 2
-  }
+const PlayerHand: FunctionComponent<Props> = ({player, leftPosition}) => {
+  const chooseCardAnimation = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type === MoveType.ChooseDevelopmentCard && animation.move.playerId === player.empire)
+
+  const getItemProps = (index: number) => ({
+    ignore: player.hand[index] === chooseCardAnimation?.move.card && !chooseCardAnimation.undo,
+    hoverStyle: css`transform: scale(1.5);`,
+    drag: {
+      item: developmentFromHand(player.hand[index]),
+      disabled: !!player.chosenCard || player.hand.length === 1,
+      animation: {seconds: chooseCardAnimation?.duration ?? 0.2}
+    },
+    css: player.hand[index] === chooseCardAnimation?.move.card ? css`z-index: 1000` : undefined,
+    animation: chooseCardAnimation ? {
+      seconds: chooseCardAnimation.duration,
+      fromNeutralPosition: player.hand[index] === chooseCardAnimation?.move.card && chooseCardAnimation.undo
+    } : undefined
+  })
+
+  const translateChosenCard = chooseCardAnimation ? chooseCardAnimation.undo ?
+    translateFromDraftArea(player.draftArea.length, chooseCardAnimation.duration, leftPosition)
+    : translateToDraftArea(player.draftArea.length, chooseCardAnimation.duration, leftPosition)
+    : undefined
+
+  return (
+    <Hand css={playerHandStyle(leftPosition)} rotationOrigin={50} gapMaxAngle={0.72} sizeRatio={cardRatio} getItemProps={getItemProps}>
+      {player.hand.map(card => <DevelopmentCard key={card} development={developmentCards[card]}
+                                                css={[playerHandCardStyle, chooseCardAnimation?.move.card === card && translateChosenCard]}/>)}
+    </Hand>
+  )
 }
 
-const position = (players: number) => css`
+export const playerHandStyle = (leftPosition: number) => css`
   width: ${cardWidth}%;
   height: ${cardHeight}%;
   bottom: ${bottomMargin}%;
-  left: ${handLeftPosition(players)}%;
+  left: ${leftPosition}%;
 `
 
-const developmentCardStyle = css`
+export const playerHandCardStyle = css`
   height: 100%;
   width: 100%;
+  transform-origin: bottom;
 `
 
-const translateToDraftArea = (index: number, transitionDuration: number, players: number) => css`
-  transform: translate(${(areasLeftPosition + index * cardsShift - handLeftPosition(players)) * 100 / cardWidth}%, ${bottomMargin - getAreaCardBottom(1)}vh);
+export const translateToDraftArea = (index: number, transitionDuration: number, leftPosition: number) => css`
+  transform: translate(${(areasLeftPosition + index * cardsShift - leftPosition) * 100 / cardWidth}%, ${bottomMargin - getAreaCardBottom(1)}vh);
   transition: transform ${transitionDuration}s ease-in-out;
 `
 
-const translateToDiscard = (transitionDuration: number) => css`
-  transform: translate(-58vh, -69vh) rotate(90deg) scale(0.66);
-  transition: transform ${transitionDuration}s ease-in-out;
-`
-
-const hoverScaleFromBottom = css`transform-origin: bottom;`
-
-const PlayerHand: FunctionComponent<{ player: Player }> = ({player}) => {
-  const players = useGame<ItsAWonderfulWorld>().players.length
-  const playerId = usePlayerId()
-  const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type == MoveType.ChooseDevelopmentCard && animation.move.playerId == player.empire)
-  const discardingLeftoverCards = useAnimation<DiscardLeftoverCardsView>(animation => animation.move.type == MoveType.DiscardLeftoverCards)
-  const getDevelopmentCardCSS = (card: number) => {
-    const css = [developmentCardStyle]
-    if (choosingDevelopment && choosingDevelopment.move.card == card) {
-      css.push(translateToDraftArea(player.draftArea.length, choosingDevelopment.duration, players))
-    } else if (discardingLeftoverCards) {
-      css.push(translateToDiscard(discardingLeftoverCards.duration))
-    } else {
-      css.push(hoverScaleFromBottom)
+const translateFromDraftArea = (index: number, transitionDuration: number, leftPosition: number) => {
+  const keyframe = keyframes`
+    from {
+      transform: translate(${(areasLeftPosition + index * cardsShift - leftPosition) * 100 / cardWidth}%, ${bottomMargin - getAreaCardBottom(1)}vh);
     }
-    return css
-  }
-  return (
-    <Hand position={position(players)} rotationOrigin={5000} nearbyMaxRotation={0.72} sizeRatio={cardRatio}
-          draggable={index => ({
-            item: developmentFromHand(player.hand[index]), canDrag: player.empire == playerId && player.chosenCard == undefined && player.hand.length > 1,
-            transitionDuration: choosingDevelopment ? choosingDevelopment.duration : 0.2
-          })}
-          removing={index => choosingDevelopment && choosingDevelopment.move.card == player.hand[index] || discardingLeftoverCards != null}
-          transition={choosingDevelopment?.duration || discardingLeftoverCards?.duration}
-          itemHoverStyle={css`transform: scale(1.5);`}>
-      {player.hand.map(card => <DevelopmentCard key={card} development={developmentCards[card]} css={getDevelopmentCardCSS(card)}/>)}
-    </Hand>
-  )
+  `
+  return css`animation: ${keyframe} ${transitionDuration}s ease-in-out forwards;`
 }
 
 export default PlayerHand

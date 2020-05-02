@@ -1,12 +1,12 @@
 import {css, keyframes} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {useDrag, DragPreviewImage} from 'tabletop-game-workshop'
+import {DragPreviewImage, useDrag} from 'react-dnd'
 import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
 import Resource from '../resources/Resource'
 import {images as resourceCubeImages} from '../resources/ResourceCube'
 
 const ResourceArea: FunctionComponent<{ resource: Resource }> = ({resource}) => {
-  const [{}, ref, preview] = useDrag({
+  const [, ref, preview] = useDrag({
     item: resourceFromBoard(resource),
     collect: monitor => ({
       dragging: monitor.isDragging()

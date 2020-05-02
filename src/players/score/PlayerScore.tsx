@@ -1,14 +1,14 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {Player} from '../../ItsAWonderfulWorld'
+import {Player, PlayerView} from '../../ItsAWonderfulWorld'
 import Character from '../../material/characters/Character'
 import DevelopmentType from '../../material/developments/DevelopmentType'
 import ScoreIcon from '../../material/score-icon.png'
-import {getScore} from '../../rules'
+import {getScore} from '../../Rules'
 import ScorePart from './ScorePart'
 
 type Props = {
-  player: Player
+  player: Player | PlayerView
 } & React.HTMLAttributes<HTMLDivElement>
 
 const PlayerScore: FunctionComponent<Props> = ({player}) => (

@@ -1,22 +1,16 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {useGame} from 'tabletop-game-workshop'
-import ItsAWonderfulWorld, {Phase} from '../../ItsAWonderfulWorld'
+import {ItsAWonderfulWorldView, Phase} from '../../ItsAWonderfulWorld'
 import Resource from '../resources/Resource'
 import ResourceCube from '../resources/ResourceCube'
-import board from './board.png'
 import boardReduced from './board-reduced.png'
+import board from './board.png'
 import ResourceArea from './ResourceArea'
 import roundTracker1 from './round-tracker-1-3.png'
 import roundTracker2 from './round-tracker-2-4.png'
 
-type Props = {
-  availableResources: Resource[]
-}
-
-const Board: FunctionComponent<Props> = ({availableResources}) => {
-  const game = useGame<ItsAWonderfulWorld>()
-  const reducedSize = game.phase == Phase.Draft && game.round > 1
+const Board: FunctionComponent<{ game: ItsAWonderfulWorldView, availableResources: Resource[] }> = ({game, availableResources}) => {
+  const reducedSize = game.phase === Phase.Draft && game.round > 1
   return (
     <div css={style(reducedSize)}>
       <img src={board} css={imageStyle(reducedSize)} draggable="false"/>
@@ -24,7 +18,7 @@ const Board: FunctionComponent<Props> = ({availableResources}) => {
       <img alt={'Round tracker'} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false" css={roundTrackerStyle(game.round, reducedSize)}/>
       <span css={roundTextStyle(reducedSize)}>{game.round}</span>
       {availableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index, resource)}/>)}
-      {resources.filter(resource => availableResources.indexOf(resource) != -1).map((resource) => <ResourceArea key={resource} resource={resource}/>)}
+      {resources.filter(resource => availableResources.indexOf(resource) !== -1).map((resource) => <ResourceArea key={resource} resource={resource}/>)}
     </div>
   )
 }
@@ -63,7 +57,7 @@ const roundTrackerStyle = (round: number, reducedSize = false) => css`
   position: absolute;
   height: 10%;
   top: 4.1%;
-  left: ${round == 1 ? 36.65 : round == 2 ? 40.6 : round == 3 ? 50.4 : 54.35}%;
+  left: ${round === 1 ? 36.65 : round === 2 ? 40.6 : round === 3 ? 50.4 : 54.35}%;
   transition: left 0.5s ease-in-out, transform 0.5s ease-in-out;
   ${reducedSize && roundTrackerReducedStyle};
 `

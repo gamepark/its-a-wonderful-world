@@ -11,5 +11,5 @@ export function discardLeftoverCards(): DiscardLeftoverCards {
 }
 
 export function isDiscardLeftoverCardsView(move: DiscardLeftoverCards | DiscardLeftoverCardsView): move is DiscardLeftoverCardsView {
-  return (move as DiscardLeftoverCardsView).discardedCards != undefined
+  return (move as DiscardLeftoverCardsView).discardedCards !== undefined
 }

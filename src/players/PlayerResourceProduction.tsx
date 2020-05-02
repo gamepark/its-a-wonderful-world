@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {Player} from '../ItsAWonderfulWorld'
+import {Player, PlayerView} from '../ItsAWonderfulWorld'
 import Energy from '../material/resources/energy.png'
 import Exploration from '../material/resources/exploration.png'
 import Gold from '../material/resources/gold.png'
@@ -8,12 +8,12 @@ import Krystallium from '../material/resources/krytallium.png'
 import Materials from '../material/resources/materials.png'
 import Resource from '../material/resources/Resource'
 import Science from '../material/resources/science.png'
-import {getProduction} from '../rules'
+import {getProduction} from '../Rules'
 
 const resources = Object.values(Resource)
 
 // Display player's production the best way we can: each resource individually up to 11, then using multipliers for resources with the highest production
-const PlayerResourceProduction: FunctionComponent<{ player: Player }> = ({player}) => {
+const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const production = resources.reduce((map, resource) => {
     map.set(resource, getProduction(player, resource))
     return map
@@ -29,7 +29,7 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player }> = ({player
     while (productionDisplaySize > maxSize) {
       const maxProduction = Math.max.apply(Math, Array.from<ProductionDisplay>(productionDisplay.values()).map(elements => elements.size))
       resources.forEach(resource => {
-        if (productionDisplay.get(resource).size == maxProduction) {
+        if (productionDisplay.get(resource)?.size === maxProduction) {
           productionDisplay.set(resource, {size: 1, multiplier: maxProduction})
           productionDisplaySize -= maxProduction - 1
         }
@@ -40,7 +40,7 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player }> = ({player
   // Now, we set the start index for each display
   let resourceIndex = 0
   for (const resource of resources) {
-    const display = productionDisplay.get(resource)
+    const display = productionDisplay.get(resource)!
     display.index = resourceIndex
     resourceIndex += display.size
   }
@@ -50,13 +50,13 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player }> = ({player
       {Array.from(productionDisplay.entries()).flatMap(([resource, productionDisplay]) => {
         if (productionDisplay.multiplier) {
           return [
-            <img key={resource + 'Multiplied'} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index)} draggable="false"/>,
+            <img key={resource + 'Multiplied'} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index!)} draggable="false"/>,
             <ProductionMultiplier key={resource + 'Multiplier'} quantity={productionDisplay.multiplier}
-                                  css={productionMultiplierStyle(productionDisplay.index)}/>
+                                  css={productionMultiplierStyle(productionDisplay.index!)}/>
           ]
         } else {
           return [...Array(productionDisplay.size).keys()].map((_, index) => <img key={resource + index} src={resourceIcon[resource]}
-                                                                                  css={productionStyle(productionDisplay.index + index)} draggable="false"/>)
+                                                                                  css={productionStyle(productionDisplay.index! + index)} draggable="false"/>)
         }
       })}
     </Fragment>

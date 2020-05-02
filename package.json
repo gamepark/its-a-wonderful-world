@@ -1,28 +1,30 @@
 {
-  "name": "its-a-wonderful-world",
-  "version": "0.1.23",
-  "description": "",
-  "main": "dist/game.js",
+  "name": "@interlude-games/its-a-wonderful-world",
+  "version": "0.1.0",
+  "description": "It's a Wonderful World adaptation for interlude.games",
+  "main": "dist/Rules.js",
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "dev": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "webpack --config webpack.build.js && tsc --emitDeclarationOnly",
-    "prepublish": "npm run build"
-  },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Interlude",
+    "Board game",
+    "It’s a Wonderful World"
+  ],
+  "author": "Romain Fromi <romain.fromi@interlude.games> (https://interlude.games/)",
   "license": "ISC",
   "dependencies": {
-    "@emotion/core": "^10.0.28"
+    "@emotion/core": "^10.0.28",
+    "@interlude-games/workshop": "^0.1.0",
+    "emotion-normalize": "^10.1.0",
+    "react-dnd": "^10.0.2",
+    "react-dnd-html5-backend": "^10.0.2",
+    "react-dnd-multi-backend": "^5.0.0",
+    "react-dnd-touch-backend": "^10.0.2",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5"
   },
-  "peerDependencies": {
-    "tabletop-game-workshop": ">=0.1.23"
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
@@ -30,22 +32,45 @@
     "@babel/preset-typescript": "^7.9.0",
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@types/react": "^16.9.34",
+    "@types/react-dnd-multi-backend": "^5.0.0",
     "@types/react-dom": "^16.9.6",
+    "@types/react-redux": "^7.1.7",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
+    "customize-cra": "^0.9.1",
     "file-loader": "^5.1.0",
     "html-webpack-plugin": "^3.2.0",
     "i18next": "^19.4.3",
     "react": "^16.13.1",
+    "react-app-rewired": "^2.1.6",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.3.5",
-    "tabletop-game-workshop": "^0.1.24",
+    "react-scripts": "^3.4.1",
+    "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.9",
+    "rollup-plugin-typescript2": "^0.27.0",
     "ts-loader": "^6.2.2",
-    "typescript": "^3.8.3",
-    "url-loader": "^3.0.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
-    "webpack-merge": "^4.2.2"
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "prepublishOnly": "rollup -c"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

@@ -1,48 +1,53 @@
 import {css} from '@emotion/core'
+import {Draggable, useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
 import React, {Fragment, FunctionComponent} from 'react'
-import {Draggable, useDrop, useGame, usePlay, usePlayerId} from 'tabletop-game-workshop'
+import {useDrop} from 'react-dnd'
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
-import ItsAWonderfulWorld, {Phase, Player} from '../ItsAWonderfulWorld'
-import DevelopmentCard, {height as cardHeight, width as cardWidth, ratio as cardRatio} from '../material/developments/DevelopmentCard'
+import {ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
+import DevelopmentCard, {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
-import {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
-import {numberOfCardsToDraft} from '../rules'
+import ChooseDevelopmentCard, {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
+import MoveType from '../moves/MoveType'
+import {numberOfCardsToDraft} from '../Rules'
 import screenRatio from '../util/screenRatio'
 import {constructedCardLeftMargin} from './ConstructedCardsArea'
+import {bottomMargin} from './DisplayedEmpire'
 
-const DraftArea: FunctionComponent<{ player: Player }> = ({player}) => {
-  const game = useGame<ItsAWonderfulWorld>()
-  const row = game.phase == Phase.Draft ? 1 : 0
+const DraftArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
+  const row = game.phase === Phase.Draft ? 1 : 0
   const playerId = usePlayerId()
   const play = usePlay()
+  const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation =>
+    animation.move.type === MoveType.ChooseDevelopmentCard && animation.move.playerId === player.empire && !animation.undo)
+  const chosenCard = player.chosenCard || (choosingDevelopment ? choosingDevelopment.move.card || true : undefined)
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_HAND,
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() == DragObjectType.DEVELOPMENT_FROM_HAND,
+      isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_HAND,
       isOver: monitor.isOver()
     }),
     drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.card))
   })
   return (
     <Fragment>
-      <div ref={ref} css={getDraftAreaStyle(row, game.players.length == 2, isValidTarget, isOver)}>
+      <div ref={ref} css={getDraftAreaStyle(row, game.players.length === 2, isValidTarget, isOver)}>
         {!player.draftArea.length && <span css={draftAreaText}>Zone de draft</span>}
       </div>
       {player.draftArea.map((card, index) => (
         <Draggable key={card} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index)}
-                   canDrag={game.phase == Phase.Planning && playerId == player.empire}>
+                   disabled={playerId !== player.empire || game.phase !== Phase.Planning}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`}/>
         </Draggable>
       ))}
-      {player.chosenCard != undefined && <DevelopmentCard development={player.chosenCard != true ? developmentCards[player.chosenCard] : null}
-                                                          css={getAreaCardStyle(row, player.draftArea.length)}/>}
+      {chosenCard && <DevelopmentCard development={chosenCard !== true ? developmentCards[chosenCard] : undefined}
+                                      css={[getAreaCardStyle(row, player.draftArea.length), choosingDevelopment && css`opacity: 0;`]}/>}
     </Fragment>
   )
 }
 
-export const areasLeftPosition = constructedCardLeftMargin + cardHeight * cardRatio / screenRatio + 3
+export const areasLeftPosition = constructedCardLeftMargin + cardHeight * cardRatio / screenRatio + bottomMargin
 
 const getDraftAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(0, 255, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});

@@ -1,28 +1,24 @@
 import {css} from '@emotion/core'
-import React, {Fragment} from 'react'
-import {useGame} from 'tabletop-game-workshop'
-import ItsAWonderfulWorld from '../../ItsAWonderfulWorld'
+import React, {FunctionComponent} from 'react'
+import {ItsAWonderfulWorldView} from '../../ItsAWonderfulWorld'
 import {areasLeftPosition} from '../../players/DraftArea'
 import DevelopmentCard, {height as cardHeight, width as cardWidth} from '../developments/DevelopmentCard'
 
-const DrawPile = () => {
-  const game = useGame<ItsAWonderfulWorld>()
-  return (
-    <Fragment>
-      {game.deck.slice(-8).map((development, index) => <DevelopmentCard key={index} css={css`
-        position: absolute;
-        width: ${cardWidth}%;
-        height: ${cardHeight}%;
-        top: ${8 + index * 0.05}%;
-        left: ${areasLeftPosition - 0.6 + index * 0.05}%;
-        transform-origin: top left;
-        transform: scale(0.4);
-        & > img {
-          box-shadow: 0 0 3px black;
-        }
-      `}/>)}
-    </Fragment>
-  )
+const DrawPile: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
+  return <>
+    {[...Array(Math.min(game.deck, 8))].map((_, index) => <DevelopmentCard key={index} css={css`
+      position: absolute;
+      width: ${cardWidth}%;
+      height: ${cardHeight}%;
+      top: ${8 + index * 0.05}%;
+      left: ${areasLeftPosition - 0.6 + index * 0.05}%;
+      transform-origin: top left;
+      transform: scale(0.4);
+      & > img {
+        box-shadow: 0 0 3px black;
+      }
+    `}/>)}
+  </>
 }
 
 export default DrawPile

@@ -18,7 +18,7 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, quantity, ...props}) => (
-  <div {...props} css={[style, quantity == undefined ? backgroundStyle : '']}>
+  <div {...props} css={[style, quantity === undefined ? backgroundStyle : '']}>
     <span css={numberStyle}>{multiplier}</span><span css={multiplierStyle}>x</span>
     {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
     {isCharacter(item) ? <CharacterToken character={item} css={imageStyle}/> : <img src={developmentTypeImage[item]} css={imageShadowStyle}/>}

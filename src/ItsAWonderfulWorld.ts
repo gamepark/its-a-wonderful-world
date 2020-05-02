@@ -18,14 +18,14 @@ export type Player = {
   empireSide: EmpireSide
   hand: number[]
   cardsToPass?: number[]
-  chosenCard?: number | true
+  chosenCard?: number
   draftArea: number[]
   constructionArea: DevelopmentUnderConstruction[]
   availableResources: Resource[]
   empireCardResources: Resource[]
   constructedDevelopments: number[]
   ready: boolean
-  characters: { [Character.Financier]: number, [Character.General]: number }
+  characters: { [key in Character]: number }
   bonuses: (Resource | Character | typeof ChooseCharacter)[]
 }
 
@@ -42,3 +42,21 @@ export type Options = {
 }
 
 export enum EmpireSide {A = 'A', B = 'B'}
+
+export type ItsAWonderfulWorldView = Omit<ItsAWonderfulWorld, 'deck' | 'players'> & {
+  deck: number
+  players: (Player | PlayerView)[]
+}
+
+export type PlayerView = Omit<Player, 'hand' | 'chosenCard' | 'cardsToPass'> & {
+  hand: number
+  chosenCard: boolean
+}
+
+export function isGameView(game: ItsAWonderfulWorld | ItsAWonderfulWorldView): game is ItsAWonderfulWorldView {
+  return typeof game.deck === 'number'
+}
+
+export function isPlayerView(player: Player | PlayerView): player is PlayerView {
+  return typeof player.hand === 'number'
+}

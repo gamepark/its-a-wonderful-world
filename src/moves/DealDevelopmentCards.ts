@@ -4,7 +4,7 @@ type DealDevelopmentCards = { type: typeof MoveType.DealDevelopmentCards }
 
 export default DealDevelopmentCards
 
-export type DealDevelopmentCardsView = DealDevelopmentCards & { playerCards?: number[] }
+export type DealDevelopmentCardsView = DealDevelopmentCards & { playerCards: number[] }
 
 export function dealDevelopmentCards(): DealDevelopmentCards {
   return {type: MoveType.DealDevelopmentCards}

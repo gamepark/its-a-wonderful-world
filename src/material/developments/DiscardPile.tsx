@@ -1,13 +1,11 @@
 import {css} from '@emotion/core'
-import React, {Fragment} from 'react'
-import {useGame} from 'tabletop-game-workshop'
-import ItsAWonderfulWorld from '../../ItsAWonderfulWorld'
+import React, {Fragment, FunctionComponent} from 'react'
+import {ItsAWonderfulWorldView} from '../../ItsAWonderfulWorld'
 import {areasLeftPosition} from '../../players/DraftArea'
 import DevelopmentCard, {height as cardHeight, width as cardWidth} from '../developments/DevelopmentCard'
 import {developmentCards} from './Developments'
 
-const DiscardPile = () => {
-  const game = useGame<ItsAWonderfulWorld>()
+const DiscardPile: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
   return (
     <Fragment>
       {game.discard.slice(-8).map((card, index) => <DevelopmentCard key={index} development={developmentCards[card]} css={css`

@@ -1,18 +1,18 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import {Player} from '../ItsAWonderfulWorld'
+import {Player, PlayerView} from '../ItsAWonderfulWorld'
 import Character from '../material/characters/Character'
 import DevelopmentType from '../material/developments/DevelopmentType'
 import {empireAvatar, empireBackground, getEmpireName} from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
-import {getVictoryPointsBonusMultiplier} from '../rules'
+import {getVictoryPointsBonusMultiplier} from '../Rules'
 import PlayerResourceProduction from './PlayerResourceProduction'
 import PlayerScore from './score/PlayerScore'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 
 type Props = {
-  player: Player
+  player: Player | PlayerView
   position: number
   highlight: boolean
   showScore: boolean

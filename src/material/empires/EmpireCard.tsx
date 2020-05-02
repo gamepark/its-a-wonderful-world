@@ -1,10 +1,11 @@
 import {css} from '@emotion/core'
+import {usePlay, usePlayerId} from '@interlude-games/workshop'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
-import {useDrop, usePlay, usePlayerId} from 'tabletop-game-workshop'
+import {useDrop} from 'react-dnd'
 import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
-import {EmpireSide, Player} from '../../ItsAWonderfulWorld'
+import {EmpireSide, Player, PlayerView} from '../../ItsAWonderfulWorld'
 import {placeResource} from '../../moves/PlaceResource'
 import {glow} from '../board/ResourceArea'
 import Character from '../characters/Character'
@@ -73,7 +74,7 @@ export const empireAvatar = {
 }
 
 type Props = {
-  player: Player
+  player: Player | PlayerView
   withResourceDrop?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
@@ -84,7 +85,7 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
     accept: DragObjectType.RESOURCE_FROM_BOARD,
     canDrop: () => withResourceDrop,
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() == DragObjectType.RESOURCE_FROM_BOARD,
+      isValidTarget: monitor.getItemType() === DragObjectType.RESOURCE_FROM_BOARD,
       isOver: monitor.isOver()
     }),
     drop: (item: ResourceFromBoard) => play(placeResource(player.empire, item.resource))
@@ -92,14 +93,14 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
   return (
     <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)}>
       <img src={empiresImages[player.empire][player.empireSide]} css={imgStyle} draggable="false"/>
-      {player.empireCardResources.filter(resource => resource != Resource.Krystallium).map((resource, index) =>
+      {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
-      {player.empireCardResources.filter(resource => resource == Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire == playerId}/>)}
+      {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire === playerId}/>)}
       <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition}
-                          draggable={player.empire == playerId}/>
+                          draggable={player.empire === playerId}/>
       <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition}
-                          draggable={player.empire == playerId}/>
+                          draggable={player.empire === playerId}/>
     </div>
   )
 }
