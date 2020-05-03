@@ -1,6 +1,5 @@
 import {css} from '@emotion/core'
-import {useAnimations, useGame, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
-import Animation from '@interlude-games/workshop/dist/Types/Animation'
+import {useGame, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
 import {TFunction} from 'i18next'
 import React from 'react'
 import {Trans, useTranslation} from 'react-i18next'
@@ -10,7 +9,6 @@ import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
 import Move from './moves/Move'
-import MoveType from './moves/MoveType'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
 import ItsAWonderfulWorldRules, {getNextProductionStep, getScore, numberOfRounds} from './Rules'
@@ -44,7 +42,6 @@ const undoButtonStyle = css`
 const Header = () => {
   const game = useGame<ItsAWonderfulWorld>()
   const empire = usePlayerId<EmpireName>()
-  const animations = useAnimations<Move>()
   const play = usePlay<Move>()
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const {t} = useTranslation()
@@ -52,21 +49,19 @@ const Header = () => {
     <header css={headerStyle}>
       <IconButton css={undoButtonStyle} title={'Annuler mon dernier coup'} aria-label={'Annuler mon dernier coup'} onClick={undo}
                   disabled={!canUndo}><UndoIcon/></IconButton>
-      <h1 css={textStyle}>{getText(t, play, game, empire, animations)}</h1>
+      <h1 css={textStyle}>{getText(t, play, game, empire)}</h1>
     </header>
   )
 }
 
-function getText(t: TFunction, play: (move: Move) => void, game?: ItsAWonderfulWorld, empire?: EmpireName, animations: Animation<Move>[] = []) {
+function getText(t: TFunction, play: (move: Move) => void, game?: ItsAWonderfulWorld, empire?: EmpireName) {
   if (!game) {
     return t('Chargement de la partie...')
   }
   const player = game.players.find(player => player.empire === empire)
   switch (game.phase) {
     case Phase.Draft:
-      if (animations.some(animation => animation.move.type === MoveType.PassCards)) {
-        return t('Les joueurs passent les cartes à gauche')
-      } else if (player && player.chosenCard === undefined) {
+      if (player && player.chosenCard === undefined) {
         return t('Choisissez une carte et placez-la dans votre zone de draft')
       } else {
         const players = game.players.filter(player => player.chosenCard === undefined)
