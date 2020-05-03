@@ -131,56 +131,8 @@ const ItsAWonderfulWorldRules: GameType = {
   },
 
   getLegalMoves(game, empire) {
-    const player = getPlayer(game, empire)
-    const moves: Move[] = []
-    switch (game.phase) {
-      case Phase.Draft:
-        if (player.chosenCard === undefined) {
-          player.hand.forEach(card => moves.push(chooseDevelopmentCard(empire, card)))
-        }
-        break
-      case Phase.Planning:
-        player.draftArea.forEach(card => moves.push(slateForConstruction(empire, card), recycle(empire, card)))
-        if (!player.draftArea.length && !player.availableResources.length && !player.ready) {
-          moves.push(tellYourAreReady(empire))
-        }
-        break
-      case Phase.Production:
-        if (!player.bonuses.length && !player.availableResources.length && !player.ready) {
-          moves.push(tellYourAreReady(empire))
-        }
-        break
-    }
-    player.availableResources.forEach(resource => {
-      player.constructionArea.forEach(developmentUnderConstruction => {
-        getSpacesMissingItem(developmentUnderConstruction, item => item === resource)
-          .forEach(space => moves.push(placeResource(empire, resource, developmentUnderConstruction.card, space)))
-      })
-      moves.push(placeResource(empire, resource))
-    })
-    if (player.bonuses.some(bonus => bonus === ChooseCharacter)) {
-      Object.values(Character).forEach(character => moves.push(receiveCharacter(empire, character)))
-    }
-    if (moves.length) {
-      player.constructionArea.forEach(developmentUnderConstruction => {
-        moves.push(recycle(empire, developmentUnderConstruction.card))
-      })
-      if (player.empireCardResources.some(resource => resource === Resource.Krystallium)) {
-        player.constructionArea.forEach(developmentUnderConstruction => {
-          getSpacesMissingItem(developmentUnderConstruction, item => isResource(item))
-            .forEach(space => moves.push(placeResource(empire, Resource.Krystallium, developmentUnderConstruction.card, space)))
-        })
-      }
-      Object.values(Character).forEach(character => {
-        if (player.characters[character]) {
-          player.constructionArea.forEach(developmentUnderConstruction => {
-            getSpacesMissingItem(developmentUnderConstruction, item => item === character)
-              .forEach(space => moves.push(placeCharacter(empire, character, developmentUnderConstruction.card, space)))
-          })
-        }
-      })
-    }
-    return moves
+    const player = game.players.find(player => player.empire === empire)
+    return player ? getLegalMoves(player, game.phase) : []
   },
 
   play(move: Move | MoveView, game: ItsAWonderfulWorld | ItsAWonderfulWorldView, playerId: EmpireName) {
@@ -471,6 +423,58 @@ function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
 
 function getPlayer(game: ItsAWonderfulWorld | ItsAWonderfulWorldView, empire: EmpireName): Player | PlayerView {
   return game.players.find(player => player.empire === empire)!
+}
+
+export function getLegalMoves(player: Player, phase: Phase) {
+  const moves: Move[] = []
+  switch (phase) {
+    case Phase.Draft:
+      if (player.chosenCard === undefined) {
+        player.hand.forEach(card => moves.push(chooseDevelopmentCard(player.empire, card)))
+      }
+      break
+    case Phase.Planning:
+      player.draftArea.forEach(card => moves.push(slateForConstruction(player.empire, card), recycle(player.empire, card)))
+      if (!player.draftArea.length && !player.availableResources.length && !player.ready) {
+        moves.push(tellYourAreReady(player.empire))
+      }
+      break
+    case Phase.Production:
+      if (!player.bonuses.length && !player.availableResources.length && !player.ready) {
+        moves.push(tellYourAreReady(player.empire))
+      }
+      break
+  }
+  player.availableResources.forEach(resource => {
+    player.constructionArea.forEach(developmentUnderConstruction => {
+      getSpacesMissingItem(developmentUnderConstruction, item => item === resource)
+        .forEach(space => moves.push(placeResource(player.empire, resource, developmentUnderConstruction.card, space)))
+    })
+    moves.push(placeResource(player.empire, resource))
+  })
+  if (player.bonuses.some(bonus => bonus === ChooseCharacter)) {
+    Object.values(Character).forEach(character => moves.push(receiveCharacter(player.empire, character)))
+  }
+  if (moves.length) {
+    player.constructionArea.forEach(developmentUnderConstruction => {
+      moves.push(recycle(player.empire, developmentUnderConstruction.card))
+    })
+    if (player.empireCardResources.some(resource => resource === Resource.Krystallium)) {
+      player.constructionArea.forEach(developmentUnderConstruction => {
+        getSpacesMissingItem(developmentUnderConstruction, item => isResource(item))
+          .forEach(space => moves.push(placeResource(player.empire, Resource.Krystallium, developmentUnderConstruction.card, space)))
+      })
+    }
+    Object.values(Character).forEach(character => {
+      if (player.characters[character]) {
+        player.constructionArea.forEach(developmentUnderConstruction => {
+          getSpacesMissingItem(developmentUnderConstruction, item => item === character)
+            .forEach(space => moves.push(placeCharacter(player.empire, character, developmentUnderConstruction.card, space)))
+        })
+      }
+    })
+  }
+  return moves
 }
 
 function costSpaces(development: Development) {
