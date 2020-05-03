@@ -52,11 +52,11 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getPlayerIds(game) {
+  getPlayerIds(game: ItsAWonderfulWorld) {
     return game.players.map(player => player.empire)
   },
 
-  getActivePlayers(game) {
+  getActivePlayers(game: ItsAWonderfulWorld) {
     switch (game.phase) {
       case Phase.Draft:
         return game.players.filter(player => !player.chosenCard).map(player => player.empire)
@@ -66,7 +66,7 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getAutomaticMove(game) {
+  getAutomaticMove(game: ItsAWonderfulWorld | ItsAWonderfulWorldView) {
     switch (game.phase) {
       case Phase.Draft:
         if (isGameView(game)) {
@@ -130,7 +130,7 @@ const ItsAWonderfulWorldRules: GameType = {
     return
   },
 
-  getLegalMoves(game, empire) {
+  getLegalMoves(game: ItsAWonderfulWorld, empire: EmpireName) {
     const player = game.players.find(player => player.empire === empire)
     return player ? getLegalMoves(player, game.phase) : []
   },
@@ -493,7 +493,7 @@ function getSpacesMissingItem(developmentUnderConstruction: DevelopmentUnderCons
   return getRemainingCost(developmentUnderConstruction).filter(cost => predicate(cost.item)).map(cost => cost.space)
 }
 
-export function getNextProductionStep(game: ItsAWonderfulWorld) {
+export function getNextProductionStep(game: ItsAWonderfulWorld | ItsAWonderfulWorldView) {
   switch (game.productionStep) {
     case Resource.Materials:
       return Resource.Energy
