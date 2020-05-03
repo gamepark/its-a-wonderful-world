@@ -1,4 +1,6 @@
-import {GameWithIncompleteInformation, shuffle, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo} from '@interlude-games/workshop'
+import {
+  Action, GameWithIncompleteInformation, shuffle, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo
+} from '@interlude-games/workshop'
 import ItsAWonderfulWorld, {
   DevelopmentUnderConstruction, EmpireSide, isGameView, isPlayerView, ItsAWonderfulWorldView, Options, Phase, Player, PlayerView
 } from './ItsAWonderfulWorld'
@@ -327,7 +329,7 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  canUndo(action, consecutiveActions, game) {
+  canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: ItsAWonderfulWorld | ItsAWonderfulWorldView) {
     const {playerId, move} = action
     const player = game.players.find(player => player.empire === playerId)!
     switch (move.type) {
@@ -347,7 +349,7 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getView(game, playerId) {
+  getView(game: ItsAWonderfulWorld, playerId?: EmpireName): ItsAWonderfulWorldView {
     return {
       ...game, deck: game.deck.length,
       players: game.players.map(player => player.empire !== playerId ?
@@ -356,10 +358,10 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getMoveView(move, playerId, game) {
+  getMoveView(move: Move, playerId: EmpireName, game: ItsAWonderfulWorld): MoveView {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
-        return playerId ? {...move, playerCards: getPlayer(game, playerId).hand} : move
+        return playerId ? {...move, playerCards: game.players.find(player => player.empire === playerId)!.hand} : move
       case MoveType.ChooseDevelopmentCard:
         if (playerId !== move.playerId) {
           delete move.card
@@ -373,14 +375,14 @@ const ItsAWonderfulWorldRules: GameType = {
           }, {})
         }
       case MoveType.PassCards:
-        return {...move, receivedCards: playerId ? getPlayer(game, playerId).hand : undefined}
+        return {...move, receivedCards: playerId ? game.players.find(player => player.empire === playerId)!.hand : undefined}
       case MoveType.DiscardLeftoverCards:
         return {...move, discardedCards: game.discard.slice()}
     }
     return move
   },
 
-  getAnimationDuration(move) {
+  getAnimationDuration(move: MoveView) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
@@ -391,7 +393,7 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getUndoAnimationDuration(move) {
+  getUndoAnimationDuration(move: MoveView) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.3
