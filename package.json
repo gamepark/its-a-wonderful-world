@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@emotion/core": "^10.0.28",
-    "@interlude-games/workshop": "^0.1.4",
+    "@interlude-games/workshop": "^0.1.5",
     "emotion-normalize": "^10.1.0",
     "react-dnd": "^10.0.2",
     "react-dnd-html5-backend": "^10.0.2",

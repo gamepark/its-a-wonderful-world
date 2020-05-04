@@ -5,6 +5,7 @@ import Board from './material/board/Board'
 import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
 import DiscardPile from './material/developments/DiscardPile'
 import DrawPile from './material/developments/DrawPile'
+import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
@@ -12,7 +13,7 @@ import {numberOfRounds} from './Rules'
 
 const Game: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
   const gameOver = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
-  const playerId = usePlayerId()
+  const playerId = usePlayerId<EmpireName>()
   const [displayedEmpire, setDisplayedEmpire] = useState(playerId || game.players[0].empire)
   const displayedPlayer = game.players.find(player => player.empire === displayedEmpire)!
   let playersStartingWithMyself = game.players

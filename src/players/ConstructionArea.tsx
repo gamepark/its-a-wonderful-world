@@ -5,6 +5,7 @@ import {useDrop} from 'react-dnd'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import {ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
+import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
 import {placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
@@ -14,7 +15,7 @@ import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction
 import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
-  const playerId = usePlayerId()
+  const playerId = usePlayerId<EmpireName>()
   const [focusedCard, setFocusedCard] = useState<number>()
   const row = game.phase === Phase.Draft ? 2 : 1
   const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft

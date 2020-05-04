@@ -27,6 +27,8 @@ const globalStyle = css`
   ${normalize};
   html {
     height: 100%;
+    user-select: none;
+    background-color: white;
     overflow: hidden;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

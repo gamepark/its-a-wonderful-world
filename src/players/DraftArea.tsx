@@ -8,6 +8,7 @@ import DragObjectType from '../drag-objects/DragObjectType'
 import {ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
 import DevelopmentCard, {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
+import EmpireName from '../material/empires/EmpireName'
 import ChooseDevelopmentCard, {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
 import {numberOfCardsToDraft} from '../Rules'
@@ -17,7 +18,7 @@ import {bottomMargin} from './DisplayedEmpire'
 
 const DraftArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
   const row = game.phase === Phase.Draft ? 1 : 0
-  const playerId = usePlayerId()
+  const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
   const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation =>
     animation.move.type === MoveType.ChooseDevelopmentCard && animation.move.playerId === player.empire && !animation.undo)
