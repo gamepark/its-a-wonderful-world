@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@emotion/core": "^10.0.28",
-    "@interlude-games/workshop": "^0.1.5",
+    "@interlude-games/workshop": "^0.1.6",
     "emotion-normalize": "^10.1.0",
     "react-dnd": "^10.0.2",
     "react-dnd-html5-backend": "^10.0.2",
@@ -24,7 +24,6 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5"
   },
-  "peerDependencies": {},
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
@@ -46,6 +45,7 @@
     "react-dom": "^16.13.1",
     "react-i18next": "^11.3.5",
     "react-scripts": "^3.4.1",
+    "rollup": "^2.7.6",
     "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.9",
     "rollup-plugin-typescript2": "^0.27.0",
     "ts-loader": "^6.2.2",
