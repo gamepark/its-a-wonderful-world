@@ -10,7 +10,7 @@ export default PlaceResource
 export function placeResource(playerId: EmpireName, resource: Resource): PlaceResourceOnEmpire
 export function placeResource(playerId: EmpireName, resource: Resource, card: number, space: number): PlaceResourceOnConstruction
 export function placeResource(playerId: EmpireName, resource: Resource, card?: number, space?: number): PlaceResource {
-  if (card !== undefined && space != undefined) {
+  if (card !== undefined && space !== undefined) {
     return {type: MoveType.PlaceResource, playerId, resource, card, space}
   } else {
     return {type: MoveType.PlaceResource, playerId, resource}
