@@ -11,6 +11,8 @@
     ],
     "outDir": "dist",
     "moduleResolution": "node",
+    "declaration": true,
+    "declarationDir": "dist",
     "jsx": "react",
     "allowJs": false,
     "forceConsistentCasingInFileNames": true,

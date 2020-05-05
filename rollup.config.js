@@ -8,6 +8,6 @@ export default {
     dir: 'dist',
     format: 'cjs'
   },
-  plugins: [typescript(), excludeDependenciesFromBundle()],
+  plugins: [typescript({useTsconfigDeclarationDir: true}), excludeDependenciesFromBundle()],
   external: ['@interlude-games/workshop']
 }
