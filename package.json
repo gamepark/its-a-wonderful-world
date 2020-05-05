@@ -1,6 +1,6 @@
 {
   "name": "@interlude-games/its-a-wonderful-world",
-  "version": "0.1.0",
+  "version": "0.1.23",
   "description": "It's a Wonderful World adaptation for interlude.games",
   "main": "dist/Rules.js",
   "files": [
@@ -55,7 +55,6 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "prepublishOnly": "rollup -c"
   },
