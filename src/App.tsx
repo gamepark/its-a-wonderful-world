@@ -47,7 +47,6 @@ const globalStyle = css`
   ${normalize};
   html {
     user-select: none;
-    background-color: white;
     overflow: hidden;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -64,6 +63,7 @@ const globalStyle = css`
   #root {
     height: 100vh;
     width: 100vw;
+    background-color: white;
     background-image: url(${artwork});
     background-size: cover;
     background-position: center;

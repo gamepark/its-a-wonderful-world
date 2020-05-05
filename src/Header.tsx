@@ -1,7 +1,8 @@
 import {css} from '@emotion/core'
 import {useGame, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
+import fscreen from 'fscreen'
 import {TFunction} from 'i18next'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
 import Character from './material/characters/Character'
@@ -12,6 +13,8 @@ import Move from './moves/Move'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
 import ItsAWonderfulWorldRules, {getNextProductionStep, getScore, numberOfRounds} from './Rules'
+import FullScreenExitIcon from './util/FullScreenExitIcon'
+import FullScreenIcon from './util/FullScreenIcon'
 import IconButton from './util/IconButton'
 import UndoIcon from './util/UndoIcon'
 
@@ -39,17 +42,48 @@ const undoButtonStyle = css`
   padding: 0.33em;
 `
 
+const fullScreenButtonStyle = css`
+  position: absolute;
+  top: 1vh;
+  right: 1vh;
+  font-size: 3vh;
+  padding: 0.33em;
+`
+
 const Header = () => {
   const game = useGame<ItsAWonderfulWorld>()
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const {t} = useTranslation()
+  const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
+  const onFullScreenChange = () => {
+    setFullScreen(fscreen.fullscreenElement != null)
+    if (fscreen.fullscreenElement) {
+      window.screen.orientation.lock('landscape')
+    }
+  }
+  useEffect(() => {
+    fscreen.addEventListener('fullscreenchange', onFullScreenChange)
+    return () => {
+      fscreen.removeEventListener('fullscreenchange', onFullScreenChange)
+    }
+  }, [])
   return (
     <header css={headerStyle}>
-      <IconButton css={undoButtonStyle} title={'Annuler mon dernier coup'} aria-label={'Annuler mon dernier coup'} onClick={undo}
+      <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={undo}
                   disabled={!canUndo}><UndoIcon/></IconButton>
       <h1 css={textStyle}>{getText(t, play, game, empire)}</h1>
+      {fscreen.fullscreenEnabled && !fullScreen &&
+      <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
+                  onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
+        <FullScreenIcon/>
+      </IconButton>}
+      {fullScreen &&
+      <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
+                  onClick={() => fscreen.exitFullscreen()}>
+        <FullScreenExitIcon/>
+      </IconButton>}
     </header>
   )
 }
