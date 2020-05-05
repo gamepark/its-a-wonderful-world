@@ -1,6 +1,9 @@
 import {css} from '@emotion/core'
+import {TFunction} from 'i18next'
 import React, {Fragment, FunctionComponent} from 'react'
+import {useTranslation} from 'react-i18next'
 import {Player, PlayerView} from '../ItsAWonderfulWorld'
+import {getEmpireName} from '../material/empires/EmpireCard'
 import Energy from '../material/resources/energy.png'
 import Exploration from '../material/resources/exploration.png'
 import Gold from '../material/resources/gold.png'
@@ -14,6 +17,7 @@ const resources = Object.values(Resource)
 
 // Display player's production the best way we can: each resource individually up to 11, then using multipliers for resources with the highest production
 const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
+  const {t} = useTranslation()
   const production = resources.reduce((map, resource) => {
     map.set(resource, getProduction(player, resource))
     return map
@@ -25,15 +29,16 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView 
     productionDisplay.set(entry[0], {size})
     productionDisplaySize += size
   }
+  const displayMultiplierForHighProduction = (resource: Resource, production: number) => {
+    if (productionDisplay.get(resource)?.size === production) {
+      productionDisplay.set(resource, {size: 1, multiplier: production})
+      productionDisplaySize -= production - 1
+    }
+  }
   const reduceProductionDisplay = (maxSize: number) => {
     while (productionDisplaySize > maxSize) {
       const maxProduction = Math.max.apply(Math, Array.from<ProductionDisplay>(productionDisplay.values()).map(elements => elements.size))
-      resources.forEach(resource => {
-        if (productionDisplay.get(resource)?.size === maxProduction) {
-          productionDisplay.set(resource, {size: 1, multiplier: maxProduction})
-          productionDisplaySize -= maxProduction - 1
-        }
-      })
+      resources.forEach(resource => displayMultiplierForHighProduction(resource, maxProduction))
     }
   }
   reduceProductionDisplay(11)
@@ -50,13 +55,15 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView 
       {Array.from(productionDisplay.entries()).flatMap(([resource, productionDisplay]) => {
         if (productionDisplay.multiplier) {
           return [
-            <img key={resource + 'Multiplied'} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index!)} draggable="false"/>,
+            <img key={resource + 'Multiplied'} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index!)} draggable="false"
+                 alt={getDescription(t, getEmpireName(t, player.empire), resource, production.get(resource)!)}/>,
             <ProductionMultiplier key={resource + 'Multiplier'} quantity={productionDisplay.multiplier}
                                   css={productionMultiplierStyle(productionDisplay.index!)}/>
           ]
         } else {
-          return [...Array(productionDisplay.size).keys()].map((_, index) => <img key={resource + index} src={resourceIcon[resource]}
-                                                                                  css={productionStyle(productionDisplay.index! + index)} draggable="false"/>)
+          return [...Array(productionDisplay.size).keys()].map((_, index) =>
+            <img key={resource + index} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index! + index)} draggable="false"
+                 alt={getDescription(t, getEmpireName(t, player.empire), resource, production.get(resource)!)}/>)
         }
       })}
     </Fragment>
@@ -128,5 +135,22 @@ const productionMultiplierQuantityStyle = css`
   color: white;
   text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
 `
+
+const getDescription = (t: TFunction, player: string, resource: Resource, quantity: number) => {
+  switch (resource) {
+    case Resource.Materials:
+      return t('{player} produit {quantity, plural, one{# cube} other{# cubes}} gris (les Matériaux)', {player, quantity})
+    case Resource.Energy:
+      return t('{player} produit {quantity, plural, one{# cube noir} other{# cubes noirs}} (l’Énergie)', {player, quantity})
+    case Resource.Science:
+      return t('{player} produit {quantity, plural, one{# cube vert} other{# cubes verts}} (la Science)', {player, quantity})
+    case Resource.Gold:
+      return t('{player} produit {quantity, plural, one{# cube jaune} other{# cubes jaunes}} (l’Or)', {player, quantity})
+    case Resource.Exploration:
+      return t('{player} produit {quantity, plural, one{# cube bleu} other{# cubes bleus}} (l’Exploration)', {player, quantity})
+    case Resource.Krystallium:
+      return t('{player} produit {quantity, plural, one{# cube rouge} other{# cubes rouges}} (le Krystallium)', {player, quantity})
+  }
+}
 
 export default PlayerResourceProduction

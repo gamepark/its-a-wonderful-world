@@ -1,5 +1,7 @@
 import {css} from '@emotion/core'
+import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
+import {useTranslation} from 'react-i18next'
 import Character, {isCharacter} from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
 import DevelopmentType from '../material/developments/DevelopmentType'
@@ -17,13 +19,18 @@ type Props = {
   quantity?: number
 } & React.HTMLAttributes<HTMLDivElement>
 
-const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, quantity, ...props}) => (
-  <div {...props} css={[style, quantity === undefined ? backgroundStyle : '']}>
-    <span css={numberStyle}>{multiplier}</span><span css={multiplierStyle}>x</span>
-    {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
-    {isCharacter(item) ? <CharacterToken character={item} css={imageStyle}/> : <img src={developmentTypeImage[item]} css={imageShadowStyle}/>}
-  </div>
-)
+const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, quantity, ...props}) => {
+  const {t} = useTranslation()
+  return (
+    <div {...props} css={[style, quantity === undefined ? backgroundStyle : '']}>
+      <span css={numberStyle}>{multiplier}</span><span css={multiplierStyle}>x</span>
+      {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
+      {isCharacter(item) ?
+        <CharacterToken character={item} css={imageStyle}/> :
+        <img src={developmentTypeImage[item]} css={imageShadowStyle} alt={getDevelopmentTypeDescription(t, item, multiplier)}/>}
+    </div>
+  )
+}
 
 const backgroundStyle = css`
   background-image: url(${ScoreBackground});
@@ -94,5 +101,20 @@ const quantityStyle = css`
   color: white;
   text-shadow: 0 0 3px black;
 `
+
+const getDevelopmentTypeDescription = (t: TFunction, developmentType: DevelopmentType, quantity: number) => {
+  switch (developmentType) {
+    case DevelopmentType.Structure:
+      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement blanc (les Structures)', {quantity})
+    case DevelopmentType.Vehicle:
+      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)', {quantity})
+    case DevelopmentType.Research:
+      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement vert (les Recherches)', {quantity})
+    case DevelopmentType.Project:
+      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement jaune (les Projets)', {quantity})
+    case DevelopmentType.Discovery:
+      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)', {quantity})
+  }
+}
 
 export default VictoryPointsMultiplier

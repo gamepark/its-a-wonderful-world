@@ -32,9 +32,9 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
     {focusedCard && <Fragment>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
       {getSmartPlaceResourceMoves(player, focusedCard).map(move =>
-        <a key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
+        <button key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
           <ResourceCube resource={move.resource} css={buttonResourceStyle}/>⇒
-        </a>
+        </button>
       )}
     </Fragment>}
     <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
@@ -122,7 +122,8 @@ const getPlaceResourceButtonStyle = (index: number) => css`
   align-items: center;
   font-size: 4.8vh;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
-  &:hover {
+  &:hover, &:focus {
+    outline:0;
     background: #dfdfdf linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
   }
   &:active {

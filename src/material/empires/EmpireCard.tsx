@@ -91,8 +91,7 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
     drop: (item: ResourceFromBoard) => play(placeResource(player.empire, item.resource))
   })
   return (
-    <div ref={ref} {...props} css={getStyle(isValidTarget, isOver)}>
-      <img src={empiresImages[player.empire][player.empireSide]} css={imgStyle} draggable="false"/>
+    <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
       {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
@@ -105,12 +104,16 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
   )
 }
 
-const getStyle = (isValidTarget: boolean, isOver: boolean) => css`
+const style = css`
   transform-origin: bottom left;
   border-radius: 5%;
   transition: transform 0.2s ease-in-out;
-  ${isValidTarget && validTargetStyle};
-  ${isOver && overStyle};
+  box-shadow: 0 0 2px black;
+  background-size: cover;
+`
+
+const getBackgroundImage = (empire: EmpireName, empireSide: EmpireSide) => css`
+  background-image: url(${empiresImages[empire][empireSide]});
 `
 
 const validTargetStyle = css`
@@ -128,16 +131,6 @@ const overStyle = css`
     z-index: 1;
     background-color: rgba(0, 128, 0, 0.3);
   }
-`
-
-const imgStyle = css`
-  height: 100%;
-  border-radius: 5%;
-  box-shadow: 0 0 2px black;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
 `
 
 const getResourceStyle = (index: number) => css`

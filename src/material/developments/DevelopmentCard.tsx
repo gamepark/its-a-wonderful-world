@@ -98,20 +98,21 @@ export const ratio = 65 / 100
 export const width = height * ratio / screenRatio // percentage of playing area width
 
 const DevelopmentCard = forwardRef<HTMLDivElement, Props>(({development, ...props}, ref) => (
-  <div ref={ref} {...props}>
-    <img src={development ? images.get(development) : CardBack} css={imgStyle} draggable="false"/>
-    <h3 style={{display: 'none'}}>Zeppelin</h3>
-  </div>
+  <div ref={ref} {...props} css={[style, getBackgroundImage(development)]}/>
 ))
 
-const imgStyle = css`
+const style = css`
   height: 100%;
   border-radius: 6% / ${65 / 100 * 6}%;
   box-shadow: 0 0 5px black;
+  background-size: cover;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
+`
+
+const getBackgroundImage = (development?: Development) => css`
+  background-image: url(${development ? images.get(development) : CardBack});
 `
 
 const images = new Map<Development, any>()

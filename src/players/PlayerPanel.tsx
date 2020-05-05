@@ -32,7 +32,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
   victoryPointsMultipliers.sort((item1, item2) => item2.multiplier - item1.multiplier)
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
-      <img src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
+      <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       <h3 css={nameStyle}>{getEmpireName(t, player.empire)}</h3>
       <PlayerResourceProduction player={player}/>
       {victoryPointsMultipliers.slice(0, 3).map((victoryPointsMultiplier, index) =>

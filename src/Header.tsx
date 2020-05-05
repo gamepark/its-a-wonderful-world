@@ -84,8 +84,8 @@ function getText(t: TFunction, play: (move: Move) => void, game?: ItsAWonderfulW
       } else if (!player.ready) {
         return <Trans values={{resource: Resource.Materials}}
                       defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                      components={[<a onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</a>]}>
-          Cliquez sur <a onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</a> pour continuer
+                      components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}>
+          Cliquez sur <button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button> pour continuer
         </Trans>
       } else {
         const players = game.players.filter(player => !player.ready)
@@ -100,21 +100,21 @@ function getText(t: TFunction, play: (move: Move) => void, game?: ItsAWonderfulW
         if (player.availableResources.length) {
           return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')
         } else if (player.bonuses.some(bonus => bonus === 'CHOOSE_CHARACTER')) {
-          return <Trans>Vous pouvez récupérer un <a onClick={() => play(receiveCharacter(player.empire, Character.Financier))}
-                                                    css={buttonStyle}>Financier</a> ou un <a
-            onClick={() => play(receiveCharacter(player.empire, Character.General))} css={buttonStyle}>Général</a></Trans>
+          return <Trans>Vous pouvez récupérer un <button onClick={() => play(receiveCharacter(player.empire, Character.Financier))}
+                                                         css={buttonStyle}>Financier</button> ou un <button
+            onClick={() => play(receiveCharacter(player.empire, Character.General))} css={buttonStyle}>Général</button></Trans>
         } else if (game.productionStep !== Resource.Exploration) {
           return <Trans values={{resource: getNextProductionStep(game)}}
                         defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                        components={[<a onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</a>]}>
-            Cliquez sur <a onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</a> pour continuer
+                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}>
+            Cliquez sur <button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button> pour continuer
           </Trans>
         } else if (game.round < numberOfRounds) {
-          return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(player.empire))}
-                                       css={buttonStyle}>Valider</a> si vous êtes prêt à passer au tour suivant</Trans>
+          return <Trans>Cliquez sur <button onClick={() => play(tellYourAreReady(player.empire))}
+                                            css={buttonStyle}>Valider</button> si vous êtes prêt à passer au tour suivant</Trans>
         } else {
-          return <Trans>Cliquez sur <a onClick={() => play(tellYourAreReady(player.empire))}
-                                       css={buttonStyle}>Valider</a> pour passer au calcul des scores</Trans>
+          return <Trans>Cliquez sur <button onClick={() => play(tellYourAreReady(player.empire))}
+                                            css={buttonStyle}>Valider</button> pour passer au calcul des scores</Trans>
         }
       } else {
         const players = game.players.filter(player => !player.ready)
@@ -167,6 +167,10 @@ const buttonStyle = css`
   text-transform: uppercase;
   text-shadow: 1px 1px 3px darkslategrey;
   transition: translate 0.2s ease-in-out;
+  background: none;
+  &:focus {
+    outline:0;
+  }
   &:active {
     transform: translateY(1px);
   }
@@ -181,7 +185,7 @@ const buttonStyle = css`
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }
-  &:hover:after {
+  &:hover:after, &:focus:after {
     opacity: 1;
   }
 `
