@@ -80,7 +80,6 @@ export const getAreaCardStyle = (row: number, index: number, totalCards = number
   height: ${cardHeight}%;
   will-change: bottom, left, transform !important;
   transition-property: bottom, left, transform, z-index;
-  z-index: 0;
   ${getAreaCardBottomPosition(row)}
   ${getAreaCardLeftPosition(index, totalCards, fullWidth)};
   ${focused && getFocusTransform()}

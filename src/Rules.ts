@@ -32,7 +32,9 @@ import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
 export const numberOfRounds = 4
-const defaultNumberOfPlayers = 2
+const playersMin = 2
+const playersMax = 5
+const defaultNumberOfPlayers = 5
 const defaultEmpireCardsSide = EmpireSide.A
 
 type GameType = SimultaneousGame<ItsAWonderfulWorld, Move, EmpireName>
@@ -406,10 +408,10 @@ const ItsAWonderfulWorldRules: GameType = {
 }
 
 function setupPlayers(players?: number | [{ empire?: EmpireName }], empireSide?: EmpireSide) {
-  if (Array.isArray(players) && players.length >= 2 && players.length <= 4) {
+  if (Array.isArray(players) && players.length >= playersMin && players.length <= playersMax) {
     const empiresLeft = shuffle(Object.values(EmpireName).filter(empire => players.some(player => player.empire === empire)))
     return players.map<Player>(player => setupPlayer(player.empire || empiresLeft.pop()!, empireSide))
-  } else if (typeof players === 'number' && Number.isInteger(players) && players >= 2 && players <= 4) {
+  } else if (typeof players === 'number' && Number.isInteger(players) && players >= playersMin && players <= playersMax) {
     return shuffle(Object.values(EmpireName)).slice(0, players).map<Player>(empire => setupPlayer(empire, empireSide))
   } else {
     return shuffle(Object.values(EmpireName)).slice(0, defaultNumberOfPlayers).map<Player>(empire => setupPlayer(empire, empireSide))

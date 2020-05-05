@@ -48,10 +48,10 @@ export const playerPanelWidth = 20
 
 const style = (empire: EmpireName, position: number, highlight: boolean) => css`
   position: absolute;
-  top: ${8.5 + position * 18.5}%;
+  top: ${8.5 + position * 18.2}%;
   right: 1%;
   width: ${playerPanelWidth}%;
-  height: 17%;
+  height: 16.7%;
   border-radius: 5px;
   background-image: url(${empireBackground[empire]});
   background-size: cover;
