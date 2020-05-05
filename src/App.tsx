@@ -46,7 +46,6 @@ export default App
 const globalStyle = css`
   ${normalize};
   html {
-    height: 100%;
     user-select: none;
     background-color: white;
     overflow: hidden;
@@ -60,11 +59,11 @@ const globalStyle = css`
     box-sizing: inherit;
   }
   body {
-    height: 100%;
     margin: 0;
   }
   #root {
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
     background-image: url(${artwork});
     background-size: cover;
     background-position: center;
