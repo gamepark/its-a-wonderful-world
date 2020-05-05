@@ -1172,10 +1172,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interlude-games/workshop@^0.1.12":
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.12.tgz#745d995ae714bd24db4f0c023789cbefb35ce2e4"
-  integrity sha512-hdwp+8oZfRR5imso+X5D9ao+06O7jQXbJ/955iSCqYLcc6paRJ58prULJljfCx8ncppvleYBe5UhI/B376YJqQ==
+"@interlude-games/workshop@^0.1.13":
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.13.tgz#23ed5bee6bbf56125b9fa6d73c767916545263fd"
+  integrity sha512-1py2Q5R1lmzvqM21ldPbxZaIPndtxBM/MAQkZFeW4B4Ag+pfJ/cIVeo0EZSAw0/LqSNR7uyE9/KGOd6XCNrtaw==
   dependencies:
     apollo-boost "^0.4.7"
     graphql "^14.0.0"
