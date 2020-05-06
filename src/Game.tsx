@@ -1,3 +1,4 @@
+import {css} from '@emotion/core'
 import {Letterbox, usePlayerId} from '@interlude-games/workshop'
 import React, {FunctionComponent, useState} from 'react'
 import {ItsAWonderfulWorldView, Phase} from './ItsAWonderfulWorld'
@@ -22,7 +23,7 @@ const Game: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
     playersStartingWithMyself = [...game.players.slice(playerIndex, game.players.length), ...game.players.slice(0, playerIndex)]
   }
   return (
-    <Letterbox>
+    <Letterbox css={hiddenOnPortrait}>
       {!gameOver && <Board game={game} availableResources={displayedPlayer.availableResources}/>}
       {!gameOver && <DrawPile game={game}/>}
       {!gameOver && <DiscardPile game={game}/>}
@@ -36,5 +37,11 @@ const Game: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
     </Letterbox>
   )
 }
+
+const hiddenOnPortrait = css`
+  @media all and (orientation:portrait) {
+    display: none;
+  }
+`
 
 export default Game

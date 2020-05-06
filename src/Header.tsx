@@ -27,26 +27,35 @@ const headerStyle = css`
 `
 
 const textStyle = css`
+  @media all and (orientation:portrait) {
+    display: none;
+  }
   color: #333333;
   padding: 1vh;
-  margin: 0;
+  margin: 0 6vh;
   line-height: 1.25;
   font-size: 4vh;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 const undoButtonStyle = css`
+  @media all and (orientation:portrait) {
+    display: none;
+  }
   position: absolute;
-  top: 1vh;
-  left: 1vh;
-  font-size: 3vh;
+  top: 0;
+  left: 0;
+  font-size: 4vh;
   padding: 0.33em;
 `
 
 const fullScreenButtonStyle = css`
   position: absolute;
-  top: 1vh;
-  right: 1vh;
-  font-size: 3vh;
+  top: 0;
+  right: 0;
+  font-size: 4vh;
   padding: 0.33em;
 `
 
@@ -74,6 +83,7 @@ const Header = () => {
       <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={undo}
                   disabled={!canUndo}><UndoIcon/></IconButton>
       <h1 css={textStyle}>{getText(t, play, game, empire)}</h1>
+      <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
       {fscreen.fullscreenEnabled && !fullScreen &&
       <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
                   onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
@@ -222,6 +232,17 @@ const buttonStyle = css`
   &:hover:after, &:focus:after {
     opacity: 1;
   }
+`
+
+const portraitText = css`
+  @media all and (orientation:landscape) {
+    display: none;
+  }
+  color: #333333;
+  line-height: 1.25;
+  font-size: 3vh;
+  margin: 0 6vh 0 0;
+  padding: 1.5vh 1vh 1.5vh 1vh;
 `
 
 export default Header
