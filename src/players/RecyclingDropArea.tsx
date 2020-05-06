@@ -23,7 +23,7 @@ const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) 
   })
   return (
     <div ref={ref} css={getStyle(isValidTarget, isOver)}>
-      <span css={text}>Recycle</span>
+      <span css={text}>Recycler</span>
     </div>
   )
 }
