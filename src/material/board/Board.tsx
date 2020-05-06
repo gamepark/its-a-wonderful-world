@@ -19,7 +19,7 @@ const Board: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | 
       <img src={boardReduced} css={reducedImageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
       <img alt={t('Le marqueur de tour')} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false"
            css={roundTrackerStyle(game.round, reducedSize)}/>
-      <span css={roundTextStyle(reducedSize)}>{game.round}</span>
+      {reducedSize && <span css={roundTextStyle}>{game.round}</span>}
       {player.availableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index, resource)}/>)}
       {[...new Set(player.availableResources)].map(resource => <ResourceArea key={resource} resource={resource} canDrag={!isPlayerView(player)}/>)}
     </div>
@@ -70,14 +70,13 @@ const roundTrackerReducedStyle = css`
   transform: translateY(260%) scale(3);
 `
 
-const roundTextStyle = (reducedSize = false) => css`
+const roundTextStyle = css`
   position: absolute;
   top: 27%;
   left: 110.5%;
   font-size: 5vh;
   color: #333333;
   font-weight: bold;
-  opacity: ${reducedSize ? 1 : 0};
   transition: opacity 0.5s ease-in-out;
 `
 
