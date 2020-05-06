@@ -6,7 +6,7 @@ import Resource from '../resources/Resource'
 import ResourceCube, {images as resourceCubeImages} from '../resources/ResourceCube'
 
 const ResourceArea: FunctionComponent<{ resource: Resource, canDrag: boolean, quantity: number }> = ({resource, canDrag, quantity}) => {
-  const [, ref, preview] = useDrag({
+  const [{dragging}, ref, preview] = useDrag({
     canDrag, item: resourceFromBoard(resource),
     collect: monitor => ({
       dragging: monitor.isDragging()
@@ -15,7 +15,7 @@ const ResourceArea: FunctionComponent<{ resource: Resource, canDrag: boolean, qu
   return (
     <>
       <DragPreviewImage connect={preview} src={resourceCubeImages[resource]}/>
-      {[...Array(quantity)].map((_, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index, resource)}/>)}
+      {[...Array(dragging ? quantity - 1 : quantity)].map((_, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index, resource)}/>)}
       <div ref={ref} key={resource} css={[getResourceAreaHighlight(resource), canDrag && canDragStyle]}/>
     </>
   )
