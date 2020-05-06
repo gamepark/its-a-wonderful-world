@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import {ItsAWonderfulWorldView, Phase} from '../../ItsAWonderfulWorld'
+import {isPlayerView, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../../ItsAWonderfulWorld'
 import Resource from '../resources/Resource'
 import ResourceCube from '../resources/ResourceCube'
 import boardReduced from './board-reduced.png'
@@ -10,17 +10,18 @@ import ResourceArea from './ResourceArea'
 import roundTracker1 from './round-tracker-1-3.png'
 import roundTracker2 from './round-tracker-2-4.png'
 
-const Board: FunctionComponent<{ game: ItsAWonderfulWorldView, availableResources: Resource[] }> = ({game, availableResources}) => {
+const Board: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
   const reducedSize = game.phase === Phase.Draft && game.round > 1
   return (
     <div css={style(reducedSize)}>
-      <img src={board} css={imageStyle(reducedSize)} alt={t('Le plateau de jeu')}  draggable="false"/>
-      <img src={boardReduced} css={reducedImageStyle(reducedSize)} alt={t('Le plateau de jeu')}  draggable="false"/>
-      <img alt={t('Le marqueur de tour')} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false" css={roundTrackerStyle(game.round, reducedSize)}/>
+      <img src={board} css={imageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
+      <img src={boardReduced} css={reducedImageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
+      <img alt={t('Le marqueur de tour')} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false"
+           css={roundTrackerStyle(game.round, reducedSize)}/>
       <span css={roundTextStyle(reducedSize)}>{game.round}</span>
-      {availableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index, resource)}/>)}
-      {resources.filter(resource => availableResources.indexOf(resource) !== -1).map((resource) => <ResourceArea key={resource} resource={resource}/>)}
+      {player.availableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index, resource)}/>)}
+      {[...new Set(player.availableResources)].map(resource => <ResourceArea key={resource} resource={resource} canDrag={!isPlayerView(player)}/>)}
     </div>
   )
 }

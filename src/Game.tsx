@@ -24,7 +24,7 @@ const Game: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
   }
   return (
     <Letterbox css={hiddenOnPortrait}>
-      {!gameOver && <Board game={game} availableResources={displayedPlayer.availableResources}/>}
+      {!gameOver && <Board game={game} player={displayedPlayer}/>}
       {!gameOver && <DrawPile game={game}/>}
       {!gameOver && <DiscardPile game={game}/>}
       <DisplayedEmpire game={game} player={displayedPlayer} showAreas={!gameOver}/>

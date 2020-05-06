@@ -5,9 +5,9 @@ import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
 import Resource from '../resources/Resource'
 import {images as resourceCubeImages} from '../resources/ResourceCube'
 
-const ResourceArea: FunctionComponent<{ resource: Resource }> = ({resource}) => {
+const ResourceArea: FunctionComponent<{ resource: Resource, canDrag: boolean }> = ({resource, canDrag}) => {
   const [, ref, preview] = useDrag({
-    item: resourceFromBoard(resource),
+    canDrag, item: resourceFromBoard(resource),
     collect: monitor => ({
       dragging: monitor.isDragging()
     })
@@ -15,7 +15,7 @@ const ResourceArea: FunctionComponent<{ resource: Resource }> = ({resource}) => 
   return (
     <Fragment>
       <DragPreviewImage connect={preview} src={resourceCubeImages[resource]}/>
-      <div ref={ref} key={resource} css={getResourceAreaHighlight(resource)}/>
+      <div ref={ref} key={resource} css={[getResourceAreaHighlight(resource), canDrag && canDragStyle]}/>
     </Fragment>
   )
 }
@@ -29,8 +29,11 @@ const getResourceAreaHighlight = (resource: Resource) => css`
   left: ${resources.indexOf(resource) * 18.95 + 4.5}%;
   top: 22%;
   border-radius: 100%;
-  cursor: grab;
   animation: ${glow(resourceColor[resource])} 1s ease-in-out infinite alternate;
+`
+
+const canDragStyle = css`
+  cursor: grab;
 `
 
 const resourceColor = {
