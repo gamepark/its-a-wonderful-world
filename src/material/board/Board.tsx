@@ -2,8 +2,6 @@ import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {isPlayerView, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../../ItsAWonderfulWorld'
-import Resource from '../resources/Resource'
-import ResourceCube from '../resources/ResourceCube'
 import boardReduced from './board-reduced.png'
 import board from './board.png'
 import ResourceArea from './ResourceArea'
@@ -20,13 +18,11 @@ const Board: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | 
       <img alt={t('Le marqueur de tour')} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false"
            css={roundTrackerStyle(game.round, reducedSize)}/>
       {reducedSize && <span css={roundTextStyle}>{game.round}</span>}
-      {player.availableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={getResourceStyle(index, resource)}/>)}
-      {[...new Set(player.availableResources)].map(resource => <ResourceArea key={resource} resource={resource} canDrag={!isPlayerView(player)}/>)}
+      {[...new Set(player.availableResources)].map(resource => <ResourceArea key={resource} resource={resource} canDrag={!isPlayerView(player)}
+                                                                             quantity={player.availableResources.filter(r => r === resource).length}/>)}
     </div>
   )
 }
-
-const resources = Object.values(Resource)
 
 const style = (reducedSize = false) => css`
   position: absolute;
@@ -79,28 +75,5 @@ const roundTextStyle = css`
   font-weight: bold;
   transition: opacity 0.5s ease-in-out;
 `
-
-const getResourceStyle = (index: number, resource: Resource) => {
-  const cubeDispersion = cubesDispersion[index] || [0, 0]
-  return css`
-    position: absolute;
-    width: 2%;
-    left: ${resources.indexOf(resource) * 18.95 + 8.5 + cubeDispersion[0]}%;
-    top: ${32 + cubeDispersion[1]}%;
-  `
-}
-
-const cubesDispersion = [
-  [-2.5, -4],
-  [1.5, -3],
-  [2.5, 4],
-  [-3, 3.5],
-  [0.5, 9],
-  [-0.5, 1.5],
-  [0, -9],
-  [-2, 10],
-  [4, -2],
-  [3, 10]
-]
 
 export default Board
