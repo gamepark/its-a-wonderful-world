@@ -130,6 +130,13 @@ const ItsAWonderfulWorldRules: GameType = {
       } else if (isCharacter(bonus)) {
         return receiveCharacter(player.empire, bonus)
       }
+      if (player.draftArea.length === 0) {
+        for (const resource of [...new Set(player.availableResources)]) {
+          if (!player.constructionArea.some(construction => getSpacesMissingItem(construction, item => item === resource).length > 0)) {
+            return placeResource(player.empire, resource)
+          }
+        }
+      }
     }
     return
   },
@@ -451,7 +458,7 @@ export function getLegalMoves(player: Player, phase: Phase) {
       }
       break
   }
-  player.availableResources.forEach(resource => {
+  [...new Set(player.availableResources)].forEach(resource => {
     player.constructionArea.forEach(developmentUnderConstruction => {
       getSpacesMissingItem(developmentUnderConstruction, item => item === resource)
         .forEach(space => moves.push(placeResource(player.empire, resource, developmentUnderConstruction.card, space)))
