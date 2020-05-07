@@ -4,6 +4,7 @@ import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {krystalliumFromEmpire} from '../../drag-objects/KrystalliumCube'
+import screenRatio from '../../util/screenRatio'
 import Energy from './energy-cube.png'
 import Exploration from './exploration-cube.png'
 import Gold from './gold-cube.png'
@@ -29,6 +30,9 @@ const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ..
     return <img src={images[resource]} css={style} {...props} draggable={false} alt={getDescription(t, resource)}/>
   }
 }
+
+export const cubeWidth = 1.2
+export const cubeHeight = 1.2 * screenRatio * 1.05
 
 const style = css`
   filter: drop-shadow(0 0 5px black);

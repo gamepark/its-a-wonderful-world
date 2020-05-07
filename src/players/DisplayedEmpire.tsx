@@ -1,8 +1,6 @@
-import {css} from '@emotion/core'
 import {usePlayerId} from '@interlude-games/workshop'
 import React, {Fragment, FunctionComponent} from 'react'
 import {isPlayerView, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
-import {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
 import EmpireCard from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
 import ConstructedCardsArea, {constructedCardLeftMargin} from './ConstructedCardsArea'
@@ -19,7 +17,7 @@ const DisplayedEmpire: FunctionComponent<{ game: ItsAWonderfulWorldView, player:
   const playerId = usePlayerId<EmpireName>()
   return (
     <Fragment>
-      <EmpireCard player={player} css={empireCardStyle} withResourceDrop={playerId === player.empire}/>
+      <EmpireCard player={player} withResourceDrop={playerId === player.empire}/>
       {showAreas && <DraftArea game={game} player={player}/>}
       {showAreas && (game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} player={player}/>}
       {showAreas && <RecyclingDropArea empire={player.empire}/>}
@@ -29,14 +27,6 @@ const DisplayedEmpire: FunctionComponent<{ game: ItsAWonderfulWorldView, player:
     </Fragment>
   )
 }
-
-const empireCardStyle = css`
-  position: absolute;
-  bottom: 2%;
-  left: -4%;
-  height: ${cardHeight * cardRatio}%;
-  width: ${cardWidth / cardRatio}%;
-`
 
 const handLeftPosition = (players: number) => {
   if (players <= 2) {

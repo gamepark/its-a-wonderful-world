@@ -12,15 +12,18 @@ const Board: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | 
   const {t} = useTranslation()
   const reducedSize = game.phase === Phase.Draft && game.round > 1
   return (
-    <div css={style(reducedSize)}>
-      <img src={board} css={imageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
-      <img src={boardReduced} css={reducedImageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
-      <img alt={t('Le marqueur de tour')} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false"
-           css={roundTrackerStyle(game.round, reducedSize)}/>
-      {reducedSize && <span css={roundTextStyle}>{game.round}</span>}
-      {[...new Set(player.availableResources)].map(resource => <ResourceArea key={resource} resource={resource} canDrag={!isPlayerView(player)}
+    <>
+      <div css={style(reducedSize)}>
+        <img src={board} css={imageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
+        <img src={boardReduced} css={reducedImageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
+        <img alt={t('Le marqueur de tour')} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false"
+             css={roundTrackerStyle(game.round, reducedSize)}/>
+        {reducedSize && <span css={roundTextStyle}>{game.round}</span>}
+      </div>
+      {[...new Set(player.availableResources)].map(resource => <ResourceArea key={resource} game={game} player={player}
+                                                                             resource={resource} canDrag={!isPlayerView(player)}
                                                                              quantity={player.availableResources.filter(r => r === resource).length}/>)}
-    </div>
+    </>
   )
 }
 

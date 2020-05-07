@@ -388,6 +388,8 @@ const ItsAWonderfulWorldRules: GameType = {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
+      case MoveType.PlaceResource:
+        return 0.2
       /*case MoveType.DiscardLeftoverCards:
         return [0.5]*/
       default:

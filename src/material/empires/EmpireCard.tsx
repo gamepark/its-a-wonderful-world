@@ -7,9 +7,10 @@ import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {EmpireSide, Player, PlayerView} from '../../ItsAWonderfulWorld'
 import {placeResource} from '../../moves/PlaceResource'
-import {glow} from '../board/ResourceArea'
+import {glow} from '../../util/Styles'
 import Character from '../characters/Character'
 import CharacterTokenPile from '../characters/CharacterTokenPile'
+import {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../developments/DevelopmentCard'
 import Resource from '../resources/Resource'
 import ResourceCube from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.png'
@@ -104,7 +105,15 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
   )
 }
 
+export const empireCardDeltaX = -4
+export const empireCardDeltaY = -2
+
 const style = css`
+  position: absolute;
+  left: ${empireCardDeltaX}%;
+  bottom: ${-empireCardDeltaY}%;
+  height: ${cardHeight * cardRatio}%;
+  width: ${cardWidth / cardRatio}%;
   transform-origin: bottom left;
   border-radius: 5%;
   transition: transform 0.2s ease-in-out;
@@ -147,7 +156,7 @@ const getKrystalliumStyle = (index: number) => css`
   bottom: ${index * 10}%;
 `
 
-const resourcePosition = [
+export const resourcePosition = [
   [12, 32],
   [2, 47],
   [5, 66],

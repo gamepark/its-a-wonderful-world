@@ -8,17 +8,17 @@ import DragObjectType from '../drag-objects/DragObjectType'
 import KrystalliumFromEmpire from '../drag-objects/KrystalliumCube'
 import ResourceFromBoard from '../drag-objects/ResourceFromBoard'
 import {DevelopmentUnderConstruction, isPlayerView, ItsAWonderfulWorldView, Player, PlayerView} from '../ItsAWonderfulWorld'
-import {glow} from '../material/board/ResourceArea'
 import {isCharacter} from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
-import DevelopmentCard from '../material/developments/DevelopmentCard'
+import DevelopmentCard, {height as cardHeight, width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
-import ResourceCube from '../material/resources/ResourceCube'
+import ResourceCube, {cubeHeight, cubeWidth} from '../material/resources/ResourceCube'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import {getLegalMoves, getRemainingCost} from '../Rules'
+import {glow} from '../util/Styles'
 
 type Props = {
   game: ItsAWonderfulWorldView
@@ -81,11 +81,11 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
     <Draggable item={developmentFromConstructionArea(developmentUnderConstruction.card)} disabled={!canRecycle || canDrop || focused} {...props}>
       <div ref={ref} css={getStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[developmentUnderConstruction.card]} css={css`height: 100%;`}/>
-        {developmentUnderConstruction.costSpaces.map((item, index) => {
+        {[...developmentUnderConstruction.costSpaces].reverse().map((item, index) => {
           if (isResource(item)) {
-            return <ResourceCube key={index} resource={item} css={getResourceStyle(index)}/>
+            return <ResourceCube key={index} resource={item} css={getResourceStyle(developmentUnderConstruction.costSpaces.length - index - 1)}/>
           } else if (isCharacter(item)) {
-            return <CharacterToken key={index} character={item} css={getCharacterTokenStyle(index)}/>
+            return <CharacterToken key={index} character={item} css={getCharacterTokenStyle(developmentUnderConstruction.costSpaces.length - index - 1)}/>
           } else {
             return null
           }
@@ -119,11 +119,15 @@ const overStyle = css`
   }
 `
 
+export const costSpaceDeltaX = 0.25
+export const costSpaceDeltaY = (index: number) =>  index * 2.1 + 0.3
+
 const getResourceStyle = (index: number) => css`
   position: absolute;
-  height: 10%;
-  left: 3.5%;
-  top: ${index * 9 + 1.5}%;
+  width: ${cubeWidth * 100 / cardWidth};
+  height: ${cubeHeight * 100 / cardHeight}%;
+  left: ${costSpaceDeltaX * 100 / cardWidth}%;
+  top: ${costSpaceDeltaY(index) * 100 / cardHeight}%;
 `
 
 const getCharacterTokenStyle = (index: number) => css`
