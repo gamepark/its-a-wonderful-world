@@ -41,7 +41,7 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
       {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
     </div>
     {player.constructionArea.map((construction, index) => {
-        return <DevelopmentCardUnderConstruction key={construction.card} game={game} player={player} developmentUnderConstruction={construction}
+        return <DevelopmentCardUnderConstruction key={construction.card} game={game} player={player} construction={construction}
                                                  setFocus={() => setFocusedCard(construction.card)}
                                                  canRecycle={player.empire === playerId && focusedCard !== construction.card && row !== 2}
                                                  onClick={() => setFocusedCard(construction.card)}
