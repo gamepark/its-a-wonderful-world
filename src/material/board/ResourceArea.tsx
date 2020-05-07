@@ -23,7 +23,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
       dragging: monitor.isDragging()
     })
   })
-  const animations = useAnimations<PlaceResource>(animation => animation.move.type === MoveType.PlaceResource)
+  const animations = useAnimations<PlaceResource>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire)
   const getAnimation = (index: number) => {
     if (animations.length < quantity - index) {
       return
