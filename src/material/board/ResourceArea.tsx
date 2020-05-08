@@ -23,7 +23,8 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
       dragging: monitor.isDragging()
     })
   })
-  const animations = useAnimations<PlaceResource>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire)
+  const animations = useAnimations<PlaceResource>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire
+    && animation.move.resource === resource)
   const getAnimation = (index: number) => {
     if (animations.length < quantity - index) {
       return
@@ -39,7 +40,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
       translateY += 100 - getAreaCardBottom(1) - cardHeight + costSpaceDeltaY(move.space)
     } else {
       const resourcePosition = player.empireCardResources.filter(resource => resource !== Resource.Krystallium).length
-      const destination = empireCardResourcePosition[resourcePosition  % 5]
+      const destination = empireCardResourcePosition[resourcePosition % 5]
       translateX += empireCardDeltaX + cardWidth / cardRatio - destination[0] * cardWidth / cardRatio / 100 - cubeWidth
       translateY += 100 + empireCardDeltaY - cardHeight * cardRatio + destination[1] * cardHeight * cardRatio / 100
     }
