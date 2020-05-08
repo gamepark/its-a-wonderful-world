@@ -2,10 +2,13 @@ import {css} from '@emotion/core'
 import {usePlay, usePlayerId} from '@interlude-games/workshop'
 import React, {Fragment, FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
+import {useTranslation} from 'react-i18next'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
-import {DevelopmentUnderConstruction, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
+import {DevelopmentUnderConstruction, isPlayer, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
+import constructionCost from '../material/developments/ConstructionCost'
 import {width as cardWidth} from '../material/developments/DevelopmentCard'
+import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
@@ -16,12 +19,19 @@ import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction
 import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
+  const {t} = useTranslation()
   const playerId = usePlayerId<EmpireName>()
   const [focusedCard, setFocusedCard] = useState<number>()
   const construction = player.constructionArea.find(construction => construction.card === focusedCard)
+  const maxSpendableResources = isPlayer(player) && game.productionStep && construction ? maxResourcesToPlace(player, construction, game.productionStep) : 0
   const row = game.phase === Phase.Draft ? 2 : 1
   const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
   const play = usePlay()
+  const placeResources = (construction: DevelopmentUnderConstruction, resource: Resource, quantity: number) => {
+    getRemainingCost(construction).filter(cost => cost.item === resource).slice(0, quantity).forEach(cost =>
+      play(placeResource(player.empire, resource, construction.card, cost.space))
+    )
+  }
   useEffect(() => {
     if (!player.constructionArea.some(construction => construction.card === focusedCard)) {
       setFocusedCard(undefined)
@@ -38,12 +48,17 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
   return <>
     {construction && <Fragment>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
-      {getSmartPlaceResourceMoves(player, construction).map(move =>
+      {isPlayer(player) && getSmartPlaceResourceMoves(player, construction).map(move =>
         <button key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
           <ResourceCube resource={move.resource} css={buttonResourceStyle}/>
           <span>⇒</span>
         </button>
       )}
+      {maxSpendableResources > 1 && <button css={getPlaceResourceButtonStyle(getTotalConstructionCost(construction.card))}
+                                            onClick={() => placeResources(construction, game.productionStep!, maxSpendableResources)}>
+        <span>{t('Placer')}</span>
+        {[...Array(maxSpendableResources)].map((_, index) => <ResourceCube key={index} resource={game.productionStep!} css={buttonResourceStyle}/>)}
+      </button>}
     </Fragment>}
     <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
       {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
@@ -60,7 +75,7 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
   </>
 }
 
-function getSmartPlaceResourceMoves(player: Player | PlayerView, construction: DevelopmentUnderConstruction) {
+function getSmartPlaceResourceMoves(player: Player, construction: DevelopmentUnderConstruction) {
   const moves: PlaceResourceOnConstruction[] = []
   const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
   const krystalliumAvailable = player.empireCardResources.filter(resource => resource === Resource.Krystallium).length
@@ -84,6 +99,14 @@ function getSmartPlaceResourceMoves(player: Player | PlayerView, construction: D
     }
   })
   return moves
+}
+
+const getTotalConstructionCost = (card: number) => Object.values(constructionCost(developmentCards[card].constructionCost)).reduce((value, sum) => sum + value)
+
+const maxResourcesToPlace = (player: Player, construction: DevelopmentUnderConstruction, resource: Resource) => {
+  const availableResources = player.availableResources.filter(r => r === resource).length
+  const requiredResources = getRemainingCost(construction).filter(cost => cost.item === resource).length
+  return Math.min(availableResources, requiredResources)
 }
 
 const getConstructionAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
@@ -125,7 +148,7 @@ const getPlaceResourceButtonStyle = (index: number) => css`
   border-radius: 2vh;
   border: 0.1vh solid #dcdcdc;
   color: #333333;
-  padding: 0 2vh;
+  padding: 0 2vh 0 1vh;
   align-items: center;
   font-size: 4.8vh;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
@@ -134,10 +157,9 @@ const getPlaceResourceButtonStyle = (index: number) => css`
     background: #dfdfdf linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
   }
   &:active {
-    position:relative;
     transform: translateY(1px);
   }
-  & > :not(:first-child) {
+  & > * {
     margin-left: 1vh;
   }
 `
