@@ -57,6 +57,10 @@ export function isGameView(game: ItsAWonderfulWorld | ItsAWonderfulWorldView): g
   return typeof game.deck === 'number'
 }
 
+export function isPlayer(player: Player | PlayerView): player is Player {
+  return Array.isArray(player.hand)
+}
+
 export function isPlayerView(player: Player | PlayerView): player is PlayerView {
   return typeof player.hand === 'number'
 }

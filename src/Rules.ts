@@ -18,8 +18,8 @@ import {discardLeftoverCards, isDiscardLeftoverCardsView} from './moves/DiscardL
 import Move, {MoveView} from './moves/Move'
 import MoveType from './moves/MoveType'
 import {isPassCardsView, passCards} from './moves/PassCards'
-import {placeCharacter} from './moves/PlaceCharacter'
-import {isPlaceResourceOnConstruction, placeResource} from './moves/PlaceResource'
+import PlaceCharacter, {placeCharacter} from './moves/PlaceCharacter'
+import {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from './moves/PlaceResource'
 import {produce} from './moves/Produce'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {recycle} from './moves/Recycle'
@@ -391,12 +391,12 @@ const ItsAWonderfulWorldRules: GameType = {
     return move
   },
 
-  getAnimationDuration(move: MoveView) {
+  getAnimationDuration(move: MoveView, _: ItsAWonderfulWorldView, playerId: EmpireName) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
       case MoveType.PlaceResource:
-        return 0.2
+        return move.playerId === playerId && isPlaceResourceOnConstruction(move) ? 0 : 0.2
       /*case MoveType.DiscardLeftoverCards:
         return [0.5]*/
       default:
@@ -576,6 +576,54 @@ export function getComboVictoryPoints(player: Player | PlayerView, item: Develop
 
 export function getItemQuantity(player: Player | PlayerView, item: DevelopmentType | Character): number {
   return isDevelopmentType(item) ? player.constructedDevelopments.filter(card => developmentCards[card].type === item).length : player.characters[item]
+}
+
+export function canBuild(player: Player, card: number): boolean {
+  const construction = player.constructionArea.find(construction => construction.card === card)
+  if (!construction) {
+    return false
+  }
+  const remainingCost = getRemainingCost(construction)
+  for (const character of Object.values(Character)) {
+    if (player.characters[character] < remainingCost.filter(cost => cost.item === character).length) {
+      return false
+    }
+  }
+  let krystalliumLeft = player.empireCardResources.filter(resource => resource === Resource.Krystallium).length
+  for (const resource of Object.values(Resource)) {
+    const resourceCost = remainingCost.filter(cost => cost.item === resource).length
+    const resources = player.availableResources.filter(r => r === resource).length
+    if (resources < resourceCost) {
+      if (krystalliumLeft + resources < resourceCost) {
+        return false
+      }
+      krystalliumLeft -= resourceCost - resources
+    }
+  }
+  return true
+}
+
+export function getMovesToBuild(player: Player, card: number): (PlaceResourceOnConstruction | PlaceCharacter)[] {
+  const moves: (PlaceResourceOnConstruction | PlaceCharacter)[] = []
+  const construction = player.constructionArea.find(construction => construction.card === card)!
+  const remainingCost = getRemainingCost(construction)
+  for (const resource of Object.values(Resource)) {
+    const resourceCosts = remainingCost.filter(cost => cost.item === resource)
+    const resources = player.availableResources.filter(r => r === resource).length
+    for (const cost of resourceCosts) {
+      if (resources > 0) {
+        moves.push(placeResource(player.empire, resource, card, cost.space))
+      } else {
+        moves.push(placeResource(player.empire, Resource.Krystallium, card, cost.space))
+      }
+    }
+  }
+  for (const cost of remainingCost) {
+    if (isCharacter(cost.item)) {
+      moves.push(placeCharacter(player.empire, cost.item, card, cost.space))
+    }
+  }
+  return moves
 }
 
 // noinspection JSUnusedGlobalSymbols
