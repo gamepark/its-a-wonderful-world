@@ -1,10 +1,10 @@
 import {css} from '@emotion/core'
 import {usePlay, usePlayerId} from '@interlude-games/workshop'
-import React, {Fragment, FunctionComponent, useState} from 'react'
+import React, {Fragment, FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
-import {ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
+import {DevelopmentUnderConstruction, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
@@ -17,9 +17,15 @@ import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
   const playerId = usePlayerId<EmpireName>()
   const [focusedCard, setFocusedCard] = useState<number>()
+  const construction = player.constructionArea.find(construction => construction.card === focusedCard)
   const row = game.phase === Phase.Draft ? 2 : 1
   const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
   const play = usePlay()
+  useEffect(() => {
+    if (!player.constructionArea.some(construction => construction.card === focusedCard)) {
+      setFocusedCard(undefined)
+    }
+  }, [player, focusedCard])
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
     collect: (monitor) => ({
@@ -29,9 +35,9 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
     drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.card))
   })
   return <>
-    {focusedCard && <Fragment>
+    {construction && <Fragment>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
-      {getSmartPlaceResourceMoves(player, focusedCard).map(move =>
+      {getSmartPlaceResourceMoves(player, construction).map(move =>
         <button key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
           <ResourceCube resource={move.resource} css={buttonResourceStyle}/>⇒
         </button>
@@ -52,9 +58,8 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
   </>
 }
 
-function getSmartPlaceResourceMoves(player: Player | PlayerView, card: number) {
+function getSmartPlaceResourceMoves(player: Player | PlayerView, construction: DevelopmentUnderConstruction) {
   const moves: PlaceResourceOnConstruction[] = []
-  const construction = player.constructionArea.find(construction => construction.card === card)!
   const availableResource = JSON.parse(JSON.stringify(player.availableResources))
   const krystalliumAvailable = player.empireCardResources.filter(resource => resource === Resource.Krystallium).length
   const availableKrystalliumPerResource: Record<Resource, number> = {
