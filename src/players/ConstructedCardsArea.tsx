@@ -30,7 +30,6 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
     }),
     drop: (item: DevelopmentFromConstructionArea) => getMovesToBuild(player as Player, item.card).forEach(move => play(move))
   })
-  console.log(isValidTarget)
   return (
     <Fragment>
       {player.constructedDevelopments.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]}

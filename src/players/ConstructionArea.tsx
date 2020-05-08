@@ -5,6 +5,7 @@ import {useDrop} from 'react-dnd'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import {DevelopmentUnderConstruction, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
+import {width as cardWidth} from '../material/developments/DevelopmentCard'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
@@ -39,7 +40,8 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
       {getSmartPlaceResourceMoves(player, construction).map(move =>
         <button key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
-          <ResourceCube resource={move.resource} css={buttonResourceStyle}/>⇒
+          <ResourceCube resource={move.resource} css={buttonResourceStyle}/>
+          <span>⇒</span>
         </button>
       )}
     </Fragment>}
@@ -60,7 +62,7 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
 
 function getSmartPlaceResourceMoves(player: Player | PlayerView, construction: DevelopmentUnderConstruction) {
   const moves: PlaceResourceOnConstruction[] = []
-  const availableResource = JSON.parse(JSON.stringify(player.availableResources))
+  const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
   const krystalliumAvailable = player.empireCardResources.filter(resource => resource === Resource.Krystallium).length
   const availableKrystalliumPerResource: Record<Resource, number> = {
     [Resource.Materials]: krystalliumAvailable,
@@ -72,9 +74,9 @@ function getSmartPlaceResourceMoves(player: Player | PlayerView, construction: D
   }
   getRemainingCost(construction).forEach(cost => {
     if (isResource(cost.item)) {
-      if (availableResource[cost.item] > 0) {
+      if (availableResource.some(resource => resource === cost.item)) {
         moves.push(placeResource(player.empire, cost.item, construction.card, cost.space))
-        availableResource[cost.item]--
+        availableResource.splice(availableResource.findIndex(resource => resource === cost.item), 1)
       } else if (availableKrystalliumPerResource[cost.item] > 0) {
         moves.push(placeResource(player.empire, Resource.Krystallium, construction.card, cost.space))
         availableKrystalliumPerResource[cost.item]--
@@ -116,7 +118,7 @@ const getPlaceResourceButtonStyle = (index: number) => css`
   position: absolute;
   z-index: 100;
   top: ${index * 6.5 + 16.5}%;
-  left: 29%;
+  right: ${51 + cardWidth * 1.5}%;
   display: inline-flex;
   box-shadow: inset 0 0.1vh 0 0 #ffffff;
   background: #ededed linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
@@ -135,12 +137,14 @@ const getPlaceResourceButtonStyle = (index: number) => css`
     position:relative;
     transform: translateY(1px);
   }
+  & > :not(:first-child) {
+    margin-left: 1vh;
+  }
 `
 
 const buttonResourceStyle = css`
   display: inline;
   height: 3.5vh;
-  margin: 0 1.5vh 0 0.5vh;
 `
 
 export default ConstructionArea
