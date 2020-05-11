@@ -34,7 +34,7 @@ const numberOfCardsDeal2Players = 10
 export const numberOfRounds = 4
 const playersMin = 2
 const playersMax = 5
-const defaultNumberOfPlayers = 5
+const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
 type GameType = SimultaneousGame<ItsAWonderfulWorld, Move, EmpireName>

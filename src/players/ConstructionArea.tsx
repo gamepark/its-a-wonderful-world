@@ -6,15 +6,18 @@ import {useTranslation} from 'react-i18next'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import {DevelopmentUnderConstruction, isPlayer, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
+import Character from '../material/characters/Character'
+import CharacterToken from '../material/characters/CharacterToken'
 import constructionCost from '../material/developments/ConstructionCost'
 import {width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
-import {placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
+import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
+import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import {slateForConstruction} from '../moves/SlateForConstruction'
-import {getRemainingCost} from '../Rules'
+import {canBuild, getMovesToBuild, getRemainingCost} from '../Rules'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 
@@ -32,6 +35,9 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
       play(placeResource(player.empire, resource, construction.card, cost.space))
     )
   }
+  const build = (construction: DevelopmentUnderConstruction) => {
+    getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
+  }
   useEffect(() => {
     if (!player.constructionArea.some(construction => construction.card === focusedCard)) {
       setFocusedCard(undefined)
@@ -48,17 +54,24 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
   return <>
     {construction && <Fragment>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
-      {isPlayer(player) && getSmartPlaceResourceMoves(player, construction).map(move =>
-        <button key={move.space} css={getPlaceResourceButtonStyle(move.space)} onClick={() => play(move)}>
-          <ResourceCube resource={move.resource} css={buttonResourceStyle}/>
+      {isPlayer(player) && getSmartPlaceItemMoves(player, construction).map(move =>
+        <button key={move.space} css={getPlaceItemButtonStyle(move.space)} onClick={() => play(move)}>
+          {isPlaceResource(move) ?
+            <ResourceCube resource={move.resource} css={buttonItemStyle}/> :
+            <CharacterToken character={move.character} css={buttonItemStyle}/>
+          }
           <span>⇒</span>
         </button>
       )}
-      {maxSpendableResources > 1 && <button css={getPlaceResourceButtonStyle(getTotalConstructionCost(construction.card))}
+      {maxSpendableResources > 1 && <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card))}
                                             onClick={() => placeResources(construction, game.productionStep!, maxSpendableResources)}>
         <span>{t('Placer')}</span>
-        {[...Array(maxSpendableResources)].map((_, index) => <ResourceCube key={index} resource={game.productionStep!} css={buttonResourceStyle}/>)}
+        {[...Array(maxSpendableResources)].map((_, index) => <ResourceCube key={index} resource={game.productionStep!} css={buttonItemStyle}/>)}
       </button>}
+      {isPlayer(player) && canBuild(player, construction.card) &&
+      <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 1 : 0))}
+              onClick={() => build(construction)}>{t('Construire')}</button>
+      }
     </Fragment>}
     <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
       {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
@@ -75,8 +88,8 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
   </>
 }
 
-function getSmartPlaceResourceMoves(player: Player, construction: DevelopmentUnderConstruction) {
-  const moves: PlaceResourceOnConstruction[] = []
+function getSmartPlaceItemMoves(player: Player, construction: DevelopmentUnderConstruction): (PlaceResourceOnConstruction | PlaceCharacter)[] {
+  const moves: (PlaceResourceOnConstruction | PlaceCharacter)[] = []
   const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
   const krystalliumAvailable = player.empireCardResources.filter(resource => resource === Resource.Krystallium).length
   const availableKrystalliumPerResource: Record<Resource, number> = {
@@ -87,6 +100,10 @@ function getSmartPlaceResourceMoves(player: Player, construction: DevelopmentUnd
     [Resource.Exploration]: krystalliumAvailable,
     [Resource.Krystallium]: krystalliumAvailable
   }
+  const availableCharacters: Record<Character, number> = {
+    [Character.Financier]: player.characters.Financier,
+    [Character.General]: player.characters.General
+  }
   getRemainingCost(construction).forEach(cost => {
     if (isResource(cost.item)) {
       if (availableResource.some(resource => resource === cost.item)) {
@@ -95,6 +112,11 @@ function getSmartPlaceResourceMoves(player: Player, construction: DevelopmentUnd
       } else if (availableKrystalliumPerResource[cost.item] > 0) {
         moves.push(placeResource(player.empire, Resource.Krystallium, construction.card, cost.space))
         availableKrystalliumPerResource[cost.item]--
+      }
+    } else {
+      if (availableCharacters[cost.item] > 0) {
+        moves.push(placeCharacter(player.empire, cost.item, construction.card, cost.space))
+        availableCharacters[cost.item]--
       }
     }
   })
@@ -137,7 +159,7 @@ const popupBackgroundStyle = css`
   z-index: 99;
 `
 
-const getPlaceResourceButtonStyle = (index: number) => css`
+const getPlaceItemButtonStyle = (index: number) => css`
   position: absolute;
   z-index: 100;
   top: ${index * 6.5 + 16.5}%;
@@ -164,7 +186,7 @@ const getPlaceResourceButtonStyle = (index: number) => css`
   }
 `
 
-const buttonResourceStyle = css`
+const buttonItemStyle = css`
   display: inline;
   height: 3.5vh;
 `
