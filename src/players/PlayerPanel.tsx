@@ -10,6 +10,7 @@ import {getVictoryPointsBonusMultiplier} from '../Rules'
 import PlayerResourceProduction from './PlayerResourceProduction'
 import PlayerScore from './score/PlayerScore'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
+import { usePlayer } from '@interlude-games/workshop'
 
 type Props = {
   player: Player | PlayerView
@@ -20,6 +21,7 @@ type Props = {
 
 const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, showScore, ...props}) => {
   const {t} = useTranslation()
+  const playerInfo = usePlayer<EmpireName>(player.empire)
   const victoryPointsMultipliers: { item: Character | DevelopmentType, multiplier: number }[] = []
   const completeVictoryPointsMultiplier = (item: Character | DevelopmentType) => {
     const multiplier = getVictoryPointsBonusMultiplier(player, item)
@@ -33,7 +35,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
       <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
-      <h3 css={nameStyle}>{getEmpireName(t, player.empire)}</h3>
+      <h3 css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</h3>
       <PlayerResourceProduction player={player}/>
       {victoryPointsMultipliers.slice(0, 3).map((victoryPointsMultiplier, index) =>
         <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier}
