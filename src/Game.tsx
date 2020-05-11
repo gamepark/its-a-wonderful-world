@@ -40,7 +40,7 @@ const Game: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
 
 const hiddenOnPortrait = css`
   @media all and (orientation:portrait) {
-    display: none;
+    display: none !important;
   }
 `
 

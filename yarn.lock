@@ -1589,6 +1589,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.4.tgz#1581d6c16e3d4803eb079c87d4ac893ee7501c2c"
   integrity sha512-x26ur3dSXgv5AwKS0lNfbjpCakGIduWU1DU91Zz58ONRWrIKGunmZBNv4P7N+e27sJkiGDsw/3fT4AtsqQBrBA==
 
+"@types/nosleep.js@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@types/nosleep.js/-/nosleep.js-0.9.0.tgz#57c9f322c88f18a9559942d26c64c4ab4de9a9d2"
+  integrity sha512-RM0MRsjpfBsgbcmmC32ZE+zaxc8VMwc56UemKCl/eb0eL2t5tRb2ioxOXLlpyOZ770CF8X0osxqcjV3Hf9UWlw==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -7429,6 +7434,11 @@ normalize-url@^3.0.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-3.3.0.tgz#b2e1c4dc4f7c6d57743df733a4f5978d18650559"
   integrity sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==
+
+nosleep.js@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/nosleep.js/-/nosleep.js-0.9.0.tgz#0f1371b81dc182e3b6bbdb837e880f16db9d7163"
+  integrity sha512-qLOl2MmuGOPZY7Exi0kYJSCr2e9IcAtOykOo7hXUGAoaMC1Iqj0m+Aj2REuay68mDkhbc5CoA4ccUvcZI175Kw==
 
 npm-run-path@^2.0.0:
   version "2.0.2"

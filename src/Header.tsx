@@ -2,6 +2,7 @@ import {css} from '@emotion/core'
 import {useGame, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
 import fscreen from 'fscreen'
 import {TFunction} from 'i18next'
+import NoSleep from 'nosleep.js'
 import React, {useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
@@ -59,6 +60,8 @@ const fullScreenButtonStyle = css`
   padding: 0.33em;
 `
 
+const noSleep = new NoSleep()
+
 const Header = () => {
   const game = useGame<ItsAWonderfulWorld>()
   const empire = usePlayerId<EmpireName>()
@@ -70,6 +73,9 @@ const Header = () => {
     setFullScreen(fscreen.fullscreenElement != null)
     if (fscreen.fullscreenElement) {
       window.screen.orientation.lock('landscape')
+      noSleep.enable()
+    } else {
+      noSleep.disable()
     }
   }
   useEffect(() => {
