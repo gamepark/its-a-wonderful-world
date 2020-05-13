@@ -60,6 +60,7 @@ const globalStyle = css`
   }
   body {
     margin: 0;
+    font-family: 'Oswald', "Roboto Light", serif;
   }
   #root {
     position: absolute;
