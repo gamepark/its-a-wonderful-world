@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import {Draggable, useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
-import React, {Fragment, FunctionComponent} from 'react'
+import React, {FunctionComponent, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
@@ -18,11 +18,13 @@ import PlayerView from '../types/PlayerView'
 import screenRatio from '../util/screenRatio'
 import {constructedCardLeftMargin} from './ConstructedCardsArea'
 import {bottomMargin} from './DisplayedEmpire'
+import {popupBackgroundStyle} from '../util/Styles'
 
 const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const row = game.phase === Phase.Draft ? 1 : 0
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
+  const [focusedCard, setFocusedCard] = useState<number>()
   const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation =>
     animation.move.type === MoveType.ChooseDevelopmentCard && animation.move.playerId === player.empire && !animation.undo)
   const chosenCard = player.chosenCard || (choosingDevelopment ? choosingDevelopment.move.card || true : undefined)
@@ -35,19 +37,20 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.card))
   })
   return (
-    <Fragment>
+    <>
+      {focusedCard !== undefined && <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>}
       <div ref={ref} css={getDraftAreaStyle(row, game.players.length === 2, isValidTarget, isOver)}>
         {!player.draftArea.length && <span css={draftAreaText}>Zone de draft</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={card} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index)}
+        <Draggable key={card} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index,focusedCard === card)}
                    disabled={playerId !== player.empire || game.phase !== Phase.Planning}>
-          <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`}/>
+          <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)} />
         </Draggable>
       ))}
       {chosenCard && <DevelopmentCard development={chosenCard !== true ? developmentCards[chosenCard] : undefined}
                                       css={[getAreaCardStyle(row, player.draftArea.length), choosingDevelopment && css`opacity: 0;`]}/>}
-    </Fragment>
+    </>
   )
 }
 
@@ -77,7 +80,7 @@ export const getAreasStyle = (row: number, fullWidth: boolean, isValidTarget = f
 
 `
 
-export const getAreaCardStyle = (row: number, index: number, totalCards = numberOfCardsToDraft, fullWidth = false, focused = false) => css`
+export const getAreaCardStyle = (row: number, index: number, focused = false, totalCards = numberOfCardsToDraft, fullWidth = false) => css`
   position: absolute;
   width: ${cardWidth}%;
   height: ${cardHeight}%;
