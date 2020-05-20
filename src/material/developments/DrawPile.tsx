@@ -1,10 +1,10 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import {ItsAWonderfulWorldView} from '../../ItsAWonderfulWorld'
 import {areasLeftPosition} from '../../players/DraftArea'
+import GameView from '../../types/GameView'
 import DevelopmentCard, {height as cardHeight, width as cardWidth} from '../developments/DevelopmentCard'
 
-const DrawPile: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
+const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
   return <>
     {[...Array(Math.min(game.deck, 8))].map((_, index) => <DevelopmentCard key={index} css={css`
       position: absolute;

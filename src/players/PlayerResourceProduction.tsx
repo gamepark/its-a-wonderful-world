@@ -2,7 +2,6 @@ import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
 import React, {Fragment, FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import {Player, PlayerView} from '../ItsAWonderfulWorld'
 import {getEmpireName} from '../material/empires/EmpireCard'
 import Energy from '../material/resources/energy.png'
 import Exploration from '../material/resources/exploration.png'
@@ -12,6 +11,8 @@ import Materials from '../material/resources/materials.png'
 import Resource from '../material/resources/Resource'
 import Science from '../material/resources/science.png'
 import {getProduction} from '../Rules'
+import Player from '../types/Player'
+import PlayerView from '../types/PlayerView'
 
 const resources = Object.values(Resource)
 

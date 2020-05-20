@@ -1,7 +1,7 @@
-import {EmpireSide} from '../../ItsAWonderfulWorld'
 import Character from '../characters/Character'
 import DevelopmentType from '../developments/DevelopmentType'
 import Resource from '../resources/Resource'
+import EmpireSide from './EmpireSide'
 
 type Empire = {
   [key in EmpireSide]: {

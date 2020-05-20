@@ -1,16 +1,17 @@
 import {css} from '@emotion/core'
+import {usePlayer} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import {Player, PlayerView} from '../ItsAWonderfulWorld'
 import Character from '../material/characters/Character'
 import DevelopmentType from '../material/developments/DevelopmentType'
 import {empireAvatar, empireBackground, getEmpireName} from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
 import {getVictoryPointsBonusMultiplier} from '../Rules'
+import Player from '../types/Player'
+import PlayerView from '../types/PlayerView'
 import PlayerResourceProduction from './PlayerResourceProduction'
 import PlayerScore from './score/PlayerScore'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
-import { usePlayer } from '@interlude-games/workshop'
 
 type Props = {
   player: Player | PlayerView

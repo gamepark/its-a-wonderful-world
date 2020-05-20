@@ -1,15 +1,14 @@
 import {
   Action, GameWithIncompleteInformation, shuffle, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo
 } from '@interlude-games/workshop'
-import ItsAWonderfulWorld, {
-  DevelopmentUnderConstruction, EmpireSide, isGameView, isPlayerView, ItsAWonderfulWorldView, Options, Phase, Player, PlayerView
-} from './ItsAWonderfulWorld'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
+import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
 import {developmentCards} from './material/developments/Developments'
 import DevelopmentType, {isDevelopmentType} from './material/developments/DevelopmentType'
 import EmpireName from './material/empires/EmpireName'
 import Empires from './material/empires/Empires'
+import EmpireSide from './material/empires/EmpireSide'
 import Resource, {isResource} from './material/resources/Resource'
 import {chooseDevelopmentCard, isChooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
 import {completeConstruction} from './moves/CompleteConstruction'
@@ -28,6 +27,13 @@ import {slateForConstruction} from './moves/SlateForConstruction'
 import {startPhase} from './moves/StartPhase'
 import {tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
+import Game from './types/Game'
+import GameOptions from './types/GameOptions'
+import GameView from './types/GameView'
+import Phase from './types/Phase'
+import Player from './types/Player'
+import PlayerView from './types/PlayerView'
+import {isGameView, isPlayerView} from './types/typeguards'
 
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
@@ -37,16 +43,16 @@ const playersMax = 5
 const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
-type GameType = SimultaneousGame<ItsAWonderfulWorld, Move, EmpireName>
-  & GameWithIncompleteInformation<ItsAWonderfulWorld, Move, EmpireName, ItsAWonderfulWorldView, MoveView>
-  & WithOptions<ItsAWonderfulWorld, Options>
-  & WithAutomaticMoves<ItsAWonderfulWorld, Move>
-  & WithUndo<ItsAWonderfulWorld, Move, EmpireName>
-  & WithAnimations<ItsAWonderfulWorldView, MoveView, EmpireName>
+type GameType = SimultaneousGame<Game, Move, EmpireName>
+  & GameWithIncompleteInformation<Game, Move, EmpireName, GameView, MoveView>
+  & WithOptions<Game, GameOptions>
+  & WithAutomaticMoves<Game, Move>
+  & WithUndo<Game, Move, EmpireName>
+  & WithAnimations<GameView, MoveView, EmpireName>
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: GameType = {
-  setup(options?: Options) {
+  setup(options?: GameOptions) {
     return {
       players: setupPlayers(options?.players, options?.empiresSide),
       deck: shuffle(Array.from(developmentCards.keys())),
@@ -56,11 +62,11 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getPlayerIds(game: ItsAWonderfulWorld) {
+  getPlayerIds(game: Game) {
     return game.players.map(player => player.empire)
   },
 
-  getActivePlayers(game: ItsAWonderfulWorld) {
+  getActivePlayers(game: Game) {
     switch (game.phase) {
       case Phase.Draft:
         return game.players.filter(player => !player.chosenCard).map(player => player.empire)
@@ -70,7 +76,7 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getAutomaticMove(game: ItsAWonderfulWorld | ItsAWonderfulWorldView) {
+  getAutomaticMove(game: Game | GameView) {
     switch (game.phase) {
       case Phase.Draft:
         if (isGameView(game)) {
@@ -116,9 +122,9 @@ const ItsAWonderfulWorldRules: GameType = {
         break
     }
     for (const player of game.players) {
-      for (const developmentUnderConstruction of player.constructionArea) {
-        if (developmentUnderConstruction.costSpaces.every(space => space !== null)) {
-          return completeConstruction(player.empire, developmentUnderConstruction.card)
+      for (const construction of player.constructionArea) {
+        if (construction.costSpaces.every(space => space !== null)) {
+          return completeConstruction(player.empire, construction.card)
         }
       }
       if (player.empireCardResources.filter(resource => resource !== Resource.Krystallium).length >= 5) {
@@ -141,12 +147,12 @@ const ItsAWonderfulWorldRules: GameType = {
     return
   },
 
-  getLegalMoves(game: ItsAWonderfulWorld, empire: EmpireName) {
+  getLegalMoves(game: Game, empire: EmpireName) {
     const player = game.players.find(player => player.empire === empire)
     return player ? getLegalMoves(player, game.phase) : []
   },
 
-  play(move: Move | MoveView, game: ItsAWonderfulWorld | ItsAWonderfulWorldView, playerId: EmpireName) {
+  play(move: Move | MoveView, game: Game | GameView, playerId: EmpireName) {
     switch (move.type) {
       case MoveType.DealDevelopmentCards: {
         const cardsToDeal = game.players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft
@@ -239,7 +245,7 @@ const ItsAWonderfulWorldRules: GameType = {
           player.draftArea.splice(indexInDraftArea, 1)
           player.availableResources.push(developmentCards[move.card].recyclingBonus)
         } else {
-          player.constructionArea = player.constructionArea.filter(developmentUnderConstruction => developmentUnderConstruction.card !== move.card)
+          player.constructionArea = player.constructionArea.filter(construction => construction.card !== move.card)
           player.bonuses.push(developmentCards[move.card].recyclingBonus)
         }
         game.discard.push(move.card)
@@ -264,7 +270,7 @@ const ItsAWonderfulWorldRules: GameType = {
       }
       case MoveType.CompleteConstruction: {
         const player = getPlayer(game, move.playerId)
-        player.constructionArea = player.constructionArea.filter(developmentUnderConstruction => developmentUnderConstruction.card !== move.card)
+        player.constructionArea = player.constructionArea.filter(construction => construction.card !== move.card)
         player.constructedDevelopments.push(move.card)
         const bonus = developmentCards[move.card].constructionBonus
         if (bonus) {
@@ -338,7 +344,7 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: ItsAWonderfulWorld | ItsAWonderfulWorldView) {
+  canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: Game | GameView) {
     const {playerId, move} = action
     const player = game.players.find(player => player.empire === playerId)!
     switch (move.type) {
@@ -358,7 +364,7 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getView(game: ItsAWonderfulWorld, playerId?: EmpireName): ItsAWonderfulWorldView {
+  getView(game: Game, playerId?: EmpireName): GameView {
     return {
       ...game, deck: game.deck.length,
       players: game.players.map(player => player.empire !== playerId ?
@@ -367,7 +373,7 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
-  getMoveView(move: Move, playerId: EmpireName, game: ItsAWonderfulWorld): MoveView {
+  getMoveView(move: Move, playerId: EmpireName, game: Game): MoveView {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
         return playerId ? {...move, playerCards: game.players.find(player => player.empire === playerId)!.hand} : move
@@ -391,7 +397,7 @@ const ItsAWonderfulWorldRules: GameType = {
     return move
   },
 
-  getAnimationDuration(move: MoveView, _: ItsAWonderfulWorldView, playerId: EmpireName) {
+  getAnimationDuration(move: MoveView, _: GameView, playerId: EmpireName) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
@@ -434,7 +440,7 @@ function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
   }
 }
 
-function getPlayer(game: ItsAWonderfulWorld | ItsAWonderfulWorldView, empire: EmpireName): Player | PlayerView {
+function getPlayer(game: Game | GameView, empire: EmpireName): Player | PlayerView {
   return game.players.find(player => player.empire === empire)!
 }
 
@@ -459,9 +465,9 @@ export function getLegalMoves(player: Player, phase: Phase) {
       break
   }
   [...new Set(player.availableResources)].forEach(resource => {
-    player.constructionArea.forEach(developmentUnderConstruction => {
-      getSpacesMissingItem(developmentUnderConstruction, item => item === resource)
-        .forEach(space => moves.push(placeResource(player.empire, resource, developmentUnderConstruction.card, space)))
+    player.constructionArea.forEach(construction => {
+      getSpacesMissingItem(construction, item => item === resource)
+        .forEach(space => moves.push(placeResource(player.empire, resource, construction.card, space)))
     })
     moves.push(placeResource(player.empire, resource))
   })
@@ -469,20 +475,20 @@ export function getLegalMoves(player: Player, phase: Phase) {
     Object.values(Character).forEach(character => moves.push(receiveCharacter(player.empire, character)))
   }
   if (moves.length) {
-    player.constructionArea.forEach(developmentUnderConstruction => {
-      moves.push(recycle(player.empire, developmentUnderConstruction.card))
+    player.constructionArea.forEach(construction => {
+      moves.push(recycle(player.empire, construction.card))
     })
     if (player.empireCardResources.some(resource => resource === Resource.Krystallium)) {
-      player.constructionArea.forEach(developmentUnderConstruction => {
-        getSpacesMissingItem(developmentUnderConstruction, item => isResource(item))
-          .forEach(space => moves.push(placeResource(player.empire, Resource.Krystallium, developmentUnderConstruction.card, space)))
+      player.constructionArea.forEach(construction => {
+        getSpacesMissingItem(construction, item => isResource(item))
+          .forEach(space => moves.push(placeResource(player.empire, Resource.Krystallium, construction.card, space)))
       })
     }
     Object.values(Character).forEach(character => {
       if (player.characters[character]) {
-        player.constructionArea.forEach(developmentUnderConstruction => {
-          getSpacesMissingItem(developmentUnderConstruction, item => item === character)
-            .forEach(space => moves.push(placeCharacter(player.empire, character, developmentUnderConstruction.card, space)))
+        player.constructionArea.forEach(construction => {
+          getSpacesMissingItem(construction, item => item === character)
+            .forEach(space => moves.push(placeCharacter(player.empire, character, construction.card, space)))
         })
       }
     })
@@ -494,19 +500,19 @@ function costSpaces(development: Development) {
   return Object.values(development.constructionCost).reduce((sum, cost) => sum! + cost!)
 }
 
-export function getRemainingCost(developmentUnderConstruction: DevelopmentUnderConstruction): { item: Resource | Character, space: number }[] {
-  const development = developmentCards[developmentUnderConstruction.card]
+export function getRemainingCost(construction: Construction): { item: Resource | Character, space: number }[] {
+  const development = developmentCards[construction.card]
   return Array.of<Resource | Character>(...Object.values(Resource), ...Object.values(Character))
     .flatMap(item => Array(development.constructionCost[item] || 0).fill(item))
     .map((item, index) => ({item, space: index}))
-    .filter(item => !developmentUnderConstruction.costSpaces[item.space])
+    .filter(item => !construction.costSpaces[item.space])
 }
 
-function getSpacesMissingItem(developmentUnderConstruction: DevelopmentUnderConstruction, predicate: (item: Resource | Character) => boolean) {
-  return getRemainingCost(developmentUnderConstruction).filter(cost => predicate(cost.item)).map(cost => cost.space)
+function getSpacesMissingItem(construction: Construction, predicate: (item: Resource | Character) => boolean) {
+  return getRemainingCost(construction).filter(cost => predicate(cost.item)).map(cost => cost.space)
 }
 
-export function getNextProductionStep(game: ItsAWonderfulWorld | ItsAWonderfulWorldView) {
+export function getNextProductionStep(game: Game | GameView) {
   switch (game.productionStep) {
     case Resource.Materials:
       return Resource.Energy

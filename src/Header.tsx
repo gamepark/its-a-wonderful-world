@@ -5,7 +5,6 @@ import {TFunction} from 'i18next'
 import NoSleep from 'nosleep.js'
 import React, {useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
-import ItsAWonderfulWorld, {Phase} from './ItsAWonderfulWorld'
 import Character from './material/characters/Character'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
@@ -14,6 +13,8 @@ import Move from './moves/Move'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
 import ItsAWonderfulWorldRules, {getNextProductionStep, getScore, numberOfRounds} from './Rules'
+import GameView from './types/GameView'
+import Phase from './types/Phase'
 import FullScreenExitIcon from './util/FullScreenExitIcon'
 import FullScreenIcon from './util/FullScreenIcon'
 import IconButton from './util/IconButton'
@@ -63,7 +64,7 @@ const fullScreenButtonStyle = css`
 const noSleep = new NoSleep()
 
 const Header = () => {
-  const game = useGame<ItsAWonderfulWorld>()
+  const game = useGame<GameView>()
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
@@ -104,7 +105,7 @@ const Header = () => {
   )
 }
 
-function getText(t: TFunction, play: (move: Move) => void, game?: ItsAWonderfulWorld, empire?: EmpireName) {
+function getText(t: TFunction, play: (move: Move) => void, game?: GameView, empire?: EmpireName) {
   if (!game) {
     return t('Chargement de la partie...')
   }

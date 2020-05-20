@@ -8,10 +8,10 @@ import {DndProvider} from 'react-dnd'
 import MultiBackend from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {initReactI18next, useTranslation} from 'react-i18next'
-import Game from './Game'
+import GameDisplay from './GameDisplay'
 import Header from './Header'
-import {ItsAWonderfulWorldView} from './ItsAWonderfulWorld'
 import artwork from './material/its-cover-artwork.png'
+import GameView from './types/GameView'
 import RotateScreenIcon from './util/RotateScreenIcon'
 
 i18next.use(initReactI18next).use(ICU)
@@ -33,11 +33,11 @@ i18next.init({
 
 const App: FunctionComponent = () => {
   const {t} = useTranslation()
-  const game = useGame<ItsAWonderfulWorldView>()
+  const game = useGame<GameView>()
   return (
     <DndProvider backend={MultiBackend} options={HTML5ToTouch}>
       <Global styles={globalStyle}/>
-      {game && <Game game={game}/>}
+      {game && <GameDisplay game={game}/>}
       <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
       <Header/>
     </DndProvider>

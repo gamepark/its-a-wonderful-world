@@ -1,14 +1,18 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import {isPlayerView, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../../ItsAWonderfulWorld'
+import GameView from '../../types/GameView'
+import Phase from '../../types/Phase'
+import Player from '../../types/Player'
+import PlayerView from '../../types/PlayerView'
+import {isPlayer} from '../../types/typeguards'
 import boardReduced from './board-reduced.png'
 import board from './board.png'
 import ResourceArea from './ResourceArea'
 import roundTracker1 from './round-tracker-1-3.png'
 import roundTracker2 from './round-tracker-2-4.png'
 
-const Board: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
+const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
   const reducedSize = game.phase === Phase.Draft && game.round > 1
   return (
@@ -21,7 +25,7 @@ const Board: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | 
         {reducedSize && <span css={roundTextStyle}>{game.round}</span>}
       </div>
       {[...new Set(player.availableResources)].map(resource => <ResourceArea key={resource} game={game} player={player}
-                                                                             resource={resource} canDrag={!isPlayerView(player)}
+                                                                             resource={resource} canDrag={isPlayer(player)}
                                                                              quantity={player.availableResources.filter(r => r === resource).length}/>)}
     </>
   )

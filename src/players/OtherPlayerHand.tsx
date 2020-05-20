@@ -1,9 +1,9 @@
 import {Hand, useAnimation} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
-import {PlayerView} from '../ItsAWonderfulWorld'
 import DevelopmentCard, {ratio as cardRatio} from '../material/developments/DevelopmentCard'
 import ChooseDevelopmentCard from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
+import PlayerView from '../types/PlayerView'
 import {playerHandCardStyle, playerHandStyle, translateToDraftArea} from './PlayerHand'
 
 type Props = { player: PlayerView, leftPosition: number }

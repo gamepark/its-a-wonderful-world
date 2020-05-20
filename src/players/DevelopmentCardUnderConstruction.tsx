@@ -7,9 +7,9 @@ import {developmentFromConstructionArea} from '../drag-objects/DevelopmentFromCo
 import DragObjectType from '../drag-objects/DragObjectType'
 import KrystalliumFromEmpire from '../drag-objects/KrystalliumCube'
 import ResourceFromBoard from '../drag-objects/ResourceFromBoard'
-import {DevelopmentUnderConstruction, isPlayerView, ItsAWonderfulWorldView, Player, PlayerView} from '../ItsAWonderfulWorld'
 import {isCharacter} from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
+import Construction from '../material/developments/Construction'
 import DevelopmentCard, {height as cardHeight, width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
@@ -19,12 +19,16 @@ import MoveType from '../moves/MoveType'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import {getLegalMoves, getRemainingCost} from '../Rules'
+import GameView from '../types/GameView'
+import Player from '../types/Player'
+import PlayerView from '../types/PlayerView'
+import {isPlayer} from '../types/typeguards'
 import {glow} from '../util/Styles'
 
 type Props = {
-  game: ItsAWonderfulWorldView
+  game: GameView
   player: Player | PlayerView
-  construction: DevelopmentUnderConstruction
+  construction: Construction
   canRecycle: boolean
   focused: boolean
   setFocus: () => void
@@ -33,7 +37,7 @@ type Props = {
 const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, player, construction, canRecycle, focused, setFocus, ...props}) => {
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
-  const legalMoves = isPlayerView(player) ? [] : getLegalMoves(player, game.phase)
+  const legalMoves = isPlayer(player) ? getLegalMoves(player, game.phase) : []
   const placeResourceMoves: PlaceResourceOnConstruction[] = legalMoves.filter(isPlaceResource).filter(isPlaceResourceOnConstruction)
     .filter(move => move.card === construction.card)
   const placeCharacterMoves: PlaceCharacter[] = legalMoves.filter(isPlaceCharacter).filter(move => move.card === construction.card)

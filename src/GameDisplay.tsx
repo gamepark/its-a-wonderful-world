@@ -1,7 +1,6 @@
 import {css} from '@emotion/core'
 import {Letterbox, usePlayerId} from '@interlude-games/workshop'
 import React, {FunctionComponent, useState} from 'react'
-import {ItsAWonderfulWorldView, Phase} from './ItsAWonderfulWorld'
 import Board from './material/board/Board'
 import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
 import DiscardPile from './material/developments/DiscardPile'
@@ -11,8 +10,10 @@ import Resource from './material/resources/Resource'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
 import {numberOfRounds} from './Rules'
+import GameView from './types/GameView'
+import Phase from './types/Phase'
 
-const Game: FunctionComponent<{ game: ItsAWonderfulWorldView }> = ({game}) => {
+const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   const gameOver = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
   const playerId = usePlayerId<EmpireName>()
   const [displayedEmpire, setDisplayedEmpire] = useState(playerId || game.players[0].empire)
@@ -44,4 +45,4 @@ const hiddenOnPortrait = css`
   }
 `
 
-export default Game
+export default GameDisplay

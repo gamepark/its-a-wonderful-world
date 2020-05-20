@@ -1,8 +1,12 @@
 import {usePlayerId} from '@interlude-games/workshop'
 import React, {Fragment, FunctionComponent} from 'react'
-import {isPlayerView, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
 import EmpireCard from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
+import GameView from '../types/GameView'
+import Phase from '../types/Phase'
+import Player from '../types/Player'
+import PlayerView from '../types/PlayerView'
+import {isPlayer} from '../types/typeguards'
 import ConstructedCardsArea, {constructedCardLeftMargin} from './ConstructedCardsArea'
 import ConstructionArea from './ConstructionArea'
 import DraftArea from './DraftArea'
@@ -13,7 +17,7 @@ import RecyclingDropArea from './RecyclingDropArea'
 
 export const bottomMargin = 3
 
-const DisplayedEmpire: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView, showAreas: boolean }> = ({game, player, showAreas}) => {
+const DisplayedEmpire: FunctionComponent<{ game: GameView, player: Player | PlayerView, showAreas: boolean }> = ({game, player, showAreas}) => {
   const playerId = usePlayerId<EmpireName>()
   return (
     <Fragment>
@@ -22,8 +26,10 @@ const DisplayedEmpire: FunctionComponent<{ game: ItsAWonderfulWorldView, player:
       {showAreas && (game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} player={player}/>}
       {showAreas && <RecyclingDropArea empire={player.empire}/>}
       <ConstructedCardsArea player={player}/>
-      {isPlayerView(player) ? <OtherPlayerHand player={player} leftPosition={handLeftPosition(game.players.length)}/>
-        : <PlayerHand player={player} leftPosition={handLeftPosition(game.players.length)}/>}
+      {isPlayer(player) ?
+        <PlayerHand player={player} leftPosition={handLeftPosition(game.players.length)}/> :
+        <OtherPlayerHand player={player} leftPosition={handLeftPosition(game.players.length)}/>
+      }
     </Fragment>
   )
 }

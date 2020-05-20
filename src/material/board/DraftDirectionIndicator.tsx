@@ -1,6 +1,7 @@
 import {css, keyframes} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
-import {Player, PlayerView} from '../../ItsAWonderfulWorld'
+import Player from '../../types/Player'
+import PlayerView from '../../types/PlayerView'
 import DownArrowIcon from '../../util/DownArrowIcon'
 import UpArrowIcon from '../../util/UpArrowIcon'
 

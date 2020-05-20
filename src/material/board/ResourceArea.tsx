@@ -3,18 +3,21 @@ import {useAnimations} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
-import {isPlayerView, ItsAWonderfulWorldView, Player, PlayerView} from '../../ItsAWonderfulWorld'
 import MoveType from '../../moves/MoveType'
 import PlaceResource, {isPlaceResourceOnConstruction} from '../../moves/PlaceResource'
 import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
 import {getAreaCardBottom, getAreaCardLeft} from '../../players/DraftArea'
+import GameView from '../../types/GameView'
+import Player from '../../types/Player'
+import PlayerView from '../../types/PlayerView'
+import {isPlayerView} from '../../types/typeguards'
 import {glow} from '../../util/Styles'
 import {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../developments/DevelopmentCard'
 import {empireCardDeltaX, empireCardDeltaY, resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
 import Resource from '../resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
 
-type Props = { game: ItsAWonderfulWorldView, player: Player | PlayerView, resource: Resource, canDrag: boolean, quantity: number }
+type Props = { game: GameView, player: Player | PlayerView, resource: Resource, canDrag: boolean, quantity: number }
 
 const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag, quantity}) => {
   const [{dragging}, ref, preview] = useDrag({

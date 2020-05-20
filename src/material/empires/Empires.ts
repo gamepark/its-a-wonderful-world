@@ -1,9 +1,9 @@
-import {EmpireSide} from '../../ItsAWonderfulWorld'
 import Character from '../characters/Character'
 import DevelopmentType from '../developments/DevelopmentType'
 import Resource from '../resources/Resource'
 import Empire from './Empire'
 import EmpireName from './EmpireName'
+import EmpireSide from './EmpireSide'
 
 const EmpireSideB = {
   production: {

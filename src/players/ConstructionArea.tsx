@@ -5,9 +5,9 @@ import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
-import {DevelopmentUnderConstruction, isPlayer, ItsAWonderfulWorldView, Phase, Player, PlayerView} from '../ItsAWonderfulWorld'
 import Character from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
+import Construction from '../material/developments/Construction'
 import constructionCost from '../material/developments/ConstructionCost'
 import {width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
@@ -18,10 +18,15 @@ import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import {slateForConstruction} from '../moves/SlateForConstruction'
 import {canBuild, getMovesToBuild, getRemainingCost} from '../Rules'
+import GameView from '../types/GameView'
+import Phase from '../types/Phase'
+import Player from '../types/Player'
+import PlayerView from '../types/PlayerView'
+import {isPlayer} from '../types/typeguards'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {getAreaCardStyle, getAreasStyle} from './DraftArea'
 
-const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player: Player | PlayerView }> = ({game, player}) => {
+const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
   const playerId = usePlayerId<EmpireName>()
   const [focusedCard, setFocusedCard] = useState<number>()
@@ -30,12 +35,12 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
   const row = game.phase === Phase.Draft ? 2 : 1
   const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
   const play = usePlay()
-  const placeResources = (construction: DevelopmentUnderConstruction, resource: Resource, quantity: number) => {
+  const placeResources = (construction: Construction, resource: Resource, quantity: number) => {
     getRemainingCost(construction).filter(cost => cost.item === resource).slice(0, quantity).forEach(cost =>
       play(placeResource(player.empire, resource, construction.card, cost.space))
     )
   }
-  const build = (construction: DevelopmentUnderConstruction) => {
+  const build = (construction: Construction) => {
     getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
   }
   useEffect(() => {
@@ -88,7 +93,7 @@ const ConstructionArea: FunctionComponent<{ game: ItsAWonderfulWorldView, player
   </>
 }
 
-function getSmartPlaceItemMoves(player: Player, construction: DevelopmentUnderConstruction): (PlaceResourceOnConstruction | PlaceCharacter)[] {
+function getSmartPlaceItemMoves(player: Player, construction: Construction): (PlaceResourceOnConstruction | PlaceCharacter)[] {
   const moves: (PlaceResourceOnConstruction | PlaceCharacter)[] = []
   const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
   const krystalliumAvailable = player.empireCardResources.filter(resource => resource === Resource.Krystallium).length
@@ -125,7 +130,7 @@ function getSmartPlaceItemMoves(player: Player, construction: DevelopmentUnderCo
 
 const getTotalConstructionCost = (card: number) => Object.values(constructionCost(developmentCards[card].constructionCost)).reduce((value, sum) => sum + value)
 
-const maxResourcesToPlace = (player: Player, construction: DevelopmentUnderConstruction, resource: Resource) => {
+const maxResourcesToPlace = (player: Player, construction: Construction, resource: Resource) => {
   const availableResources = player.availableResources.filter(r => r === resource).length
   const requiredResources = getRemainingCost(construction).filter(cost => cost.item === resource).length
   return Math.min(availableResources, requiredResources)
