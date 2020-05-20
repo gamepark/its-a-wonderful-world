@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import {usePlay, usePlayerId} from '@interlude-games/workshop'
-import React, {Fragment, FunctionComponent, useEffect, useState} from 'react'
+import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
@@ -25,6 +25,7 @@ import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {getAreaCardStyle, getAreasStyle} from './DraftArea'
+import {popupBackgroundStyle} from '../util/Styles'
 
 const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -57,7 +58,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
     drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.card))
   })
   return <>
-    {construction && <Fragment>
+    {construction && <>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
       {isPlayer(player) && getSmartPlaceItemMoves(player, construction).map(move =>
         <button key={move.space} css={getPlaceItemButtonStyle(move.space)} onClick={() => play(move)}>
@@ -77,7 +78,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
       <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 1 : 0))}
               onClick={() => build(construction)}>{t('Construire')}</button>
       }
-    </Fragment>}
+    </>}
     <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
       {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
     </div>
@@ -87,7 +88,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
                                                  canRecycle={player.empire === playerId && focusedCard !== construction.card && row !== 2}
                                                  onClick={() => setFocusedCard(construction.card)}
                                                  focused={focusedCard === construction.card}
-                                                 css={getAreaCardStyle(row, index, player.constructionArea.length, fullWidth, focusedCard === construction.card)}/>
+                                                 css={getAreaCardStyle(row, index, focusedCard === construction.card, player.constructionArea.length, fullWidth)}/>
       }
     )}
   </>
@@ -152,16 +153,6 @@ const constructionAreaText = css`
   text-align: center;
   font-size: 4vh;
   color: crimson;
-`
-
-const popupBackgroundStyle = css`
-  position: fixed;
-  top: -100%;
-  bottom: -100%;
-  left: -100%;
-  right: -100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 99;
 `
 
 const getPlaceItemButtonStyle = (index: number) => css`
