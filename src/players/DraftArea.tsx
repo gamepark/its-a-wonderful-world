@@ -16,9 +16,9 @@ import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import screenRatio from '../util/screenRatio'
+import {popupBackgroundStyle} from '../util/Styles'
 import {constructedCardLeftMargin} from './ConstructedCardsArea'
 import {bottomMargin} from './DisplayedEmpire'
-import {popupBackgroundStyle} from '../util/Styles'
 
 const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const row = game.phase === Phase.Draft ? 1 : 0
@@ -43,9 +43,10 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         {!player.draftArea.length && <span css={draftAreaText}>Zone de draft</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={card} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index,focusedCard === card)}
-                   disabled={playerId !== player.empire || game.phase !== Phase.Planning}>
-          <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)} />
+        <Draggable key={card} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index, focusedCard === card)}
+                   disabled={playerId !== player.empire || game.phase !== Phase.Planning}
+                   animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: 0.2}}>
+          <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>
       ))}
       {chosenCard && <DevelopmentCard development={chosenCard !== true ? developmentCards[chosenCard] : undefined}
@@ -84,11 +85,9 @@ export const getAreaCardStyle = (row: number, index: number, focused = false, to
   position: absolute;
   width: ${cardWidth}%;
   height: ${cardHeight}%;
-  will-change: bottom, left, transform !important;
-  transition-property: bottom, left, transform, z-index;
-  ${getAreaCardBottomPosition(row)}
+  ${getAreaCardBottomPosition(row)};
   ${getAreaCardLeftPosition(index, totalCards, fullWidth)};
-  ${focused && getFocusTransform()}
+  ${focused ? getFocusTransform() : css`z-index: 1`};
 `
 
 export const getAreaCardLeftPosition = (index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => css`
@@ -115,8 +114,8 @@ export const getAreaCardBottomPosition = (row: number) => css`
 const getFocusTransform = () => css`
   bottom: 50%;
   left: 50%;
-  z-index: 100 !important;
-  transform: translate(-50%, 50%) scale(3) !important;
+  z-index: 100;
+  transform: translate(-50%, 50%) scale(3);
 `
 
 export const getAreaCardBottom = (row: number) => (cardHeight + 4) * row + 3
