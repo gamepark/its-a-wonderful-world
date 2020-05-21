@@ -102,7 +102,7 @@ export const getAreasStyle = (row: number, fullWidth: boolean, isValidTarget = f
   border-radius: ${border * 5}vh;
   border-style: dashed;
   border-width: ${border}vh;
-  z-index: ${isValidTarget ? 1 : 'auto'};
+  z-index: ${isValidTarget ? 10 : 'auto'};
 
 `
 
