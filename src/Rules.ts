@@ -615,10 +615,11 @@ export function getMovesToBuild(player: Player, card: number): (PlaceResourceOnC
   const remainingCost = getRemainingCost(construction)
   for (const resource of Object.values(Resource)) {
     const resourceCosts = remainingCost.filter(cost => cost.item === resource)
-    const resources = player.availableResources.filter(r => r === resource).length
+    let resources = player.availableResources.filter(r => r === resource).length
     for (const cost of resourceCosts) {
       if (resources > 0) {
         moves.push(placeResource(player.empire, resource, card, cost.space))
+        resources--
       } else {
         moves.push(placeResource(player.empire, Resource.Krystallium, card, cost.space))
       }
