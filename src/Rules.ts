@@ -401,6 +401,8 @@ const ItsAWonderfulWorldRules: GameType = {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
+      case MoveType.SlateForConstruction:
+        return 0.3
       case MoveType.PlaceResource:
         return move.playerId === playerId && isPlaceResourceOnConstruction(move) ? 0 : 0.2
       /*case MoveType.DiscardLeftoverCards:

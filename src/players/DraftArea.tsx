@@ -1,7 +1,9 @@
 import {css} from '@emotion/core'
 import {Draggable, useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
+import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
+import {useTranslation} from 'react-i18next'
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
@@ -10,19 +12,18 @@ import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import ChooseDevelopmentCard, {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
+import {recycle} from '../moves/Recycle'
+import SlateForConstruction, {slateForConstruction} from '../moves/SlateForConstruction'
 import {numberOfCardsToDraft} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
+import {isPlayer} from '../types/typeguards'
 import screenRatio from '../util/screenRatio'
+import {popupBackgroundStyle} from '../util/Styles'
 import {constructedCardLeftMargin} from './ConstructedCardsArea'
 import {bottomMargin} from './DisplayedEmpire'
-import {popupBackgroundStyle} from '../util/Styles'
-import {isPlayer} from '../types/typeguards'
-import {slateForConstruction} from '../moves/SlateForConstruction'
-import {recycle} from '../moves/Recycle'
-import {useTranslation} from 'react-i18next'
 
 const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -32,6 +33,8 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   const [focusedCard, setFocusedCard] = useState<number>()
   const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation =>
     animation.move.type === MoveType.ChooseDevelopmentCard && animation.move.playerId === player.empire && !animation.undo)
+  const slatingForConstruction = useAnimation<SlateForConstruction>(animation =>
+    animation.move.type === MoveType.SlateForConstruction && animation.move.playerId === player.empire)
   const chosenCard = player.chosenCard || (choosingDevelopment ? choosingDevelopment.move.card || true : undefined)
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_HAND,
@@ -42,23 +45,23 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.card))
   })
   useEffect(() => {
-    if ( focusedCard !== player.chosenCard && !player.draftArea.some(card => card === focusedCard)) {
+    if (focusedCard !== player.chosenCard && (!player.draftArea.some(card => card === focusedCard) || slatingForConstruction?.move.card === focusedCard)) {
       setFocusedCard(undefined)
     }
-  }, [player, focusedCard])
+  }, [player, focusedCard, slatingForConstruction])
   return (
     <>
       {focusedCard !== undefined &&
       <>
-          <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
+        <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
         {isPlayer(player) && game.phase === Phase.Planning &&
         <>
-            <button css={draftConstructionButton} onClick={() => play(slateForConstruction(player.empire,focusedCard))}>
-              {t('Construire')}
-            </button>
-            <button css={draftRecyclingButton} onClick={() => play(recycle(player.empire,focusedCard))}>
-              {t('Recycler')}
-            </button>
+          <button css={draftConstructionButton} onClick={() => play(slateForConstruction(player.empire, focusedCard))}>
+            {t('Construire')}
+          </button>
+          <button css={draftRecyclingButton} onClick={() => play(recycle(player.empire, focusedCard))}>
+            {t('Recycler')}
+          </button>
         </>
         }
       </>
@@ -67,15 +70,17 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         {!player.draftArea.length && <span css={draftAreaText}>{t('Zone de draft')}</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={card} item={developmentFromDraftArea(card)} css={getAreaCardStyle(row, index, focusedCard === card)}
+        <Draggable key={card} item={developmentFromDraftArea(card)}
+                   css={[getAreaCardStyle(row, index, focusedCard === card),
+                     slatingForConstruction?.move.card === card && slateAnimation(slatingForConstruction, index, player.constructionArea.length)]}
                    disabled={playerId !== player.empire || game.phase !== Phase.Planning}
                    animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: 0.2}}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>
       ))}
       {chosenCard && <DevelopmentCard development={chosenCard !== true ? developmentCards[chosenCard] : undefined}
-                                      css={[getAreaCardStyle(row, player.draftArea.length,focusedCard === chosenCard), choosingDevelopment && css`opacity: 0;`]}
-                                      onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)} />}
+                                      css={[getAreaCardStyle(row, player.draftArea.length, focusedCard === chosenCard), choosingDevelopment && css`opacity: 0;`]}
+                                      onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)}/>}
     </>
   )
 }
@@ -90,7 +95,7 @@ const getDraftAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boole
 
 const border = 0.3
 
-export const cardsShift = cardHeight * cardRatio / screenRatio + 1
+export const cardsShift = cardWidth + 1
 
 export const getAreasStyle = (row: number, fullWidth: boolean, isValidTarget = false) => css`
   position: absolute;
@@ -200,5 +205,9 @@ const draftRecyclingButton = css`
   }
 `
 
+const slateAnimation = (animation: Animation<SlateForConstruction>, origin: number, destination: number) => css`
+  transform: translateX(${(destination - origin) * 100 * cardsShift / cardWidth}%) translateY(${-100 * (cardHeight + 4) / cardHeight}%);
+  transition-duration: ${animation.duration}s;
+`
 
 export default DraftArea
