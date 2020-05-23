@@ -1,6 +1,5 @@
 import {css} from '@emotion/core'
 import React, {forwardRef} from 'react'
-import screenRatio from '../../util/screenRatio'
 import CardBack from './back.png'
 import Development from './Development'
 import {
@@ -92,10 +91,6 @@ import TankDivisionImage from './vehicle/tank-division.png'
 import ZeppelinImage from './vehicle/zeppelin.png'
 
 type Props = { development?: Development } & React.HTMLAttributes<HTMLDivElement>
-
-export const height = 23 // percentage of playing area height
-export const ratio = 65 / 100
-export const width = height * ratio / screenRatio // percentage of playing area width
 
 const DevelopmentCard = forwardRef<HTMLDivElement, Props>(({development, ...props}, ref) => (
   <div ref={ref} {...props} css={[style, getBackgroundImage(development)]}/>

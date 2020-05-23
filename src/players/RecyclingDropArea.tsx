@@ -7,9 +7,7 @@ import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import EmpireName from '../material/empires/EmpireName'
 import {recycle} from '../moves/Recycle'
-import {numberOfCardsToDraft} from '../Rules'
-import screenRatio from '../util/screenRatio'
-import {areasLeftPosition, cardsShift} from './DraftArea'
+import {areasX, areaWidth} from '../util/Styles'
 
 const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) => {
   const play = usePlay()
@@ -28,14 +26,12 @@ const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) 
   )
 }
 
-const border = 0.3
-
 const getStyle = (isValidTarget: boolean, isOver: boolean) => css`
   position: absolute;
   display: ${isValidTarget ? 'block' : 'none'};
   height: 36%;
-  width: ${cardsShift * numberOfCardsToDraft + 1}%;
-  left: calc(${areasLeftPosition}% - ${border * 5 / screenRatio}%);
+  width: ${areaWidth}%;
+  left: ${areasX}%;
   top: 8%;
   background-color: rgba(0, 0, 0, ${isOver ? 0.5 : 0.3});
   border: 0.3vh dashed grey;

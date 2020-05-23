@@ -1,29 +1,26 @@
 import {css} from '@emotion/core'
 import {Draggable, useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
-import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
-import DevelopmentCard, {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
+import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import ChooseDevelopmentCard, {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
 import {recycle} from '../moves/Recycle'
 import SlateForConstruction, {slateForConstruction} from '../moves/SlateForConstruction'
-import {numberOfCardsToDraft} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import screenRatio from '../util/screenRatio'
-import {popupBackgroundStyle} from '../util/Styles'
-import {constructedCardLeftMargin} from './ConstructedCardsArea'
-import {bottomMargin} from './DisplayedEmpire'
+import {
+  areaCardStyle, cardHeight, cardStyle, cardWidth, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
+} from '../util/Styles'
 
 const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -35,6 +32,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     animation.move.type === MoveType.ChooseDevelopmentCard && animation.move.playerId === player.empire && !animation.undo)
   const slatingForConstruction = useAnimation<SlateForConstruction>(animation =>
     animation.move.type === MoveType.SlateForConstruction && animation.move.playerId === player.empire)
+  const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.move.card)
   const chosenCard = player.chosenCard || (choosingDevelopment ? choosingDevelopment.move.card || true : undefined)
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_HAND,
@@ -49,6 +47,25 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       setFocusedCard(undefined)
     }
   }, [player, focusedCard, slatingForConstruction])
+
+  function getPosition(card: number, index: number) {
+    if (card === slatingForConstruction?.move.card) {
+      const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
+      return {
+        x: `${getAreaCardX(player.constructionArea.length, player.constructionArea.length + 1, fullWidth) * 100 / cardWidth}%`,
+        y: `${getAreaCardY(row + 1) * 100 / cardHeight}%`
+      }
+    } else {
+      if (removeIndex !== -1 && removeIndex < index) {
+        index--
+      }
+      return {
+        x: `${getAreaCardX(index) * 100 / cardWidth}%`,
+        y: `${getAreaCardY(row) * 100 / cardHeight}%`
+      }
+    }
+  }
+
   return (
     <>
       {focusedCard !== undefined &&
@@ -71,84 +88,27 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       </div>
       {player.draftArea.map((card, index) => (
         <Draggable key={card} item={developmentFromDraftArea(card)}
-                   css={[getAreaCardStyle(row, index, focusedCard === card),
-                     slatingForConstruction?.move.card === card && slateAnimation(slatingForConstruction, index, player.constructionArea.length)]}
+                   origin={getPosition(card, index)}
+                   css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform]}
                    disabled={playerId !== player.empire || game.phase !== Phase.Planning}
-                   animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: 0.2}}>
+                   animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: slatingForConstruction?.duration ?? 0.2}}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>
       ))}
       {chosenCard && <DevelopmentCard development={chosenCard !== true ? developmentCards[chosenCard] : undefined}
-                                      css={[getAreaCardStyle(row, player.draftArea.length, focusedCard === chosenCard), choosingDevelopment && css`opacity: 0;`]}
+                                      css={[getAreaCardTransform(row, player.draftArea.length),
+                                        cardStyle, areaCardStyle, focusedCard === chosenCard && getCardFocusTransform,
+                                        choosingDevelopment && css`opacity: 0;`]}
                                       onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)}/>}
     </>
   )
 }
 
-export const areasLeftPosition = constructedCardLeftMargin + cardHeight * cardRatio / screenRatio + bottomMargin
-
 const getDraftAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(0, 255, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
   border-color: green;
-  ${getAreasStyle(row, fullWidth, isValidTarget)};
+  ${getAreasStyle(row, fullWidth, isValidTarget)}; 
 `
-
-const border = 0.3
-
-export const cardsShift = cardWidth + 1
-
-export const getAreasStyle = (row: number, fullWidth: boolean, isValidTarget = false) => css`
-  position: absolute;
-  height: ${cardHeight + border * 10}%;
-  bottom: ${getAreaCardBottom(row) - border * 5}%;
-  left: ${areasLeftPosition - border * 5 / screenRatio}%;
-  right: ${fullWidth ? '1%' : 'auto'};
-  width: ${fullWidth ? 'auto' : (cardsShift * numberOfCardsToDraft + 1) + '%'};
-  border-radius: ${border * 5}vh;
-  border-style: dashed;
-  border-width: ${border}vh;
-  z-index: ${isValidTarget ? 10 : 'auto'};
-
-`
-
-export const getAreaCardStyle = (row: number, index: number, focused = false, totalCards = numberOfCardsToDraft, fullWidth = false) => css`
-  position: absolute;
-  width: ${cardWidth}%;
-  height: ${cardHeight}%;
-  ${getAreaCardBottomPosition(row)};
-  ${getAreaCardLeftPosition(index, totalCards, fullWidth)};
-  ${focused ? getFocusTransform() : css`z-index: 1`};
-`
-
-export const getAreaCardLeftPosition = (index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => css`
-  left: ${getAreaCardLeft(index, totalCards, fullWidth)}%;
-`
-
-export const getAreaCardLeft = (index: number, totalCards = numberOfCardsToDraft, fullWidth = false) => {
-  let leftShift = cardsShift
-  if (fullWidth) {
-    if (totalCards > 9) {
-      const width = 100 - areasLeftPosition - cardHeight * cardRatio / screenRatio - 2
-      leftShift = width / (totalCards - 1)
-    }
-  } else if (totalCards > numberOfCardsToDraft) {
-    leftShift = cardsShift * (numberOfCardsToDraft - 1) / (totalCards - 1)
-  }
-  return areasLeftPosition + index * leftShift
-}
-
-export const getAreaCardBottomPosition = (row: number) => css`
-  bottom: ${getAreaCardBottom(row)}%;
-`
-
-const getFocusTransform = () => css`
-  bottom: 50%;
-  left: 50%;
-  z-index: 100;
-  transform: translate(-50%, 50%) scale(3);
-`
-
-export const getAreaCardBottom = (row: number) => (cardHeight + 4) * row + 3
 
 const draftAreaText = css`
   position: absolute;
@@ -161,6 +121,7 @@ const draftAreaText = css`
   color: darkgreen;
   font-size: 4vh;
 `
+
 const draftConstructionButton = css`
   position: absolute;
   z-index: 100;
@@ -203,11 +164,6 @@ const draftRecyclingButton = css`
   &:active {
     transform: translateY(1px);
   }
-`
-
-const slateAnimation = (animation: Animation<SlateForConstruction>, origin: number, destination: number) => css`
-  transform: translateX(${(destination - origin) * 100 * cardsShift / cardWidth}%) translateY(${-100 * (cardHeight + 4) / cardHeight}%);
-  transition-duration: ${animation.duration}s;
 `
 
 export default DraftArea

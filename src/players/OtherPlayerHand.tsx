@@ -1,22 +1,38 @@
+import {css} from '@emotion/core'
 import {Hand, useAnimation} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
-import DevelopmentCard, {ratio as cardRatio} from '../material/developments/DevelopmentCard'
+import DevelopmentCard from '../material/developments/DevelopmentCard'
 import ChooseDevelopmentCard from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
 import PlayerView from '../types/PlayerView'
-import {playerHandCardStyle, playerHandStyle, translateToDraftArea} from './PlayerHand'
+import {cardRatio, cardStyle} from '../util/Styles'
+import {getChosenCardAnimation, handPosition, handPosition2Players, playerHandCardStyle} from './PlayerHand'
 
-type Props = { player: PlayerView, leftPosition: number }
+type Props = { player: PlayerView, players: number }
 
-const OtherPlayerHand: FunctionComponent<Props> = ({player, leftPosition}) => {
+const OtherPlayerHand: FunctionComponent<Props> = ({player, players}) => {
   const chooseCardAnimation = useAnimation<ChooseDevelopmentCard>(animation => animation.move.type === MoveType.ChooseDevelopmentCard && animation.move.playerId === player.empire)
+  const position = players > 2 ? handPosition : handPosition2Players
 
-  return <Hand css={playerHandStyle(leftPosition)} rotationOrigin={50} gapMaxAngle={0.72} sizeRatio={cardRatio}
-               getItemProps={index => ({ignore: index >= player.hand})}>
-    {[...Array(player.hand)].map((_, index) => <DevelopmentCard key={'#' + index} css={playerHandCardStyle}/>)}
-    {chooseCardAnimation && <DevelopmentCard css={[playerHandCardStyle,
-      translateToDraftArea(player.draftArea.length, chooseCardAnimation.duration, leftPosition)]}/>}
-  </Hand>
+  const getItemProps = (index: number) => {
+    const chosen = chooseCardAnimation && index === player.hand - 1
+    const undo = chooseCardAnimation?.undo
+    return {
+      ignore: chosen && !undo,
+      css: chosen && !undo ? css`z-index: 10;` : undefined,
+      animation: chooseCardAnimation ? {
+        seconds: chooseCardAnimation.duration,
+        fromNeutralPosition: chosen && undo
+      } : undefined
+    }
+  }
+
+  return (
+    <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} sizeRatio={cardRatio} getItemProps={getItemProps}>
+      {[...Array(player.hand)].map((_, index) => <DevelopmentCard key={'#' + index} css={[playerHandCardStyle,
+        chooseCardAnimation && index === player.hand - 1 && getChosenCardAnimation(player, chooseCardAnimation, players)]}/>)}
+    </Hand>
+  )
 }
 
 export default OtherPlayerHand

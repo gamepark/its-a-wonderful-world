@@ -9,7 +9,6 @@ import Character from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
 import Construction from '../material/developments/Construction'
 import constructionCost from '../material/developments/ConstructionCost'
-import {width as cardWidth} from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
@@ -23,9 +22,8 @@ import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
+import {cardHeight, cardWidth, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle} from '../util/Styles'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
-import {getAreaCardStyle, getAreasStyle} from './DraftArea'
-import {popupBackgroundStyle} from '../util/Styles'
 
 const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -84,11 +82,15 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
     </div>
     {player.constructionArea.map((construction, index) => {
         return <DevelopmentCardUnderConstruction key={construction.card} game={game} player={player} construction={construction}
+                                                 origin={{
+                                                   x: `${getAreaCardX(index, player.constructionArea.length, fullWidth) * 100 / cardWidth}%`,
+                                                   y: `${getAreaCardY(row) * 100 / cardHeight}%`
+                                                 }}
                                                  setFocus={() => setFocusedCard(construction.card)}
                                                  canRecycle={player.empire === playerId && focusedCard !== construction.card && row !== 2}
                                                  onClick={() => setFocusedCard(construction.card)}
                                                  focused={focusedCard === construction.card}
-                                                 css={getAreaCardStyle(row, index, focusedCard === construction.card, player.constructionArea.length, fullWidth)}/>
+                                                 css={focusedCard === construction.card && getCardFocusTransform}/>
       }
     )}
   </>

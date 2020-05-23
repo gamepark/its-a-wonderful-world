@@ -1,5 +1,6 @@
 import {css} from '@emotion/core'
 import {Draggable, useAnimations, usePlay, usePlayerId} from '@interlude-games/workshop'
+import {DragAroundProps} from '@interlude-games/workshop/dist/Draggable/DragAround'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import CharacterTokenFromEmpire from '../drag-objects/CharacterTokenFromEmpire'
@@ -10,7 +11,7 @@ import ResourceFromBoard from '../drag-objects/ResourceFromBoard'
 import {isCharacter} from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
 import Construction from '../material/developments/Construction'
-import DevelopmentCard, {height as cardHeight, width as cardWidth} from '../material/developments/DevelopmentCard'
+import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
@@ -23,7 +24,7 @@ import GameView from '../types/GameView'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import {glow} from '../util/Styles'
+import {areaCardStyle, cardHeight, cardStyle, cardWidth, glow} from '../util/Styles'
 
 type Props = {
   game: GameView
@@ -32,7 +33,7 @@ type Props = {
   canRecycle: boolean
   focused: boolean
   setFocus: () => void
-} & React.HTMLAttributes<HTMLDivElement>
+} & Omit<DragAroundProps, 'dragging'>
 
 const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, player, construction, canRecycle, focused, setFocus, ...props}) => {
   const playerId = usePlayerId<EmpireName>()
@@ -85,9 +86,9 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
   const animations = useAnimations<PlaceResourceOnConstruction>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire
     && isPlaceResourceOnConstruction(animation.move) && animation.move.card === construction.card)
   return (
-    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} {...props}
+    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]} {...props}
                animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: 0.2}}>
-      <div ref={ref} css={getStyle(canDrop, isOver)}>
+      <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>
         {[...construction.costSpaces].reverse().map((item, index) => {
           const space = construction.costSpaces.length - index
@@ -106,8 +107,9 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
   )
 }
 
-const getStyle = (canDrop: boolean, isOver: boolean) => css`
+const getInnerStyle = (canDrop: boolean, isOver: boolean) => css`
   border-radius: 5%;
+  width: 100%;
   height: 100%;
   ${canDrop && canDropStyle};
   ${canDrop && isOver && overStyle};

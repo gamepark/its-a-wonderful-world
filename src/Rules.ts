@@ -262,7 +262,12 @@ const ItsAWonderfulWorldRules: GameType = {
           player.empireCardResources.splice(player.empireCardResources.indexOf(move.resource), 1)
         }
         if (isPlaceResourceOnConstruction(move)) {
-          player.constructionArea.find(construction => construction.card === move.card)!.costSpaces[move.space] = move.resource
+          const construction = player.constructionArea.find(construction => construction.card === move.card)
+          if (construction) {
+            construction.costSpaces[move.space] = move.resource
+          } else {
+            console.error('Could not find the construction to place a resource on!')
+          }
         } else {
           player.empireCardResources.push(move.resource)
         }

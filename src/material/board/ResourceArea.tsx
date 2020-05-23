@@ -6,13 +6,11 @@ import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
 import MoveType from '../../moves/MoveType'
 import PlaceResource, {isPlaceResourceOnConstruction} from '../../moves/PlaceResource'
 import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
-import {getAreaCardBottom, getAreaCardLeft} from '../../players/DraftArea'
 import GameView from '../../types/GameView'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {isPlayerView} from '../../types/typeguards'
-import {glow} from '../../util/Styles'
-import {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../developments/DevelopmentCard'
+import {cardHeight, cardRatio, cardWidth, getAreaCardX, getAreaCardY, glow} from '../../util/Styles'
 import {empireCardDeltaX, empireCardDeltaY, resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
 import Resource from '../resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
@@ -39,8 +37,8 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     let translateY = -(boardResourceTopPosition + cubeDeltaY + cubePosition.y * cubeHeight)
     if (isPlaceResourceOnConstruction(move)) {
       const constructionIndex = player.constructionArea.findIndex(construction => construction.card === move.card)
-      translateX += getAreaCardLeft(constructionIndex, player.constructionArea.length, game.players.length === 2) + costSpaceDeltaX
-      translateY += 100 - getAreaCardBottom(1) - cardHeight + costSpaceDeltaY(move.space)
+      translateX += getAreaCardX(constructionIndex, player.constructionArea.length, game.players.length === 2) + costSpaceDeltaX
+      translateY += getAreaCardY(1) + costSpaceDeltaY(move.space)
     } else {
       const resourcePosition = player.empireCardResources.filter(resource => resource !== Resource.Krystallium).length
       const destination = empireCardResourcePosition[resourcePosition % 5]

@@ -1,23 +1,18 @@
 import {css} from '@emotion/core'
 import {usePlay} from '@interlude-games/workshop'
-import React, {Fragment, FunctionComponent} from 'react'
+import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
 import DragObjectType from '../drag-objects/DragObjectType'
-import DevelopmentCard, {height as cardHeight, ratio as cardRatio, width as cardWidth} from '../material/developments/DevelopmentCard'
+import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import Move from '../moves/Move'
 import {canBuild, getMovesToBuild} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import screenRatio from '../util/screenRatio'
-
-const empireCardHorizontalShift = 0.44
-const empireCardVerticalShift = 0.9
-const developmentCardVerticalShift = 2.5
-export const constructedCardLeftMargin = cardHeight * empireCardHorizontalShift / screenRatio - 5
+import {cardHeight, cardRatio, cardStyle, cardWidth, constructedCardLeftMargin, developmentCardVerticalShift, empireCardVerticalShift} from '../util/Styles'
 
 const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
@@ -33,22 +28,23 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
     drop: (item: DevelopmentFromConstructionArea) => getMovesToBuild(player as Player, item.card).forEach(move => play(move))
   })
   return (
-    <Fragment>
-      {player.constructedDevelopments.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]}
-                                                                            css={[style, bottomPosition(index)]}/>)}
-      <div ref={ref} css={[buildDropArea, !dragging && hidden, isValidTarget ? validDropAreaColor(isOver) : invalidDropAreaColor]}>
+    <>
+      {player.constructedDevelopments.map((card, index) =>
+        <DevelopmentCard key={card} development={developmentCards[card]} css={[style, cardStyle, bottomPosition(index)]}/>
+      )}
+      {dragging &&
+      <div ref={ref} css={[buildDropArea, isValidTarget ? validDropAreaColor(isOver) : invalidDropAreaColor]}>
         <span css={[dropAreaText, isValidTarget ? validDropTextColor : invalidDropTextColor]}>
           {isValidTarget ? t('Construire') : t('Construction impossible')}
         </span>
       </div>
-    </Fragment>
+      }
+    </>
   )
 }
 
 const style = css`
   position:absolute;
-  width: ${cardWidth}%;
-  height: ${cardHeight}%;
   bottom: ${2 + cardHeight * cardRatio * empireCardVerticalShift}%;
   left: ${1 + constructedCardLeftMargin}%;
 `
@@ -64,10 +60,6 @@ const buildDropArea = css`
   top: 8%;
   bottom: ${2 + cardHeight * cardRatio * empireCardVerticalShift}%;
   border-radius: 1vh;
-`
-
-const hidden = css`
-  display: none;
 `
 
 const validDropAreaColor = (isOver: boolean) => css`
