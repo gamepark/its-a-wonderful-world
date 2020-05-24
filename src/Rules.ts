@@ -136,11 +136,11 @@ const ItsAWonderfulWorldRules: GameType = {
       } else if (isCharacter(bonus)) {
         return receiveCharacter(player.empire, bonus)
       }
-      if (player.draftArea.length === 0) {
-        for (const resource of [...new Set(player.availableResources)]) {
-          if (!player.constructionArea.some(construction => getSpacesMissingItem(construction, item => item === resource).length > 0)) {
-            return placeResource(player.empire, resource)
-          }
+      for (const resource of [...new Set(player.availableResources)]) {
+        if (!player.draftArea.some(card => developmentCards[card].constructionCost[resource])
+          && !player.constructionArea.some(construction => getSpacesMissingItem(construction, item => item === resource).length > 0)) {
+          // Automatically place resources on the Empire card if there is 0 chance to place it on a development
+          return placeResource(player.empire, resource)
         }
       }
     }
