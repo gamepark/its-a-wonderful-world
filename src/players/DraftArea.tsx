@@ -95,11 +95,11 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>
       ))}
-      {chosenCard && <DevelopmentCard development={chosenCard !== true ? developmentCards[chosenCard] : undefined}
-                                      css={[getAreaCardTransform(row, player.draftArea.length),
-                                        cardStyle, areaCardStyle, focusedCard === chosenCard && getCardFocusTransform,
-                                        choosingDevelopment && css`opacity: 0;`]}
-                                      onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)}/>}
+      {chosenCard !== undefined && <DevelopmentCard development={chosenCard !== true ? developmentCards[chosenCard] : undefined}
+                                                    css={[getAreaCardTransform(row, player.draftArea.length),
+                                                      cardStyle, areaCardStyle, focusedCard === chosenCard && getCardFocusTransform,
+                                                      choosingDevelopment && css`opacity: 0;`]}
+                                                    onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)}/>}
     </>
   )
 }
