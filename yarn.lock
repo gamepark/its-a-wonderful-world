@@ -1191,10 +1191,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interlude-games/workshop@^0.1.25":
-  version "0.1.25"
-  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.25.tgz#41d8423ed52cc1dd9a92022fd1a9d536ee609c57"
-  integrity sha512-FhI2BX1mypiyXNllfvXD/9199gFfxsK2OT38N6QsLOgr0PBRLRb0gTU4SuHl662cCoDbZHlqOSR/iAkjRQ42Kw==
+"@interlude-games/workshop@^0.1.26":
+  version "0.1.26"
+  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.26.tgz#81fe23a9b1c62ab5aaccc99471e4ac3a98b4c654"
+  integrity sha512-9eKOI89d9gQTA5aIudPLVsXsmHMfKIN+/GdWNclXA/BrjfrkmCbkD2caPF+EH5TstlJjkDQch7YthqBB6J53JQ==
   dependencies:
     "@datadog/browser-logs" "^1.11.4"
     apollo-cache-inmemory "^1.6.5"
