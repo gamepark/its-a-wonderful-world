@@ -1200,10 +1200,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interlude-games/workshop@^0.1.28":
-  version "0.1.28"
-  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.28.tgz#496762fdaa35d09ddc937da0ed8169b9dee6484f"
-  integrity sha512-fHCzaDZdK9zqH7AYbItSWkLmgnQAxaG+wLqn0mwNswOaIUDWRlZ0zHH9Wsl/bEUlGzqjzMm4BFUldT57+NQb/g==
+"@interlude-games/workshop@^0.1.29":
+  version "0.1.29"
+  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.29.tgz#879560c0370caa8801e8580473275e65b39b1d3a"
+  integrity sha512-oMEsdwNaMR8Aa0Q8QAu7KDagOV6Vfs4xAS6imi4poUhjNem7bsVH1dAGkxugX+pcISZfBhfgf4Uh3B3Aa2kHLQ==
   dependencies:
     "@datadog/browser-core" "^1.11.5"
     "@datadog/browser-logs" "^1.11.4"
