@@ -1,5 +1,6 @@
 import {css} from '@emotion/core'
-import {useGame, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
+import {useGame, usePlay, usePlayerId, usePlayers, useUndo} from '@interlude-games/workshop'
+import Player from '@interlude-games/workshop/dist/Types/Player'
 import fscreen from 'fscreen'
 import {TFunction} from 'i18next'
 import NoSleep from 'nosleep.js'
@@ -68,6 +69,7 @@ const Header = () => {
   const game = useGame<GameView>()
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
+  const players = usePlayers<EmpireName>()
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const {t} = useTranslation()
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
@@ -90,7 +92,7 @@ const Header = () => {
     <header css={headerStyle}>
       <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={undo}
                   disabled={!canUndo}><UndoIcon/></IconButton>
-      <h1 css={textStyle}>{getText(t, play, game, empire)}</h1>
+      <h1 css={textStyle}>{getText(t, play, players, game, empire)}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
       {fscreen.fullscreenEnabled && !fullScreen &&
       <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
@@ -106,19 +108,20 @@ const Header = () => {
   )
 }
 
-function getText(t: TFunction, play: (move: Move) => void, game?: GameView, empire?: EmpireName) {
+function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<EmpireName>[], game?: GameView, empire?: EmpireName) {
   if (!game) {
     return t('Chargement de la partie...')
   }
   const player = game.players.find(player => player.empire === empire)
+  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
   switch (game.phase) {
     case Phase.Draft:
       if (player && player.chosenCard === undefined) {
         return t('Choisissez une carte et placez-la dans votre zone de draft')
       } else {
-        const players = game.players.filter(player => player.chosenCard === undefined)
+        const players = game.players.filter(player => player.chosenCard === false)
         if (players.length === 1) {
-          return t('{player} doit choisir une carte développement', {player: getEmpireName(t, players[0].empire)})
+          return t('{player} doit choisir une carte développement', {player: getPlayerName(players[0].empire)})
         } else if (player) {
           return t('Les autres joueurs doivent choisir une carte développement')
         } else {
@@ -142,7 +145,7 @@ function getText(t: TFunction, play: (move: Move) => void, game?: GameView, empi
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 1) {
-          return t('{player} doit faire sa planification', {player: getEmpireName(t, players[0].empire)})
+          return t('{player} doit faire sa planification', {player: getPlayerName(players[0].empire)})
         } else {
           return t('Les autres joueurs doivent faire leur planification')
         }
@@ -172,7 +175,7 @@ function getText(t: TFunction, play: (move: Move) => void, game?: GameView, empi
         const players = game.players.filter(player => !player.ready)
         if (players.length) {
           if (players.length === 1) {
-            return t('{player} doit utiliser les ressources produites', {player: getEmpireName(t, players[0].empire)})
+            return t('{player} doit utiliser les ressources produites', {player: getPlayerName(players[0].empire)})
           } else if (player) {
             return t('Les autres joueurs doivent utiliser les ressources produites')
           } else {
@@ -195,7 +198,7 @@ function getText(t: TFunction, play: (move: Move) => void, game?: GameView, empi
             if (player === winners[0]) {
               return t('Victoire ! Vous gagnez la partie avec {score} points', {score: highestScore})
             } else {
-              return t('{player} gagne la partie avec {score} points', {player: getEmpireName(t, winners[0].empire), score: highestScore})
+              return t('{player} gagne la partie avec {score} points', {player: getPlayerName(winners[0].empire), score: highestScore})
             }
           }
           return t('Égalité ! Les joueurs ont chacun {score} points', {score: highestScore})
