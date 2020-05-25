@@ -148,8 +148,12 @@ const ItsAWonderfulWorldRules: GameType = {
   },
 
   getLegalMoves(game: Game, empire: EmpireName) {
-    const player = game.players.find(player => player.empire === empire)
-    return player ? getLegalMoves(player, game.phase) : []
+    if (game.round === numberOfRounds && game.productionStep === Resource.Exploration) {
+      return [] // Game over
+    } else {
+      const player = game.players.find(player => player.empire === empire)
+      return player ? getLegalMoves(player, game.phase) : []
+    }
   },
 
   play(move: Move | MoveView, game: Game | GameView, playerId: EmpireName) {
@@ -481,25 +485,23 @@ export function getLegalMoves(player: Player, phase: Phase) {
   if (player.bonuses.some(bonus => bonus === ChooseCharacter)) {
     Object.values(Character).forEach(character => moves.push(receiveCharacter(player.empire, character)))
   }
-  if (moves.length) {
+  player.constructionArea.forEach(construction => {
+    moves.push(recycle(player.empire, construction.card))
+  })
+  if (player.empireCardResources.some(resource => resource === Resource.Krystallium)) {
     player.constructionArea.forEach(construction => {
-      moves.push(recycle(player.empire, construction.card))
-    })
-    if (player.empireCardResources.some(resource => resource === Resource.Krystallium)) {
-      player.constructionArea.forEach(construction => {
-        getSpacesMissingItem(construction, item => isResource(item))
-          .forEach(space => moves.push(placeResource(player.empire, Resource.Krystallium, construction.card, space)))
-      })
-    }
-    Object.values(Character).forEach(character => {
-      if (player.characters[character]) {
-        player.constructionArea.forEach(construction => {
-          getSpacesMissingItem(construction, item => item === character)
-            .forEach(space => moves.push(placeCharacter(player.empire, character, construction.card, space)))
-        })
-      }
+      getSpacesMissingItem(construction, item => isResource(item))
+        .forEach(space => moves.push(placeResource(player.empire, Resource.Krystallium, construction.card, space)))
     })
   }
+  Object.values(Character).forEach(character => {
+    if (player.characters[character]) {
+      player.constructionArea.forEach(construction => {
+        getSpacesMissingItem(construction, item => item === character)
+          .forEach(space => moves.push(placeCharacter(player.empire, character, construction.card, space)))
+      })
+    }
+  })
   return moves
 }
 
