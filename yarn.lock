@@ -1055,15 +1055,6 @@
     lodash.merge "4.6.2"
     tslib "1.10.0"
 
-"@datadog/browser-core@^1.11.5":
-  version "1.11.5"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-1.11.5.tgz#297b6197a8606b9b13b8deed4a5b2152a49039f4"
-  integrity sha512-U2GS2yZaFBYfL6ncsEu3XfB9gqCEbfAYxE7jIG1F4aeSRtpn73S/jEXRpHH6CJETcp1p1GHXPbQIxZEA/PkJnA==
-  dependencies:
-    lodash.assign "4.2.0"
-    lodash.merge "4.6.2"
-    tslib "1.10.0"
-
 "@datadog/browser-logs@^1.11.4":
   version "1.11.4"
   resolved "https://registry.yarnpkg.com/@datadog/browser-logs/-/browser-logs-1.11.4.tgz#25dc87567f265d985d425aa97028ffc6f7039dfc"
@@ -1200,12 +1191,11 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interlude-games/workshop@^0.1.29":
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.29.tgz#879560c0370caa8801e8580473275e65b39b1d3a"
-  integrity sha512-oMEsdwNaMR8Aa0Q8QAu7KDagOV6Vfs4xAS6imi4poUhjNem7bsVH1dAGkxugX+pcISZfBhfgf4Uh3B3Aa2kHLQ==
+"@interlude-games/workshop@^0.1.30":
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.30.tgz#fb4bd943b6e9b42cf8db98eedd5abeca7ffd7c9c"
+  integrity sha512-2tRkG+NAeIOuHPrzqeOvrasgwc0jH2CDhvHrvVGZso6H6WUypoJZ9ueSs6BRG4CQzbwQ/Ik45RPXUh4fTtopLw==
   dependencies:
-    "@datadog/browser-core" "^1.11.5"
     "@datadog/browser-logs" "^1.11.4"
     apollo-cache-inmemory "^1.6.5"
     apollo-client "^2.6.8"
