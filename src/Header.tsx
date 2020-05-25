@@ -18,12 +18,13 @@ import Phase from './types/Phase'
 import FullScreenExitIcon from './util/FullScreenExitIcon'
 import FullScreenIcon from './util/FullScreenIcon'
 import IconButton from './util/IconButton'
+import {headerHeight} from './util/Styles'
 import UndoIcon from './util/UndoIcon'
 
 const headerStyle = css`
   position: absolute;
   width: 100%;
-  height: 7%;
+  height: ${headerHeight}%;
   text-align: center;
   background: rgba(255, 255, 255, 0.5);
 `

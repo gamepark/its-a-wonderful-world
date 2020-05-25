@@ -8,11 +8,13 @@ import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
+import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
 import EmpireName from '../material/empires/EmpireName'
-import ChooseDevelopmentCard, {chooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
-import MoveType from '../moves/MoveType'
-import {recycle} from '../moves/Recycle'
-import SlateForConstruction, {slateForConstruction} from '../moves/SlateForConstruction'
+import ChooseDevelopmentCard, {
+  chooseDevelopmentCard, ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
+} from '../moves/ChooseDevelopmentCard'
+import Recycle, {isRecycle, recycle} from '../moves/Recycle'
+import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
@@ -28,12 +30,15 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
   const [focusedCard, setFocusedCard] = useState<number>()
-  const choosingDevelopment = useAnimation<ChooseDevelopmentCard>(animation =>
-    animation.move.type === MoveType.ChooseDevelopmentCard && animation.move.playerId === player.empire && !animation.undo)
-  const slatingForConstruction = useAnimation<SlateForConstruction>(animation =>
-    animation.move.type === MoveType.SlateForConstruction && animation.move.playerId === player.empire)
-  const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.move.card)
-  const chosenCard = player.chosenCard || (choosingDevelopment ? choosingDevelopment.move.card || true : undefined)
+  const animation = useAnimation<ChooseDevelopmentCard | ChooseDevelopmentCardView | SlateForConstruction | Recycle>(animation =>
+    (isChooseDevelopmentCard(animation.move) || isSlateForConstruction(animation.move) || isRecycle(animation.move))
+    && animation.move.playerId === player.empire
+  )
+  const choosingDevelopment = animation && isChooseDevelopmentCard(animation.move) && !animation.undo ? animation.move : undefined
+  const slatingForConstruction = animation && isSlateForConstruction(animation.move) ? animation.move : undefined
+  const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
+  const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
+  const chosenCard = player.chosenCard || (choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : undefined)
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_HAND,
     collect: (monitor) => ({
@@ -43,26 +48,27 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.card))
   })
   useEffect(() => {
-    if (focusedCard !== player.chosenCard && (!player.draftArea.some(card => card === focusedCard) || slatingForConstruction?.move.card === focusedCard)) {
+    if (!animation && focusedCard !== player.chosenCard && !player.draftArea.some(card => card === focusedCard)) {
       setFocusedCard(undefined)
     }
-  }, [player, focusedCard, slatingForConstruction])
+  }, [player, focusedCard, animation])
 
-  function getPosition(card: number, index: number) {
-    if (card === slatingForConstruction?.move.card) {
+  function getTransform(card: number, index: number) {
+    if (card === slatingForConstruction?.card) {
       const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
-      return {
-        x: `${getAreaCardX(player.constructionArea.length, player.constructionArea.length + 1, fullWidth) * 100 / cardWidth}%`,
-        y: `${getAreaCardY(row + 1) * 100 / cardHeight}%`
-      }
+      const x = getAreaCardX(player.constructionArea.length, player.constructionArea.length + 1, fullWidth) * 100 / cardWidth
+      const y = getAreaCardY(row + 1) * 100 / cardHeight
+      return `translate(${x}%, ${y}%)`
+    } else if (card === recycling?.card) {
+      const discardIndex = Math.min(game.discard.length, discardPileMaxSize)
+      const x = discardPileCardX(discardIndex) * 100 / cardWidth
+      const y = discardPileCardY(discardIndex) * 100 / cardHeight
+      return `translate(${x}%, ${y}%) scale(${discardPileScale})`
     } else {
       if (removeIndex !== -1 && removeIndex < index) {
         index--
       }
-      return {
-        x: `${getAreaCardX(index) * 100 / cardWidth}%`,
-        y: `${getAreaCardY(row) * 100 / cardHeight}%`
-      }
+      return `translate(${getAreaCardX(index) * 100 / cardWidth}%, ${getAreaCardY(row) * 100 / cardHeight}%)`
     }
   }
 
@@ -88,10 +94,10 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       </div>
       {player.draftArea.map((card, index) => (
         <Draggable key={card} item={developmentFromDraftArea(card)}
-                   origin={getPosition(card, index)}
+                   postTransform={getTransform(card, index)}
                    css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform]}
-                   disabled={playerId !== player.empire || game.phase !== Phase.Planning}
-                   animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: slatingForConstruction?.duration ?? 0.2}}>
+                   disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning}
+                   animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: animation?.duration ?? 0.2}}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>
       ))}

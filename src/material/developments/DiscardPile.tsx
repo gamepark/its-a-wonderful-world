@@ -1,19 +1,19 @@
 import {css} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
 import GameView from '../../types/GameView'
-import {areasCardX, cardStyle} from '../../util/Styles'
+import {cardStyle, cardWidth} from '../../util/Styles'
 import DevelopmentCard from '../developments/DevelopmentCard'
 import {developmentCards} from './Developments'
+import {drawPileCardX, drawPileCardY, drawPileMaxSize, drawPileScale} from './DrawPile'
 
 const DiscardPile: FunctionComponent<{ game: GameView }> = ({game}) => {
   return (
     <Fragment>
-      {game.discard.slice(-8).map((card, index) => <DevelopmentCard key={index} development={developmentCards[card]} css={[cardStyle, css`
+      {game.discard.slice(-discardPileMaxSize).map((card, index) => <DevelopmentCard key={index} development={developmentCards[card]} css={[cardStyle, css`
         position: absolute;
-        top: ${8 + index * 0.05}%;
-        left: ${areasCardX + 5 + index * 0.05}%;
-        transform-origin: top left;
-        transform: scale(0.4);
+        left: ${discardPileCardX(index)}%;
+        top: ${discardPileCardY(index)}%;
+        transform: scale(${discardPileScale});
         & > img {
           box-shadow: 0 0 3px black;
         }
@@ -21,5 +21,10 @@ const DiscardPile: FunctionComponent<{ game: GameView }> = ({game}) => {
     </Fragment>
   )
 }
+
+export const discardPileMaxSize = drawPileMaxSize
+export const discardPileScale = drawPileScale
+export const discardPileCardX = (index: number) => drawPileCardX(index) + cardWidth * drawPileScale + 1
+export const discardPileCardY = drawPileCardY
 
 export default DiscardPile

@@ -1,4 +1,5 @@
 import EmpireName from '../material/empires/EmpireName'
+import Move, {MoveView} from './Move'
 import MoveType from './MoveType'
 
 export default interface ChooseDevelopmentCard {
@@ -13,6 +14,10 @@ export function chooseDevelopmentCard(playerId: EmpireName, card: number): Choos
   return {type: MoveType.ChooseDevelopmentCard, playerId, card}
 }
 
-export function isChooseDevelopmentCard(move: ChooseDevelopmentCard | ChooseDevelopmentCardView): move is ChooseDevelopmentCard {
+export function isChooseDevelopmentCard(move: Move | MoveView): move is (ChooseDevelopmentCard | ChooseDevelopmentCardView) {
+  return move.type === MoveType.ChooseDevelopmentCard
+}
+
+export function isChosenDevelopmentCardVisible(move: ChooseDevelopmentCard | ChooseDevelopmentCardView): move is ChooseDevelopmentCard {
   return (move as ChooseDevelopmentCard).card !== undefined
 }

@@ -10,7 +10,7 @@ import EmpireName from './material/empires/EmpireName'
 import Empires from './material/empires/Empires'
 import EmpireSide from './material/empires/EmpireSide'
 import Resource, {isResource} from './material/resources/Resource'
-import {chooseDevelopmentCard, isChooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
+import {chooseDevelopmentCard, isChosenDevelopmentCardVisible} from './moves/ChooseDevelopmentCard'
 import {completeConstruction} from './moves/CompleteConstruction'
 import {dealDevelopmentCards, isDealDevelopmentCardsView} from './moves/DealDevelopmentCards'
 import {discardLeftoverCards, isDiscardLeftoverCardsView} from './moves/DiscardLeftoverCards'
@@ -179,7 +179,7 @@ const ItsAWonderfulWorldRules: GameType = {
         if (isPlayerView(player)) {
           player.hand--
           player.chosenCard = true
-        } else if (isChooseDevelopmentCard(move)) {
+        } else if (isChosenDevelopmentCardVisible(move)) {
           player.hand = player.hand.filter(card => card !== move.card)
           player.chosenCard = move.card
         }
@@ -411,6 +411,7 @@ const ItsAWonderfulWorldRules: GameType = {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
       case MoveType.SlateForConstruction:
+      case MoveType.Recycle:
         return 0.3
       case MoveType.PlaceResource:
         return move.playerId === playerId && isPlaceResourceOnConstruction(move) ? 0 : 0.2
@@ -425,8 +426,6 @@ const ItsAWonderfulWorldRules: GameType = {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.3
-      /*case MoveType.DiscardLeftoverCards:
-        return [0.5]*/
       default:
         return 0
     }

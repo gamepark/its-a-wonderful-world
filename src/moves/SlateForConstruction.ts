@@ -1,4 +1,5 @@
 import EmpireName from '../material/empires/EmpireName'
+import Move, {MoveView} from './Move'
 import MoveType from './MoveType'
 
 export default interface SlateForConstruction {
@@ -9,4 +10,8 @@ export default interface SlateForConstruction {
 
 export function slateForConstruction(playerId: EmpireName, card: number): SlateForConstruction {
   return {type: MoveType.SlateForConstruction, playerId, card}
+}
+
+export function isSlateForConstruction(move: Move | MoveView): move is SlateForConstruction {
+  return move.type === MoveType.SlateForConstruction
 }

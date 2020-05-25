@@ -2,6 +2,8 @@ import {css, keyframes} from '@emotion/core'
 import {numberOfCardsToDraft} from '../Rules'
 
 export const screenRatio = 16 / 9
+export const headerHeight = 7
+export const topMargin = 1
 export const bottomMargin = 3
 export const cardHeight = 23  // percentage of playing area cardHeight
 export const cardRatio = 65 / 100

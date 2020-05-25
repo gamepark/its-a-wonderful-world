@@ -1,4 +1,4 @@
-import {css} from '@emotion/core'
+import {css, keyframes} from '@emotion/core'
 import {useAnimations} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
@@ -45,17 +45,21 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
       translateX += empireCardDeltaX + cardWidth / cardRatio - destination[0] * cardWidth / cardRatio / 100 - cubeWidth
       translateY += 100 + empireCardDeltaY - cardHeight * cardRatio + destination[1] * cardHeight * cardRatio / 100
     }
-    const transformation = css`
+    if (animation.isAutomaticMove || isPlayerView(player)) {
+      const keyframe = keyframes`
+        from {transform: none;}
+        to {transform: translate(${translateX / cubeWidth * 100}%, ${translateY / cubeHeight * 100}%);}
+      `
+      return css`
+        z-index: 10;
+        animation: ${keyframe} ${animation.duration}s ease-in-out;
+      `
+    } else {
+      return css`
         z-index: 10;
         transform: translate(${translateX / cubeWidth * 100}%, ${translateY / cubeHeight * 100}%);
       `
-    if (animation.isAutomaticMove || isPlayerView(player)) {
-      return css`
-        ${transformation};
-        transition: transform ${animation.duration}s ease-in-out;
-      `
     }
-    return transformation
   }
   return (
     <>

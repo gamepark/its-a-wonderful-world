@@ -1,6 +1,6 @@
 import Character from '../material/characters/Character'
 import EmpireName from '../material/empires/EmpireName'
-import Move from './Move'
+import Move, {MoveView} from './Move'
 import MoveType from './MoveType'
 
 export default interface PlaceCharacter {
@@ -15,6 +15,6 @@ export function placeCharacter(playerId: EmpireName, character: Character, card:
   return {type: MoveType.PlaceCharacter, playerId, character, card, space}
 }
 
-export function isPlaceCharacter(move: Move): move is PlaceCharacter {
+export function isPlaceCharacter(move: Move | MoveView): move is PlaceCharacter {
   return move.type === MoveType.PlaceCharacter
 }
