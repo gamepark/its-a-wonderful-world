@@ -9,7 +9,7 @@ import EmpireName from '../material/empires/EmpireName'
 import {getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
-import {playerPanelWidth} from '../util/Styles'
+import {headerHeight, playerPanelHeight, playerPanelMargin, playerPanelWidth} from '../util/Styles'
 import PlayerResourceProduction from './PlayerResourceProduction'
 import PlayerScore from './score/PlayerScore'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
@@ -50,10 +50,11 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
 
 const style = (empire: EmpireName, position: number, highlight: boolean) => css`
   position: absolute;
-  top: ${8.5 + position * 18.2}%;
+  z-index: 1;
+  top: ${headerHeight + playerPanelMargin + position * (playerPanelHeight + playerPanelMargin)}%;
   right: 1%;
   width: ${playerPanelWidth}%;
-  height: 16.7%;
+  height: ${playerPanelHeight}%;
   border-radius: 5px;
   background-image: url(${empireBackground[empire]});
   background-size: cover;
