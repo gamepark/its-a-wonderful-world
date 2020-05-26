@@ -1,6 +1,6 @@
 {
   "name": "@interlude-games/its-a-wonderful-world",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "It's a Wonderful World adaptation for interlude.games",
   "main": "dist/Rules.js",
   "files": [
