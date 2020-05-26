@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {useGame, usePlay, usePlayerId, usePlayers, useUndo} from '@interlude-games/workshop'
+import {useActions, useGame, usePlay, usePlayerId, usePlayers, useUndo} from '@interlude-games/workshop'
 import Player from '@interlude-games/workshop/dist/Types/Player'
 import fscreen from 'fscreen'
 import {TFunction} from 'i18next'
@@ -19,6 +19,7 @@ import Phase from './types/Phase'
 import FullScreenExitIcon from './util/FullScreenExitIcon'
 import FullScreenIcon from './util/FullScreenIcon'
 import IconButton from './util/IconButton'
+import LoadingSpinner from './util/LoadingSpinner'
 import {headerHeight} from './util/Styles'
 import UndoIcon from './util/UndoIcon'
 
@@ -42,6 +43,14 @@ const textStyle = css`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+`
+
+const loadingSpinnerStyle = css`
+  position: absolute;
+  left: 1vh;
+  top: 1vh;
+  transform-origin: top left;
+  transform: scale(0.6);
 `
 
 const undoButtonStyle = css`
@@ -70,6 +79,8 @@ const Header = () => {
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const players = usePlayers<EmpireName>()
+  const actions = useActions<Move, EmpireName>()
+  const nonGuaranteedUndo = actions?.some(action => action.cancelled && action.cancelPending && !action.animation && !action.delayed)
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const {t} = useTranslation()
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
@@ -90,8 +101,10 @@ const Header = () => {
   }, [])
   return (
     <header css={headerStyle}>
-      <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={undo}
-                  disabled={!canUndo}><UndoIcon/></IconButton>
+      {actions === undefined || nonGuaranteedUndo ?
+        <LoadingSpinner css={loadingSpinnerStyle}/> :
+        <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={undo}
+                    disabled={!canUndo}><UndoIcon/></IconButton>}
       <h1 css={textStyle}>{getText(t, play, players, game, empire)}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
       {fscreen.fullscreenEnabled && !fullScreen &&

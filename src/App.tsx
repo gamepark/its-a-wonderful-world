@@ -1,5 +1,5 @@
 import {css, Global} from '@emotion/core'
-import {useGame} from '@interlude-games/workshop'
+import {useFailures, useGame} from '@interlude-games/workshop'
 import normalize from 'emotion-normalize'
 import i18next from 'i18next'
 import ICU from 'i18next-icu'
@@ -8,9 +8,11 @@ import {DndProvider} from 'react-dnd'
 import MultiBackend from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {initReactI18next, useTranslation} from 'react-i18next'
+import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
 import Header from './Header'
 import artwork from './material/its-cover-artwork.png'
+import Move from './moves/Move'
 import GameView from './types/GameView'
 import RotateScreenIcon from './util/RotateScreenIcon'
 
@@ -34,12 +36,14 @@ i18next.init({
 const App: FunctionComponent = () => {
   const {t} = useTranslation()
   const game = useGame<GameView>()
+  const [failures, clearFailures] = useFailures<Move>()
   return (
     <DndProvider backend={MultiBackend} options={HTML5ToTouch}>
       <Global styles={globalStyle}/>
       {game && <GameDisplay game={game}/>}
       <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
       <Header/>
+      {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
     </DndProvider>
   )
 }

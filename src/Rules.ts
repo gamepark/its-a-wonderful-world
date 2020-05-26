@@ -149,7 +149,7 @@ const ItsAWonderfulWorldRules: GameType = {
 
   getLegalMoves(game: Game, empire: EmpireName) {
     const player = game.players.find(player => player.empire === empire)
-    if (!player || game.round === numberOfRounds && game.productionStep === Resource.Exploration && player.ready) {
+    if (!player || (game.round === numberOfRounds && game.productionStep === Resource.Exploration && player.ready)) {
       return []
     }
     return getLegalMoves(player, game.phase)
