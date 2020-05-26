@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import React, {FunctionComponent, useState} from 'react'
+import React, {FunctionComponent, useEffect, useState} from 'react'
 
 type Props = React.HTMLAttributes<HTMLButtonElement> & { disabled?: boolean }
 
@@ -23,6 +23,8 @@ const IconButton: FunctionComponent<Props> = ({children, disabled = false, ...pr
       props.onMouseUp(event)
     }
   }
+
+  useEffect(() => () => timer && clearTimeout(timer))
 
   return (
     <button type="button" {...props} css={[buttonStyle, active ? activeStyle : '', disabled ? disabledStyle : '']}
