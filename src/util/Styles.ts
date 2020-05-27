@@ -25,6 +25,7 @@ export const areasCardX = constructedCardLeftMargin + cardHeight * cardRatio / s
 export const areasX = areasCardX - areasBorders * 5 / screenRatio
 export const constructedCardX = 1 + constructedCardLeftMargin
 export const constructedCardY = (index: number) => 100 - cardHeight - empireCardBottomMargin - cardHeight * cardRatio * empireCardVerticalShift - index * developmentCardVerticalShift
+export const playerPanelY = (index: number) => headerHeight + playerPanelMargin + index * (playerPanelHeight + playerPanelMargin)
 
 export const cardStyle = css`
   width: ${cardWidth}%;

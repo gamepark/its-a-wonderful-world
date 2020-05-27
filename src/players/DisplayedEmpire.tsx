@@ -24,7 +24,7 @@ const DisplayedEmpire: FunctionComponent<{ game: GameView, player: Player | Play
       {showAreas && <RecyclingDropArea empire={player.empire}/>}
       <ConstructedCardsArea player={player}/>
       {isPlayer(player) ?
-        <PlayerHand player={player} players={game.players.length}/> :
+        <PlayerHand player={player} players={game.players.length} round={game.round}/> :
         <OtherPlayerHand player={player} players={game.players.length}/>
       }
     </Fragment>

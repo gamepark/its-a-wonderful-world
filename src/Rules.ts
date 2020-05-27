@@ -409,6 +409,8 @@ const ItsAWonderfulWorldRules: GameType = {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
+      case MoveType.PassCards:
+        return 3
       case MoveType.SlateForConstruction:
       case MoveType.Recycle:
       case MoveType.CompleteConstruction:
