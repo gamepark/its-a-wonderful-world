@@ -6,6 +6,7 @@ import Phase from '../../types/Phase'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {isPlayer} from '../../types/typeguards'
+import {isResource} from '../resources/Resource'
 import boardReduced from './board-reduced.png'
 import board from './board.png'
 import ResourceArea from './ResourceArea'
@@ -15,6 +16,7 @@ import roundTracker2 from './round-tracker-2-4.png'
 const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
   const reducedSize = game.phase === Phase.Draft && game.round > 1
+  const resources = [...player.availableResources, ...player.bonuses.filter(isResource)]
   return (
     <>
       <div css={style(reducedSize)}>
@@ -24,9 +26,9 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
              css={roundTrackerStyle(game.round, reducedSize)}/>
         {reducedSize && <span css={roundTextStyle}>{game.round}</span>}
       </div>
-      {[...new Set(player.availableResources)].map(resource => <ResourceArea key={resource} game={game} player={player}
-                                                                             resource={resource} canDrag={isPlayer(player)}
-                                                                             quantity={player.availableResources.filter(r => r === resource).length}/>)}
+      {[...new Set(resources)].map(resource =>
+        <ResourceArea key={resource} game={game} player={player} resource={resource} canDrag={isPlayer(player)}
+                      quantity={resources.filter(r => r === resource).length}/>)}
     </>
   )
 }

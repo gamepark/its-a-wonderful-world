@@ -10,8 +10,8 @@ import GameView from '../../types/GameView'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {isPlayerView} from '../../types/typeguards'
-import {cardHeight, cardRatio, cardWidth, getAreaCardX, getAreaCardY, glow} from '../../util/Styles'
-import {empireCardDeltaX, empireCardDeltaY, resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
+import {cardHeight, cardRatio, cardWidth, empireCardBottomMargin, empireCardLeftMargin, getAreaCardX, getAreaCardY, glow} from '../../util/Styles'
+import {resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
 import Resource from '../resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
 
@@ -42,8 +42,8 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     } else {
       const resourcePosition = player.empireCardResources.filter(resource => resource !== Resource.Krystallium).length
       const destination = empireCardResourcePosition[resourcePosition % 5]
-      translateX += empireCardDeltaX + cardWidth / cardRatio - destination[0] * cardWidth / cardRatio / 100 - cubeWidth
-      translateY += 100 + empireCardDeltaY - cardHeight * cardRatio + destination[1] * cardHeight * cardRatio / 100
+      translateX += empireCardLeftMargin + cardWidth / cardRatio - destination[0] * cardWidth / cardRatio / 100 - cubeWidth
+      translateY += 100 - empireCardBottomMargin - cardHeight * cardRatio + destination[1] * cardHeight * cardRatio / 100
     }
     if (animation.isAutomaticMove || isPlayerView(player)) {
       const keyframe = keyframes`

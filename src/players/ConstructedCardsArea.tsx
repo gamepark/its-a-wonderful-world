@@ -12,7 +12,7 @@ import {canBuild, getMovesToBuild} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import {cardHeight, cardRatio, cardStyle, cardWidth, constructedCardLeftMargin, developmentCardVerticalShift, empireCardVerticalShift} from '../util/Styles'
+import {cardHeight, cardRatio, cardStyle, cardWidth, constructedCardX, constructedCardY, empireCardBottomMargin, empireCardVerticalShift} from '../util/Styles'
 
 const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
@@ -30,7 +30,7 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
   return (
     <>
       {player.constructedDevelopments.map((card, index) =>
-        <DevelopmentCard key={card} development={developmentCards[card]} css={[style, cardStyle, bottomPosition(index)]}/>
+        <DevelopmentCard key={card} development={developmentCards[card]} css={[style, cardStyle, transform(index)]}/>
       )}
       {dragging &&
       <div ref={ref} css={[buildDropArea, isValidTarget ? validDropAreaColor(isOver) : invalidDropAreaColor]}>
@@ -45,20 +45,18 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
 
 const style = css`
   position:absolute;
-  bottom: ${2 + cardHeight * cardRatio * empireCardVerticalShift}%;
-  left: ${1 + constructedCardLeftMargin}%;
 `
 
-const bottomPosition = (index: number) => css`
-  bottom: ${2 + cardHeight * cardRatio * empireCardVerticalShift + index * developmentCardVerticalShift}%;
+const transform = (index: number) => css`
+  transform: translate(${constructedCardX * 100 / cardWidth}%, ${constructedCardY(index) * 100 / cardHeight}%);
 `
 
 const buildDropArea = css`
   position: absolute;
-  left: ${1 + constructedCardLeftMargin}%;
+  left: ${constructedCardX}%;
   width: ${cardWidth}%;
   top: 8%;
-  bottom: ${2 + cardHeight * cardRatio * empireCardVerticalShift}%;
+  bottom: ${empireCardBottomMargin + cardHeight * cardRatio * empireCardVerticalShift}%;
   border-radius: 1vh;
 `
 

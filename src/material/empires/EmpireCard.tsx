@@ -8,7 +8,7 @@ import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {placeResource} from '../../moves/PlaceResource'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {cardHeight, cardRatio, cardWidth, glow} from '../../util/Styles'
+import {cardHeight, cardRatio, cardWidth, empireCardBottomMargin, empireCardLeftMargin, glow} from '../../util/Styles'
 import Character from '../characters/Character'
 import CharacterTokenPile from '../characters/CharacterTokenPile'
 import Resource from '../resources/Resource'
@@ -106,13 +106,10 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
   )
 }
 
-export const empireCardDeltaX = -4
-export const empireCardDeltaY = -2
-
 const style = css`
   position: absolute;
-  left: ${empireCardDeltaX}%;
-  bottom: ${-empireCardDeltaY}%;
+  left: ${empireCardLeftMargin}%;
+  bottom: ${empireCardBottomMargin}%;
   height: ${cardHeight * cardRatio}%;
   width: ${cardWidth / cardRatio}%;
   transform-origin: bottom left;

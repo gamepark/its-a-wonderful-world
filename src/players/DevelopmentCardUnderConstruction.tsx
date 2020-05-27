@@ -86,8 +86,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
   const animations = useAnimations<PlaceResourceOnConstruction>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire
     && isPlaceResourceOnConstruction(animation.move) && animation.move.card === construction.card)
   return (
-    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]} {...props}
-               animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: 0.2}}>
+    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>
         {[...construction.costSpaces].reverse().map((item, index) => {

@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {usePlay, usePlayerId} from '@interlude-games/workshop'
+import {useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
 import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
@@ -10,11 +10,14 @@ import CharacterToken from '../material/characters/CharacterToken'
 import Construction from '../material/developments/Construction'
 import constructionCost from '../material/developments/ConstructionCost'
 import {developmentCards} from '../material/developments/Developments'
+import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
+import CompleteConstruction, {isCompleteConstruction} from '../moves/CompleteConstruction'
 import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
+import Recycle, {isRecycle} from '../moves/Recycle'
 import {slateForConstruction} from '../moves/SlateForConstruction'
 import {canBuild, getMovesToBuild, getRemainingCost} from '../Rules'
 import GameView from '../types/GameView'
@@ -22,7 +25,9 @@ import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import {cardHeight, cardWidth, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle} from '../util/Styles'
+import {
+  cardHeight, cardWidth, constructedCardX, constructedCardY, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
+} from '../util/Styles'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 
 const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
@@ -34,6 +39,12 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
   const row = game.phase === Phase.Draft ? 2 : 1
   const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
   const play = usePlay()
+  const animation = useAnimation<CompleteConstruction | Recycle>(animation =>
+    (isCompleteConstruction(animation.move) || isRecycle(animation.move)) && animation.move.playerId === player.empire
+  )
+  const completingConstruction = animation && isCompleteConstruction(animation.move) ? animation.move : undefined
+  const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
+  const removeIndex = player.constructionArea.findIndex(construction => construction.card === completingConstruction?.card)
   const placeResources = (construction: Construction, resource: Resource, quantity: number) => {
     getRemainingCost(construction).filter(cost => cost.item === resource).slice(0, quantity).forEach(cost =>
       play(placeResource(player.empire, resource, construction.card, cost.space))
@@ -43,10 +54,10 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
     getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
   }
   useEffect(() => {
-    if (!player.constructionArea.some(construction => construction.card === focusedCard)) {
+    if (!animation && !player.constructionArea.some(construction => construction.card === focusedCard)) {
       setFocusedCard(undefined)
     }
-  }, [player, focusedCard])
+  }, [player, focusedCard, animation])
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
     collect: (monitor) => ({
@@ -55,6 +66,23 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
     }),
     drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.card))
   })
+
+  function getTransform(card: number, index: number) {
+    if (card === completingConstruction?.card) {
+      return `translate(${constructedCardX * 100 / cardWidth}%, ${constructedCardY(player.constructedDevelopments.length) * 100 / cardHeight}%)`
+    } else if (card === recycling?.card) {
+      const discardIndex = Math.min(game.discard.length, discardPileMaxSize)
+      const x = discardPileCardX(discardIndex) * 100 / cardWidth
+      const y = discardPileCardY(discardIndex) * 100 / cardHeight
+      return `translate(${x}%, ${y}%) scale(${discardPileScale})`
+    } else {
+      if (removeIndex !== -1 && removeIndex < index) {
+        index--
+      }
+      return `translate(${getAreaCardX(index, player.constructionArea.length, fullWidth) * 100 / cardWidth}%, ${getAreaCardY(row) * 100 / cardHeight}%)`
+    }
+  }
+
   return <>
     {construction && <>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
@@ -82,7 +110,8 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
     </div>
     {player.constructionArea.map((construction, index) => {
         return <DevelopmentCardUnderConstruction key={construction.card} game={game} player={player} construction={construction}
-                                                 postTransform={`translate(${getAreaCardX(index, player.constructionArea.length, fullWidth) * 100 / cardWidth}%, ${getAreaCardY(row) * 100 / cardHeight}%)`}
+                                                 animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: animation?.duration ?? 0.2}}
+                                                 postTransform={getTransform(construction.card, index)}
                                                  setFocus={() => setFocusedCard(construction.card)}
                                                  canRecycle={player.empire === playerId && focusedCard !== construction.card && row !== 2}
                                                  onClick={() => setFocusedCard(construction.card)}

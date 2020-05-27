@@ -8,6 +8,8 @@ export const bottomMargin = 3
 export const cardHeight = 23  // percentage of playing area cardHeight
 export const cardRatio = 65 / 100
 export const cardWidth = cardHeight * cardRatio / screenRatio  // percentage of playing area cardWidth
+export const empireCardLeftMargin = -4
+export const empireCardBottomMargin = 2
 export const empireCardHorizontalShift = 0.44
 export const empireCardVerticalShift = 0.9
 export const developmentCardVerticalShift = 2.5
@@ -21,6 +23,8 @@ export const areaWidth = (cardWidth + areasCardMargin) * numberOfCardsToDraft + 
 export const marginBetweenCardRows = 4
 export const areasCardX = constructedCardLeftMargin + cardHeight * cardRatio / screenRatio + bottomMargin
 export const areasX = areasCardX - areasBorders * 5 / screenRatio
+export const constructedCardX = 1 + constructedCardLeftMargin
+export const constructedCardY = (index: number) => 100 - cardHeight - empireCardBottomMargin - cardHeight * cardRatio * empireCardVerticalShift - index * developmentCardVerticalShift
 
 export const cardStyle = css`
   width: ${cardWidth}%;

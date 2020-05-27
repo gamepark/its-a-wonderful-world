@@ -411,6 +411,7 @@ const ItsAWonderfulWorldRules: GameType = {
         return 0.5
       case MoveType.SlateForConstruction:
       case MoveType.Recycle:
+      case MoveType.CompleteConstruction:
         return 0.3
       case MoveType.PlaceResource:
         return move.playerId === playerId && isPlaceResourceOnConstruction(move) ? 0 : 0.2
