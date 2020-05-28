@@ -38,7 +38,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   const slatingForConstruction = animation && isSlateForConstruction(animation.move) ? animation.move : undefined
   const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
-  const chosenCard = player.chosenCard || (choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : undefined)
+  const chosenCard = choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : player.chosenCard
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_HAND,
     collect: (monitor) => ({
@@ -101,7 +101,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>
       ))}
-      {chosenCard !== undefined && <DevelopmentCard development={chosenCard !== true ? developmentCards[chosenCard] : undefined}
+      {chosenCard !== undefined && <DevelopmentCard development={typeof chosenCard == 'number' ? developmentCards[chosenCard] : undefined}
                                                     css={[getAreaCardTransform(row, player.draftArea.length),
                                                       cardStyle, areaCardStyle, focusedCard === chosenCard && getCardFocusTransform,
                                                       choosingDevelopment && css`opacity: 0;`]}
