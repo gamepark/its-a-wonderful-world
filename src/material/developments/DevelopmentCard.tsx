@@ -127,12 +127,11 @@ const style = css`
   &:after {
     content: '';
     position: absolute;
-    right: 0;
-    left: 0;
-    top: 0;
-    bottom: 0;
+    right: 1px;
+    left: 1px;
+    top: 1px;
+    bottom: 1px;
     border-radius: 6% / ${65 / 100 * 6}%;
-    box-shadow: 0 0 5px black;
     background-image: url(${CardBack});
     background-size: cover;
     transform: translateZ(-2px) rotateY(180deg);
