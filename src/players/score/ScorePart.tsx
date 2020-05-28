@@ -65,6 +65,8 @@ const multiplierStyle = css`
   bottom: 100%;
   height: 80%;
   right: 5%;
+  left: 5%;
+  justify-content: flex-end;
   filter: drop-shadow(0 0 1px black);
 `
 
