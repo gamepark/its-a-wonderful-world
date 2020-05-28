@@ -6,7 +6,9 @@ import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import ChooseDevelopmentCard, {isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
+import MoveType from '../moves/MoveType'
 import {isPassCards, PassCardsView} from '../moves/PassCards'
+import {isRevealChosenCards, RevealChosenCardsView} from '../moves/RevealChosenCards'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {
@@ -17,8 +19,8 @@ import {
 type Props = { player: Player, players: number, round: number }
 
 const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
-  const animation = useAnimation<ChooseDevelopmentCard | PassCardsView>(animation =>
-    (isChooseDevelopmentCard(animation.move) && animation.move.playerId === player.empire) || isPassCards(animation.move)
+  const animation = useAnimation<ChooseDevelopmentCard | RevealChosenCardsView | PassCardsView>(animation =>
+    (isChooseDevelopmentCard(animation.move) && animation.move.playerId === player.empire) || isRevealChosenCards(animation.move) || isPassCards(animation.move)
   )
   const choosingCard = animation && isChooseDevelopmentCard(animation.move) ? animation.move : undefined
   const passingCard = animation && isPassCards(animation.move) ? animation.move : undefined
@@ -34,7 +36,7 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
       hoverStyle: css`transform: translateY(-25%) scale(1.5);`,
       drag: {
         item: developmentFromHand(player.hand[index]),
-        disabled: !!player.chosenCard || player.hand.length === 1,
+        disabled: !!player.chosenCard || player.hand.length === 1 || animation?.move.type === MoveType.RevealChosenCards,
         animation: {seconds: animation?.duration ?? 0.2}
       },
       css: passingCard ? getZIndexRevert(index) : ignore ? css`z-index: 10;` : undefined,

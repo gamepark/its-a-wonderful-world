@@ -418,7 +418,7 @@ const ItsAWonderfulWorldRules: GameType = {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
       case MoveType.RevealChosenCards:
-        return (playerId ? game.players.length - 1 : game.players.length) * 2
+        return (1 + (playerId ? game.players.length - 2 : game.players.length - 1) * 0.7) * 2.5
       case MoveType.PassCards:
         return 3
       case MoveType.SlateForConstruction:

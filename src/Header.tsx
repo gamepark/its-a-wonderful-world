@@ -1,5 +1,6 @@
 import {css} from '@emotion/core'
-import {useActions, useGame, usePlay, usePlayerId, usePlayers, useUndo} from '@interlude-games/workshop'
+import {useActions, useAnimation, useGame, usePlay, usePlayerId, usePlayers, useUndo} from '@interlude-games/workshop'
+import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import Player from '@interlude-games/workshop/dist/Types/Player'
 import fscreen from 'fscreen'
 import {TFunction} from 'i18next'
@@ -11,6 +12,7 @@ import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
 import Move from './moves/Move'
+import MoveType from './moves/MoveType'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
 import ItsAWonderfulWorldRules, {getNextProductionStep, getScore, numberOfRounds} from './Rules'
@@ -81,6 +83,7 @@ const Header = () => {
   const players = usePlayers<EmpireName>()
   const actions = useActions<Move, EmpireName>()
   const nonGuaranteedUndo = actions?.some(action => action.cancelled && action.cancelPending && !action.animation && !action.delayed)
+  const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const {t} = useTranslation()
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
@@ -105,7 +108,7 @@ const Header = () => {
         <LoadingSpinner css={loadingSpinnerStyle}/> :
         <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={undo}
                     disabled={!canUndo}><UndoIcon/></IconButton>}
-      <h1 css={textStyle}>{getText(t, play, players, game, empire)}</h1>
+      <h1 css={textStyle}>{getText(t, play, players, game, empire, animation)}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
       {fscreen.fullscreenEnabled && !fullScreen &&
       <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
@@ -121,7 +124,7 @@ const Header = () => {
   )
 }
 
-function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<EmpireName>[], game?: GameView, empire?: EmpireName) {
+function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<EmpireName>[], game?: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   if (!game) {
     return t('Chargement de la partie...')
   }
@@ -129,7 +132,15 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<E
   const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
   switch (game.phase) {
     case Phase.Draft:
-      if (player && player.chosenCard === undefined) {
+      if (animation && animation.move.type === MoveType.RevealChosenCards) {
+        return t('Les joueurs révèlent la carte qu’ils ont choisi')
+      } else if (animation && animation.move.type === MoveType.PassCards) {
+        if (game.round % 2 === 1) {
+          return t('Les joueurs passent le reste du paquet à gauche')
+        } else {
+          return t('Les joueurs passent le reste du paquet à droite')
+        }
+      } else if (player && player.chosenCard === undefined) {
         return t('Choisissez une carte et placez-la dans votre zone de draft')
       } else {
         const players = game.players.filter(player => player.chosenCard === undefined)

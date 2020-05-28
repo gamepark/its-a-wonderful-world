@@ -81,7 +81,7 @@ const revealCardKeyframe = keyframes`
 `
 
 const revealedCardAnimation = (order: number, duration: number) => {
-  return css`animation: ${revealCardKeyframe} ${duration}s ${order * duration}s ease-in-out both`
+  return css`animation: ${revealCardKeyframe} ${duration}s ${order * duration * 7 / 10}s ease-in-out both`
 }
 
 export default GameDisplay
