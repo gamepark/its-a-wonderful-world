@@ -297,6 +297,14 @@ export const Supercomputer: Development = {
   recyclingBonus: Science
 }
 
+export const Teleportation: Development = {
+  type: Research,
+  constructionCost: {[Science]: 8},
+  constructionBonus: {[Krystallium]: 2},
+  victoryPoints: 8,
+  recyclingBonus: Exploration
+}
+
 export const TimeTravel: Development = {
   type: Research,
   constructionCost: {[Science]: 5, [Krystallium]: 3},
@@ -646,7 +654,7 @@ export const TreasureOfTheTemplars: Development = {
 export const developments: Development[] = [
   FinancialCenter, IndustrialComplex, MilitaryBase, NuclearPlant, OffshoreOilRig, RecyclingPlant, ResearchCenter, TransportationNetwork, WindTurbines,
   AirborneLaboratory, AircraftCarrier, Icebreaker, Juggernaut, MegaDrill, SaucerSquadron, Submarine, TankDivision, Zeppelin,
-  Aquaculture, BionicCrafts, ClimateControl, Cryopreservation, GeneticUpgrades, GravityInverter, HumanCloning, MegaBomb, Neuroscience, QuantumGenerator, RobotAssistants, RoboticAnimals, Satellites, SecurityAutomatons, SuperSoldiers, SuperSonar, Supercomputer, TimeTravel, Transmutation, UniversalVaccine, UnknownTechnology, VirtualReality,
+  Aquaculture, BionicCrafts, ClimateControl, Cryopreservation, GeneticUpgrades, GravityInverter, HumanCloning, MegaBomb, Neuroscience, QuantumGenerator, RobotAssistants, RoboticAnimals, Satellites, SecurityAutomatons, SuperSoldiers, SuperSonar, Supercomputer, Teleportation, TimeTravel, Transmutation, UniversalVaccine, UnknownTechnology, VirtualReality,
   CasinoCity, EspionageAgency, GiantDam, GiantTower, HarborZone, LunarBase, MagneticTrain, Museum, NationalMonument, PolarBase, PropagandaCenter, SecretLaboratory, SecretSociety, SolarCannon, SpaceElevator, UndergroundCity, UnderwaterCity, UniversalExposition, University, WorldCongress,
   AlexandersTomb, AncientAstronauts, ArkOfTheCovenant, Atlantis, BermudaTriangle, BlackBeardsTreasure, CenterOfTheEarth, CitiesOfGold, CityOfAgartha, FountainOfYouth, GardensOfTheHesperides, IslandOfAvalon, KingSolomonsMines, LostContinentOfMu, ParallelDimension, Roswell, TreasureOfTheTemplars]
 
