@@ -6,7 +6,7 @@ import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import ChooseDevelopmentCard, {isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
-import PassCards, {isPassCards, isPassCardsView} from '../moves/PassCards'
+import {isPassCards, PassCardsView} from '../moves/PassCards'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {
@@ -17,7 +17,7 @@ import {
 type Props = { player: Player, players: number, round: number }
 
 const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
-  const animation = useAnimation<ChooseDevelopmentCard | PassCards>(animation =>
+  const animation = useAnimation<ChooseDevelopmentCard | PassCardsView>(animation =>
     (isChooseDevelopmentCard(animation.move) && animation.move.playerId === player.empire) || isPassCards(animation.move)
   )
   const choosingCard = animation && isChooseDevelopmentCard(animation.move) ? animation.move : undefined
@@ -72,7 +72,7 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
   }
 
   const hand = [...player.hand]
-  if (passingCard && isPassCardsView(passingCard)) {
+  if (passingCard) {
     hand.push(...passingCard.receivedCards)
   }
 
@@ -87,9 +87,9 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
   )
 }
 
-const hand2PlayersX = 50 + (constructedCardLeftMargin + 1) / 2
-const handX = hand2PlayersX - (playerPanelWidth + 1) / 2
-const handY = 100 - cardHeight - bottomMargin
+export const hand2PlayersX = 50 + (constructedCardLeftMargin + 1) / 2
+export const handX = hand2PlayersX - (playerPanelWidth + 1) / 2
+export const handY = 100 - cardHeight - bottomMargin
 
 export const handPosition2Players = css`
   left: ${hand2PlayersX}%;

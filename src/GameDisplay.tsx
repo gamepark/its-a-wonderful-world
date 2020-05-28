@@ -17,18 +17,19 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   const gameOver = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
   const playerId = usePlayerId<EmpireName>()
   const [displayedEmpire, setDisplayedEmpire] = useState(playerId || game.players[0].empire)
-  const displayedPlayer = game.players.find(player => player.empire === displayedEmpire)!
   let playersStartingWithMyself = game.players
   if (playerId) {
     const playerIndex = game.players.findIndex(player => player.empire === playerId)
     playersStartingWithMyself = [...game.players.slice(playerIndex, game.players.length), ...game.players.slice(0, playerIndex)]
   }
+  const displayedPlayerPanelIndex = playersStartingWithMyself.findIndex(player => player.empire === displayedEmpire)
+  const displayedPlayer = playersStartingWithMyself[displayedPlayerPanelIndex]!
   return (
     <Letterbox css={hiddenOnPortrait}>
       {!gameOver && <Board game={game} player={displayedPlayer}/>}
       {!gameOver && <DrawPile game={game}/>}
       {!gameOver && <DiscardPile game={game}/>}
-      <DisplayedEmpire game={game} player={displayedPlayer} showAreas={!gameOver}/>
+      <DisplayedEmpire game={game} player={displayedPlayer} showAreas={!gameOver} panelIndex={displayedPlayerPanelIndex}/>
       {game.players.length > 2 && game.phase === Phase.Draft &&
       <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={playersStartingWithMyself}/>}
       {playersStartingWithMyself.map((player, index) =>

@@ -14,7 +14,14 @@ import OtherPlayerHand from './OtherPlayerHand'
 import PlayerHand from './PlayerHand'
 import RecyclingDropArea from './RecyclingDropArea'
 
-const DisplayedEmpire: FunctionComponent<{ game: GameView, player: Player | PlayerView, showAreas: boolean }> = ({game, player, showAreas}) => {
+type Props = {
+  game: GameView
+  player: Player | PlayerView
+  showAreas: boolean
+  panelIndex: number
+}
+
+const DisplayedEmpire: FunctionComponent<Props> = ({game, player, showAreas, panelIndex}) => {
   const playerId = usePlayerId<EmpireName>()
   return (
     <Fragment>
@@ -25,7 +32,7 @@ const DisplayedEmpire: FunctionComponent<{ game: GameView, player: Player | Play
       <ConstructedCardsArea player={player}/>
       {isPlayer(player) ?
         <PlayerHand player={player} players={game.players.length} round={game.round}/> :
-        <OtherPlayerHand player={player} players={game.players.length}/>
+        <OtherPlayerHand player={player} players={game.players.length} round={game.round} panelIndex={panelIndex}/>
       }
     </Fragment>
   )
