@@ -132,7 +132,7 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<E
       if (player && player.chosenCard === undefined) {
         return t('Choisissez une carte et placez-la dans votre zone de draft')
       } else {
-        const players = game.players.filter(player => player.chosenCard === false)
+        const players = game.players.filter(player => player.chosenCard === undefined)
         if (players.length === 1) {
           return t('{player} doit choisir une carte développement', {player: getPlayerName(players[0].empire)})
         } else if (player) {

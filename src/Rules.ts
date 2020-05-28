@@ -188,7 +188,7 @@ const ItsAWonderfulWorldRules: GameType = {
         if (isRevealChosenCardsView(move)) {
           game.players.forEach(player => {
             player.draftArea.push(move.revealedCards[player.empire]!)
-            player.chosenCard = isPlayerView(player) ? false : undefined
+            delete player.chosenCard
           })
         } else if (!isGameView(game)) {
           game.players.forEach(player => {
@@ -375,9 +375,17 @@ const ItsAWonderfulWorldRules: GameType = {
   getView(game: Game, playerId?: EmpireName): GameView {
     return {
       ...game, deck: game.deck.length,
-      players: game.players.map(player => player.empire !== playerId ?
-        {...player, hand: player.hand.length, chosenCard: player.chosenCard !== undefined} : player
-      )
+      players: game.players.map(player => {
+        if (player.empire === playerId) {
+          return player
+        } else {
+          const playerView = {...player, hand: player.hand.length} as PlayerView
+          if (player.chosenCard !== undefined) {
+            playerView.chosenCard = true
+          }
+          return playerView
+        }
+      })
     }
   },
 
@@ -405,10 +413,12 @@ const ItsAWonderfulWorldRules: GameType = {
     return move
   },
 
-  getAnimationDuration(move: MoveView, _: GameView, playerId: EmpireName) {
+  getAnimationDuration(move: MoveView, game: GameView, playerId: EmpireName) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return 0.5
+      case MoveType.RevealChosenCards:
+        return (playerId ? game.players.length - 1 : game.players.length) * 2
       case MoveType.PassCards:
         return 3
       case MoveType.SlateForConstruction:
