@@ -30,14 +30,11 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   const displayedPlayer = playersStartingWithMyself[displayedPlayerPanelIndex]!
   const revealingCards = useAnimation<RevealChosenCardsView>(animation => isRevealChosenCards(animation.move))
   const sortByPanel = (entries: [EmpireName, number][]) => {
-    entries.sort((a, b) => playersStartingWithMyself.findIndex(p => p.empire === b[0]) - playersStartingWithMyself.findIndex(p => p.empire === a[0]))
+    entries.sort((a, b) => playersStartingWithMyself.findIndex(p => p.empire === a[0]) - playersStartingWithMyself.findIndex(p => p.empire === b[0]))
     return entries
   }
   const revealedCards = revealingCards && sortByPanel(Object.entries(revealingCards.move.revealedCards) as [EmpireName, number][])
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
-  if (revealedCards) {
-    console.log(revealedCards)
-  }
   return (
     <Letterbox css={hiddenOnPortrait}>
       {!gameOver && <Board game={game} player={displayedPlayer}/>}
