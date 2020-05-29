@@ -1,5 +1,5 @@
 import {css, Global} from '@emotion/core'
-import {useFailures, useGame} from '@interlude-games/workshop'
+import {useDisplayState, useFailures, useGame} from '@interlude-games/workshop'
 import normalize from 'emotion-normalize'
 import i18next from 'i18next'
 import ICU from 'i18next-icu'
@@ -11,10 +11,12 @@ import {initReactI18next, useTranslation} from 'react-i18next'
 import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
 import Header from './Header'
-import artwork from './material/its-cover-artwork.png'
+import EmpireName from './material/empires/EmpireName'
+import artwork from './material/its-cover-artwork.jpg'
 import Move from './moves/Move'
 import GameView from './types/GameView'
 import RotateScreenIcon from './util/RotateScreenIcon'
+import {empireBackground} from './util/Styles'
 
 i18next.use(initReactI18next).use(ICU)
 
@@ -37,9 +39,10 @@ const App: FunctionComponent = () => {
   const {t} = useTranslation()
   const game = useGame<GameView>()
   const [failures, clearFailures] = useFailures<Move>()
+  const [displayedEmpire] = useDisplayState<EmpireName>()
   return (
     <DndProvider backend={MultiBackend} options={HTML5ToTouch}>
-      <Global styles={globalStyle}/>
+      <Global styles={[globalStyle, backgroundImage(displayedEmpire)]}/>
       {game && <GameDisplay game={game}/>}
       <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
       <Header/>
@@ -49,6 +52,12 @@ const App: FunctionComponent = () => {
 }
 
 export default App
+
+const backgroundImage = (empire?: EmpireName) => css`
+  #root {
+   background-image: url(${empire ? empireBackground[empire] : artwork});
+  }
+`
 
 const globalStyle = css`
   ${normalize};
@@ -73,7 +82,6 @@ const globalStyle = css`
     user-select: none;
     overflow: hidden;
     background-color: white;
-    background-image: url(${artwork});
     background-size: cover;
     background-position: center;
   }

@@ -1,6 +1,6 @@
 import {css, keyframes} from '@emotion/core'
-import {Letterbox, useAnimation, usePlayerId} from '@interlude-games/workshop'
-import React, {FunctionComponent, useState} from 'react'
+import {Letterbox, useAnimation, useDisplayState, usePlayerId} from '@interlude-games/workshop'
+import React, {FunctionComponent} from 'react'
 import Board from './material/board/Board'
 import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
 import DevelopmentCard from './material/developments/DevelopmentCard'
@@ -20,7 +20,7 @@ import {cardHeight, cardStyle, playerPanelHeight, playerPanelWidth, playerPanelY
 const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   const gameOver = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
   const playerId = usePlayerId<EmpireName>()
-  const [displayedEmpire, setDisplayedEmpire] = useState(playerId || game.players[0].empire)
+  const [displayedEmpire, setDisplayedEmpire] = useDisplayState(playerId || game.players[0].empire)
   let playersStartingWithMyself = game.players
   if (playerId) {
     const playerIndex = game.players.findIndex(player => player.empire === playerId)

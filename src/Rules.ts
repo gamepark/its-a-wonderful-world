@@ -48,7 +48,7 @@ type GameType = SimultaneousGame<Game, Move, EmpireName>
   & WithOptions<Game, GameOptions>
   & WithAutomaticMoves<Game, Move>
   & WithUndo<Game, Move, EmpireName>
-  & WithAnimations<GameView, MoveView, EmpireName>
+  & WithAnimations<GameView, MoveView, EmpireName, EmpireName>
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: GameType = {
@@ -413,22 +413,28 @@ const ItsAWonderfulWorldRules: GameType = {
     return move
   },
 
-  getAnimationDuration(move: MoveView, game: GameView, playerId: EmpireName) {
+  getAnimationDuration(move: MoveView, game: GameView, currentPlayerId: EmpireName, displayedPlayerId: EmpireName) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
-        return 0.5
+        return move.playerId === displayedPlayerId ? 0.5 : 0
       case MoveType.RevealChosenCards:
-        return (1 + (playerId ? game.players.length - 2 : game.players.length - 1) * 0.7) * 2.5
+        return (1 + (currentPlayerId ? game.players.length - 2 : game.players.length - 1) * 0.7) * 2.5
       case MoveType.PassCards:
         return 3
       case MoveType.SlateForConstruction:
       case MoveType.Recycle:
       case MoveType.CompleteConstruction:
-        return 0.3
+        return move.playerId === displayedPlayerId ? 0.3 : 0
       case MoveType.PlaceResource:
-        return move.playerId === playerId && isPlaceResourceOnConstruction(move) ? 0 : 0.2
-      /*case MoveType.DiscardLeftoverCards:
-        return [0.5]*/
+        if (move.playerId !== displayedPlayerId) {
+          return 0
+        }
+        if (move.playerId === currentPlayerId) {
+          if (isPlaceResourceOnConstruction(move) || move.resource === Resource.Krystallium) {
+            return 0
+          }
+        }
+        return 0.2
       default:
         return 0
     }

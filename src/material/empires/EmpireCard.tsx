@@ -16,25 +16,20 @@ import ResourceCube from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.png'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
 import AztecEmpireB from './aztec-empire-B.png'
-import AztecEmpireBackground from './aztec-empire-background.png'
 import EmpireName from './EmpireName'
 import EmpireSide from './EmpireSide'
 import FederationOfAsiaA from './federation-of-asia-A.png'
 import FederationOfAsiaAvatar from './federation-of-asia-avatar.png'
 import FederationOfAsiaB from './federation-of-asia-B.png'
-import FederationOfAsiaBackground from './federation-of-asia-background.png'
 import NoramStatesA from './noram-states-A.png'
 import NoramStatesAvatar from './noram-states-avatar.png'
 import NoramStatesB from './noram-states-B.png'
-import NoramStatesBackground from './noram-states-background.png'
 import PanafricanUnionA from './panafrican-union-A.png'
 import PanafricanUnionAvatar from './panafrican-union-avatar.png'
 import PanafricanUnionB from './panafrican-union-B.png'
-import PanafricanUnionBackground from './panafrican-union-background.png'
 import RepublicOfEuropeA from './republic-of-europe-A.png'
 import RepublicOfEuropeAvatar from './republic-of-europe-avatar.png'
 import RepublicOfEuropeB from './republic-of-europe-B.png'
-import RepublicOfEuropeBackground from './republic-of-europe-background.png'
 
 const empiresImages = {
   [EmpireName.AztecEmpire]: {
@@ -57,14 +52,6 @@ const empiresImages = {
     [EmpireSide.A]: RepublicOfEuropeA,
     [EmpireSide.B]: RepublicOfEuropeB
   }
-}
-
-export const empireBackground = {
-  [EmpireName.AztecEmpire]: AztecEmpireBackground,
-  [EmpireName.FederationOfAsia]: FederationOfAsiaBackground,
-  [EmpireName.NoramStates]: NoramStatesBackground,
-  [EmpireName.PanafricanUnion]: PanafricanUnionBackground,
-  [EmpireName.RepublicOfEurope]: RepublicOfEuropeBackground
 }
 
 export const empireAvatar = {
