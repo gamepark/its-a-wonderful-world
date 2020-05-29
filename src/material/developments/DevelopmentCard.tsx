@@ -145,8 +145,8 @@ const getBackgroundImage = (development?: Development) => css`
 const cardTitle = css`
   position: absolute;
   top: 1.4%;
-  left: 20%;
-  width: 66%;
+  left: 19%;
+  width: 68%;
   text-align: center;
   color: #EEE;
   font-size: 0.85vh;
