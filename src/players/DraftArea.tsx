@@ -72,6 +72,13 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     }
   }
 
+  function zIndexStyle(card: number) {
+    if (card === slatingForConstruction?.card || card === recycling?.card) {
+      return css`z-index: 10`
+    }
+    return
+  }
+
   return (
     <>
       {focusedCard !== undefined &&
@@ -95,7 +102,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       {player.draftArea.map((card, index) => (
         <Draggable key={card} item={developmentFromDraftArea(card)}
                    postTransform={getTransform(card, index)}
-                   css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform]}
+                   css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card)]}
                    disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning}
                    animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: animation?.duration ?? 0.2}}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
