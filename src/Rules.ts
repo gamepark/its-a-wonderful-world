@@ -354,6 +354,9 @@ const ItsAWonderfulWorldRules: GameType = {
 
   canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: Game | GameView) {
     const {playerId, move} = action
+    if (game.round === numberOfRounds && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)) {
+      return false
+    }
     const player = game.players.find(player => player.empire === playerId)!
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
