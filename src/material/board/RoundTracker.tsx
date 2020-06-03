@@ -22,7 +22,7 @@ const roundTrackerStyle = css`
   height: 10.5%;
   top: ${headerHeight + 0.5}%;
   left: ${constructedCardX}%;
-  transition: left 0.5s ease-in-out, transform 0.5s ease-in-out;
+  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
 `
 
 const roundTextStyle = css`
@@ -34,7 +34,6 @@ const roundTextStyle = css`
   color: #333;
   font-weight: bold;
   text-shadow: #888 2px 0 10px;
-  transition: opacity 0.5s ease-in-out;
 `
 
 export default RoundTracker
