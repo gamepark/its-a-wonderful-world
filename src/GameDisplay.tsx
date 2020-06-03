@@ -16,6 +16,7 @@ import {numberOfRounds} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import {cardHeight, cardStyle, playerPanelHeight, playerPanelWidth, playerPanelY} from './util/Styles'
+import RoundTracker from './material/board/RoundTracker'
 
 const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   const gameOver = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
@@ -38,6 +39,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   return (
     <Letterbox css={hiddenOnPortrait}>
       {!gameOver && <Board game={game} player={displayedPlayer}/>}
+      <RoundTracker round={game.round}/>
       {!gameOver && <DrawPile game={game}/>}
       {!gameOver && <DiscardPile game={game}/>}
       <DisplayedEmpire game={game} player={displayedPlayer} showAreas={!gameOver} panelIndex={displayedPlayerPanelIndex}/>
