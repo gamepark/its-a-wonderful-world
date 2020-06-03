@@ -110,7 +110,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
     </div>
     {player.constructionArea.map((construction, index) => {
         return <DevelopmentCardUnderConstruction key={construction.card} game={game} player={player} construction={construction}
-                                                 animation={{properties: ['bottom', 'left', 'transform', 'z-index'], seconds: animation?.duration ?? 0.2}}
+                                                 animation={{properties: ['transform', 'z-index'], seconds: animation?.duration ?? 0.2}}
                                                  postTransform={getTransform(construction.card, index)}
                                                  setFocus={() => setFocusedCard(construction.card)}
                                                  canRecycle={player.empire === playerId && focusedCard !== construction.card && row !== 2}
