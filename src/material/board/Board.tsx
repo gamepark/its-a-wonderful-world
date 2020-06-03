@@ -24,7 +24,6 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
         <img src={boardReduced} css={reducedImageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
         <img alt={t('Le marqueur de tour')} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false"
              css={roundTrackerStyle(game.round, reducedSize)}/>
-        {reducedSize && <span css={roundTextStyle}>{game.round}</span>}
       </div>
       {[...new Set(resources)].map(resource =>
         <ResourceArea key={resource} game={game} player={player} resource={resource} canDrag={isPlayer(player)}
@@ -71,18 +70,7 @@ const roundTrackerStyle = (round: number, reducedSize = false) => css`
 `
 
 const roundTrackerReducedStyle = css`
-  left: 110%;
-  transform: translateY(260%) scale(3);
-`
-
-const roundTextStyle = css`
-  position: absolute;
-  top: 27%;
-  left: 110.5%;
-  font-size: 5vh;
-  color: #333333;
-  font-weight: bold;
-  transition: opacity 0.5s ease-in-out;
+  display:none;
 `
 
 export default Board
