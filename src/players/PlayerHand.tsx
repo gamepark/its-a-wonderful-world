@@ -112,9 +112,26 @@ export const playerHandCardStyle = css`
 export const getChosenCardAnimation = (player: Player | PlayerView, animation: Animation, players: number) => {
   if (animation.undo) {
     return translateFromDraftArea(player.draftArea.length, animation.duration, players)
+  } else if (animation.isAutomaticMove) {
+    return animateToDraftArea(player.draftArea.length, animation.duration, players)
   } else {
     return translateToDraftArea(player.draftArea.length, animation.duration, players)
   }
+}
+
+const animateToDraftArea = (index: number, transitionDuration: number, players: number) => {
+  const keyframe = keyframes`
+    from {
+      transform: none;
+    }
+    to {
+      transform: translate(${(getAreaCardX(index) - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%,
+        ${(getAreaCardY(1) - handY) * 100 / cardHeight}%);
+    }
+  `
+  return css`
+    animation: ${keyframe} ${transitionDuration}s ease-in-out forwards;
+  `
 }
 
 const translateToDraftArea = (index: number, transitionDuration: number, players: number) => css`
@@ -156,9 +173,7 @@ const passCardAnimation = (destination: number, animation: Animation, players: n
        rotateY(180deg) scale(0);
     } 
   `
-  return css`
-    animation: ${keyframe} ${animation.duration}s ease-in-out;
-`
+  return css`animation: ${keyframe} ${animation.duration}s ease-in-out;`
 }
 
 const receiveCardAnimation = (origin: number, animation: Animation, players: number) => {
@@ -182,9 +197,7 @@ const receiveCardAnimation = (origin: number, animation: Animation, players: num
       transform: perspective(100vh);
     }
   `
-  return css`
-    animation: ${keyframe} ${animation.duration}s ease-in-out;
-  `
+  return css`animation: ${keyframe} ${animation.duration}s ease-in-out;`
 }
 
 export default PlayerHand
