@@ -1,6 +1,7 @@
 import {
   Action, GameWithIncompleteInformation, shuffle, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo
 } from '@interlude-games/workshop'
+import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
@@ -44,6 +45,7 @@ const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
 type GameType = SimultaneousGame<Game, Move, EmpireName>
+  & CompetitiveGame<Game, Move, EmpireName>
   & GameWithIncompleteInformation<Game, Move, EmpireName, GameView, MoveView>
   & WithOptions<Game, GameOptions>
   & WithAutomaticMoves<Game, Move>
@@ -350,6 +352,15 @@ const ItsAWonderfulWorldRules: GameType = {
         break
       }
     }
+  },
+
+  rankPlayers(game: Game, empireA: EmpireName, empireB: EmpireName): number {
+    const playerA = getPlayer(game, empireA), playerB = getPlayer(game, empireB)
+    const scoreA = getScore(playerA), scoreB = getScore(playerB)
+    if (scoreA === scoreB) {
+      return playerB.constructedDevelopments.length - playerA.constructedDevelopments.length
+    }
+    return scoreB - scoreA
   },
 
   canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: Game | GameView) {
