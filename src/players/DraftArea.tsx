@@ -20,6 +20,8 @@ import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
+import ConstructBackgroundImage from '../material/board/title-orange-2.png'
+import RecyclingBackgroundImage from '../material/board/title-black-2.png'
 import {
   areaCardStyle, cardHeight, cardStyle, cardWidth, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
@@ -98,6 +100,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       }
       <div ref={ref} css={getDraftAreaStyle(row, game.players.length === 2, isValidTarget, isOver)}>
         {!player.draftArea.length && <span css={draftAreaText}>{t('Zone de draft')}</span>}
+        {isValidTarget && <span css={draftActionAreaText}>&rarr; {t('Sélectionner cette carte')}</span>}
       </div>
       {player.draftArea.map((card, index) => (
         <Draggable key={card} item={developmentFromDraftArea(card)}
@@ -118,8 +121,9 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
 }
 
 const getDraftAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
-  background-color: rgba(0, 255, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
-  border-color: green;
+  background-color: rgba(175, 202, 11, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
+  border-color: #afca0b;
+  box-shadow: 0 0vh 0.7vh #afca0b; 
   ${getAreasStyle(row, fullWidth, isValidTarget)}; 
 `
 
@@ -131,52 +135,68 @@ const draftAreaText = css`
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
-  color: darkgreen;
+  color: #879d12;
   font-size: 4vh;
+`
+const draftActionAreaText = css`
+position: absolute;
+width: 100%;
+margin: 0;
+padding: 0 1vh;
+top: 50%;
+transform: translateY(-50%);
+text-align: center;
+color: antiquewhite;
+font-size: 6vh;
+text-shadow: 0 0vh 1vh #333;
+`
+
+export const textButtonFontStyle = css`
+  font-size: 2.5vh;
+  text-align: right;
+  line-height: 4.5vh;
+  color: #EEE;
+  font-weight: lighter;
+  text-shadow: 0 0 1vh #000, 0 0 1vh #000;
+  text-transform:uppercase;
+`
+
+export const textButton = css`
+  position: absolute;
+  z-index: 100;
+  width:13%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-color:transparent;
+  ${textButtonFontStyle}; 
+  padding: 1vh 2vh 0.5vh;
+  border:none;
+  &:hover, &:focus {
+    outline:0;
+    color:#FFF;
+    transform: translateY(1px) scale(1.1);
+    cursor:pointer;
+  }
+  &:active {
+    color:#FFF;
+    transform: translateY(1px);
+  }
 `
 
 const draftConstructionButton = css`
-  position: absolute;
-  z-index: 100;
   bottom: 51%;
   right: ${51 + cardWidth * 1.5}%;
-  box-shadow: inset 0 0.1vh 0 0 #ffffff;
-  background: #ededed linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
-  border-radius: 2vh;
-  border: 0.1vh solid #dcdcdc;
-  color: #333333;
-  padding: 0 2vh 0 1vh;
-  font-size: 4.8vh;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
-  &:hover, &:focus {
-    outline:0;
-    background: #dfdfdf linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
-  }
-  &:active {
-    transform: translateY(1px);
-  }
+  background-image: url(${ConstructBackgroundImage});
+  ${textButton};
 `
 
 const draftRecyclingButton = css`
-  position: absolute;
-  z-index: 100;
   top: 51%;
   right: ${51 + cardWidth * 1.5}%;
-  box-shadow: inset 0 0.1vh 0 0 #ffffff;
-  background: #ededed linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
-  border-radius: 2vh;
-  border: 0.1vh solid #dcdcdc;
-  color: #333333;
-  padding: 0 2vh 0 1vh;
-  font-size: 4.8vh;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
-  &:hover, &:focus {
-    outline:0;
-    background: #dfdfdf linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
-  }
-  &:active {
-    transform: translateY(1px);
-  }
+  background-image: url(${RecyclingBackgroundImage});
+  ${textButton}; 
 `
+
 
 export default DraftArea

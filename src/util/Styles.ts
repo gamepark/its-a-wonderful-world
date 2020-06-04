@@ -61,7 +61,7 @@ export const getAreasStyle = (row: number, fullWidth: boolean, isValidTarget = f
   right: ${fullWidth ? '1%' : 'auto'};
   top: ${getAreaCardY(row) - areasBorders * 5}%;
   border-radius: ${areasBorders * 5}vh;
-  border-style: dashed;
+  border-style: solid;
   border-width: ${areasBorders}vh;
   z-index: ${isValidTarget ? 10 : 'auto'};
 `

@@ -8,8 +8,10 @@ import DragObjectType from '../drag-objects/DragObjectType'
 import EmpireName from '../material/empires/EmpireName'
 import {recycle} from '../moves/Recycle'
 import {areasX, areaWidth} from '../util/Styles'
+import {useTranslation} from 'react-i18next'
 
 const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) => {
+  const {t} = useTranslation()
   const play = usePlay()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: [DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
@@ -21,7 +23,7 @@ const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) 
   })
   return (
     <div ref={ref} css={getStyle(isValidTarget, isOver)}>
-      <span css={text}>Recycler</span>
+      <span css={text}>&rarr; {t('Recycler')}</span>
     </div>
   )
 }
