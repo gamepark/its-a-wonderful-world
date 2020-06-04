@@ -71,7 +71,7 @@ const ItsAWonderfulWorldRules: GameType = {
   getActivePlayers(game: Game) {
     switch (game.phase) {
       case Phase.Draft:
-        return game.players.filter(player => !player.chosenCard).map(player => player.empire)
+        return game.players.filter(player => player.chosenCard === undefined).map(player => player.empire)
       case Phase.Planning:
       case Phase.Production:
         return game.players.filter(player => !player.ready).map(player => player.empire)
