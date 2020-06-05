@@ -74,15 +74,15 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
 
 const resources = Object.values(Resource)
 
-const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 10.25 + 25
-const boardResourceTopPosition = 16.5
+const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 13.5 + 13
+const boardResourceTopPosition = 27
 const cubeDeltaX = 2.6
 const cubeDeltaY = 3.3
 
 const getResourceAreaHighlight = (resource: Resource) => css`
   position: absolute;
-  width: 5.8%;
-  height: 10%;
+  width: 6.5%;
+  height: 12%;
   left: ${getBoardResourceLeftPosition(resource)}%;
   top: ${boardResourceTopPosition}%;
   border-radius: 100%;

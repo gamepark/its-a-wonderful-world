@@ -7,11 +7,16 @@ import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {isPlayer} from '../../types/typeguards'
 import {isResource} from '../resources/Resource'
-import boardReduced from './board-reduced.png'
-import board from './board.png'
+import boardCircleGrey from './board-circle-grey.png'
+import boardCircleBlack from './board-circle-black.png'
+import boardCircleGreen from './board-circle-green.png'
+import boardCircleYellow from './board-circle-yellow.png'
+import boardCircleBlue from './board-circle-blue.png'
+import boardCircleFinancier from '../characters/circle-financier.png'
+import boardCircleGeneral from '../characters/circle-general.png'
+import boardCircleFinancierGeneral from '../characters/circle-financier-general.png'
+import boardArrow from './arrow-white-2.png'
 import ResourceArea from './ResourceArea'
-import roundTracker1 from './round-tracker-1-3.png'
-import roundTracker2 from './round-tracker-2-4.png'
 
 const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -20,10 +25,23 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
   return (
     <>
       <div css={style(reducedSize)}>
-        <img src={board} css={imageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
-        <img src={boardReduced} css={reducedImageStyle(reducedSize)} alt={t('Le plateau de jeu')} draggable="false"/>
-        <img alt={t('Le marqueur de tour')} src={game.round % 2 ? roundTracker1 : roundTracker2} draggable="false"
-             css={roundTrackerStyle(game.round, reducedSize)}/>
+        <div css={boardCircles}>
+        <img src={boardCircleGrey} css={circleStyle} alt={t('Matériaux')} draggable="false"/>
+        <img src={boardArrow} css={arrowStyle} alt={t('Validation des Matériaux')} draggable="false"/>
+        <img src={boardCircleBlack} css={circleStyle} alt={t('Énergies')} draggable="false"/>
+        <img src={boardArrow} css={arrowStyle} alt={t('Validation des Énergies')} draggable="false"/>
+        <img src={boardCircleGreen} css={circleStyle} alt={t('Sciences')} draggable="false"/>
+        <img src={boardArrow} css={arrowStyle} alt={t('Validation des Sciences')} draggable="false"/>
+        <img src={boardCircleYellow} css={circleStyle} alt={t('Ors')} draggable="false"/>
+        <img src={boardArrow} css={arrowStyle} alt={t('Validation des Ors')} draggable="false"/>
+        <img src={boardCircleBlue} css={circleStyle} alt={t('Explorations')} draggable="false"/>
+        <img src={boardArrow} css={arrowStyle} alt={t('Validation des Explorations')} draggable="false"/>
+        <img src={boardCircleFinancier} css={greyFinancierStyle} alt={t('Financier des Matériaux')} draggable="false"/>
+        <img src={boardCircleGeneral} css={blackGeneralStyle} alt={t('Général des Énergies')} draggable="false"/>
+        <img src={boardCircleFinancierGeneral} css={greenFinancierGeneralStyle} alt={t('Financier et Général des Sciences')} draggable="false"/>
+        <img src={boardCircleFinancier} css={yellowFinancierStyle} alt={t('Financier des Ors')} draggable="false"/>
+        <img src={boardCircleGeneral} css={bleuGeneralStyle} alt={t('Général des Explorations')} draggable="false"/>
+        </div>
       </div>
       {[...new Set(resources)].map(resource =>
         <ResourceArea key={resource} game={game} player={player} resource={resource} canDrag={isPlayer(player)}
@@ -35,42 +53,71 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
 const style = (reducedSize = false) => css`
   position: absolute;
   height: 34%;
-  width: 54%;
+  width: 69%;
   top: 9%;
-  left: 50%;
+  left: 45%;
   transform: translateX(-50%);
   transition: transform 0.5s ease-in-out;
-  ${reducedSize && css`transform: translate(-50%, -30%) scale(0.6)`}
+  ${reducedSize && css`transform: translate(-60%, -48%) scale(0.5); `}
 `
 
-const imageStyle = (reducedSize = false) => css`
-  height: 100%;
+const boardCircles = css`
+  position: absolute;
+  width: 98%;
+  bottom: 1%;
+  left: 1%;
+`
+
+const circleStyle = css`
+  width: 15%;
+  vertical-align: middle;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
-  opacity: ${reducedSize ? 0 : 1};
+  transition: opacity 0.5s ease-in-out;
+`
+const arrowStyle = css`
+  width: 5%;
+  vertical-align: middle;
+  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  transition: opacity 0.5s ease-in-out;
+`
+const greyFinancierStyle = css`
+  position:absolute;
+  width: 2.5%;
+  top:6%;
+  left:6.2%;
   transition: opacity 0.5s ease-in-out;
 `
 
-const reducedImageStyle = (reducedSize = false) => css`
-  position: absolute;
-  height: 51.1%;
-  top: 12.3%;
-  left: 1.9%;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
-  opacity: ${reducedSize ? 1 : 0};
+const blackGeneralStyle = css`
+  position:absolute;
+   width: 2.5%;
+  top:6%;
+  left:26.25%;
   transition: opacity 0.5s ease-in-out;
 `
 
-const roundTrackerStyle = (round: number, reducedSize = false) => css`
-  position: absolute;
-  height: 10%;
-  top: 4.1%;
-  left: ${round === 1 ? 36.65 : round === 2 ? 40.6 : round === 3 ? 50.4 : 54.35}%;
-  transition: left 0.5s ease-in-out, transform 0.5s ease-in-out;
-  ${reducedSize && roundTrackerReducedStyle};
+const greenFinancierGeneralStyle = css`
+  position:absolute;
+  width: 2.5%;
+  top:7%;
+  left:46.25%;
+  transition: opacity 0.5s ease-in-out;
 `
 
-const roundTrackerReducedStyle = css`
-  display:none;
+const yellowFinancierStyle = css`
+  position:absolute;
+  width: 2.5%;
+  top:6%;
+  left:66.25%;
+  transition: opacity 0.5s ease-in-out;
+`
+
+const bleuGeneralStyle = css`
+  position:absolute;
+  width: 2.5%;
+  top:6%;
+  left:86.25%;
+  transition: opacity 0.5s ease-in-out;
 `
 
 export default Board
