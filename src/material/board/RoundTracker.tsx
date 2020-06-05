@@ -31,9 +31,9 @@ const roundTextStyle = css`
   top: 10.3%;
   left: 4.3%;
   font-size: 4vh;
-  color: #333;
+  color: white;
   font-weight: bold;
-  text-shadow: #888 2px 0 10px;
+  text-shadow: 0 0 5px black, 0 0 5px black, 0 0 5px black, 0 0 5px black;
 `
 
 export default RoundTracker
