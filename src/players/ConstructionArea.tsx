@@ -5,6 +5,7 @@ import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
+import ConstructBackgroundImage from '../material/board/title-orange-2.png'
 import Character from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
 import Construction from '../material/developments/Construction'
@@ -12,8 +13,10 @@ import constructionCost from '../material/developments/ConstructionCost'
 import {developmentCards} from '../material/developments/Developments'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
 import EmpireName from '../material/empires/EmpireName'
+import ButtonArrow from '../material/resources/button-arrow.png'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
+import BackgroundCubeImage from '../material/resources/texture-grey.jpg'
 import CompleteConstruction, {isCompleteConstruction} from '../moves/CompleteConstruction'
 import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
@@ -29,9 +32,6 @@ import {
   cardHeight, cardWidth, constructedCardX, constructedCardY, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
-import BackgroundCubeImage from '../material/resources/texture-grey.jpg'
-import ButtonArrow from '../material/resources/button-arrow.png'
-import ConstructBackgroundImage from '../material/board/title-orange-2.png'
 import {textButton, textButtonFontStyle} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
@@ -68,7 +68,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
       isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromDraftArea) => play(slateForConstruction(player.empire, item.card))
+    drop: (item: DevelopmentFromDraftArea) => slateForConstruction(player.empire, item.card)
   })
 
   function getTransform(card: number, index: number) {

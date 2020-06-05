@@ -16,10 +16,12 @@ import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth} from '../material/resources/ResourceCube'
+import CompleteConstruction from '../moves/CompleteConstruction'
 import MoveType from '../moves/MoveType'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
-import {getLegalMoves, getRemainingCost} from '../Rules'
+import Recycle, {isRecycle} from '../moves/Recycle'
+import {getLegalMoves, getMovesToBuild, getRemainingCost} from '../Rules'
 import GameView from '../types/GameView'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
@@ -85,8 +87,18 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
   })
   const animations = useAnimations<PlaceResourceOnConstruction>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire
     && isPlaceResourceOnConstruction(animation.move) && animation.move.card === construction.card)
+
+  const onDrop = (move: Recycle | CompleteConstruction) => {
+    if (isRecycle(move)) {
+      play(move)
+    } else {
+      getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
+    }
+  }
+
   return (
-    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]} {...props}>
+    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]}
+               onDrop={onDrop} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>
         {[...construction.costSpaces].reverse().map((item, index) => {

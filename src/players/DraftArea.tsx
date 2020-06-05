@@ -4,15 +4,14 @@ import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
-import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
+import RecyclingBackgroundImage from '../material/board/title-black-2.png'
+import ConstructBackgroundImage from '../material/board/title-orange-2.png'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
 import EmpireName from '../material/empires/EmpireName'
-import ChooseDevelopmentCard, {
-  chooseDevelopmentCard, ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
-} from '../moves/ChooseDevelopmentCard'
+import ChooseDevelopmentCard, {ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible} from '../moves/ChooseDevelopmentCard'
 import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
 import GameView from '../types/GameView'
@@ -20,8 +19,6 @@ import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import ConstructBackgroundImage from '../material/board/title-orange-2.png'
-import RecyclingBackgroundImage from '../material/board/title-black-2.png'
 import {
   areaCardStyle, cardHeight, cardStyle, cardWidth, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
@@ -46,8 +43,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     collect: (monitor) => ({
       isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_HAND,
       isOver: monitor.isOver()
-    }),
-    drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.card))
+    })
   })
   useEffect(() => {
     if (!animation && focusedCard !== player.chosenCard && !player.draftArea.some(card => card === focusedCard)) {
@@ -103,8 +99,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         {isValidTarget && <span css={draftActionAreaText}>&rarr; {t('Sélectionner cette carte')}</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={card} item={developmentFromDraftArea(card)}
-                   postTransform={getTransform(card, index)}
+        <Draggable key={card} item={developmentFromDraftArea(card)} onDrop={play} postTransform={getTransform(card, index)}
                    css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card)]}
                    disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning}
                    animation={{properties: ['transform', 'z-index'], seconds: animation?.duration ?? 0.2}}>

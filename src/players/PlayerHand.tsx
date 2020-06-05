@@ -1,11 +1,11 @@
 import {css, keyframes} from '@emotion/core'
-import {Hand, useAnimation} from '@interlude-games/workshop'
+import {Hand, useAnimation, usePlay} from '@interlude-games/workshop'
 import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import React, {FunctionComponent} from 'react'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
-import ChooseDevelopmentCard, {isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
+import ChooseDevelopmentCard, {chooseDevelopmentCard, isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
 import {isPassCards, PassCardsView} from '../moves/PassCards'
 import {isRevealChosenCards, RevealChosenCardsView} from '../moves/RevealChosenCards'
@@ -19,6 +19,7 @@ import {
 type Props = { player: Player, players: number, round: number }
 
 const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
+  const play = usePlay<ChooseDevelopmentCard>()
   const animation = useAnimation<ChooseDevelopmentCard | RevealChosenCardsView | PassCardsView>(animation =>
     (isChooseDevelopmentCard(animation.move) && animation.move.playerId === player.empire) || isRevealChosenCards(animation.move) || isPassCards(animation.move)
   )
@@ -27,7 +28,8 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
   const position = players > 2 ? handPosition : handPosition2Players
 
   const getItemProps = (index: number) => {
-    const chosen = index < player.hand.length && player.hand[index] === choosingCard?.card
+    const card = player.hand[index]
+    const chosen = index < player.hand.length && card === choosingCard?.card
     const undo = choosingCard && animation?.undo
     const received = passingCard && index >= player.hand.length
     const ignore = (chosen && !undo) || (passingCard && !received)
@@ -35,9 +37,10 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
       ignore,
       hoverStyle: css`transform: translateY(-25%) scale(1.5);`,
       drag: {
-        item: developmentFromHand(player.hand[index]),
+        item: developmentFromHand(card),
         disabled: !!player.chosenCard || player.hand.length === 1 || animation?.move.type === MoveType.RevealChosenCards,
-        animation: {seconds: animation?.duration ?? 0.2}
+        animation: {seconds: animation?.duration ?? 0.2},
+        onDrop: () => play(chooseDevelopmentCard(player.empire, card))
       },
       css: passingCard ? getZIndexRevert(index) : ignore ? css`z-index: 10;` : undefined,
       animation: animation ? {

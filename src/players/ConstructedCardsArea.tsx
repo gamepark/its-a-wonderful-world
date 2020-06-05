@@ -1,5 +1,4 @@
 import {css} from '@emotion/core'
-import {usePlay} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
@@ -7,8 +6,8 @@ import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromCons
 import DragObjectType from '../drag-objects/DragObjectType'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
-import Move from '../moves/Move'
-import {canBuild, getMovesToBuild} from '../Rules'
+import {completeConstruction} from '../moves/CompleteConstruction'
+import {canBuild} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
@@ -16,7 +15,6 @@ import {cardHeight, cardRatio, cardStyle, cardWidth, constructedCardX, construct
 
 const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
-  const play = usePlay<Move>()
   const [{dragging, isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
     canDrop: (item: DevelopmentFromConstructionArea) => isPlayer(player) && canBuild(player, item.card),
@@ -25,7 +23,7 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
       isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA && isPlayer(player) && canBuild(player, monitor.getItem().card),
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromConstructionArea) => getMovesToBuild(player as Player, item.card).forEach(move => play(move))
+    drop: (item: DevelopmentFromConstructionArea) => completeConstruction(player.empire, item.card)
   })
   return (
     <>
