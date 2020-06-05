@@ -35,6 +35,9 @@ export interface PlaceResourceOnConstruction {
   space: number
 }
 
-export function isPlaceResourceOnConstruction(move: PlaceResource): move is PlaceResourceOnConstruction {
+export function isPlaceResourceOnConstruction(move: Move): move is PlaceResourceOnConstruction {
+  if (!isPlaceResource(move)) {
+    return false
+  }
   return (move as PlaceResourceOnConstruction).card !== undefined && (move as PlaceResourceOnConstruction).space !== undefined
 }

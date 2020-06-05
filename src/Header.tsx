@@ -106,8 +106,8 @@ const Header = () => {
     <header css={headerStyle}>
       {actions === undefined || nonGuaranteedUndo ?
         <LoadingSpinner css={loadingSpinnerStyle}/> :
-        <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={undo}
-                    disabled={!canUndo}><UndoIcon/></IconButton>}
+        <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={() => undo()}
+                    disabled={!canUndo()}><UndoIcon/></IconButton>}
       <h1 css={textStyle}>{getText(t, play, players, game, empire, animation)}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
       {fscreen.fullscreenEnabled && !fullScreen &&

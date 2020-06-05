@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import {useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
-import React, {FunctionComponent, useEffect, useState} from 'react'
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
@@ -21,7 +21,7 @@ import CompleteConstruction, {isCompleteConstruction} from '../moves/CompleteCon
 import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import Recycle, {isRecycle} from '../moves/Recycle'
-import {slateForConstruction} from '../moves/SlateForConstruction'
+import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
 import {canBuild, getMovesToBuild, getRemainingCost} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
@@ -43,11 +43,16 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
   const row = game.phase === Phase.Draft ? 2 : 1
   const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
   const play = usePlay()
-  const animation = useAnimation<CompleteConstruction | Recycle>(animation =>
-    (isCompleteConstruction(animation.move) || isRecycle(animation.move)) && animation.move.playerId === player.empire
+  const animation = useAnimation<CompleteConstruction | Recycle | SlateForConstruction>(animation =>
+    (isCompleteConstruction(animation.move) || isRecycle(animation.move) || isSlateForConstruction(animation.move)) && animation.move.playerId === player.empire
   )
   const completingConstruction = animation && isCompleteConstruction(animation.move) ? animation.move : undefined
   const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
+  const undoingSlateForConstruction = animation && animation.undo && isSlateForConstruction(animation.move) ? animation.move : undefined
+  const constructions = useRef(player.constructionArea)
+  if (!undoingSlateForConstruction) {
+    constructions.current = player.constructionArea
+  }
   const removeIndex = player.constructionArea.findIndex(construction => construction.card === completingConstruction?.card)
   const placeResources = (construction: Construction, resource: Resource, quantity: number) => {
     getRemainingCost(construction).filter(cost => cost.item === resource).slice(0, quantity).forEach(cost =>
@@ -79,6 +84,10 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
       const x = discardPileCardX(discardIndex) * 100 / cardWidth
       const y = discardPileCardY(discardIndex) * 100 / cardHeight
       return `translate(${x}%, ${y}%) scale(${discardPileScale})`
+    } else if (card === undoingSlateForConstruction?.card) {
+      const x = getAreaCardX(player.draftArea.indexOf(card)) * 100 / cardWidth
+      const y = getAreaCardY(row - 1) * 100 / cardHeight
+      return `translate(${x}%, ${y}%)`
     } else {
       if (removeIndex !== -1 && removeIndex < index) {
         index--
@@ -112,7 +121,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
       {!player.constructionArea.length && <span css={constructionAreaText}>{t('Zone de construction')}</span>}
       {isValidTarget && <span css={constructAreaText}>&rarr; {t('Mettre en Construction')}</span>}
     </div>
-    {player.constructionArea.map((construction, index) => {
+    {constructions.current.map((construction, index) => {
         return <DevelopmentCardUnderConstruction key={construction.card} game={game} player={player} construction={construction}
                                                  animation={{properties: ['transform', 'z-index'], seconds: animation?.duration ?? 0.2}}
                                                  postTransform={getTransform(construction.card, index)}
@@ -120,7 +129,8 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
                                                  canRecycle={player.empire === playerId && focusedCard !== construction.card && row !== 2}
                                                  onClick={() => setFocusedCard(construction.card)}
                                                  focused={focusedCard === construction.card}
-                                                 css={focusedCard === construction.card && getCardFocusTransform}/>
+                                                 css={[focusedCard === construction.card && getCardFocusTransform,
+                                                   animation && animation.move.card && css`z-index: 10`]}/>
       }
     )}
   </>

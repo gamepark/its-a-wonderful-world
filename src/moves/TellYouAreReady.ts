@@ -1,4 +1,5 @@
 import EmpireName from '../material/empires/EmpireName'
+import Move from './Move'
 import MoveType from './MoveType'
 
 export default interface TellYouAreReady {
@@ -8,4 +9,8 @@ export default interface TellYouAreReady {
 
 export function tellYourAreReady(playerId: EmpireName): TellYouAreReady {
   return {type: MoveType.TellYouAreReady, playerId}
+}
+
+export function isTellYouAreReady(move: Move): move is TellYouAreReady {
+  return move.type === MoveType.TellYouAreReady
 }
