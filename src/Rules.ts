@@ -221,7 +221,13 @@ const ItsAWonderfulWorldRules: GameType = {
         if (!isGameView(game)) {
           game.players.forEach(player => game.discard.push(...player.hand.splice(0)))
         } else {
-          game.players.forEach(player => player.hand = [])
+          game.players.forEach(player => {
+            if (isPlayerView(player)) {
+              player.hand = 0
+            } else {
+              player.hand = []
+            }
+          })
           if (isDiscardLeftoverCardsView(move)) {
             game.discard.push(...move.discardedCards)
           }
