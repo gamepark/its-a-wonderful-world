@@ -29,6 +29,10 @@ import {
   cardHeight, cardWidth, constructedCardX, constructedCardY, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
+import BackgroundCubeImage from '../material/resources/texture-grey.jpg'
+import ButtonArrow from '../material/resources/button-arrow.png'
+import ConstructBackgroundImage from '../material/board/title-orange-2.png'
+import {textButton, textButtonFontStyle} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -92,21 +96,21 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
             <ResourceCube resource={move.resource} css={buttonItemStyle}/> :
             <CharacterToken character={move.character} css={buttonItemStyle}/>
           }
-          <span>⇒</span>
         </button>
       )}
       {maxSpendableResources > 1 && <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card))}
                                             onClick={() => placeResources(construction, game.productionStep!, maxSpendableResources)}>
-        <span>{t('Placer')}</span>
+        <span css={getPlaceTextStyle}>{t('Placer')} </span>
         {[...Array(maxSpendableResources)].map((_, index) => <ResourceCube key={index} resource={game.productionStep!} css={buttonItemStyle}/>)}
       </button>}
       {isPlayer(player) && canBuild(player, construction.card) &&
-      <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 1 : 0))}
+      <button css={getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 1 : 0))}
               onClick={() => build(construction)}>{t('Construire')}</button>
       }
     </>}
     <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
-      {!player.constructionArea.length && <span css={constructionAreaText}>Zone de construction</span>}
+      {!player.constructionArea.length && <span css={constructionAreaText}>{t('Zone de construction')}</span>}
+      {isValidTarget && <span css={constructAreaText}>&rarr; {t('Mettre en Construction')}</span>}
     </div>
     {player.constructionArea.map((construction, index) => {
         return <DevelopmentCardUnderConstruction key={construction.card} game={game} player={player} construction={construction}
@@ -166,8 +170,9 @@ const maxResourcesToPlace = (player: Player, construction: Construction, resourc
 }
 
 const getConstructionAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
-  background-color: rgba(255, 0, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
-  border-color: crimson;
+  background-color: rgba(247, 166, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
+  border-color: #f7a600;
+  box-shadow: 0 0 0.7vh #f7a600;
   ${getAreasStyle(row, fullWidth, isValidTarget)};
 `
 
@@ -180,7 +185,36 @@ const constructionAreaText = css`
   transform: translateY(-50%);
   text-align: center;
   font-size: 4vh;
-  color: crimson;
+  color: #f7a600;
+`
+
+const constructAreaText = css`
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0 1vh;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: antiquewhite;
+  font-size: 6vh;
+  text-shadow: 0 0 1vh #333;
+`
+
+const getPlaceConstructionButton = (index: number) => css`
+  top: ${index * 6.5 + 16.5}%;
+  right: ${51 + cardWidth * 1.5}%;
+  background-image: url(${ConstructBackgroundImage});
+  ${textButton};
+`
+
+const buttonItemStyle = css`
+  display: inline;
+  height: 5vh;
+`
+
+const getPlaceTextStyle = css`
+  margin:0 1vh;
 `
 
 const getPlaceItemButtonStyle = (index: number) => css`
@@ -189,30 +223,34 @@ const getPlaceItemButtonStyle = (index: number) => css`
   top: ${index * 6.5 + 16.5}%;
   right: ${51 + cardWidth * 1.5}%;
   display: inline-flex;
-  box-shadow: inset 0 0.1vh 0 0 #ffffff;
-  background: #ededed linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+  background-color:transparent;
+  background-image: url(${BackgroundCubeImage});
+  border: 0.2vh solid #ddd;
   border-radius: 2vh;
-  border: 0.1vh solid #dcdcdc;
-  color: #333333;
-  padding: 0 2vh 0 1vh;
+  padding: 0.4vh;
+  margin-right:2vh;
   align-items: center;
-  font-size: 4.8vh;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  ${textButtonFontStyle};
   &:hover, &:focus {
     outline:0;
-    background: #dfdfdf linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+    transform: translateY(1px) scale(1.1);
+    cursor:pointer;
+    z-index: 101;
   }
   &:active {
     transform: translateY(1px);
   }
-  & > * {
-    margin-left: 1vh;
+  &:after{
+    background-image: url(${ButtonArrow});
+    width: 3.5vh;
+    height: 3.5vh;
+    content: '';
+    right: -4vh;
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
-`
-
-const buttonItemStyle = css`
-  display: inline;
-  height: 3.5vh;
 `
 
 export default ConstructionArea
