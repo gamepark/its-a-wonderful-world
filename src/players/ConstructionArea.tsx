@@ -172,7 +172,7 @@ const maxResourcesToPlace = (player: Player, construction: Construction, resourc
 const getConstructionAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(247, 166, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
   border-color: #f7a600;
-  box-shadow: 0 0vh 0.7vh #f7a600;
+  box-shadow: 0 0 0.7vh #f7a600;
   ${getAreasStyle(row, fullWidth, isValidTarget)};
 `
 
@@ -189,16 +189,16 @@ const constructionAreaText = css`
 `
 
 const constructAreaText = css`
-position: absolute;
-width: 100%;
-margin: 0;
-padding: 0 1vh;
-top: 50%;
-transform: translateY(-50%);
-text-align: center;
-color: antiquewhite;
-font-size: 6vh;
-text-shadow: 0 0vh 1vh #333;
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0 1vh;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: antiquewhite;
+  font-size: 6vh;
+  text-shadow: 0 0 1vh #333;
 `
 
 const getPlaceConstructionButton = (index: number) => css`

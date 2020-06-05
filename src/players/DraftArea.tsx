@@ -123,7 +123,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
 const getDraftAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(175, 202, 11, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
   border-color: #afca0b;
-  box-shadow: 0 0vh 0.7vh #afca0b; 
+  box-shadow: 0 0 0.7vh #afca0b;
   ${getAreasStyle(row, fullWidth, isValidTarget)}; 
 `
 
@@ -139,16 +139,16 @@ const draftAreaText = css`
   font-size: 4vh;
 `
 const draftActionAreaText = css`
-position: absolute;
-width: 100%;
-margin: 0;
-padding: 0 1vh;
-top: 50%;
-transform: translateY(-50%);
-text-align: center;
-color: antiquewhite;
-font-size: 6vh;
-text-shadow: 0 0vh 1vh #333;
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0 1vh;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: antiquewhite;
+  font-size: 6vh;
+  text-shadow: 0 0 1vh #333;
 `
 
 export const textButtonFontStyle = css`
@@ -195,8 +195,7 @@ const draftRecyclingButton = css`
   top: 51%;
   right: ${51 + cardWidth * 1.5}%;
   background-image: url(${RecyclingBackgroundImage});
-  ${textButton}; 
+  ${textButton};
 `
-
 
 export default DraftArea
