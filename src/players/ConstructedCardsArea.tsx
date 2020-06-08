@@ -1,10 +1,11 @@
 import {css} from '@emotion/core'
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
+import DevelopmentCardsCatalogs from '../material/developments/DevelopmentCardsCatalog'
 import {developmentCards} from '../material/developments/Developments'
 import {completeConstruction} from '../moves/CompleteConstruction'
 import {canBuild} from '../Rules'
@@ -15,6 +16,7 @@ import {cardHeight, cardRatio, cardStyle, cardWidth, constructedCardX, construct
 
 const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
+  const [focusedCardIndex, setFocusedCardIndex] = useState<number>()
   const [{dragging, isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
     canDrop: (item: DevelopmentFromConstructionArea) => isPlayer(player) && canBuild(player, item.card),
@@ -27,8 +29,13 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
   })
   return (
     <>
+      {typeof focusedCardIndex === 'number' &&
+      <DevelopmentCardsCatalogs initialIndex={focusedCardIndex} onClose={() => setFocusedCardIndex(undefined)}
+                                developments={player.constructedDevelopments.map(card => developmentCards[card])}/>
+      }
       {player.constructedDevelopments.map((card, index) =>
-        <DevelopmentCard key={card} development={developmentCards[card]} css={[style, cardStyle, transform(index)]}/>
+        <DevelopmentCard key={card} development={developmentCards[card]} onClick={() => setFocusedCardIndex(index)}
+                         css={[style, cardStyle, transform(index)]}/>
       )}
       {dragging &&
       <div ref={ref} css={[buildDropArea, isValidTarget ? validDropAreaColor(isOver) : invalidDropAreaColor]}>

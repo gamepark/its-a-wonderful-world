@@ -142,6 +142,9 @@ const style = css`
 const getBackgroundImage = (development?: Development) => css`
   background-image: url(${development ? images.get(development) : CardBack});
 `
+
+export const cardTitleFontSize = 0.85
+
 const cardTitle = css`
   position: absolute;
   top: 1.4%;
@@ -149,7 +152,7 @@ const cardTitle = css`
   width: 68%;
   text-align: center;
   color: #EEE;
-  font-size: 0.85vh;
+  font-size: ${cardTitleFontSize}vh;
   font-weight: lighter;
   text-shadow: 0 0 0.3vh #000, 0 0 0.3vh #000;
   text-transform:uppercase;
