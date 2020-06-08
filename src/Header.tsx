@@ -224,8 +224,40 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<E
             } else {
               return t('{player} gagne la partie avec {score} points', {player: getPlayerName(winners[0].empire), score: highestScore})
             }
+          } else {
+            let highestDevelopments = -1
+            let winnersTieBreaker = []
+            for (const player of winners) {
+              if (player.constructedDevelopments.length >= highestDevelopments) {
+                if (player.constructedDevelopments.length > highestDevelopments) {
+                  winnersTieBreaker = []
+                  highestDevelopments = player.constructedDevelopments.length
+                }
+                winnersTieBreaker.push(player)
+              }
+            }
+            if (winnersTieBreaker.length === 1) {
+              if (player === winnersTieBreaker[0]) {
+                return t('Victoire ! Vous gagnez la partie avec {score} points et {developments} développements construits',
+                  {score: highestScore, developments: highestDevelopments})
+              } else {
+                return t('{player} gagne la partie avec {score} points et {developments} développements construits',
+                  {player: getPlayerName(winnersTieBreaker[0].empire), score: highestScore, developments: highestDevelopments})
+              }
+            } else if (winnersTieBreaker.length === game.players.length) {
+              return t('Égalité parfaite ! Tous les joueurs ont chacun {score} points et {developments} développements construits',
+                {score: highestScore, developments: highestDevelopments})
+            } else if (winnersTieBreaker.length === 2) {
+              return t('Égalité parfaite ! {player1} et {player2} ont chacun {score} points et {developments} développements construits',
+                {player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire), score: highestScore, developments: highestDevelopments})
+            } else if (winnersTieBreaker.length === 3) {
+              return t('Égalité parfaite ! {player1}, {player2} et {player3} ont chacun {score} points et {developments} développements construits',
+                {player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire), player3: getPlayerName(winnersTieBreaker[2].empire), score: highestScore, developments: highestDevelopments})
+            } else if (winnersTieBreaker.length === 4) {
+              return t('Égalité parfaite ! {player1}, {player2}, {player3} et {player4} ont chacun {score} points et {developments} développements construits',
+                {player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire), player3: getPlayerName(winnersTieBreaker[2].empire), player4: getPlayerName(winnersTieBreaker[3].empire), score: highestScore, developments: highestDevelopments})
+            }
           }
-          return t('Égalité ! Les joueurs ont chacun {score} points', {score: highestScore})
         }
       }
       return ''
