@@ -1191,10 +1191,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interlude-games/workshop@^0.1.39":
-  version "0.1.39"
-  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.1.39.tgz#b6347c4d3fc15bea97b9b46b6ed93814d0096073"
-  integrity sha512-PmsTrUVWP98hTLUsh+y0Qzi3SNZXMvj5RgUkuTWMQlMbi93DC716p2xYHDGiCuT66p32mhAtN2OLs6CRBP3Bhg==
+"@interlude-games/workshop@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.2.0.tgz#760795a9c5f79e6720691f828960493bb4415325"
+  integrity sha512-3OFxyH5Xvk5+YUyjVPrUAxJ91WFAI3Bfvtoj1dw8fk3TGojXca0YdwV++CkauoeDL++Op4WuY5fMFBUKDKLgTA==
   dependencies:
     "@datadog/browser-logs" "^1.11.4"
     apollo-cache-inmemory "^1.6.5"
@@ -9192,6 +9192,13 @@ react-scripts@^3.4.1:
     workbox-webpack-plugin "4.3.1"
   optionalDependencies:
     fsevents "2.1.2"
+
+react-swipeable@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-5.5.1.tgz#48ae6182deaf62f21d4b87469b60281dbd7c4a76"
+  integrity sha512-EQObuU3Qg3JdX3WxOn5reZvOSCpU4fwpUAs+NlXSN3y+qtsO2r8VGkVnOQzmByt3BSYj9EWYdUOUfi7vaMdZZw==
+  dependencies:
+    prop-types "^15.6.2"
 
 react@^16.13.1:
   version "16.13.1"

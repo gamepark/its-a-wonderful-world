@@ -1,11 +1,14 @@
 import {css} from '@emotion/core'
-import {Draggable, useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
+import {Draggable, useActions, useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
 import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
+import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
+import RecyclingBackgroundImage from '../material/board/title-black-2.png'
+import ConstructBackgroundImage from '../material/board/title-orange-2.png'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
@@ -13,15 +16,15 @@ import EmpireName from '../material/empires/EmpireName'
 import ChooseDevelopmentCard, {
   chooseDevelopmentCard, ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
 } from '../moves/ChooseDevelopmentCard'
+import Move from '../moves/Move'
 import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
+import {canUndoSlateForConstruction} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import ConstructBackgroundImage from '../material/board/title-orange-2.png'
-import RecyclingBackgroundImage from '../material/board/title-black-2.png'
 import {
   areaCardStyle, cardHeight, cardStyle, cardWidth, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
@@ -31,23 +34,28 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   const row = game.phase === Phase.Draft ? 1 : 0
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
+  const actions = useActions<Move, EmpireName>()
   const [focusedCard, setFocusedCard] = useState<number>()
   const animation = useAnimation<ChooseDevelopmentCard | ChooseDevelopmentCardView | SlateForConstruction | Recycle>(animation =>
     (isChooseDevelopmentCard(animation.move) || isSlateForConstruction(animation.move) || isRecycle(animation.move))
     && animation.move.playerId === player.empire
   )
-  const choosingDevelopment = animation && isChooseDevelopmentCard(animation.move) && !animation.undo ? animation.move : undefined
-  const slatingForConstruction = animation && isSlateForConstruction(animation.move) ? animation.move : undefined
+  const choosingDevelopment = animation && !animation.undo && isChooseDevelopmentCard(animation.move) ? animation.move : undefined
+  const slatingForConstruction = animation && !animation.undo && isSlateForConstruction(animation.move) ? animation.move : undefined
+  const undoingSlateForConstruction = animation && animation.undo && isSlateForConstruction(animation.move) ? animation.move : undefined
   const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
   const chosenCard = choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : player.chosenCard
-  const [{isValidTarget, isOver}, ref] = useDrop({
-    accept: DragObjectType.DEVELOPMENT_FROM_HAND,
+  const canDrop = (item: DevelopmentFromHand | DevelopmentFromConstructionArea) => item.type === DragObjectType.DEVELOPMENT_FROM_HAND
+    || (!!playerId && !!actions && canUndoSlateForConstruction(actions, playerId, item.card))
+  const [{dragItemType, isValidTarget, isOver}, ref] = useDrop({
+    accept: [DragObjectType.DEVELOPMENT_FROM_HAND, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA], canDrop,
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_HAND,
+      dragItemType: monitor.getItemType(),
+      isValidTarget: monitor.canDrop() && canDrop(monitor.getItem()),
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromHand) => play(chooseDevelopmentCard(player.empire, item.card))
+    drop: item => item.type === DragObjectType.DEVELOPMENT_FROM_HAND ? chooseDevelopmentCard(player.empire, item.card) : slateForConstruction(player.empire, item.card)
   })
   useEffect(() => {
     if (!animation && focusedCard !== player.chosenCard && !player.draftArea.some(card => card === focusedCard)) {
@@ -100,12 +108,14 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       }
       <div ref={ref} css={getDraftAreaStyle(row, game.players.length === 2, isValidTarget, isOver)}>
         {!player.draftArea.length && <span css={draftAreaText}>{t('Zone de draft')}</span>}
-        {isValidTarget && <span css={draftActionAreaText}>&rarr; {t('Sélectionner cette carte')}</span>}
+        {isValidTarget && <span css={draftActionAreaText}>&rarr; {
+          dragItemType === DragObjectType.DEVELOPMENT_FROM_HAND ? t('Sélectionner cette carte') : t('Annuler la construction')
+        }</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={card} item={developmentFromDraftArea(card)}
-                   postTransform={getTransform(card, index)}
-                   css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card)]}
+        <Draggable key={card} item={developmentFromDraftArea(card)} onDrop={play} postTransform={getTransform(card, index)}
+                   css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card),
+                     undoingSlateForConstruction?.card === card && css`display: none`]}
                    disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning}
                    animation={{properties: ['transform', 'z-index'], seconds: animation?.duration ?? 0.2}}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>

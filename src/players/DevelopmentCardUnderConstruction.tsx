@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {Draggable, useAnimations, usePlay, usePlayerId} from '@interlude-games/workshop'
+import {Draggable, useActions, useAnimations, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
 import {DragAroundProps} from '@interlude-games/workshop/dist/Draggable/DragAround'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
@@ -16,10 +16,14 @@ import {developmentCards} from '../material/developments/Developments'
 import EmpireName from '../material/empires/EmpireName'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth} from '../material/resources/ResourceCube'
+import CompleteConstruction, {isCompleteConstruction} from '../moves/CompleteConstruction'
+import Move from '../moves/Move'
 import MoveType from '../moves/MoveType'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter} from '../moves/PlaceCharacter'
-import {isPlaceResource, isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
-import {getLegalMoves, getRemainingCost} from '../Rules'
+import {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
+import Recycle, {isRecycle} from '../moves/Recycle'
+import SlateForConstruction, {slateForConstruction} from '../moves/SlateForConstruction'
+import ItsAWonderfulWorldRules, {canUndoSlateForConstruction, getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard} from '../Rules'
 import GameView from '../types/GameView'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
@@ -39,7 +43,9 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
   const legalMoves = isPlayer(player) ? getLegalMoves(player, game.phase) : []
-  const placeResourceMoves: PlaceResourceOnConstruction[] = legalMoves.filter(isPlaceResource).filter(isPlaceResourceOnConstruction)
+  const [undo] = useUndo(ItsAWonderfulWorldRules)
+  const actions = useActions<Move, EmpireName>()
+  const placeResourceMoves: PlaceResourceOnConstruction[] = legalMoves.filter(isPlaceResourceOnConstruction)
     .filter(move => move.card === construction.card)
   const placeCharacterMoves: PlaceCharacter[] = legalMoves.filter(isPlaceCharacter).filter(move => move.card === construction.card)
   const [{canDrop, isOver}, ref] = useDrop({
@@ -85,8 +91,28 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
   })
   const animations = useAnimations<PlaceResourceOnConstruction>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire
     && isPlaceResourceOnConstruction(animation.move) && animation.move.card === construction.card)
+
+  const onDrop = (move: Recycle | CompleteConstruction | SlateForConstruction) => {
+    if (isRecycle(move)) {
+      if (actions && canUndoSlateForConstruction(actions, player.empire, construction.card)) {
+        const placeItemsOnCard = actions!.filter(action => action.playerId === player.empire && isPlaceItemOnCard(action.move, construction.card))
+        placeItemsOnCard.map(action => action.move).reverse().forEach(undo)
+        undo(slateForConstruction(player.empire, construction.card))
+      }
+      play(move)
+    } else if (isCompleteConstruction(move)) {
+      getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
+    } else {
+      // First undo the item placed on the card if any
+      const placeItemsOnCard = actions!.filter(action => action.playerId === player.empire && isPlaceItemOnCard(action.move, construction.card))
+      placeItemsOnCard.map(action => action.move).reverse().forEach(undo)
+      undo(move)
+    }
+  }
+
   return (
-    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]} {...props}>
+    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]}
+               onDrop={onDrop} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>
         {[...construction.costSpaces].reverse().map((item, index) => {

@@ -2,6 +2,7 @@ import {
   Action, GameWithIncompleteInformation, shuffle, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo
 } from '@interlude-games/workshop'
 import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
+import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
@@ -18,15 +19,15 @@ import {discardLeftoverCards, isDiscardLeftoverCardsView} from './moves/DiscardL
 import Move, {MoveView} from './moves/Move'
 import MoveType from './moves/MoveType'
 import {isPassCardsView, passCards} from './moves/PassCards'
-import PlaceCharacter, {placeCharacter} from './moves/PlaceCharacter'
+import PlaceCharacter, {isPlaceCharacter, placeCharacter} from './moves/PlaceCharacter'
 import {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from './moves/PlaceResource'
 import {produce} from './moves/Produce'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {recycle} from './moves/Recycle'
 import {isRevealChosenCardsView, revealChosenCards} from './moves/RevealChosenCards'
-import {slateForConstruction} from './moves/SlateForConstruction'
+import {isSlateForConstruction, slateForConstruction} from './moves/SlateForConstruction'
 import {startPhase} from './moves/StartPhase'
-import {tellYourAreReady} from './moves/TellYouAreReady'
+import {isTellYouAreReady, tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
 import Game from './types/Game'
 import GameOptions from './types/GameOptions'
@@ -378,12 +379,20 @@ const ItsAWonderfulWorldRules: GameType = {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return player.chosenCard === move.card
-      case MoveType.SlateForConstruction:
       case MoveType.Recycle:
-      case MoveType.PlaceCharacter:
-      case MoveType.PlaceResource:
       case MoveType.ReceiveCharacter:
         return !consecutiveActions.some(action => action.playerId === playerId)
+      case MoveType.SlateForConstruction:
+        return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move, move.card)))
+      case MoveType.PlaceResource:
+        if (isPlaceResourceOnConstruction(move)) {
+          return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || (isPlaceItemOnCard(action.move, move.card))))
+        } else {
+          return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move)
+            || (isPlaceResourceOnConstruction(action.move) && action.move.resource === Resource.Krystallium)))
+        }
+      case MoveType.PlaceCharacter:
+        return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || (isPlaceItemOnCard(action.move, move.card))))
       case MoveType.TellYouAreReady:
         return !action.consequences.some(consequence => consequence.type === MoveType.StartPhase || consequence.type === MoveType.Produce)
           && !consecutiveActions.some(action => action.consequences.some(consequence => consequence.type === MoveType.StartPhase || consequence.type === MoveType.Produce))
@@ -463,6 +472,7 @@ const ItsAWonderfulWorldRules: GameType = {
   getUndoAnimationDuration(move: MoveView) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
+      case MoveType.SlateForConstruction:
         return 0.3
       default:
         return 0
@@ -677,6 +687,34 @@ export function getMovesToBuild(player: Player, card: number): (PlaceResourceOnC
     }
   }
   return moves
+}
+
+export function isPlaceItemOnCard(move: Move, card?: Number): move is (PlaceResourceOnConstruction | PlaceCharacter) {
+  if (card !== undefined) {
+    return isPlaceItemOnCard(move) && move.card === card
+  } else {
+    return isPlaceResourceOnConstruction(move) || isPlaceCharacter(move)
+  }
+}
+
+export function canUndoSlateForConstruction(actions: DisplayedAction<Move, EmpireName>[], playerId: EmpireName, card: number) {
+  const index = actions.findIndex(action => action.playerId === playerId && isSlateForConstruction(action.move) && action.move.card === card)
+  if (index === -1) {
+    return false
+  }
+  const consecutiveActions = actions.slice(index + 1)
+  return !consecutiveActions.some(action => action.playerId === playerId && isTellYouAreReady(action.move))
+}
+
+export function isActive(game: Game | GameView, playerId: EmpireName) {
+  const player = game.players.find(player => player.empire === playerId)!
+  switch (game.phase) {
+    case Phase.Draft:
+      return player.chosenCard === undefined
+    case Phase.Planning:
+    case Phase.Production:
+      return !player.ready
+  }
 }
 
 // noinspection JSUnusedGlobalSymbols

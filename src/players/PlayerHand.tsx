@@ -1,11 +1,13 @@
 import {css, keyframes} from '@emotion/core'
-import {Hand, useAnimation} from '@interlude-games/workshop'
+import {Hand, useAnimation, usePlay} from '@interlude-games/workshop'
 import Animation from '@interlude-games/workshop/dist/Types/Animation'
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useEffect, useState} from 'react'
+import {useTranslation} from 'react-i18next'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
+import chooseButtonBackground from '../material/board/title-orange-2.png'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
-import ChooseDevelopmentCard, {isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
+import ChooseDevelopmentCard, {chooseDevelopmentCard, isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
 import {isPassCards, PassCardsView} from '../moves/PassCards'
 import {isRevealChosenCards, RevealChosenCardsView} from '../moves/RevealChosenCards'
@@ -13,21 +15,27 @@ import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {
   bottomMargin, cardHeight, cardRatio, cardStyle, cardWidth, constructedCardLeftMargin, getAreaCardX, getAreaCardY, playerPanelHeight, playerPanelWidth,
-  playerPanelY
+  playerPanelY, popupBackgroundStyle
 } from '../util/Styles'
+import {textButton} from './DraftArea'
 
 type Props = { player: Player, players: number, round: number }
 
 const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
+  const {t} = useTranslation()
+  const play = usePlay<ChooseDevelopmentCard>()
+  const [focusedCard, setFocusedCard] = useState<number>()
   const animation = useAnimation<ChooseDevelopmentCard | RevealChosenCardsView | PassCardsView>(animation =>
     (isChooseDevelopmentCard(animation.move) && animation.move.playerId === player.empire) || isRevealChosenCards(animation.move) || isPassCards(animation.move)
   )
   const choosingCard = animation && isChooseDevelopmentCard(animation.move) ? animation.move : undefined
   const passingCard = animation && isPassCards(animation.move) ? animation.move : undefined
   const position = players > 2 ? handPosition : handPosition2Players
+  const canChooseCard = !player.chosenCard && player.hand.length >= 1 && animation?.move.type !== MoveType.RevealChosenCards
 
   const getItemProps = (index: number) => {
-    const chosen = index < player.hand.length && player.hand[index] === choosingCard?.card
+    const card = player.hand[index]
+    const chosen = index < player.hand.length && card === choosingCard?.card
     const undo = choosingCard && animation?.undo
     const received = passingCard && index >= player.hand.length
     const ignore = (chosen && !undo) || (passingCard && !received)
@@ -35,16 +43,18 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
       ignore,
       hoverStyle: css`transform: translateY(-25%) scale(1.5);`,
       drag: {
-        item: developmentFromHand(player.hand[index]),
-        disabled: !!player.chosenCard || player.hand.length === 1 || animation?.move.type === MoveType.RevealChosenCards,
-        animation: {seconds: animation?.duration ?? 0.2}
+        item: developmentFromHand(card),
+        disabled: !canChooseCard,
+        animation: {seconds: animation?.duration ?? 0.2},
+        onDrop: () => play(chooseDevelopmentCard(player.empire, card))
       },
       css: passingCard ? getZIndexRevert(index) : ignore ? css`z-index: 10;` : undefined,
       animation: animation ? {
         seconds: passingCard ? animation.duration * 3 / 10 : animation.duration,
         delay: passingCard && index >= player.hand.length ? animation.duration * 7 / 10 : 0,
         fromNeutralPosition: (chosen && undo) || received
-      } : undefined
+      } : undefined,
+      onClick: () => setFocusedCard(card)
     })
   }
 
@@ -78,14 +88,32 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
     hand.push(...passingCard.receivedCards)
   }
 
+  useEffect(() => {
+    if (typeof focusedCard == 'number' && (animation || hand.indexOf(focusedCard) === -1)) {
+      setFocusedCard(undefined)
+    }
+  }, [hand, focusedCard, animation])
+
   return (
-    <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} sizeRatio={cardRatio} getItemProps={getItemProps}>
-      {hand.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]} css={[playerHandCardStyle,
-        choosingCard?.card === card && animation && getChosenCardAnimation(player, animation, players),
-        animation && passingCard && (index < player.hand.length ?
-          passCardAnimation(round % 2 === 1 ? 1 : players - 1, animation, players) :
-          receiveCardAnimation(round % 2 === 1 ? players - 1 : 1, animation, players))]}/>)}
-    </Hand>
+    <>
+      {focusedCard !== undefined &&
+      <>
+        <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
+        <DevelopmentCard development={developmentCards[focusedCard]} css={focusCardStyle}/>
+        {canChooseCard &&
+        <button css={chooseCardButton} onClick={() => play(chooseDevelopmentCard(player.empire, focusedCard))}>
+          {t('Choisir')}
+        </button>}
+      </>
+      }
+      <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} sizeRatio={cardRatio} getItemProps={getItemProps}>
+        {hand.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]} css={[playerHandCardStyle,
+          choosingCard?.card === card && animation && getChosenCardAnimation(player, animation, players),
+          animation && passingCard && (index < player.hand.length ?
+            passCardAnimation(round % 2 === 1 ? 1 : players - 1, animation, players) :
+            receiveCardAnimation(round % 2 === 1 ? players - 1 : 1, animation, players))]}/>)}
+      </Hand>
+    </>
   )
 }
 
@@ -199,5 +227,25 @@ const receiveCardAnimation = (origin: number, animation: Animation, players: num
   `
   return css`animation: ${keyframe} ${animation.duration}s ease-in-out;`
 }
+
+const focusCardStyle = css`
+  position: absolute;
+  width: ${cardWidth * 3}%;
+  height: ${cardHeight * 3}%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  & > h3 {
+    font-size: 2.55vh;
+  }
+`
+
+const chooseCardButton = css`
+  top: 45%;
+  right: ${51 + cardWidth * 1.5}%;
+  background-image: url(${chooseButtonBackground});
+  ${textButton};
+`
 
 export default PlayerHand

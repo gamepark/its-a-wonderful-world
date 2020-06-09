@@ -1,14 +1,14 @@
 import {css} from '@emotion/core'
-import {usePlay} from '@interlude-games/workshop'
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
+import DevelopmentCardsCatalogs from '../material/developments/DevelopmentCardsCatalog'
 import {developmentCards} from '../material/developments/Developments'
-import Move from '../moves/Move'
-import {canBuild, getMovesToBuild} from '../Rules'
+import {completeConstruction} from '../moves/CompleteConstruction'
+import {canBuild} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
@@ -16,7 +16,7 @@ import {cardHeight, cardRatio, cardStyle, cardWidth, constructedCardX, construct
 
 const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
-  const play = usePlay<Move>()
+  const [focusedCardIndex, setFocusedCardIndex] = useState<number>()
   const [{dragging, isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
     canDrop: (item: DevelopmentFromConstructionArea) => isPlayer(player) && canBuild(player, item.card),
@@ -25,12 +25,17 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
       isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA && isPlayer(player) && canBuild(player, monitor.getItem().card),
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromConstructionArea) => getMovesToBuild(player as Player, item.card).forEach(move => play(move))
+    drop: (item: DevelopmentFromConstructionArea) => completeConstruction(player.empire, item.card)
   })
   return (
     <>
+      {typeof focusedCardIndex === 'number' &&
+      <DevelopmentCardsCatalogs initialIndex={focusedCardIndex} onClose={() => setFocusedCardIndex(undefined)}
+                                developments={player.constructedDevelopments.map(card => developmentCards[card])}/>
+      }
       {player.constructedDevelopments.map((card, index) =>
-        <DevelopmentCard key={card} development={developmentCards[card]} css={[style, cardStyle, transform(index)]}/>
+        <DevelopmentCard key={card} development={developmentCards[card]} onClick={() => setFocusedCardIndex(index)}
+                         css={[style, cardStyle, transform(index)]}/>
       )}
       {dragging &&
       <div ref={ref} css={[buildDropArea, isValidTarget ? validDropAreaColor(isOver) : invalidDropAreaColor]}>
