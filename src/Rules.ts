@@ -706,5 +706,16 @@ export function canUndoSlateForConstruction(actions: DisplayedAction<Move, Empir
   return !consecutiveActions.some(action => action.playerId === playerId && isTellYouAreReady(action.move))
 }
 
+export function isActive(game: Game | GameView, playerId: EmpireName) {
+  const player = game.players.find(player => player.empire === playerId)!
+  switch (game.phase) {
+    case Phase.Draft:
+      return player.chosenCard === undefined
+    case Phase.Planning:
+    case Phase.Production:
+      return !player.ready
+  }
+}
+
 // noinspection JSUnusedGlobalSymbols
 export default ItsAWonderfulWorldRules
