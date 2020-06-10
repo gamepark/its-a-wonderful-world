@@ -34,6 +34,7 @@ const style = css`
   &:not(:first-of-type) {
     div:last-of-type:before {
       content: '+';
+      display: block;
       position: absolute;
       right: 115%;
       font-size: 5vh;
@@ -68,6 +69,9 @@ const multiplierStyle = css`
   left: 5%;
   justify-content: flex-end;
   filter: drop-shadow(0 0 1px black);
+  & img {
+    filter: none;
+  }
 `
 
 export default ScorePart
