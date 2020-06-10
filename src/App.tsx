@@ -22,7 +22,7 @@ import {empireBackground} from './util/Styles'
 i18next.use(initReactI18next).use(ICU)
 
 const query = new URLSearchParams(window.location.search)
-const locale = query.get('lng') || 'en'
+const locale = query.get('locale') || 'en'
 
 i18next.init({
   lng: locale,
