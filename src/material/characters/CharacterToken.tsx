@@ -27,7 +27,7 @@ function getDescription(t: TFunction, character: Character) {
     case Character.Financier:
       return t('Un jeton Financier')
     case Character.General:
-      return t('Un jeton Militaire')
+      return t('Un jeton Général')
   }
 }
 

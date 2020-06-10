@@ -14,25 +14,22 @@ import Header from './Header'
 import EmpireName from './material/empires/EmpireName'
 import artwork from './material/its-cover-artwork.jpg'
 import Move from './moves/Move'
+import translations from './translations.json'
 import GameView from './types/GameView'
 import RotateScreenIcon from './util/RotateScreenIcon'
 import {empireBackground} from './util/Styles'
 
 i18next.use(initReactI18next).use(ICU)
 
+const query = new URLSearchParams(window.location.search)
+const locale = query.get('lng') || 'en'
+
 i18next.init({
-  lng: 'fr',
+  lng: locale,
   fallbackLng: 'en',
-  keySeparator: '>',
-  nsSeparator: '|',
-  resources: {
-    en: {
-      website: {}
-    },
-    fr: {
-      website: {}
-    }
-  }
+  keySeparator: false,
+  nsSeparator: false,
+  resources: translations
 })
 
 const App: FunctionComponent = () => {

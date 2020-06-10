@@ -153,25 +153,22 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<E
         }
       }
     case Phase.Planning:
-      if (!player) {
-        return t('Les joueurs doivent faire leur planification')
-      }
-      if (player.draftArea.length) {
+      if (player && player.draftArea.length) {
         return t('Vous devez mettre en construction ou recycler chacune des cartes draftées')
-      } else if (player.availableResources.length) {
+      } else if (player && player.availableResources.length) {
         return t('Placez vos ressources sur vos développements en construction ou votre carte Empire')
-      } else if (!player.ready) {
+      } else if (player && !player.ready) {
         return <Trans values={{resource: Resource.Materials}}
                       defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                      components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}>
-          Cliquez sur <button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button> pour continuer
-        </Trans>
+                      components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}/>
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 1) {
           return t('{player} doit faire sa planification', {player: getPlayerName(players[0].empire)})
-        } else {
+        } else if (player) {
           return t('Les autres joueurs doivent faire leur planification')
+        } else {
+          return t('Les joueurs doivent faire leur planification')
         }
       }
     case Phase.Production:
@@ -179,21 +176,19 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<E
         if (player.availableResources.length) {
           return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')
         } else if (player.bonuses.some(bonus => bonus === 'CHOOSE_CHARACTER')) {
-          return <Trans>Vous pouvez récupérer un <button onClick={() => play(receiveCharacter(player.empire, Character.Financier))}
-                                                         css={buttonStyle}>Financier</button> ou un <button
-            onClick={() => play(receiveCharacter(player.empire, Character.General))} css={buttonStyle}>Général</button></Trans>
+          return <Trans defaults="Vous pouvez récupérer un <0>Financier</0> ou un <1>Général</1>"
+                        components={[<button onClick={() => play(receiveCharacter(player.empire, Character.Financier))} css={buttonStyle}>Financier</button>,
+                          <button onClick={() => play(receiveCharacter(player.empire, Character.General))} css={buttonStyle}>Général</button>]}/>
         } else if (game.productionStep !== Resource.Exploration) {
           return <Trans values={{resource: getNextProductionStep(game)}}
                         defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}>
-            Cliquez sur <button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button> pour continuer
-          </Trans>
+                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}/>
         } else if (game.round < numberOfRounds) {
-          return <Trans>Cliquez sur <button onClick={() => play(tellYourAreReady(player.empire))}
-                                            css={buttonStyle}>Valider</button> si vous êtes prêt à passer au tour suivant</Trans>
+          return <Trans defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer au tour suivant"
+                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}/>
         } else {
-          return <Trans>Cliquez sur <button onClick={() => play(tellYourAreReady(player.empire))}
-                                            css={buttonStyle}>Valider</button> pour passer au calcul des scores</Trans>
+          return <Trans defaults="Cliquez sur <0>Valider</0> pour passer au calcul des scores"
+                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}/>
         }
       } else {
         const players = game.players.filter(player => !player.ready)
@@ -249,13 +244,23 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<E
                 {score: highestScore, developments: highestDevelopments})
             } else if (winnersTieBreaker.length === 2) {
               return t('Égalité parfaite ! {player1} et {player2} ont chacun {score} points et {developments} développements construits',
-                {player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire), score: highestScore, developments: highestDevelopments})
+                {
+                  player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire), score: highestScore,
+                  developments: highestDevelopments
+                })
             } else if (winnersTieBreaker.length === 3) {
               return t('Égalité parfaite ! {player1}, {player2} et {player3} ont chacun {score} points et {developments} développements construits',
-                {player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire), player3: getPlayerName(winnersTieBreaker[2].empire), score: highestScore, developments: highestDevelopments})
+                {
+                  player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire),
+                  player3: getPlayerName(winnersTieBreaker[2].empire), score: highestScore, developments: highestDevelopments
+                })
             } else if (winnersTieBreaker.length === 4) {
               return t('Égalité parfaite ! {player1}, {player2}, {player3} et {player4} ont chacun {score} points et {developments} développements construits',
-                {player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire), player3: getPlayerName(winnersTieBreaker[2].empire), player4: getPlayerName(winnersTieBreaker[3].empire), score: highestScore, developments: highestDevelopments})
+                {
+                  player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire),
+                  player3: getPlayerName(winnersTieBreaker[2].empire), player4: getPlayerName(winnersTieBreaker[3].empire), score: highestScore,
+                  developments: highestDevelopments
+                })
             }
           }
         }
