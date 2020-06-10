@@ -364,10 +364,14 @@ const ItsAWonderfulWorldRules: GameType = {
   rankPlayers(game: Game, empireA: EmpireName, empireB: EmpireName): number {
     const playerA = getPlayer(game, empireA), playerB = getPlayer(game, empireB)
     const scoreA = getScore(playerA), scoreB = getScore(playerB)
-    if (scoreA === scoreB) {
-      return playerB.constructedDevelopments.length - playerA.constructedDevelopments.length
+    if (scoreA !== scoreB) {
+      return scoreB - scoreA
     }
-    return scoreB - scoreA
+    const buildingsA = playerA.constructedDevelopments.length, buildingsB = playerB.constructedDevelopments.length
+    if (buildingsA !== buildingsB) {
+      return buildingsB - buildingsA
+    }
+    return countCharacters(playerB) - countCharacters(playerA)
   },
 
   canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: Game | GameView) {
@@ -715,6 +719,10 @@ export function isActive(game: Game | GameView, playerId: EmpireName) {
     case Phase.Production:
       return !player.ready
   }
+}
+
+export function countCharacters(player: Player | PlayerView) {
+  return player.characters.Financier + player.characters.General
 }
 
 // noinspection JSUnusedGlobalSymbols

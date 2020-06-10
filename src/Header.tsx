@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {useActions, useAnimation, useGame, usePlay, usePlayerId, usePlayers, useUndo} from '@interlude-games/workshop'
 import Animation from '@interlude-games/workshop/dist/Types/Animation'
-import Player from '@interlude-games/workshop/dist/Types/Player'
+import PlayerInfo from '@interlude-games/workshop/dist/Types/Player'
 import fscreen from 'fscreen'
 import {TFunction} from 'i18next'
 import NoSleep from 'nosleep.js'
@@ -15,9 +15,11 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
-import ItsAWonderfulWorldRules, {getNextProductionStep, getScore, numberOfRounds} from './Rules'
+import ItsAWonderfulWorldRules, {countCharacters, getNextProductionStep, getScore, numberOfRounds} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
+import Player from './types/Player'
+import PlayerView from './types/PlayerView'
 import FullScreenExitIcon from './util/FullScreenExitIcon'
 import FullScreenIcon from './util/FullScreenIcon'
 import IconButton from './util/IconButton'
@@ -124,7 +126,7 @@ const Header = () => {
   )
 }
 
-function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<EmpireName>[], game?: GameView, empire?: EmpireName, animation?: Animation<Move>) {
+function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game?: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   if (!game) {
     return t('Chargement de la partie...')
   }
@@ -201,71 +203,97 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: Player<E
             return t('Les joueurs doivent utiliser les ressources produites')
           }
         } else if (game.productionStep === Resource.Exploration && game.round === numberOfRounds) {
-          let highestScore = -1
-          let winners = []
-          for (const player of game.players) {
-            const score = getScore(player)
-            if (score >= highestScore) {
-              if (score > highestScore) {
-                winners = []
-                highestScore = score
-              }
-              winners.push(player)
-            }
-          }
-          if (winners.length === 1) {
-            if (player === winners[0]) {
-              return t('Victoire ! Vous gagnez la partie avec {score} points', {score: highestScore})
-            } else {
-              return t('{player} gagne la partie avec {score} points', {player: getPlayerName(winners[0].empire), score: highestScore})
-            }
-          } else {
-            let highestDevelopments = -1
-            let winnersTieBreaker = []
-            for (const player of winners) {
-              if (player.constructedDevelopments.length >= highestDevelopments) {
-                if (player.constructedDevelopments.length > highestDevelopments) {
-                  winnersTieBreaker = []
-                  highestDevelopments = player.constructedDevelopments.length
-                }
-                winnersTieBreaker.push(player)
-              }
-            }
-            if (winnersTieBreaker.length === 1) {
-              if (player === winnersTieBreaker[0]) {
-                return t('Victoire ! Vous gagnez la partie avec {score} points et {developments} développements construits',
-                  {score: highestScore, developments: highestDevelopments})
-              } else {
-                return t('{player} gagne la partie avec {score} points et {developments} développements construits',
-                  {player: getPlayerName(winnersTieBreaker[0].empire), score: highestScore, developments: highestDevelopments})
-              }
-            } else if (winnersTieBreaker.length === game.players.length) {
-              return t('Égalité parfaite ! Tous les joueurs ont chacun {score} points et {developments} développements construits',
-                {score: highestScore, developments: highestDevelopments})
-            } else if (winnersTieBreaker.length === 2) {
-              return t('Égalité parfaite ! {player1} et {player2} ont chacun {score} points et {developments} développements construits',
-                {
-                  player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire), score: highestScore,
-                  developments: highestDevelopments
-                })
-            } else if (winnersTieBreaker.length === 3) {
-              return t('Égalité parfaite ! {player1}, {player2} et {player3} ont chacun {score} points et {developments} développements construits',
-                {
-                  player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire),
-                  player3: getPlayerName(winnersTieBreaker[2].empire), score: highestScore, developments: highestDevelopments
-                })
-            } else if (winnersTieBreaker.length === 4) {
-              return t('Égalité parfaite ! {player1}, {player2}, {player3} et {player4} ont chacun {score} points et {developments} développements construits',
-                {
-                  player1: getPlayerName(winnersTieBreaker[0].empire), player2: getPlayerName(winnersTieBreaker[1].empire),
-                  player3: getPlayerName(winnersTieBreaker[2].empire), player4: getPlayerName(winnersTieBreaker[3].empire), score: highestScore,
-                  developments: highestDevelopments
-                })
-            }
-          }
+          return getEndOfGameText(t, playersInfo, game, player)
         }
       }
       return ''
+  }
+}
+
+function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], game: GameView, player?: Player | PlayerView) {
+  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
+  let highestScore = -1
+  let playersWithHighestScore = []
+  for (const player of game.players) {
+    const score = getScore(player)
+    if (score >= highestScore) {
+      if (score > highestScore) {
+        playersWithHighestScore = []
+        highestScore = score
+      }
+      playersWithHighestScore.push(player)
+    }
+  }
+  if (playersWithHighestScore.length === 1) {
+    if (player === playersWithHighestScore[0]) {
+      return t('Victoire ! Vous gagnez la partie avec {score} points', {score: highestScore})
+    } else {
+      return t('{player} gagne la partie avec {score} points', {player: getPlayerName(playersWithHighestScore[0].empire), score: highestScore})
+    }
+  }
+  let highestDevelopments = -1
+  let playersWithMostDevelopments = []
+  for (const player of playersWithHighestScore) {
+    if (player.constructedDevelopments.length >= highestDevelopments) {
+      if (player.constructedDevelopments.length > highestDevelopments) {
+        playersWithMostDevelopments = []
+        highestDevelopments = player.constructedDevelopments.length
+      }
+      playersWithMostDevelopments.push(player)
+    }
+  }
+  if (playersWithMostDevelopments.length === 1) {
+    if (player === playersWithMostDevelopments[0]) {
+      return t('Victoire ! Vous gagnez la partie avec {score} points et {developments} développements construits',
+        {score: highestScore, developments: highestDevelopments})
+    } else {
+      return t('{player} gagne la partie avec {score} points et {developments} développements construits',
+        {player: getPlayerName(playersWithMostDevelopments[0].empire), score: highestScore, developments: highestDevelopments})
+    }
+  }
+  let highestCharacters = -1
+  let playersWithMostCharacters = []
+  for (const player of playersWithMostDevelopments) {
+    const characters = countCharacters(player)
+    if (characters >= highestCharacters) {
+      if (characters > highestCharacters) {
+        playersWithMostCharacters = []
+        highestCharacters = characters
+      }
+      playersWithMostCharacters.push(player)
+    }
+  }
+  if (playersWithMostCharacters.length === 1) {
+    if (player === playersWithMostCharacters[0]) {
+      return t('Victoire ! Vous gagnez la partie avec {score} points, {developments} développements et {characters} personnages',
+        {score: highestScore, developments: highestDevelopments, characters: highestCharacters})
+    } else {
+      return t('{player} gagne la partie avec {score} points, {developments} développements et {characters} personnages',
+        {player: getPlayerName(playersWithMostCharacters[0].empire), score: highestScore, developments: highestDevelopments, characters: highestCharacters})
+    }
+  }
+  if (playersWithMostCharacters.length === game.players.length) {
+    return t('Égalité parfaite ! Tous les joueurs ont {score} points, {developments} développements et {characters} personnages',
+      {score: highestScore, developments: highestDevelopments, characters: highestCharacters})
+  } else if (playersWithMostCharacters.length === 2) {
+    return t('Égalité parfaite ! {player1} et {player2} ont {score} points, {developments} développements et {characters} personnages',
+      {
+        player1: getPlayerName(playersWithMostCharacters[0].empire), player2: getPlayerName(playersWithMostCharacters[1].empire),
+        score: highestScore, developments: highestDevelopments, characters: highestCharacters
+      })
+  } else if (playersWithMostCharacters.length === 3) {
+    return t('Égalité parfaite ! {player1}, {player2} et {player3} ont {score} points, {developments} développements et {characters} personnages',
+      {
+        player1: getPlayerName(playersWithMostCharacters[0].empire), player2: getPlayerName(playersWithMostCharacters[1].empire),
+        player3: getPlayerName(playersWithMostCharacters[2].empire), score: highestScore, developments: highestDevelopments, characters: highestCharacters
+      })
+  } else {
+    return t('Égalité parfaite ! {player1}, {player2}, {player3} et {player4} ont {score} points, {developments} développements et {characters} personnages',
+      {
+        player1: getPlayerName(playersWithMostCharacters[0].empire), player2: getPlayerName(playersWithMostCharacters[1].empire),
+        player3: getPlayerName(playersWithMostCharacters[2].empire), player4: getPlayerName(playersWithMostCharacters[3].empire),
+        score: highestScore, developments: highestDevelopments, characters: highestCharacters
+      })
   }
 }
 
