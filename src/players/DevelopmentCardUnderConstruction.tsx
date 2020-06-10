@@ -142,7 +142,7 @@ const getInnerStyle = (canDrop: boolean, isOver: boolean) => css`
 
 const canDropStyle = css`
   transition: transform 0.2s ease-in-out !important;
-  animation: ${glow('green')} 1s ease-in-out infinite alternate;
+  animation: ${glow('#f7a600')} 1s ease-in-out infinite alternate;
   transform: scale(1.05);
 `
 
@@ -153,12 +153,12 @@ const overStyle = css`
     width: 100%;
     height: 100%;
     z-index: 1;
-    background-color: rgba(0, 128, 0, 0.3);
+    background-color: rgba(247, 166, 0, 0.3);
   }
 `
 
-export const costSpaceDeltaX = 0.25
-export const costSpaceDeltaY = (index: number) => index * 2.1 + 0.3
+export const costSpaceDeltaX = 0.22
+export const costSpaceDeltaY = (index: number) => index * 2.1 + 0.4
 
 const getResourceStyle = (index: number) => css`
   position: absolute;

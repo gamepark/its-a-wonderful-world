@@ -234,8 +234,8 @@ const getPlaceItemButtonStyle = (index: number) => css`
   right: ${51 + cardWidth * 1.5}%;
   display: inline-flex;
   background-color:transparent;
-  background-image: url(${BackgroundCubeImage});
-  border: 0.2vh solid #ddd;
+  /*background-image: url(${BackgroundCubeImage});*/
+  border: 0vh solid #ddd;
   border-radius: 2vh;
   padding: 0.4vh;
   margin-right:2vh;

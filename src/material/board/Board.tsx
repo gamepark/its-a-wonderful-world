@@ -36,11 +36,13 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
         <img src={boardArrow} css={arrowStyle} alt={t('Validation des Ors')} draggable="false"/>
         <img src={boardCircleBlue} css={circleStyle} alt={t('Explorations')} draggable="false"/>
         <img src={boardArrow} css={arrowStyle} alt={t('Validation des Explorations')} draggable="false"/>
+
         <img src={boardCircleFinancier} css={greyFinancierStyle} alt={t('Financier des Matériaux')} draggable="false"/>
         <img src={boardCircleGeneral} css={blackGeneralStyle} alt={t('Général des Énergies')} draggable="false"/>
         <img src={boardCircleFinancierGeneral} css={greenFinancierGeneralStyle} alt={t('Financier et Général des Sciences')} draggable="false"/>
         <img src={boardCircleFinancier} css={yellowFinancierStyle} alt={t('Financier des Ors')} draggable="false"/>
         <img src={boardCircleGeneral} css={bleuGeneralStyle} alt={t('Général des Explorations')} draggable="false"/>
+
         </div>
       </div>
       {[...new Set(resources)].map(resource =>
