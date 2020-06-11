@@ -5,6 +5,7 @@ import Phase from '../../types/Phase'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {isPlayer} from '../../types/typeguards'
+import {areasX, boardHeight, boardTop, boardWidth} from '../../util/Styles'
 import {isResource, productionSteps} from '../resources/Resource'
 import ResourceArea from './ResourceArea'
 
@@ -22,16 +23,15 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
 
 const style = css`
   position: absolute;
-  width: 68%;
-  height: 34%;
-  top: 21%;
-  left: 45%;
-  transform: translateX(-50%);
+  width: ${boardWidth}%;
+  height: ${boardHeight}%;
+  left: ${areasX}%;
+  top: ${boardTop}%;
   transition: transform 0.5s ease-in-out;
 `
 
 const reducedSizeStyle = css`
-  transform: translate(-60%, -64%) scale(0.5);
+  transform: translate(-10%, -64%) scale(0.5);
 `
 
 export default Board

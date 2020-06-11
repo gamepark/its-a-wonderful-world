@@ -17,7 +17,7 @@ import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {isPlayer, isPlayerView} from '../../types/typeguards'
 import {
-  boardCirclesRatio, cardHeight, cardRatio, cardWidth, empireCardBottomMargin, empireCardLeftMargin, getAreaCardX, getAreaCardY, glow
+  boardHeight, boardWidth, cardHeight, cardRatio, cardWidth, empireCardBottomMargin, empireCardLeftMargin, getAreaCardX, getAreaCardY, glow
 } from '../../util/Styles'
 import resourceCircleFinancierGeneral from '../characters/circle-financier-general.png'
 import resourceCircleFinancier from '../characters/circle-financier.png'
@@ -108,15 +108,15 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
   )
 }
 
-const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 3.5
+const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 4
 const getHighlightLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 2.5
 const getNumberLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6
 const getCircleCharacterLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6.25
-const boardResourceTopPosition = 20
+const boardResourceTopPosition = 22
 const cubeDeltaX = 2.6
 const cubeDeltaY = 3.3
-const resourceWidth = cubeWidth * 1.6
-const resourceHeight = cubeHeight * 1.6 * boardCirclesRatio
+const resourceWidth = cubeWidth * 100 / boardWidth
+const resourceHeight = cubeHeight * 100 / boardHeight
 
 const resourceColor = {
   [Materials]: '#ddd6c5',
@@ -194,7 +194,7 @@ const numberStyle = css`
   position: absolute;
   width: 3%;
   height: 9%;
-  top: ${boardResourceTopPosition + 19.5}%;
+  top: 39.5%;
   text-align:center;
   font-size: 2.5vh;
   font-weight: bold;
@@ -283,7 +283,7 @@ const resourceStyle = css`
 `
 
 const getResourcePosition = (index: number, resource: Resource) => {
-  const cubeDispersion = toHexagonalSpiralPosition(index)
+  const cubeDispersion = index === 0 ? {x: 0, y: 0} : toHexagonalSpiralPosition(index - 1)
   return css`
     left: ${getBoardResourceLeftPosition(resource) + cubeDispersion.x * resourceWidth / 2 + cubeDeltaX}%;
     top: ${boardResourceTopPosition + cubeDispersion.y * resourceHeight + cubeDeltaY}%;
