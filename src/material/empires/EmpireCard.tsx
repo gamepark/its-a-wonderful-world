@@ -138,7 +138,7 @@ const getKrystalliumStyle = (index: number) => css`
   position: absolute;
   width: 10%;
   right: -15%;
-  bottom: ${index * 10}%;
+  bottom: ${index * 12}%;
 `
 
 export const resourcePosition = [

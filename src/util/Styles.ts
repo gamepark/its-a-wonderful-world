@@ -8,6 +8,9 @@ import RepublicOfEuropeBackground from '../material/empires/republic-of-europe-a
 import {numberOfCardsToDraft} from '../Rules'
 
 export const screenRatio = 16 / 9
+export const boardWidth = 68
+export const boardHeight = 34
+export const boardTop = 21
 export const headerHeight = 7
 export const topMargin = 1
 export const bottomMargin = 3

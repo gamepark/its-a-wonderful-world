@@ -29,7 +29,7 @@ const roundTextStyle = css`
   position: absolute;
   z-index: 2;
   top: 10.3%;
-  left: 4.3%;
+  left: 4%;
   font-size: 4vh;
   color: white;
   font-weight: bold;
