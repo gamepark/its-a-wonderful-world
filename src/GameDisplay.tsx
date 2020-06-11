@@ -19,7 +19,7 @@ import GameView from './types/GameView'
 import Phase from './types/Phase'
 import {cardHeight, cardStyle, playerPanelHeight, playerPanelWidth, playerPanelY} from './util/Styles'
 
-const SOUND_ALERT_INACTIVITY_THRESHOLD = 5000 // ms
+const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
 const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   const gameOver = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)

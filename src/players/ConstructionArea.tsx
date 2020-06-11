@@ -127,7 +127,6 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
                                                  postTransform={getTransform(construction.card, index)}
                                                  setFocus={() => setFocusedCard(construction.card)}
                                                  canRecycle={player.empire === playerId && focusedCard !== construction.card && row !== 2}
-                                                 onClick={() => setFocusedCard(construction.card)}
                                                  focused={focusedCard === construction.card}
                                                  css={[focusedCard === construction.card && getCardFocusTransform,
                                                    animation && animation.move.card && css`z-index: 10`]}/>
@@ -173,7 +172,7 @@ function getSmartPlaceItemMoves(player: Player, construction: Construction): (Pl
 
 const getTotalConstructionCost = (card: number) => Object.values(constructionCost(developmentCards[card].constructionCost)).reduce((value, sum) => sum + value)
 
-const maxResourcesToPlace = (player: Player, construction: Construction, resource: Resource) => {
+export const maxResourcesToPlace = (player: Player, construction: Construction, resource: Resource) => {
   const availableResources = player.availableResources.filter(r => r === resource).length
   const requiredResources = getRemainingCost(construction).filter(cost => cost.item === resource).length
   return Math.min(availableResources, requiredResources)

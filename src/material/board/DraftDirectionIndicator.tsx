@@ -1,21 +1,25 @@
 import {css, keyframes} from '@emotion/core'
 import React, {Fragment, FunctionComponent} from 'react'
+import {useTranslation} from 'react-i18next'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import DownArrowIcon from '../../util/DownArrowIcon'
 import {headerHeight, playerPanelHeight, playerPanelMargin} from '../../util/Styles'
 import UpArrowIcon from '../../util/UpArrowIcon'
 
-const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: (Player | PlayerView)[] }> = ({clockwise, players}) => (
-  <Fragment>
-    {players.slice(1).map((_, index) => clockwise ?
-      <DescendingArrows key={index} color="forestgreen" css={css`top: ${headerHeight + (index + 1) * (playerPanelHeight + playerPanelMargin)}%;`}
-                        title={'Sens de passage des cartes'}/> :
-      <AscendingArrows key={index} color="purple" css={css`top: ${25.2 + index * 18.5}%;`}
-                       title={'Sens de passage des cartes'}/>
-    )}
-  </Fragment>
-)
+const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: (Player | PlayerView)[] }> = ({clockwise, players}) => {
+  const {t} = useTranslation()
+  return (
+    <Fragment>
+      {players.slice(1).map((_, index) => clockwise ?
+        <DescendingArrows key={index} color="forestgreen" css={css`top: ${headerHeight + (index + 1) * (playerPanelHeight + playerPanelMargin)}%;`}
+                          title={t('Sens de passage des cartes')}/> :
+        <AscendingArrows key={index} color="purple" css={css`top: ${25.2 + index * 18.5}%;`}
+                         title={t('Sens de passage des cartes')}/>
+      )}
+    </Fragment>
+  )
+}
 
 const DescendingArrows: FunctionComponent<React.HTMLAttributes<HTMLDivElement> & { color: string }> = ({color, ...props}) => (
   <div css={[slider, scrollDownAnimation]} {...props}>

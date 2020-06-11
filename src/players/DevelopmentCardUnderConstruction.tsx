@@ -29,6 +29,7 @@ import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
 import {areaCardStyle, cardHeight, cardStyle, cardWidth, glow} from '../util/Styles'
+import {useLongPress} from '../util/useLongPress'
 
 type Props = {
   game: GameView
@@ -44,6 +45,21 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
   const play = usePlay()
   const legalMoves = isPlayer(player) ? getLegalMoves(player, game.phase) : []
   const [undo] = useUndo(ItsAWonderfulWorldRules)
+  const longPress = useLongPress({
+    onClick: () => setFocus(),
+    onLongPress: () => {
+      const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
+      getRemainingCost(construction).forEach(cost => {
+        if (isResource(cost.item)) {
+          if (availableResource.some(resource => resource === cost.item)) {
+            play(placeResource(player.empire, cost.item, construction.card, cost.space))
+            availableResource.splice(availableResource.findIndex(resource => resource === cost.item), 1)
+          }
+        }
+      })
+      window.navigator.vibrate(200)
+    }
+  })
   const actions = useActions<Move, EmpireName>()
   const placeResourceMoves: PlaceResourceOnConstruction[] = legalMoves.filter(isPlaceResourceOnConstruction)
     .filter(move => move.card === construction.card)
@@ -112,7 +128,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
 
   return (
     <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]}
-               onDrop={onDrop} {...props}>
+               onDrop={onDrop} {...longPress} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>
         {[...construction.costSpaces].reverse().map((item, index) => {
