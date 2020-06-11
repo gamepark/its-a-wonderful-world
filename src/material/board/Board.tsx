@@ -12,7 +12,7 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
   const reducedSize = game.phase === Phase.Draft && game.round > 1
   const playerResources = [...player.availableResources, ...player.bonuses.filter(isResource)]
   return (
-    <div css={boardCircles(reducedSize)}>
+    <div css={[style, reducedSize && reducedSizeStyle]}>
       {productionSteps.map(resource =>
         <ResourceArea key={resource} game={game} player={player} resource={resource} canDrag={isPlayer(player)}
                       quantity={playerResources.filter(r => r === resource).length}/>)}
@@ -20,7 +20,7 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
   )
 }
 
-const boardCircles = (reducedSize = false) => css`
+const style = css`
   position: absolute;
   width: 68%;
   height: 34%;
@@ -28,7 +28,10 @@ const boardCircles = (reducedSize = false) => css`
   left: 45%;
   transform: translateX(-50%);
   transition: transform 0.5s ease-in-out;
-  ${reducedSize && css`transform: translate(-60%, -64%) scale(0.5); `}
+`
+
+const reducedSizeStyle = css`
+  transform: translate(-60%, -64%) scale(0.5);
 `
 
 export default Board

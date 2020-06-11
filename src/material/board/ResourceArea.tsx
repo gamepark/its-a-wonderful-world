@@ -31,6 +31,8 @@ import resourceCircleGreen from './board-circle-green.png'
 import resourceCircleGrey from './board-circle-grey.png'
 import resourceCircleYellow from './board-circle-yellow.png'
 
+const {Materials, Energy, Science, Gold, Exploration, Krystallium} = Resource
+
 type Props = { game: GameView, player: Player | PlayerView, resource: Resource, canDrag: boolean, quantity: number }
 
 const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag, quantity}) => {
@@ -57,7 +59,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
       translateX += getAreaCardX(constructionIndex, player.constructionArea.length, game.players.length === 2) + costSpaceDeltaX
       translateY += getAreaCardY(1) + costSpaceDeltaY(move.space)
     } else {
-      const resourcePosition = player.empireCardResources.filter(resource => resource !== Resource.Krystallium).length
+      const resourcePosition = player.empireCardResources.filter(resource => resource !== Krystallium).length
       const destination = empireCardResourcePosition[resourcePosition % 5]
       translateX += empireCardLeftMargin + cardWidth / cardRatio - destination[0] * cardWidth / cardRatio / 100 - cubeWidth
       translateY += 100 - empireCardBottomMargin - cardHeight * cardRatio + destination[1] * cardHeight * cardRatio / 100
@@ -78,27 +80,28 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
       `
     }
   }
-  const isCircleHighlight = quantity !== 0 || game.phase === Phase.Draft
   const playerProduction = getProduction(player, resource)
   const hasMostProduction = !game.players.some(p => p.empire !== player.empire && getProduction(p, resource) >= playerProduction)
   const play = usePlay<Move>()
   const canPlayerValidate = isPlayer(player) && game.phase === Phase.Production && player.availableResources.length === 0 && !player.ready && game.productionStep === resource && player.bonuses.length === 0
   return (
     <>
-      <img src={resourceCircle[resource]} css={circleStyle(isCircleHighlight)} alt={t(Resource[resource])} draggable="false"/>
-      <button disabled={!canPlayerValidate} css={arrowStyle(canPlayerValidate)} onClick={() => play(tellYourAreReady(player.empire))} draggable="false"
+      <img src={resourceCircle[resource]} css={[circleStyle, game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle]}
+           alt={t(Resource[resource])} draggable="false"/>
+      <button disabled={!canPlayerValidate} css={arrowStyle} onClick={() => play(tellYourAreReady(player.empire))} draggable="false"
               title={t('Validation des ' + Resource[resource])}/>
-      <img src={resourceCharacter[resource]} css={characterStyle(resource, hasMostProduction)} alt={t(resourceCharacterText[resource])} draggable="false"/>
+      <img src={resourceCharacter[resource]} alt={t(resourceCharacterText[resource])} draggable="false"
+           css={[characterStyle, hasMostProduction && characterHighlightStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
       {quantity !== 0 &&
       <>
         <DragPreviewImage connect={preview} src={resourceCubeImages[resource]}/>
         {[...Array(quantity)].map((_, index) =>
           <ResourceCube key={index} resource={resource}
-                        css={[getResourceStyle(index, resource), dragging && index === quantity - 1 && css`opacity: 0;`, getAnimation(index)]}/>
+                        css={[resourceStyle, getResourcePosition(index, resource), dragging && index === quantity - 1 && css`opacity: 0;`, getAnimation(index)]}/>
         )
         }
-        <div ref={ref} key={resource} css={[getResourceAreaHighlight(resource), canDrag && canDragStyle]}/>
-        <div css={getResourceNumberStyle(resource)}>{quantity}</div>
+        <div ref={ref} key={resource} css={[areaHighlight, resourceAreaHighlight[resource], canDrag && canDragStyle]}/>
+        <div css={[numberStyle, resourceNumberStyle[resource]]}>{quantity}</div>
       </>
       }
     </>
@@ -116,82 +119,128 @@ const resourceWidth = cubeWidth * 1.6
 const resourceHeight = cubeHeight * 1.6 * boardCirclesRatio
 
 const resourceColor = {
-  [Resource.Materials]: 'white',
-  [Resource.Energy]: 'grey',
-  [Resource.Science]: 'green',
-  [Resource.Gold]: 'gold',
-  [Resource.Exploration]: 'blue',
-  [Resource.Krystallium]: 'red'
+  [Materials]: 'white',
+  [Energy]: 'grey',
+  [Science]: 'green',
+  [Gold]: 'gold',
+  [Exploration]: 'blue',
+  [Krystallium]: 'red'
 }
 
 const resourceTextColor = {
-  [Resource.Materials]: '#ddd6c5',
-  [Resource.Energy]: '#808080',
-  [Resource.Science]: '#c5d430',
-  [Resource.Gold]: '#ffed67',
-  [Resource.Exploration]: '#68c7f2',
-  [Resource.Krystallium]: '#d91214'
+  [Materials]: '#ddd6c5',
+  [Energy]: '#808080',
+  [Science]: '#c5d430',
+  [Gold]: '#ffed67',
+  [Exploration]: '#68c7f2',
+  [Krystallium]: '#d91214'
 }
 
 const resourceCircle = {
-  [Resource.Materials]: resourceCircleGrey,
-  [Resource.Energy]: resourceCircleBlack,
-  [Resource.Science]: resourceCircleGreen,
-  [Resource.Gold]: resourceCircleYellow,
-  [Resource.Exploration]: resourceCircleBlue
+  [Materials]: resourceCircleGrey,
+  [Energy]: resourceCircleBlack,
+  [Science]: resourceCircleGreen,
+  [Gold]: resourceCircleYellow,
+  [Exploration]: resourceCircleBlue
 }
 
 const resourceCharacter = {
-  [Resource.Materials]: resourceCircleFinancier,
-  [Resource.Energy]: resourceCircleGeneral,
-  [Resource.Science]: resourceCircleFinancierGeneral,
-  [Resource.Gold]: resourceCircleFinancier,
-  [Resource.Exploration]: resourceCircleGeneral
+  [Materials]: resourceCircleFinancier,
+  [Energy]: resourceCircleGeneral,
+  [Science]: resourceCircleFinancierGeneral,
+  [Gold]: resourceCircleFinancier,
+  [Exploration]: resourceCircleGeneral
 }
 
 const resourceCharacterText = {
-  [Resource.Materials]: 'Financier des Matériaux',
-  [Resource.Energy]: 'Général des Énergies',
-  [Resource.Science]: 'Financier et Général des Sciences',
-  [Resource.Gold]: 'Financier des Ors',
-  [Resource.Exploration]: 'Général des Explorations'
+  [Materials]: 'Financier des Matériaux',
+  [Energy]: 'Général des Énergies',
+  [Science]: 'Financier et Général des Sciences',
+  [Gold]: 'Financier des Ors',
+  [Exploration]: 'Général des Explorations'
 }
 
-const getResourceAreaHighlight = (resource: Resource) => css`
+const areaHighlight = css`
   position: absolute;
   width: 9.5%;
   height: 36%;
-  left: ${getHighlightLeftPosition(resource)}%;
   top: ${boardResourceTopPosition - 6}%;
   border-radius: 100%;
-  animation: ${glow(resourceColor[resource])} 1s ease-in-out infinite alternate;
 `
 
-const getResourceNumberStyle = (resource: Resource) => css`
+const resourceAreaHighlight = {
+  [Materials]: css`
+    left: ${getHighlightLeftPosition(Materials)}%;
+    animation: ${glow(resourceColor[Materials])} 1s ease-in-out infinite alternate;
+  `,
+  [Energy]: css`
+    left: ${getHighlightLeftPosition(Energy)}%;
+    animation: ${glow(resourceColor[Energy])} 1s ease-in-out infinite alternate;
+  `,
+  [Science]: css`
+    left: ${getHighlightLeftPosition(Science)}%;
+    animation: ${glow(resourceColor[Science])} 1s ease-in-out infinite alternate;
+  `,
+  [Gold]: css`
+    left: ${getHighlightLeftPosition(Gold)}%;
+    animation: ${glow(resourceColor[Gold])} 1s ease-in-out infinite alternate;
+  `,
+  [Exploration]: css`
+    left: ${getHighlightLeftPosition(Exploration)}%;
+    animation: ${glow(resourceColor[Exploration])} 1s ease-in-out infinite alternate;
+  `
+}
+
+const numberStyle = css`
   position: absolute;
   width: 3%;
   height: 9%;
-  left: ${getNumberLeftPosition(resource)}%;
   top: ${boardResourceTopPosition + 19.5}%;
   text-align:center;
-  color:${resourceTextColor[resource]};
   font-size: 2.5vh;
   font-weight: bold;
   text-shadow: 0 0 5px black, 0 0 5px black, 0 0 5px black, 0 0 5px black;
 `
 
+const resourceNumberStyle = {
+  [Materials]: css`
+    left: ${getNumberLeftPosition(Materials)}%;
+    color:${resourceTextColor[Materials]};
+  `,
+  [Energy]: css`
+    left: ${getNumberLeftPosition(Energy)}%;
+    color:${resourceTextColor[Energy]};
+  `,
+  [Science]: css`
+    left: ${getNumberLeftPosition(Science)}%;
+    color:${resourceTextColor[Science]};
+  `,
+  [Gold]: css`
+    left: ${getNumberLeftPosition(Gold)}%;
+    color:${resourceTextColor[Gold]};
+  `,
+  [Exploration]: css`
+    left: ${getNumberLeftPosition(Exploration)}%;
+    color:${resourceTextColor[Exploration]};
+  `
+}
+
 const canDragStyle = css`
   cursor: grab;
 `
 
-const circleStyle = (isResourcePresent: boolean) => css`
+const circleStyle = css`
   width: 15%;
   vertical-align: middle;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
   transition: opacity 0.5s ease-in-out;
-  opacity: ${ isResourcePresent ? '1' : '0.8' };
 `
-const arrowStyle = (isActiveButton: boolean) => css`
+
+const circleShadowedStyle = css`
+  opacity: 0.7;
+`
+
+const arrowStyle = css`
   width: 5%;
   height:23%;
   vertical-align: middle;
@@ -202,26 +251,41 @@ const arrowStyle = (isActiveButton: boolean) => css`
   background-repeat:no-repeat;
   background-color:transparent;
   border:0 solid #FFF;
-  opacity: ${isActiveButton ? '1' : '0.6'};
-  ${isActiveButton ? 'transform: scale(1.4); &:hover {cursor:pointer;transform: scale(1.7);}' : ''};
+  &:disabled {
+  &:disabled {
+    opacity: 0.6;
+  }
+  &:not(:disabled) {
+    transform: scale(1.4);
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.7);
+    }
+  }
 `
 
-const characterStyle = (resource: Resource, singleMostPlayer: boolean) => css`
+const characterStyle = css`
   position:absolute;
   width: 2.5%;
   top:4.2%;
-  left:${getCircleCharacterLeftPosition(resource)}%;
   transition: opacity 0.5s ease-in-out;
-  opacity: ${singleMostPlayer ? '1' : '0.5'};
-  ${singleMostPlayer ? 'filter: drop-shadow(0 0 5px white);' : ''};
+  opacity: 0.5;
 `
 
-const getResourceStyle = (index: number, resource: Resource) => {
+const characterHighlightStyle = css`
+  opacity: 1;
+  filter: drop-shadow(0 0 5px white);
+`
+
+const resourceStyle = css`
+  position: absolute;
+  width: ${resourceWidth}%;
+  height: ${resourceHeight}%;
+`
+
+const getResourcePosition = (index: number, resource: Resource) => {
   const cubeDispersion = toHexagonalSpiralPosition(index)
   return css`
-    position: absolute;
-    width: ${resourceWidth}%;
-    height: ${resourceHeight}%;
     left: ${getBoardResourceLeftPosition(resource) + cubeDispersion.x * resourceWidth / 2 + cubeDeltaX}%;
     top: ${boardResourceTopPosition + cubeDispersion.y * resourceHeight + cubeDeltaY}%;
   `
