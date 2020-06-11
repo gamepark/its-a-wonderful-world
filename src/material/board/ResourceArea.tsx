@@ -206,7 +206,7 @@ const arrowStyle = (isActiveButton: boolean) => css`
   background-color:transparent;
   border:0 solid #FFF;
   opacity: ${ isActiveButton ? '1' : '0.6' };
-  ${ isActiveButton ?  'transform: scale(1.3); &:hover {cursor:pointer;transform: scale(1.6);}' : '' };
+  ${ isActiveButton ?  'transform: scale(1.4); &:hover {cursor:pointer;transform: scale(1.7);}' : '' };
   
 `
 const characterStyle = (resource: Resource, singleMostPlayer: boolean) => css`
