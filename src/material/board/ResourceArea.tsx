@@ -119,15 +119,6 @@ const resourceWidth = cubeWidth * 1.6
 const resourceHeight = cubeHeight * 1.6 * boardCirclesRatio
 
 const resourceColor = {
-  [Materials]: 'white',
-  [Energy]: 'grey',
-  [Science]: 'green',
-  [Gold]: 'gold',
-  [Exploration]: 'blue',
-  [Krystallium]: 'red'
-}
-
-const resourceTextColor = {
   [Materials]: '#ddd6c5',
   [Energy]: '#808080',
   [Science]: '#c5d430',
@@ -205,23 +196,23 @@ const numberStyle = css`
 const resourceNumberStyle = {
   [Materials]: css`
     left: ${getNumberLeftPosition(Materials)}%;
-    color:${resourceTextColor[Materials]};
+    color:${resourceColor[Materials]};
   `,
   [Energy]: css`
     left: ${getNumberLeftPosition(Energy)}%;
-    color:${resourceTextColor[Energy]};
+    color:${resourceColor[Energy]};
   `,
   [Science]: css`
     left: ${getNumberLeftPosition(Science)}%;
-    color:${resourceTextColor[Science]};
+    color:${resourceColor[Science]};
   `,
   [Gold]: css`
     left: ${getNumberLeftPosition(Gold)}%;
-    color:${resourceTextColor[Gold]};
+    color:${resourceColor[Gold]};
   `,
   [Exploration]: css`
     left: ${getNumberLeftPosition(Exploration)}%;
-    color:${resourceTextColor[Exploration]};
+    color:${resourceColor[Exploration]};
   `
 }
 
