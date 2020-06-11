@@ -32,7 +32,7 @@ const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ..
 }
 
 export const cubeWidth = 1.2
-export const cubeHeight = 1.2 * screenRatio * 1.05
+export const cubeHeight = 1.2 * screenRatio
 
 const style = css`
   filter: drop-shadow(0 0 3px white);
