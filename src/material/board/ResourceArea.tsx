@@ -1,5 +1,6 @@
 import {css, keyframes} from '@emotion/core'
 import {useAnimations, usePlay} from '@interlude-games/workshop'
+import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
@@ -87,10 +88,9 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
   return (
     <>
       <img src={resourceCircle[resource]} css={[circleStyle, game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle]}
-           alt={t(Resource[resource])} draggable="false"/>
-      <button disabled={!canPlayerValidate} css={arrowStyle} onClick={() => play(tellYourAreReady(player.empire))} draggable="false"
-              title={t('Validation des ' + Resource[resource])}/>
-      <img src={resourceCharacter[resource]} alt={t(resourceCharacterText[resource])} draggable="false"
+           alt={resourceAreaText[resource](t)} title={resourceAreaText[resource](t)} draggable="false"/>
+      <button disabled={!canPlayerValidate} css={arrowStyle} onClick={() => play(tellYourAreReady(player.empire))} draggable="false" title={t('Valider')}/>
+      <img src={resourceCharacter[resource]} alt={resourceCharacterText[resource](t)} title={resourceCharacterText[resource](t)} draggable="false"
            css={[characterStyle, hasMostProduction && characterHighlightStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
       {quantity !== 0 &&
       <>
@@ -143,12 +143,20 @@ const resourceCharacter = {
   [Exploration]: resourceCircleGeneral
 }
 
+const resourceAreaText = {
+  [Materials]: (t: TFunction) => t('Zone de production des Matériaux (cubes blancs)'),
+  [Energy]: (t: TFunction) => t('Zone de production de l’Énergie (cubes noirs)'),
+  [Science]: (t: TFunction) => t('Zone de production de la Science (cubes verts)'),
+  [Gold]: (t: TFunction) => t('Zone de production de l’Or (cubes jaunes)'),
+  [Exploration]: (t: TFunction) => t('Zone de production de l’Exploration (cubes bleus)')
+}
+
 const resourceCharacterText = {
-  [Materials]: 'Financier des Matériaux',
-  [Energy]: 'Général des Énergies',
-  [Science]: 'Financier et Général des Sciences',
-  [Gold]: 'Financier des Ors',
-  [Exploration]: 'Général des Explorations'
+  [Materials]: (t: TFunction) => t('Le joueur produisant seul le plus de Matériaux gagne un jeton Financier'),
+  [Energy]: (t: TFunction) => t('Le joueur produisant seul le plus d’Énergie gagne un jeton Militaire'),
+  [Science]: (t: TFunction) => t('Le joueur produisant seul le plus de Science gagne un jeton Financier ou Militaire'),
+  [Gold]: (t: TFunction) => t('Le joueur produisant seul le plus d’Or gagne un jeton Financier'),
+  [Exploration]: (t: TFunction) => t('Le joueur produisant seul le plus d’Exploration gagne un jeton Militaire')
 }
 
 const areaHighlight = css`
