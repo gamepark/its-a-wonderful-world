@@ -2,35 +2,35 @@ import {css, keyframes} from '@emotion/core'
 import {useAnimations, usePlay, usePlayerId} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
+import {useTranslation} from 'react-i18next'
 import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
+import Move from '../../moves/Move'
 import MoveType from '../../moves/MoveType'
 import PlaceResource, {isPlaceResourceOnConstruction} from '../../moves/PlaceResource'
+import {tellYourAreReady} from '../../moves/TellYouAreReady'
 import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
+import {getProduction} from '../../Rules'
 import GameView from '../../types/GameView'
+import Phase from '../../types/Phase'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {isPlayerView} from '../../types/typeguards'
 import {
   boardCirclesRatio, cardHeight, cardRatio, cardWidth, empireCardBottomMargin, empireCardLeftMargin, getAreaCardX, getAreaCardY, glow
 } from '../../util/Styles'
-import {resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
-import Resource from '../resources/Resource'
-import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
-import resourceCircleGrey from './board-circle-grey.png'
-import resourceCircleBlack from './board-circle-black.png'
-import resourceCircleGreen from './board-circle-green.png'
-import resourceCircleYellow from './board-circle-yellow.png'
-import resourceCircleBlue from './board-circle-blue.png'
+import resourceCircleFinancierGeneral from '../characters/circle-financier-general.png'
 import resourceCircleFinancier from '../characters/circle-financier.png'
 import resourceCircleGeneral from '../characters/circle-general.png'
-import resourceCircleFinancierGeneral from '../characters/circle-financier-general.png'
-import boardArrow from './arrow-white-2.png'
-import {useTranslation} from 'react-i18next'
-import Phase from '../../types/Phase'
-import {tellYourAreReady} from '../../moves/TellYouAreReady'
-import Move from '../../moves/Move'
-import {getProduction} from '../../Rules'
+import {resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
 import EmpireName from '../empires/EmpireName'
+import Resource, {resources} from '../resources/Resource'
+import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
+import boardArrow from './arrow-white-2.png'
+import resourceCircleBlack from './board-circle-black.png'
+import resourceCircleBlue from './board-circle-blue.png'
+import resourceCircleGreen from './board-circle-green.png'
+import resourceCircleGrey from './board-circle-grey.png'
+import resourceCircleYellow from './board-circle-yellow.png'
 
 type Props = { game: GameView, player: Player | PlayerView, resource: Resource, canDrag: boolean, quantity: number }
 
@@ -105,8 +105,6 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     </>
   )
 }
-
-const resources = Object.values(Resource)
 
 const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 3.5
 const getHighlightLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 2.5

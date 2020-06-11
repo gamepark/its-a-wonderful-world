@@ -5,18 +5,17 @@ import Phase from '../../types/Phase'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {isPlayer} from '../../types/typeguards'
-import Resource, {isResource} from '../resources/Resource'
+import {isResource, productionSteps} from '../resources/Resource'
 import ResourceArea from './ResourceArea'
 
 const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const reducedSize = game.phase === Phase.Draft && game.round > 1
-  const resources = [...player.availableResources, ...player.bonuses.filter(isResource)]
-  const allresources = [Resource.Materials,Resource.Energy,Resource.Science,Resource.Gold,Resource.Exploration]
+  const playerResources = [...player.availableResources, ...player.bonuses.filter(isResource)]
   return (
     <div css={boardCircles(reducedSize)}>
-        {[...allresources].map(resource =>
-          <ResourceArea key={resource} game={game} player={player} resource={resource} canDrag={isPlayer(player)}
-                      quantity={resources.filter(r => r === resource).length}/>)}
+      {productionSteps.map(resource =>
+        <ResourceArea key={resource} game={game} player={player} resource={resource} canDrag={isPlayer(player)}
+                      quantity={playerResources.filter(r => r === resource).length}/>)}
     </div>
   )
 }
