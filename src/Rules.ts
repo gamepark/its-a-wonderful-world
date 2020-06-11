@@ -163,10 +163,13 @@ const ItsAWonderfulWorldRules: GameType = {
       case MoveType.DealDevelopmentCards: {
         const cardsToDeal = game.players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft
         game.players.forEach(player => {
-          if (playerId && player.empire === playerId && isDealDevelopmentCardsView(move)) {
-            player.hand = move.playerCards
-          } else if (isGameView(game)) {
-            player.hand = cardsToDeal
+          if (isGameView(game)) {
+            game.deck -= cardsToDeal
+            if (playerId && player.empire === playerId && isDealDevelopmentCardsView(move)) {
+              player.hand = move.playerCards
+            } else {
+              player.hand = cardsToDeal
+            }
           } else {
             player.hand = game.deck.splice(0, cardsToDeal)
           }
