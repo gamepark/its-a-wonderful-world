@@ -231,6 +231,10 @@ const circleShadowedStyle = css`
   opacity: 0.7;
 `
 
+const pulse = keyframes`
+  to {transform: scale(1.4);}
+`
+
 const arrowStyle = css`
   width: 5%;
   height:23%;
@@ -243,15 +247,11 @@ const arrowStyle = css`
   background-color:transparent;
   border:0 solid #FFF;
   &:disabled {
-  &:disabled {
     opacity: 0.6;
   }
-  &:not(:disabled) {
-    transform: scale(1.4);
+  &:enabled {
+    animation: ${pulse} 0.8s linear alternate infinite;
     cursor: pointer;
-    &:hover {
-      transform: scale(1.7);
-    }
   }
 `
 
