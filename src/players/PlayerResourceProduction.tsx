@@ -8,13 +8,11 @@ import Exploration from '../material/resources/exploration.png'
 import Gold from '../material/resources/gold.png'
 import Krystallium from '../material/resources/krytallium.png'
 import Materials from '../material/resources/materials.png'
-import Resource from '../material/resources/Resource'
+import Resource, {resources} from '../material/resources/Resource'
 import Science from '../material/resources/science.png'
 import {getProduction} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
-
-const resources = Object.values(Resource)
 
 // Display player's production the best way we can: each resource individually up to 11, then using multipliers for resources with the highest production
 const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {

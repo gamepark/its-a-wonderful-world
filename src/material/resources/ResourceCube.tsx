@@ -5,13 +5,13 @@ import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {krystalliumFromEmpire} from '../../drag-objects/KrystalliumCube'
 import {screenRatio} from '../../util/Styles'
-import Energy from './energy-cube.png'
-import Exploration from './exploration-cube.png'
-import Gold from './gold-cube.png'
-import Krystallium from './krytallium-cube.png'
-import Materials from './materials-cube.png'
+import Energy from './energy-cube-2.png'
+import Exploration from './exploration-cube-2.png'
+import Gold from './gold-cube-2.png'
+import Krystallium from './krytallium-cube-2.png'
+import Materials from './materials-cube-2.png'
 import Resource from './Resource'
-import Science from './science-cube.png'
+import Science from './science-cube-2.png'
 
 type Props = {
   resource: Resource
@@ -32,10 +32,10 @@ const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ..
 }
 
 export const cubeWidth = 1.2
-export const cubeHeight = 1.2 * screenRatio * 1.05
+export const cubeHeight = 1.2 * screenRatio
 
 const style = css`
-  filter: drop-shadow(0 0 5px black);
+  filter: drop-shadow(0 0 3px white);
 `
 
 const getDescription = (t: TFunction, resource: Resource) => {

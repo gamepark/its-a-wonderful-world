@@ -16,7 +16,6 @@ import EmpireName from '../material/empires/EmpireName'
 import ButtonArrow from '../material/resources/button-arrow.png'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
-import BackgroundCubeImage from '../material/resources/texture-grey.jpg'
 import CompleteConstruction, {isCompleteConstruction} from '../moves/CompleteConstruction'
 import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
@@ -107,13 +106,13 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
           }
         </button>
       )}
-      {maxSpendableResources > 1 && <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card))}
+      {maxSpendableResources > 1 && <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card) + 0.5)}
                                             onClick={() => placeResources(construction, game.productionStep!, maxSpendableResources)}>
         <span css={getPlaceTextStyle}>{t('Placer')} </span>
         {[...Array(maxSpendableResources)].map((_, index) => <ResourceCube key={index} resource={game.productionStep!} css={buttonItemStyle}/>)}
       </button>}
       {isPlayer(player) && canBuild(player, construction.card) &&
-      <button css={getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 1 : 0))}
+      <button css={getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 2 : 2))}
               onClick={() => build(construction)}>{t('Construire')}</button>
       }
     </>}
@@ -219,7 +218,7 @@ const getPlaceConstructionButton = (index: number) => css`
 
 const buttonItemStyle = css`
   display: inline;
-  height: 5vh;
+  height: 6vh;
 `
 
 const getPlaceTextStyle = css`
@@ -229,22 +228,21 @@ const getPlaceTextStyle = css`
 const getPlaceItemButtonStyle = (index: number) => css`
   position: absolute;
   z-index: 100;
-  top: ${index * 6.5 + 16.5}%;
+  top: ${index * 6.4 + 16.5}%;
   right: ${51 + cardWidth * 1.5}%;
   display: inline-flex;
   background-color:transparent;
-  background-image: url(${BackgroundCubeImage});
-  border: 0.2vh solid #ddd;
+  border: 0;
   border-radius: 2vh;
-  padding: 0.4vh;
-  margin-right:2vh;
+  padding: 0.5%;
+  margin-right: 1.5vh;
   align-items: center;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
   ${textButtonFontStyle};
   &:hover, &:focus {
-    outline:0;
+    outline: 0;
     transform: translateY(1px) scale(1.1);
-    cursor:pointer;
+    cursor: pointer;
     z-index: 101;
   }
   &:active {
@@ -255,7 +253,7 @@ const getPlaceItemButtonStyle = (index: number) => css`
     width: 3.5vh;
     height: 3.5vh;
     content: '';
-    right: -4vh;
+    right: -3.5vh;
     position: absolute;
     background-size: cover;
     background-repeat: no-repeat;

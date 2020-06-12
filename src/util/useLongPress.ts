@@ -44,7 +44,10 @@ export function useLongPress<T>({onClick, onLongPress, ms = 300, moveTolerance =
       eventRef.current = event
       if (timerRef.current) {
         clearTimeout(timerRef.current)
-        onClick && onClick(eventRef.current)
+        if (onClick) {
+          onClick(eventRef.current)
+          event.preventDefault()
+        }
         timerRef.current = undefined
         eventRef.current = undefined
       }
