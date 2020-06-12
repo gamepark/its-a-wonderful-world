@@ -8,10 +8,11 @@ import CharacterToken, {images as characterTokenImages} from './CharacterToken'
 type Props = {
   character: Character
   quantity: number
+  reduced:boolean
   draggable?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const CharacterTokenPile: FunctionComponent<Props> = ({character, quantity, draggable = false, ...props}) => {
+const CharacterTokenPile: FunctionComponent<Props> = ({character, quantity, reduced, draggable = false, ...props}) => {
   const [, ref, preview] = useDrag({
     item: characterTokenFromEmpire(character),
     canDrag: quantity > 0,
@@ -22,12 +23,12 @@ const CharacterTokenPile: FunctionComponent<Props> = ({character, quantity, drag
   const tokens = []
   const tokensToDisplay = Math.min(quantity, 5)
   for (let i = 0; i < tokensToDisplay; i++) {
-    tokens.push(<CharacterToken key={i} character={character} css={tokenStyle(i)}/>)
+    tokens.push(<CharacterToken key={i} character={character} css={[tokenStyle(i), reduced && reducedTokenStyle(i)]}/>)
   }
   return (
     <div ref={ref} {...props}>
       {tokens}
-      {quantity > 1 && <div css={tokenQuantityStyle}>{quantity}</div>}
+      {quantity > 1 && <div css={[tokenQuantityStyle, reduced && reducedTokenQuantityStyle]}>{quantity}</div>}
       <DragPreviewImage connect={preview} src={characterTokenImages[character]} css={characterTokenDraggingStyle}/>
     </div>
   )
@@ -36,17 +37,26 @@ const CharacterTokenPile: FunctionComponent<Props> = ({character, quantity, drag
 const tokenStyle = (index: number) => css`
   position: absolute;
   width: 100%;
-  left: ${index * 10}%;
+  left: ${(index * 10)+10}%;
   top: 0;
+`
+
+const reducedTokenStyle = (index: number) => css`
+  left: ${(index * 10)+50}%;
 `
 
 const tokenQuantityStyle = css`
   position: absolute;
-  font-size: 3vh;
+  font-size: 4vh;
   font-weight: bold;
   color: white;
   text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
   top: 0.5vh;
+`
+
+const reducedTokenQuantityStyle = css`
+  font-size: 3vh;
+  top: 0;
 `
 
 const characterTokenDraggingStyle = css`

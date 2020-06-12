@@ -53,6 +53,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     const animation = animations[quantity - index - 1]
     const move = animation.move
     const cubePosition = toHexagonalSpiralPosition(index)
+    const reducedSize = game.phase === Phase.Draft && game.round > 1
     let translateX = -(getBoardResourceLeftPosition(resource) + cubeDeltaX + cubePosition.x * cubeWidth / 2)
     let translateY = -(boardResourceTopPosition + cubeDeltaY + cubePosition.y * cubeHeight)
     if (isPlaceResourceOnConstruction(move)) {
@@ -61,7 +62,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
       translateY += getAreaCardY(1) + costSpaceDeltaY(move.space)
     } else {
       const resourcePosition = player.empireCardResources.filter(resource => resource !== Krystallium).length
-      const destination = empireCardResourcePosition[resourcePosition % 5]
+      const destination = empireCardResourcePosition[reducedSize?1:0][resourcePosition % 5]
       translateX += empireCardLeftMargin + cardWidth / cardRatio - destination[0] * cardWidth / cardRatio / 100 - cubeWidth
       translateY += 100 - empireCardBottomMargin - cardHeight * cardRatio + destination[1] * cardHeight * cardRatio / 100
     }

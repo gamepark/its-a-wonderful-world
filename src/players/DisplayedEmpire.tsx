@@ -25,7 +25,7 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, showAreas, pan
   const playerId = usePlayerId<EmpireName>()
   return (
     <>
-      <EmpireCard player={player} withResourceDrop={playerId === player.empire}/>
+      <EmpireCard game={game} player={player} withResourceDrop={playerId === player.empire}/>
       {showAreas && <DraftArea game={game} player={player}/>}
       {showAreas && (game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} player={player}/>}
       {showAreas && <RecyclingDropArea empire={player.empire}/>}

@@ -8,28 +8,32 @@ import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {placeResource} from '../../moves/PlaceResource'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {cardHeight, cardRatio, cardWidth, empireCardBottomMargin, empireCardLeftMargin, glow} from '../../util/Styles'
+import {empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, glow} from '../../util/Styles'
 import Character from '../characters/Character'
 import CharacterTokenPile from '../characters/CharacterTokenPile'
 import Resource from '../resources/Resource'
 import ResourceCube from '../resources/ResourceCube'
-import AztecEmpireA from './aztec-empire-A.png'
+import AztecEmpireA from './aztec-empire-A.jpg'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
-import AztecEmpireB from './aztec-empire-B.png'
+import AztecEmpireB from './aztec-empire-B.jpg'
 import EmpireName from './EmpireName'
 import EmpireSide from './EmpireSide'
-import FederationOfAsiaA from './federation-of-asia-A.png'
+import FederationOfAsiaA from './federation-of-asia-A.jpg'
 import FederationOfAsiaAvatar from './federation-of-asia-avatar.png'
-import FederationOfAsiaB from './federation-of-asia-B.png'
-import NoramStatesA from './noram-states-A.png'
+import FederationOfAsiaB from './federation-of-asia-B.jpg'
+import NoramStatesA from './noram-states-A.jpg'
 import NoramStatesAvatar from './noram-states-avatar.png'
-import NoramStatesB from './noram-states-B.png'
-import PanafricanUnionA from './panafrican-union-A.png'
+import NoramStatesB from './noram-states-B.jpg'
+import PanafricanUnionA from './panafrican-union-A.jpg'
 import PanafricanUnionAvatar from './panafrican-union-avatar.png'
-import PanafricanUnionB from './panafrican-union-B.png'
-import RepublicOfEuropeA from './republic-of-europe-A.png'
+import PanafricanUnionB from './panafrican-union-B.jpg'
+import RepublicOfEuropeA from './republic-of-europe-A.jpg'
 import RepublicOfEuropeAvatar from './republic-of-europe-avatar.png'
-import RepublicOfEuropeB from './republic-of-europe-B.png'
+import RepublicOfEuropeB from './republic-of-europe-B.jpg'
+import RecyclingArea from '../board/recycling-area.png'
+import {useTranslation} from 'react-i18next'
+import Phase from '../../types/Phase'
+import GameView from '../../types/GameView'
 
 const empiresImages = {
   [EmpireName.AztecEmpire]: {
@@ -63,13 +67,16 @@ export const empireAvatar = {
 }
 
 type Props = {
+  game: GameView
   player: Player | PlayerView
   withResourceDrop?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false, ...props}) => {
+const EmpireCard: FunctionComponent<Props> = ({game, player, withResourceDrop = false, ...props}) => {
+  const {t} = useTranslation()
   const play = usePlay()
   const playerId = usePlayerId<EmpireName>()
+  const reducedSize = game.phase === Phase.Draft && game.round > 1
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.RESOURCE_FROM_BOARD,
     canDrop: () => withResourceDrop,
@@ -80,16 +87,24 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
     drop: (item: ResourceFromBoard) => play(placeResource(player.empire, item.resource))
   })
   return (
-    <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
-      {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
-      {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire === playerId}/>)}
-      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition}
-                          draggable={player.empire === playerId}/>
-      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition}
-                          draggable={player.empire === playerId}/>
+    <>
+      <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
+        <div css={empireCardTitle}>{player.empireSide} - {getEmpireName(t,player.empire)}</div>
     </div>
+
+      <img src={RecyclingArea} alt={t('Recycling Area')} css={[recyclingAreaStyle, reducedSize && reducedRecyclingAreaStyle]}/>
+      {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={getResourceStyle(reducedSize?1:0,index)}/>)}
+      {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={[getKrystalliumStyle(index),reducedSize && reducedKrystalliumStyle(index)]} draggable={player.empire === playerId}/>)}
+
+
+
+    <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} reduced={reducedSize} css={[financiersPilePosition, reducedSize && reducedFinanciersPilePosition]}
+                      draggable={player.empire === playerId}/>
+    <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} reduced={reducedSize} css={[generalsPilePosition, reducedSize && reducedGeneralsPilePosition]}
+                      draggable={player.empire === playerId}/>
+    </>
   )
 }
 
@@ -97,8 +112,8 @@ const style = css`
   position: absolute;
   left: ${empireCardLeftMargin}%;
   bottom: ${empireCardBottomMargin}%;
-  height: ${cardHeight * cardRatio}%;
-  width: ${cardWidth / cardRatio}%;
+  height: ${empireCardHeight}%;
+  width: ${empireCardWidth}%;
   transform-origin: bottom left;
   border-radius: 5%;
   transition: transform 0.2s ease-in-out;
@@ -108,6 +123,19 @@ const style = css`
 
 const getBackgroundImage = (empire: EmpireName, empireSide: EmpireSide) => css`
   background-image: url(${empiresImages[empire][empireSide]});
+`
+
+export const empireCardTitle = css`
+  position: absolute;
+  top: 71%;
+  left: 6%;
+  width: 64%;
+  color: #EEE;
+  text-align:center;
+  font-size: 1.2vh;
+  font-weight: lighter;
+  text-shadow: 0 0 0.3vh #000, 0 0 0.3vh #000;
+  text-transform:uppercase;
 `
 
 const validTargetStyle = css`
@@ -127,40 +155,76 @@ const overStyle = css`
   }
 `
 
-const getResourceStyle = (index: number) => css`
+const recyclingAreaStyle = css`
   position: absolute;
-  width: 10%;
-  right: ${resourcePosition[index % 5][0]}%;
-  top: ${resourcePosition[index % 5][1]}%;
+  left: 30%;
+  top: 8%;
+  height: 9%;
+`
+
+const reducedRecyclingAreaStyle = css`
+  left: 56%;
+`
+
+const getResourceStyle = (reduced:number,index: number) => css`
+  position: absolute;
+  width: 1.7%;
+  left: ${resourcePosition[reduced][index % 5][0]}%;
+  top: ${resourcePosition[reduced][index % 5][1]}%;
 `
 
 const getKrystalliumStyle = (index: number) => css`
   position: absolute;
-  width: 10%;
-  right: -15%;
-  bottom: ${index * 12}%;
+  width: 1.7%;
+  left: ${42+(Math.floor(index/4) * 1.7)}%;
+  bottom: ${83+(index%4 * 2.4)}%;
+`
+
+const reducedKrystalliumStyle = (index: number) => css`
+  left: ${68+(Math.floor(index/4) * 1.7)}%;
 `
 
 export const resourcePosition = [
-  [12, 32],
-  [2, 47],
-  [5, 66],
-  [18, 66],
-  [22, 47]
+  [
+  [33, 13.5],
+  [31, 13.5],
+  [30.3, 10],
+  [32, 8.5],
+  [33.5, 10]
+  ],
+  [
+    [59, 13.5],
+    [57, 13.5],
+    [56.3, 10],
+    [58, 8.5],
+    [59.5, 10]
+  ]
 ]
 
 const financiersPilePosition = css`
   position: absolute;
-  left: 40%;
-  top: 30%;
-  width: 20%;
+  left: 53%;
+  top: 9%;
+  width: 4%;
 `
 
 const generalsPilePosition = css`
   position: absolute;
-  left: 47%;
-  top: 67%;
-  width: 20%;
+  left: 66%;
+  top: 9%;
+  width: 4%;
+`
+
+const reducedFinanciersPilePosition = css`
+  left: 73%;
+  top: 8.5%;
+  width: 2%;
+`
+
+const reducedGeneralsPilePosition = css`
+  left: 73%;
+  top: 13.5%;
+  width: 2%;
 `
 
 export function getEmpireName(t: TFunction, empire: EmpireName) {
