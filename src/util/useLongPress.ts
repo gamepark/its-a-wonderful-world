@@ -14,9 +14,11 @@ export function useLongPress<T>({onClick, onLongPress, ms = 300, moveTolerance =
   const eventRef = useRef<PressEvent<T>>()
 
   const callback = useCallback(() => {
-    onLongPress && eventRef.current && onLongPress(eventRef.current)
-    eventRef.current = undefined
-    timerRef.current = undefined
+    if (timerRef.current) {
+      onLongPress && eventRef.current && onLongPress(eventRef.current)
+      eventRef.current = undefined
+      timerRef.current = undefined
+    }
   }, [onLongPress])
 
   const start = useCallback(
@@ -24,8 +26,7 @@ export function useLongPress<T>({onClick, onLongPress, ms = 300, moveTolerance =
       event.persist()
       eventRef.current = event
       timerRef.current = setTimeout(callback, ms)
-    },
-    [callback, ms]
+    }, [callback, ms]
   )
 
   const move = useCallback(
@@ -41,15 +42,17 @@ export function useLongPress<T>({onClick, onLongPress, ms = 300, moveTolerance =
   const stop = useCallback(
     (event: PressEvent<T>) => {
       event.persist()
+      event.preventDefault()
       eventRef.current = event
       if (timerRef.current) {
         clearTimeout(timerRef.current)
-        onClick && onClick(eventRef.current)
+        if (onClick) {
+          onClick(eventRef.current)
+        }
         timerRef.current = undefined
         eventRef.current = undefined
       }
-    },
-    [onClick]
+    }, [onClick]
   )
 
   return useMemo(

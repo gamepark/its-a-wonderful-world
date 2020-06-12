@@ -162,30 +162,30 @@ const draftActionAreaText = css`
 `
 
 export const textButtonFontStyle = css`
-  font-size: 2.5vh;
+  font-size: 3vh;
   text-align: right;
-  line-height: 4.5vh;
+  line-height: 6.5vh;
   color: #EEE;
   font-weight: lighter;
   text-shadow: 0 0 1vh #000, 0 0 1vh #000;
-  text-transform:uppercase;
+  text-transform: uppercase;
 `
 
 export const textButton = css`
   position: absolute;
   z-index: 100;
-  width:13%;
+  width: 20%;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom center;
   background-color:transparent;
-  ${textButtonFontStyle}; 
-  padding: 1vh 2vh 0.5vh;
+  ${textButtonFontStyle};
+  padding: 0.5% 1.5%;
   border:none;
   &:hover, &:focus {
     outline:0;
     color:#FFF;
-    transform: translateY(1px) scale(1.1);
+    transform: translateY(1px) scale(1.05);
     cursor:pointer;
   }
   &:active {
