@@ -42,12 +42,12 @@ export function useLongPress<T>({onClick, onLongPress, ms = 300, moveTolerance =
   const stop = useCallback(
     (event: PressEvent<T>) => {
       event.persist()
+      event.preventDefault()
       eventRef.current = event
       if (timerRef.current) {
         clearTimeout(timerRef.current)
         if (onClick) {
           onClick(eventRef.current)
-          event.preventDefault()
         }
         timerRef.current = undefined
         eventRef.current = undefined
