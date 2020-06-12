@@ -52,18 +52,7 @@ export default App
 
 const backgroundImage = (empire?: EmpireName) => css`
   #root {
-    background-color: rgba(255, 255, 255, 0.7);
-    &:before {
-      content: '';
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background-image: url(${empire ? empireBackground[empire] : artwork});
-    }
+    background-image: url(${empire ? empireBackground[empire] : artwork});
   }
 `
 
@@ -92,6 +81,16 @@ const globalStyle = css`
     background-color: white;
     background-size: cover;
     background-position: center;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
   }
 `
 
