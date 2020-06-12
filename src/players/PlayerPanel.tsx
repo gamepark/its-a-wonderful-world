@@ -55,11 +55,23 @@ const style = (empire: EmpireName, position: number, highlight: boolean) => css`
   right: 1%;
   width: ${playerPanelWidth}%;
   height: ${playerPanelHeight}%;
-  border-radius: 5px;
   background-image: url(${empireBackground[empire]});
   background-size: cover;
   background-position: center;
+  border-radius: 5px;
   ${borderStyle(highlight)};
+  
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+  }
 `
 
 const borderStyle = (highlight: boolean) => highlight ? css`
