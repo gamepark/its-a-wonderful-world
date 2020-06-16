@@ -9,8 +9,6 @@ import {placeResource} from '../../moves/PlaceResource'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, glow} from '../../util/Styles'
-import Character from '../characters/Character'
-import CharacterTokenPile from '../characters/CharacterTokenPile'
 import Resource from '../resources/Resource'
 import ResourceCube from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.jpg'
@@ -30,9 +28,7 @@ import PanafricanUnionB from './panafrican-union-B.jpg'
 import RepublicOfEuropeA from './republic-of-europe-A.jpg'
 import RepublicOfEuropeAvatar from './republic-of-europe-avatar.png'
 import RepublicOfEuropeB from './republic-of-europe-B.jpg'
-import RecyclingArea from '../board/recycling-area.png'
 import {useTranslation} from 'react-i18next'
-import Phase from '../../types/Phase'
 import GameView from '../../types/GameView'
 
 const empiresImages = {
@@ -76,7 +72,6 @@ const EmpireCard: FunctionComponent<Props> = ({game, player, withResourceDrop = 
   const {t} = useTranslation()
   const play = usePlay()
   const playerId = usePlayerId<EmpireName>()
-  const reducedSize = game.phase === Phase.Draft && game.round > 1
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: DragObjectType.RESOURCE_FROM_BOARD,
     canDrop: () => withResourceDrop,
@@ -89,21 +84,14 @@ const EmpireCard: FunctionComponent<Props> = ({game, player, withResourceDrop = 
   return (
     <>
       <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
-        <div css={empireCardTitle}>{player.empireSide} - {getEmpireName(t,player.empire)}</div>
+        <div css={empireCardTitle}>({player.empireSide}) {getEmpireName(t,player.empire)}</div>
+        {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
+          <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
+        {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
+          <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire === playerId}/>)}
     </div>
 
-      <img src={RecyclingArea} alt={t('Recycling Area')} css={[recyclingAreaStyle, reducedSize && reducedRecyclingAreaStyle]}/>
-      {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={getResourceStyle(reducedSize?1:0,index)}/>)}
-      {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={[getKrystalliumStyle(index),reducedSize && reducedKrystalliumStyle(index)]} draggable={player.empire === playerId}/>)}
 
-
-
-    <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} reduced={reducedSize} css={[financiersPilePosition, reducedSize && reducedFinanciersPilePosition]}
-                      draggable={player.empire === playerId}/>
-    <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} reduced={reducedSize} css={[generalsPilePosition, reducedSize && reducedGeneralsPilePosition]}
-                      draggable={player.empire === playerId}/>
     </>
   )
 }
@@ -127,9 +115,9 @@ const getBackgroundImage = (empire: EmpireName, empireSide: EmpireSide) => css`
 
 export const empireCardTitle = css`
   position: absolute;
-  top: 71%;
+  bottom: 11%;
   left: 6%;
-  width: 64%;
+  width: 80%;
   color: #EEE;
   text-align:center;
   font-size: 1.2vh;
@@ -155,77 +143,28 @@ const overStyle = css`
   }
 `
 
-const recyclingAreaStyle = css`
-  position: absolute;
-  left: 30%;
-  top: 8%;
-  height: 9%;
-`
 
-const reducedRecyclingAreaStyle = css`
-  left: 56%;
-`
-
-const getResourceStyle = (reduced:number,index: number) => css`
+const getResourceStyle = (index: number) => css`
   position: absolute;
-  width: 1.7%;
-  left: ${resourcePosition[reduced][index % 5][0]}%;
-  top: ${resourcePosition[reduced][index % 5][1]}%;
+  width: 12%;
+  left: ${resourcePosition[index % 5][0]}%;
+  top: ${resourcePosition[index % 5][1]}%;
 `
 
 const getKrystalliumStyle = (index: number) => css`
   position: absolute;
-  width: 1.7%;
-  left: ${42+(Math.floor(index/4) * 1.7)}%;
-  bottom: ${83+(index%4 * 2.4)}%;
-`
-
-const reducedKrystalliumStyle = (index: number) => css`
-  left: ${68+(Math.floor(index/4) * 1.7)}%;
+  width: 12%;
+  right: -15%;
+  bottom: ${empireCardBottomMargin + (index * 12) }%;
 `
 
 export const resourcePosition = [
-  [
-  [33, 13.5],
-  [31, 13.5],
-  [30.3, 10],
-  [32, 8.5],
-  [33.5, 10]
-  ],
-  [
-    [59, 13.5],
-    [57, 13.5],
-    [56.3, 10],
-    [58, 8.5],
-    [59.5, 10]
-  ]
+  [29, 60],
+  [15, 60],
+  [10, 45],
+  [22, 36],
+  [34, 45]
 ]
-
-const financiersPilePosition = css`
-  position: absolute;
-  left: 53%;
-  top: 9%;
-  width: 4%;
-`
-
-const generalsPilePosition = css`
-  position: absolute;
-  left: 66%;
-  top: 9%;
-  width: 4%;
-`
-
-const reducedFinanciersPilePosition = css`
-  left: 73%;
-  top: 8.5%;
-  width: 2%;
-`
-
-const reducedGeneralsPilePosition = css`
-  left: 73%;
-  top: 13.5%;
-  width: 2%;
-`
 
 export function getEmpireName(t: TFunction, empire: EmpireName) {
   switch (empire) {

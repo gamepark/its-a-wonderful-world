@@ -53,7 +53,6 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     const animation = animations[quantity - index - 1]
     const move = animation.move
     const cubePosition = toHexagonalSpiralPosition(index)
-    const reducedSize = game.phase === Phase.Draft && game.round > 1
     let translateX = -(getBoardResourceLeftPosition(resource) + cubeDeltaX + cubePosition.x * cubeWidth / 2)
     let translateY = -(boardResourceTopPosition + cubeDeltaY + cubePosition.y * cubeHeight)
     if (isPlaceResourceOnConstruction(move)) {
@@ -62,7 +61,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
       translateY += getAreaCardY(1) + costSpaceDeltaY(move.space)
     } else {
       const resourcePosition = player.empireCardResources.filter(resource => resource !== Krystallium).length
-      const destination = empireCardResourcePosition[reducedSize?1:0][resourcePosition % 5]
+      const destination = empireCardResourcePosition[resourcePosition % 5]
       translateX += empireCardLeftMargin + cardWidth / cardRatio - destination[0] * cardWidth / cardRatio / 100 - cubeWidth
       translateY += 100 - empireCardBottomMargin - cardHeight * cardRatio + destination[1] * cardHeight * cardRatio / 100
     }
@@ -113,7 +112,7 @@ const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(r
 const getHighlightLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 2.5
 const getNumberLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6
 const getCircleCharacterLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6.25
-const boardResourceTopPosition = 22
+const boardResourceTopPosition = 30
 const cubeDeltaX = 2.6
 const cubeDeltaY = 3.3
 const resourceWidth = cubeWidth * 100 / boardWidth
@@ -163,8 +162,8 @@ const resourceCharacterText = {
 const areaHighlight = css`
   position: absolute;
   width: 9.5%;
-  height: 36%;
-  top: ${boardResourceTopPosition - 6}%;
+  height: 50%;
+  top: ${boardResourceTopPosition - 8}%;
   border-radius: 100%;
 `
 
@@ -194,8 +193,8 @@ const resourceAreaHighlight = {
 const numberStyle = css`
   position: absolute;
   width: 3%;
-  height: 9%;
-  top: 39.5%;
+  height: 13%;
+  top: 57%;
   text-align:center;
   font-size: 2.5vh;
   font-weight: bold;
@@ -266,8 +265,8 @@ const arrowStyle = css`
 
 const characterStyle = css`
   position:absolute;
-  width: 2.5%;
-  top:4.2%;
+  width: 2.6%;
+  top:6%;
   transition: opacity 0.5s ease-in-out;
   opacity: 0.5;
 `
@@ -275,6 +274,7 @@ const characterStyle = css`
 const characterHighlightStyle = css`
   opacity: 1;
   filter: drop-shadow(0 0 5px white);
+   animation: ${pulse} 0.8s linear alternate infinite;
 `
 
 const resourceStyle = css`
