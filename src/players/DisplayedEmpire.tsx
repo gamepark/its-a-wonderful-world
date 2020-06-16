@@ -32,7 +32,7 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, showAreas, pan
   const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
   return (
     <>
-      <EmpireCard game={game} player={player} withResourceDrop={isPlayer(player)}/>
+      <EmpireCard player={player} withResourceDrop={isPlayer(player)}/>
       {showAreas &&
       <>
         <DraftArea game={game} player={player}/>

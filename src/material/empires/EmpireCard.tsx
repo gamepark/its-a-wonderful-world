@@ -7,7 +7,6 @@ import {useTranslation} from 'react-i18next'
 import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {placeResource} from '../../moves/PlaceResource'
-import GameView from '../../types/GameView'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, glow} from '../../util/Styles'
@@ -63,12 +62,11 @@ export const empireAvatar = {
 }
 
 type Props = {
-  game: GameView
   player: Player | PlayerView
   withResourceDrop?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const EmpireCard: FunctionComponent<Props> = ({game, player, withResourceDrop = false, ...props}) => {
+const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false, ...props}) => {
   const {t} = useTranslation()
   const play = usePlay()
   const playerId = usePlayerId<EmpireName>()
@@ -138,7 +136,6 @@ const overStyle = css`
     background-color: rgba(0, 128, 0, 0.3);
   }
 `
-
 
 const getResourceStyle = (index: number) => css`
   position: absolute;
