@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@emotion/core": "^10.0.28",
-    "@interlude-games/workshop": "^0.2.1",
+    "@interlude-games/workshop": "^0.2.2",
     "emotion-normalize": "^10.1.0",
     "fscreen": "^1.0.2",
     "i18next-icu": "^1.3.1",
