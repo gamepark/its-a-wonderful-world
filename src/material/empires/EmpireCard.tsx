@@ -3,14 +3,16 @@ import {usePlay, usePlayerId} from '@interlude-games/workshop'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
+import {useTranslation} from 'react-i18next'
 import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {placeResource} from '../../moves/PlaceResource'
+import GameView from '../../types/GameView'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, glow} from '../../util/Styles'
 import Resource from '../resources/Resource'
-import ResourceCube from '../resources/ResourceCube'
+import ResourceCube, {cubeHeight, cubeWidth} from '../resources/ResourceCube'
 import AztecEmpireA from './aztec-empire-A.jpg'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
 import AztecEmpireB from './aztec-empire-B.jpg'
@@ -28,8 +30,6 @@ import PanafricanUnionB from './panafrican-union-B.jpg'
 import RepublicOfEuropeA from './republic-of-europe-A.jpg'
 import RepublicOfEuropeAvatar from './republic-of-europe-avatar.png'
 import RepublicOfEuropeB from './republic-of-europe-B.jpg'
-import {useTranslation} from 'react-i18next'
-import GameView from '../../types/GameView'
 
 const empiresImages = {
   [EmpireName.AztecEmpire]: {
@@ -82,17 +82,13 @@ const EmpireCard: FunctionComponent<Props> = ({game, player, withResourceDrop = 
     drop: (item: ResourceFromBoard) => play(placeResource(player.empire, item.resource))
   })
   return (
-    <>
-      <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
-        <div css={empireCardTitle}>({player.empireSide}) {getEmpireName(t,player.empire)}</div>
-        {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
-          <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
-        {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
-          <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire === playerId}/>)}
+    <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
+      <div css={empireCardTitle}>({player.empireSide}) {getEmpireName(t, player.empire)}</div>
+      {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
+      {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire === playerId}/>)}
     </div>
-
-
-    </>
   )
 }
 
@@ -105,7 +101,7 @@ const style = css`
   transform-origin: bottom left;
   border-radius: 5%;
   transition: transform 0.2s ease-in-out;
-  box-shadow: 0 0 2px black;
+  box-shadow: 0 0 5px black;
   background-size: cover;
 `
 
@@ -120,7 +116,7 @@ export const empireCardTitle = css`
   width: 80%;
   color: #EEE;
   text-align:center;
-  font-size: 1.2vh;
+  font-size: 1vh;
   font-weight: lighter;
   text-shadow: 0 0 0.3vh #000, 0 0 0.3vh #000;
   text-transform:uppercase;
@@ -146,7 +142,8 @@ const overStyle = css`
 
 const getResourceStyle = (index: number) => css`
   position: absolute;
-  width: 12%;
+  width: ${cubeWidth * 100 / empireCardWidth}%;
+  height: ${cubeHeight * 100 / empireCardHeight}%;
   left: ${resourcePosition[index % 5][0]}%;
   top: ${resourcePosition[index % 5][1]}%;
 `
@@ -155,7 +152,7 @@ const getKrystalliumStyle = (index: number) => css`
   position: absolute;
   width: 12%;
   right: -15%;
-  bottom: ${empireCardBottomMargin + (index * 12) }%;
+  bottom: ${empireCardBottomMargin + (index * 12)}%;
 `
 
 export const resourcePosition = [

@@ -23,10 +23,7 @@ const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, on
     <>
       <div css={popupBackgroundStyle} onClick={onClose}/>
       <Swipeable css={swipeZoneStyle} trackMouse={true} preventDefaultTouchmoveEvent={true} delta={3}
-                 onSwiping={event => {
-                   setDeltaX(event.deltaX);
-                   console.log(event.deltaX)
-                 }}
+                 onSwiping={event => setDeltaX(event.deltaX)}
                  onSwiped={event => slide(event.deltaX, event.velocity)}>
         {developments.map((development, index) =>
           <DevelopmentCard key={index} development={development} css={[cardStyle, cardPosition(index, focusedIndex, deltaX), deltaX === 0 && cardTransition]}/>

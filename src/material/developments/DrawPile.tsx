@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import GameView from '../../types/GameView'
-import {areasBorders, areasCardX, cardHeight, cardStyle, cardWidth, headerHeight, topMargin} from '../../util/Styles'
+import {cardHeight, cardStyle, headerHeight, topMargin} from '../../util/Styles'
 import DevelopmentCard from '../developments/DevelopmentCard'
 
 const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
@@ -20,7 +20,7 @@ const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
 
 export const drawPileMaxSize = 8
 export const drawPileScale = 0.4
-export const drawPileCardX = (index: number) => areasCardX - areasBorders * 2 + cardWidth * (drawPileScale - 1) / 2 + index * 0.05
+export const drawPileCardX = (index: number) => 68 + index * 0.05
 export const drawPileCardY = (index: number) => headerHeight + topMargin + cardHeight * (drawPileScale - 1) / 2 + index * 0.05
 
 export default DrawPile

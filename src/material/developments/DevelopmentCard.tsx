@@ -145,7 +145,7 @@ const getBackgroundImage = (development?: Development) => css`
 
 export const cardTitleFontSize = 0.85
 
-export const cardTitle = css`
+const cardTitle = css`
   position: absolute;
   top: 1.4%;
   left: 19%;

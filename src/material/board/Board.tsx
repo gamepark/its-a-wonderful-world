@@ -31,7 +31,7 @@ const style = css`
 `
 
 const reducedSizeStyle = css`
-  transform: translate(-10%, -81%) scale(0.5);
+  transform: translate(10%, -81%) scale(0.5);
 `
 
 export default Board

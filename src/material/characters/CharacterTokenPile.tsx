@@ -36,17 +36,18 @@ const CharacterTokenPile: FunctionComponent<Props> = ({character, quantity, drag
 const tokenStyle = (index: number) => css`
   position: absolute;
   width: 100%;
-  left: ${(index * 10)+10}%;
-  top: 0;
+  left: ${(index * 3)}%;
+  top: ${(index * 5)}%;
 `
 
 const tokenQuantityStyle = css`
   position: absolute;
-  font-size: 4vh;
+  font-size: 3.5vh;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
-  top: 0.5vh;
+  text-shadow: 0 0 5px black, 0 0 5px black, 0 0 5px black, 0 0 5px black;
+  top: 1.5vh;
+  left: 0.5vh;
 `
 
 const characterTokenDraggingStyle = css`

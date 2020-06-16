@@ -17,27 +17,26 @@ export const bottomMargin = 3
 export const cardHeight = 23  // percentage of playing area cardHeight
 export const cardRatio = 65 / 100
 export const cardWidth = cardHeight * cardRatio / screenRatio  // percentage of playing area cardWidth
+export const tokenWidth = 4
+export const tokenHeight = tokenWidth * screenRatio
 export const empireCardRatio = 85.75 / 100
-export const empireCardWidth = 10
+export const empireCardWidth = 9
 export const empireCardHeight = empireCardWidth * empireCardRatio * screenRatio // percentage of playing area cardWidth
-export const empireCardLeftMargin = 0
+export const empireCardLeftMargin = 1
 export const empireCardBottomMargin = 1.5
-export const empireCardHorizontalShift = 0
-export const empireCardHorizontalRightShift = 1.5
-export const empireCardVerticalShift = 0.95
 export const developmentCardVerticalShift = 2.5
-export const constructedCardLeftMargin = 0
-export const playerPanelWidth = 20
+export const constructedCardLeftMargin = 1.3
+export const constructedCardBottomMargin = 13.8
+export const playerPanelWidth = 19.5
 export const playerPanelHeight = 16.7
 export const playerPanelMargin = 1.5
 export const areasBorders = 0.3
 export const areasCardMargin = 1
 export const areaWidth = (cardWidth + areasCardMargin) * numberOfCardsToDraft + 1
 export const marginBetweenCardRows = 4
-export const areasCardX = empireCardHorizontalRightShift + constructedCardLeftMargin + cardHeight * cardRatio / screenRatio + bottomMargin
+export const areasCardX = constructedCardLeftMargin + cardHeight * cardRatio / screenRatio + bottomMargin
 export const areasX = areasCardX - areasBorders * 5 / screenRatio
-export const constructedCardX = 1 + constructedCardLeftMargin
-export const constructedCardY = (index: number) => 100 - cardHeight - empireCardBottomMargin - cardHeight * cardRatio * empireCardVerticalShift - index * developmentCardVerticalShift
+export const constructedCardY = (index: number) => 100 - cardHeight - constructedCardBottomMargin - index * developmentCardVerticalShift
 export const playerPanelY = (index: number) => headerHeight + playerPanelMargin + index * (playerPanelHeight + playerPanelMargin)
 
 export const cardStyle = css`

@@ -1276,10 +1276,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interlude-games/workshop@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.2.2.tgz#69b26a8f25c8f053763da90788092c27d5658dba"
-  integrity sha512-w7q5C7jg5cVn2evRwKilBlDsv0gqcgY/S3OVQR+vf10G3j9NWFRh9sV4WFtVMY/XN41fdx6pvLZcTIcsXM+vxA==
+"@interlude-games/workshop@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.2.3.tgz#ec8a1af0201437d90b8a3eab24b60de29bae1a79"
+  integrity sha512-EjRw/jYA9zNG64GwaMEa1HEJodfd/wg0qDKNpbWZzISv2k4eweJKtWJYagnCnc+h6EPpBOA2CLzemN83UOnPyA==
   dependencies:
     "@datadog/browser-logs" "^1.11.4"
     apollo-cache-inmemory "^1.6.5"
@@ -9201,9 +9201,9 @@ react-error-overlay@^6.0.7:
   integrity sha512-TAv1KJFh3RhqxNvhzxj6LeT5NWklP6rDr2a0jaTfsZ5wSZWHOGeqQyejUp3xxLfPt2UpyJEcVQB/zyPcmonNFA==
 
 react-i18next@^11.4.0:
-  version "11.5.1"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.5.1.tgz#084e98555d8800d5508eccc8da1ac652df358d3e"
-  integrity sha512-2VSx+dClvmCJTgrw9Nrof4EkggMlzo4s/YZPEUAdI7gU2HTksapkGtFPARzpeTk+3k1zY+Xl6pLHc0LYvsRWAQ==
+  version "11.6.0"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.6.0.tgz#0621f227954d4fe1158994a7cfb3a436133cb61a"
+  integrity sha512-koyvoDgmY7y7vlbUOVWyoHahbBABfBse9X1vgYFw/WI+CfZwjumZ2/zQGYqLoMx6lEa0c9Lxr9GNP9L3HAJYUg==
   dependencies:
     "@babel/runtime" "^7.3.1"
     html-parse-stringify2 "2.0.1"

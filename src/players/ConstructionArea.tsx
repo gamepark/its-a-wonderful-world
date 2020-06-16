@@ -28,7 +28,7 @@ import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
 import {
-  cardHeight, cardWidth, constructedCardX, constructedCardY, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
+  cardHeight, cardWidth, constructedCardLeftMargin, constructedCardY, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {textButton, textButtonFontStyle} from './DraftArea'
@@ -77,7 +77,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
 
   function getTransform(card: number, index: number) {
     if (card === completingConstruction?.card) {
-      return `translate(${constructedCardX * 100 / cardWidth}%, ${constructedCardY(player.constructedDevelopments.length) * 100 / cardHeight}%)`
+      return `translate(${constructedCardLeftMargin * 100 / cardWidth}%, ${constructedCardY(player.constructedDevelopments.length) * 100 / cardHeight}%)`
     } else if (card === recycling?.card) {
       const discardIndex = Math.min(game.discard.length, discardPileMaxSize)
       const x = discardPileCardX(discardIndex) * 100 / cardWidth
