@@ -67,11 +67,15 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
     <Letterbox css={hiddenOnPortrait}>
-      {!gameOver && <Board game={game} player={displayedPlayer}/>}
-      <RoundTracker round={game.round}/>
-      {!gameOver && <DrawPile game={game}/>}
-      {!gameOver && <DiscardPile game={game}/>}
-      <DisplayedEmpire game={game} player={displayedPlayer} showAreas={!gameOver} panelIndex={displayedPlayerPanelIndex}/>
+      {!gameOver &&
+      <>
+        <Board game={game} player={displayedPlayer}/>
+        <RoundTracker round={game.round}/>
+        <DrawPile game={game}/>
+        <DiscardPile game={game}/>
+      </>
+      }
+      <DisplayedEmpire game={game} player={displayedPlayer} gameOver={gameOver} panelIndex={displayedPlayerPanelIndex}/>
       {game.players.length > 2 && game.phase === Phase.Draft &&
       <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players}/>}
       {players.map((player, index) =>
