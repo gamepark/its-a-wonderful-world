@@ -15,9 +15,9 @@ import GameView from '../../types/GameView'
 import Phase from '../../types/Phase'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {isPlayer, isPlayerView} from '../../types/typeguards'
+import {isPlayer} from '../../types/typeguards'
 import {
-  boardHeight, boardWidth, cardHeight, cardRatio, cardWidth, empireCardBottomMargin, empireCardLeftMargin, getAreaCardX, getAreaCardY, glow
+  areasX, boardHeight, boardTop, boardWidth, empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, getAreaCardX, getAreaCardY, glow
 } from '../../util/Styles'
 import resourceCircleFinancierGeneral from '../characters/circle-financier-general.png'
 import resourceCircleFinancier from '../characters/circle-financier.png'
@@ -53,33 +53,26 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     const animation = animations[quantity - index - 1]
     const move = animation.move
     const cubePosition = toHexagonalSpiralPosition(index)
-    let translateX = -(getBoardResourceLeftPosition(resource) + cubeDeltaX + cubePosition.x * cubeWidth / 2)
-    let translateY = -(boardResourceTopPosition + cubeDeltaY + cubePosition.y * cubeHeight)
+    let translateX = -(getBoardResourceLeftPosition(resource) + cubePosition.x * resourceWidth / 2 + cubeDeltaX) * boardWidth / 100 - areasX
+    let translateY = -(boardResourceTopPosition + cubeDeltaY + cubePosition.y * resourceHeight) * boardHeight / 100 - boardTop
     if (isPlaceResourceOnConstruction(move)) {
       const constructionIndex = player.constructionArea.findIndex(construction => construction.card === move.card)
-      translateX += getAreaCardX(constructionIndex, player.constructionArea.length, game.players.length === 2) + costSpaceDeltaX
+      translateX += getAreaCardX(constructionIndex, player.constructionArea.length, game.players.length === 2) + costSpaceDeltaX - cubeWidth / 2
       translateY += getAreaCardY(1) + costSpaceDeltaY(move.space)
     } else {
       const resourcePosition = player.empireCardResources.filter(resource => resource !== Krystallium).length
       const destination = empireCardResourcePosition[resourcePosition % 5]
-      translateX += empireCardLeftMargin + cardWidth / cardRatio - destination[0] * cardWidth / cardRatio / 100 - cubeWidth
-      translateY += 100 - empireCardBottomMargin - cardHeight * cardRatio + destination[1] * cardHeight * cardRatio / 100
+      translateX += empireCardLeftMargin + destination[0] * empireCardWidth / 100 - cubeWidth / 2
+      translateY += 100 - empireCardBottomMargin - empireCardHeight + destination[1] * empireCardHeight / 100 + cubeHeight
     }
-    if (animation.isAutomaticMove || isPlayerView(player)) {
-      const keyframe = keyframes`
-        from {transform: none;}
-        to {transform: translate(${translateX / cubeWidth * 100}%, ${translateY / cubeHeight * 100}%);}
-      `
-      return css`
-        z-index: 10;
-        animation: ${keyframe} ${animation.duration}s ease-in-out;
-      `
-    } else {
-      return css`
-        z-index: 10;
-        transform: translate(${translateX / cubeWidth * 100}%, ${translateY / cubeHeight * 100}%);
-      `
-    }
+    const keyframe = keyframes`
+      from {transform: none;}
+      to {transform: translate(${translateX * 100 / cubeWidth}%, ${translateY * 100 / cubeHeight}%);}
+    `
+    return css`
+      z-index: 10;
+      animation: ${keyframe} ${animation.duration / 2}s ease-in-out forwards;
+    `
   }
   const playerProduction = getProduction(player, resource)
   const hasMostProduction = !game.players.some(p => p.empire !== player.empire && getProduction(p, resource) >= playerProduction)
@@ -112,7 +105,7 @@ const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(r
 const getHighlightLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 2.5
 const getNumberLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6
 const getCircleCharacterLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6.25
-const boardResourceTopPosition = 22
+const boardResourceTopPosition = 30
 const cubeDeltaX = 2.6
 const cubeDeltaY = 3.3
 const resourceWidth = cubeWidth * 100 / boardWidth
@@ -162,8 +155,8 @@ const resourceCharacterText = {
 const areaHighlight = css`
   position: absolute;
   width: 9.5%;
-  height: 36%;
-  top: ${boardResourceTopPosition - 6}%;
+  height: 50%;
+  top: ${boardResourceTopPosition - 8}%;
   border-radius: 100%;
 `
 
@@ -193,8 +186,8 @@ const resourceAreaHighlight = {
 const numberStyle = css`
   position: absolute;
   width: 3%;
-  height: 9%;
-  top: 39.5%;
+  height: 13%;
+  top: 57%;
   text-align:center;
   font-size: 2.5vh;
   font-weight: bold;
@@ -245,7 +238,7 @@ const pulse = keyframes`
 
 const arrowStyle = css`
   width: 5%;
-  height:23%;
+  height: 32%;
   vertical-align: middle;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
   transition: opacity 0.5s ease-in-out;
@@ -261,12 +254,15 @@ const arrowStyle = css`
     animation: ${pulse} 0.8s linear alternate infinite;
     cursor: pointer;
   }
+  &:focus {
+    outline: 0;
+  }
 `
 
 const characterStyle = css`
   position:absolute;
-  width: 2.5%;
-  top:4.2%;
+  width: 2.6%;
+  top:6%;
   transition: opacity 0.5s ease-in-out;
   opacity: 0.5;
 `

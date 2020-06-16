@@ -3,33 +3,32 @@ import {usePlay, usePlayerId} from '@interlude-games/workshop'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
+import {useTranslation} from 'react-i18next'
 import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {placeResource} from '../../moves/PlaceResource'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {cardHeight, cardRatio, cardWidth, empireCardBottomMargin, empireCardLeftMargin, glow} from '../../util/Styles'
-import Character from '../characters/Character'
-import CharacterTokenPile from '../characters/CharacterTokenPile'
+import {empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, glow} from '../../util/Styles'
 import Resource from '../resources/Resource'
-import ResourceCube from '../resources/ResourceCube'
-import AztecEmpireA from './aztec-empire-A.png'
+import ResourceCube, {cubeHeight, cubeWidth} from '../resources/ResourceCube'
+import AztecEmpireA from './aztec-empire-A.jpg'
 import AztecEmpireAvatar from './aztec-empire-avatar.png'
-import AztecEmpireB from './aztec-empire-B.png'
+import AztecEmpireB from './aztec-empire-B.jpg'
 import EmpireName from './EmpireName'
 import EmpireSide from './EmpireSide'
-import FederationOfAsiaA from './federation-of-asia-A.png'
+import FederationOfAsiaA from './federation-of-asia-A.jpg'
 import FederationOfAsiaAvatar from './federation-of-asia-avatar.png'
-import FederationOfAsiaB from './federation-of-asia-B.png'
-import NoramStatesA from './noram-states-A.png'
+import FederationOfAsiaB from './federation-of-asia-B.jpg'
+import NoramStatesA from './noram-states-A.jpg'
 import NoramStatesAvatar from './noram-states-avatar.png'
-import NoramStatesB from './noram-states-B.png'
-import PanafricanUnionA from './panafrican-union-A.png'
+import NoramStatesB from './noram-states-B.jpg'
+import PanafricanUnionA from './panafrican-union-A.jpg'
 import PanafricanUnionAvatar from './panafrican-union-avatar.png'
-import PanafricanUnionB from './panafrican-union-B.png'
-import RepublicOfEuropeA from './republic-of-europe-A.png'
+import PanafricanUnionB from './panafrican-union-B.jpg'
+import RepublicOfEuropeA from './republic-of-europe-A.jpg'
 import RepublicOfEuropeAvatar from './republic-of-europe-avatar.png'
-import RepublicOfEuropeB from './republic-of-europe-B.png'
+import RepublicOfEuropeB from './republic-of-europe-B.jpg'
 
 const empiresImages = {
   [EmpireName.AztecEmpire]: {
@@ -68,6 +67,7 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false, ...props}) => {
+  const {t} = useTranslation()
   const play = usePlay()
   const playerId = usePlayerId<EmpireName>()
   const [{isValidTarget, isOver}, ref] = useDrop({
@@ -81,14 +81,11 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
   })
   return (
     <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
+      <div css={empireCardTitle}>({player.empireSide}) {getEmpireName(t, player.empire)}</div>
       {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire === playerId}/>)}
-      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} css={financiersPilePosition}
-                          draggable={player.empire === playerId}/>
-      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} css={generalsPilePosition}
-                          draggable={player.empire === playerId}/>
     </div>
   )
 }
@@ -97,17 +94,30 @@ const style = css`
   position: absolute;
   left: ${empireCardLeftMargin}%;
   bottom: ${empireCardBottomMargin}%;
-  height: ${cardHeight * cardRatio}%;
-  width: ${cardWidth / cardRatio}%;
+  height: ${empireCardHeight}%;
+  width: ${empireCardWidth}%;
   transform-origin: bottom left;
   border-radius: 5%;
   transition: transform 0.2s ease-in-out;
-  box-shadow: 0 0 2px black;
+  box-shadow: 0 0 5px black;
   background-size: cover;
 `
 
 const getBackgroundImage = (empire: EmpireName, empireSide: EmpireSide) => css`
   background-image: url(${empiresImages[empire][empireSide]});
+`
+
+export const empireCardTitle = css`
+  position: absolute;
+  bottom: 11%;
+  left: 6%;
+  width: 80%;
+  color: #EEE;
+  text-align:center;
+  font-size: 1vh;
+  font-weight: lighter;
+  text-shadow: 0 0 0.3vh #000, 0 0 0.3vh #000;
+  text-transform:uppercase;
 `
 
 const validTargetStyle = css`
@@ -129,39 +139,26 @@ const overStyle = css`
 
 const getResourceStyle = (index: number) => css`
   position: absolute;
-  width: 10%;
-  right: ${resourcePosition[index % 5][0]}%;
+  width: ${cubeWidth * 100 / empireCardWidth}%;
+  height: ${cubeHeight * 100 / empireCardHeight}%;
+  left: ${resourcePosition[index % 5][0]}%;
   top: ${resourcePosition[index % 5][1]}%;
 `
 
 const getKrystalliumStyle = (index: number) => css`
   position: absolute;
-  width: 10%;
+  width: 12%;
   right: -15%;
-  bottom: ${index * 12}%;
+  bottom: ${empireCardBottomMargin + (index * 12)}%;
 `
 
 export const resourcePosition = [
-  [12, 32],
-  [2, 47],
-  [5, 66],
-  [18, 66],
-  [22, 47]
+  [29, 60],
+  [15, 60],
+  [10, 45],
+  [22, 36],
+  [34, 45]
 ]
-
-const financiersPilePosition = css`
-  position: absolute;
-  left: 40%;
-  top: 30%;
-  width: 20%;
-`
-
-const generalsPilePosition = css`
-  position: absolute;
-  left: 47%;
-  top: 67%;
-  width: 20%;
-`
 
 export function getEmpireName(t: TFunction, empire: EmpireName) {
   switch (empire) {

@@ -12,7 +12,10 @@ import {canBuild} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import {cardHeight, cardRatio, cardStyle, cardWidth, constructedCardX, constructedCardY, empireCardBottomMargin, empireCardVerticalShift} from '../util/Styles'
+import {
+  cardHeight, cardStyle, cardWidth, constructedCardBottomMargin, constructedCardLeftMargin, constructedCardY, empireCardLeftMargin, empireCardWidth,
+  headerHeight, topMargin
+} from '../util/Styles'
 
 const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
@@ -53,16 +56,17 @@ const style = css`
 `
 
 const transform = (index: number) => css`
-  transform: translate(${constructedCardX * 100 / cardWidth}%, ${constructedCardY(index) * 100 / cardHeight}%);
+  transform: translate(${constructedCardLeftMargin * 100 / cardWidth}%, ${constructedCardY(index) * 100 / cardHeight}%);
 `
 
 const buildDropArea = css`
   position: absolute;
-  left: ${constructedCardX}%;
-  width: ${cardWidth}%;
-  top: 8%;
-  bottom: ${empireCardBottomMargin + cardHeight * cardRatio * empireCardVerticalShift}%;
+  left: ${empireCardLeftMargin}%;
+  width: ${empireCardWidth}%;
+  top: ${headerHeight + topMargin}%;
+  bottom: ${constructedCardBottomMargin}%;
   border-radius: 1vh;
+  z-index: 10;
 `
 
 const validDropAreaColor = (isOver: boolean) => css`
@@ -79,7 +83,7 @@ const dropAreaText = css`
   position: absolute;
   width: 100%;
   margin: 0;
-  padding: 0 1vh;
+  padding: 10vh 1vh;
   text-align: center;
   font-size: 2.5vh;
 `
