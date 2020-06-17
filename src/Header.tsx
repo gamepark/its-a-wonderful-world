@@ -11,9 +11,10 @@ import Character from './material/characters/Character'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
+import {isCompleteConstruction} from './moves/CompleteConstruction'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
-import {receiveCharacter} from './moves/ReceiveCharacter'
+import {isReceiveCharacter, receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
 import ItsAWonderfulWorldRules, {countCharacters, getNextProductionStep, getScore, numberOfRounds} from './Rules'
 import GameView from './types/GameView'
@@ -85,7 +86,7 @@ const Header = () => {
   const players = usePlayers<EmpireName>()
   const actions = useActions<Move, EmpireName>()
   const nonGuaranteedUndo = actions?.some(action => action.cancelled && action.cancelPending && !action.animation && !action.delayed)
-  const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
+  const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards, MoveType.ReceiveCharacter].includes(animation.move.type))
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const {t} = useTranslation()
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
@@ -174,6 +175,15 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
         }
       }
     case Phase.Production:
+      if (animation && isReceiveCharacter(animation.move) && !animation.action.consequences.some(isCompleteConstruction)) {
+        if (animation.move.playerId === player?.empire) {
+          return t('Vous recevez un {character, select, Financier{Financier} other{Général}} pour votre suprématie en production {resource, select, Materials{de Matériaux} Energy{d’Énergie} Science{de Science} Gold{d’Or} other{d’Exploration}}',
+            {character: animation.move.character, resource: game.productionStep})
+        } else {
+          return t('{player} recoit un {character, select, Financier{Financier} other{Général}} pour sa suprématie en production {resource, select, Materials{de Matériaux} Energy{d’Énergie} Science{de Science} Gold{d’Or} other{d’Exploration}}',
+            {player: getPlayerName(animation.move.playerId), character: animation.move.character, resource: game.productionStep})
+        }
+      }
       if (player && !player.ready) {
         if (player.availableResources.length) {
           return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')

@@ -12,14 +12,17 @@ type Props = {
   player: Player | PlayerView
 } & React.HTMLAttributes<HTMLDivElement>
 
-const PlayerScore: FunctionComponent<Props> = ({player}) => (
-  <div css={style}>
-    {Object.values(DevelopmentType).map(developmentType => <ScorePart key={developmentType} player={player} item={developmentType}/>)}
-    {Object.values(Character).map(character => <ScorePart key={character} player={player} item={character}/>)}
-    <ScorePart player={player}/>
-    <div css={scoreStyle}>{getScore(player)}</div>
-  </div>
-)
+const PlayerScore: FunctionComponent<Props> = ({player}) => {
+  const score = getScore(player)
+  return (
+    <div css={style}>
+      {Object.values(DevelopmentType).map(developmentType => <ScorePart key={developmentType} player={player} item={developmentType}/>)}
+      {Object.values(Character).map(character => <ScorePart key={character} player={player} item={character}/>)}
+      <ScorePart player={player}/>
+      <div css={[scoreStyle, score !== 0 && equalSign]}>{score}</div>
+    </div>
+  )
+}
 
 const style = css`
   position: absolute;
@@ -45,6 +48,9 @@ const scoreStyle = css`
   width: 15vh;
   text-align: center;
   margin-left: 5vh;
+`
+
+const equalSign = css`
   &:before {
     content: '=';
     position: absolute;

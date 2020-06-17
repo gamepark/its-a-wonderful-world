@@ -14,7 +14,8 @@ const CharacterToken: FunctionComponent<Props> = ({character, ...props}) => {
 }
 
 const style = css`
-  filter: drop-shadow(0 0 5px black);
+  border-radius: 100%;
+  box-shadow: 0 0 5px black;
 `
 
 export const images = {

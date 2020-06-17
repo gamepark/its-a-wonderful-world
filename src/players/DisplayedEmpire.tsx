@@ -11,7 +11,7 @@ import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import {empireCardLeftMargin, headerHeight, tokenHeight, tokenWidth, topMargin} from '../util/Styles'
+import {charactersPilesY, financiersPileX, generalsPileX, headerHeight, tokenHeight, tokenWidth, topMargin} from '../util/Styles'
 import ConstructedCardsArea from './ConstructedCardsArea'
 import ConstructionArea from './ConstructionArea'
 import DraftArea from './DraftArea'
@@ -40,21 +40,21 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, gameOver, pane
         <RecyclingDropArea empire={player.empire}/>
       </>
       }
-      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]}
+      <ConstructedCardsArea player={player}/>
+      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} player={player}
                           title={isPlayer(player) ?
                             t('Vous avez {quantity, plural, one{# jeton Financier} other{# jetons Financiers}}',
                               {quantity: player.characters[Character.Financier]}) :
                             t('{player} a {quantity, plural, one{# jeton Financier} other{# jetons Financiers}}',
                               {player: getPlayerName(player.empire), quantity: player.characters[Character.Financier]})}
                           css={financiersPilePosition} draggable={isPlayer(player)}/>
-      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]}
+      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} player={player}
                           title={isPlayer(player) ?
                             t('Vous avez {quantity, plural, one{# jeton Général} other{# jetons Généraux}}',
                               {quantity: player.characters[Character.General]}) :
                             t('{player} a {quantity, plural, one{# jeton Général} other{# jetons Généraux}}',
                               {player: getPlayerName(player.empire), quantity: player.characters[Character.General]})}
                           css={generalsPilePosition} draggable={isPlayer(player)}/>
-      <ConstructedCardsArea player={player}/>
       {isPlayer(player) ?
         <PlayerHand player={player} players={game.players.length} round={game.round}/> :
         <OtherPlayerHand player={player} players={game.players.length} round={game.round} panelIndex={panelIndex}/>
@@ -65,20 +65,18 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, gameOver, pane
 
 const financiersPilePosition = css`
   position: absolute;
-  left: ${empireCardLeftMargin}%;
+  left: ${financiersPileX}%;
   top: ${headerHeight + topMargin}%;
   width: ${tokenWidth}%;
   height: ${tokenHeight}%;
-  z-index: 1;
 `
 
 const generalsPilePosition = css`
   position: absolute;
-  left: 6%;
-  top: ${headerHeight + topMargin}%;
+  left: ${generalsPileX}%;
+  top: ${charactersPilesY}%;
   width: ${tokenWidth}%;
   height: ${tokenHeight}%;
-  z-index: 1;
 `
 
 export default DisplayedEmpire

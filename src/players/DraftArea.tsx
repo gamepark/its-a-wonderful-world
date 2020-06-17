@@ -40,9 +40,9 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     (isChooseDevelopmentCard(animation.move) || isSlateForConstruction(animation.move) || isRecycle(animation.move))
     && animation.move.playerId === player.empire
   )
-  const choosingDevelopment = animation && !animation.undo && isChooseDevelopmentCard(animation.move) ? animation.move : undefined
-  const slatingForConstruction = animation && !animation.undo && isSlateForConstruction(animation.move) ? animation.move : undefined
-  const undoingSlateForConstruction = animation && animation.undo && isSlateForConstruction(animation.move) ? animation.move : undefined
+  const choosingDevelopment = animation && !animation.action.cancelled && isChooseDevelopmentCard(animation.move) ? animation.move : undefined
+  const slatingForConstruction = animation && !animation.action.cancelled && isSlateForConstruction(animation.move) ? animation.move : undefined
+  const undoingSlateForConstruction = animation && animation.action.cancelled && isSlateForConstruction(animation.move) ? animation.move : undefined
   const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
   const chosenCard = choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : player.chosenCard

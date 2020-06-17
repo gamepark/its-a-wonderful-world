@@ -36,7 +36,7 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
   const getItemProps = (index: number) => {
     const card = player.hand[index]
     const chosen = index < player.hand.length && card === choosingCard?.card
-    const undo = choosingCard && animation?.undo
+    const undo = choosingCard && animation?.action.cancelled
     const received = passingCard && index >= player.hand.length
     const ignore = (chosen && !undo) || (passingCard && !received)
     return ({
@@ -138,9 +138,9 @@ export const playerHandCardStyle = css`
 `
 
 export const getChosenCardAnimation = (player: Player | PlayerView, animation: Animation, players: number) => {
-  if (animation.undo) {
+  if (animation.action.cancelled) {
     return translateFromDraftArea(player.draftArea.length, animation.duration, players)
-  } else if (animation.isAutomaticMove) {
+  } else if (animation.action.move !== animation.move) {
     return animateToDraftArea(player.draftArea.length, animation.duration, players)
   } else {
     return translateToDraftArea(player.draftArea.length, animation.duration, players)

@@ -26,8 +26,8 @@ const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, qu
       <span css={numberStyle}>{multiplier}</span><span css={multiplierStyle}>x</span>
       {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
       {isCharacter(item) ?
-        <CharacterToken character={item} css={imageStyle}/> :
-        <img src={developmentTypeImage[item]} css={imageShadowStyle} alt={getDevelopmentTypeDescription(t, item, multiplier)}/>}
+        <CharacterToken character={item} css={characterTokenImageStyle}/> :
+        <img src={developmentTypeImage[item]} css={developmentTypeImageStyle} alt={getDevelopmentTypeDescription(t, item, multiplier)}/>}
     </div>
   )
 }
@@ -79,14 +79,14 @@ const multiplierStyle = css`
   width: 0;
 `
 
-const imageStyle = css`
+const characterTokenImageStyle = css`
   height: 80%;
-  border-radius: 0.5vh;
 `
 
-const imageShadowStyle = css`
+const developmentTypeImageStyle = css`
   box-shadow: 0 0 1px black;
-  ${imageStyle};
+  height: 80%;
+  border-radius: 0.5vh;
 `
 
 const quantityStyle = css`

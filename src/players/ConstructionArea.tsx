@@ -47,7 +47,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
   )
   const completingConstruction = animation && isCompleteConstruction(animation.move) ? animation.move : undefined
   const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
-  const undoingSlateForConstruction = animation && animation.undo && isSlateForConstruction(animation.move) ? animation.move : undefined
+  const undoingSlateForConstruction = animation && animation.action.cancelled && isSlateForConstruction(animation.move) ? animation.move : undefined
   const constructions = useRef(player.constructionArea)
   if (!undoingSlateForConstruction) {
     constructions.current = player.constructionArea
