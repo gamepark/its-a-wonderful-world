@@ -4,6 +4,7 @@ import React, {FunctionComponent, useEffect, useMemo, useRef, useState} from 're
 import bellSound from './material/bell-sound.wav'
 import Board from './material/board/Board'
 import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
+import PhaseIndicator from './material/board/PhaseIndicator'
 import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from './material/board/ResourceArea'
 import RoundTracker from './material/board/RoundTracker'
 import CharacterToken from './material/characters/CharacterToken'
@@ -80,6 +81,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
       <>
         <Board game={game} player={displayedPlayer}/>
         <RoundTracker round={game.round}/>
+        <PhaseIndicator phase={game.phase}/>
         <DrawPile game={game}/>
         <DiscardPile game={game}/>
       </>
