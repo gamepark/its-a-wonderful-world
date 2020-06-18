@@ -11,7 +11,7 @@ import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import {charactersPilesY, financiersPileX, generalsPileX, headerHeight, tokenHeight, tokenWidth, topMargin} from '../util/Styles'
+import {charactersPilesY, financiersPileX, generalsPileX, tokenHeight, tokenWidth} from '../util/Styles'
 import ConstructedCardsArea from './ConstructedCardsArea'
 import ConstructionArea from './ConstructionArea'
 import DraftArea from './DraftArea'
@@ -66,7 +66,7 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, gameOver, pane
 const financiersPilePosition = css`
   position: absolute;
   left: ${financiersPileX}%;
-  top: ${headerHeight + topMargin}%;
+  top: ${charactersPilesY}%;
   width: ${tokenWidth}%;
   height: ${tokenHeight}%;
 `
