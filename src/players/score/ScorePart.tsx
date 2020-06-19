@@ -50,7 +50,7 @@ const scoreStyle = css`
   background-repeat: no-repeat;
   background-position: center;
   font-size: 5vh;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black) drop-shadow(0.1vh 0.1vh 0.5vh black);
+  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
   font-weight: bold;
   color: white;
   text-shadow: 0 0 3px black;
