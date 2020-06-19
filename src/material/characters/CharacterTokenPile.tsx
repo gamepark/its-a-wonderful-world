@@ -17,6 +17,10 @@ import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from '../boa
 import Resource from '../resources/Resource'
 import Character from './Character'
 import CharacterToken, {images as characterTokenImages} from './CharacterToken'
+import zeroGeneral from './general-zero.png'
+import zeroFinancier from './financier-zero.png'
+import {TFunction} from 'i18next'
+import {useTranslation} from 'react-i18next'
 
 type Props = {
   player: Player | PlayerView
@@ -28,6 +32,7 @@ type Props = {
 const maxDisplayedTokens = 5
 
 const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quantity, draggable = false, ...props}) => {
+  const {t} = useTranslation()
   const animation = useAnimation<Move>(animation => isReceiveCharacter(animation.move) && animation.move.character === character
     && animation.move.playerId === player.empire)
   const [, ref, preview] = useDrag({
@@ -39,13 +44,8 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   })
   const tokens = []
   const tokensToDisplay = Math.min(quantity, maxDisplayedTokens)
-  if (tokensToDisplay === 0){
-      tokens.push(<CharacterToken key={-1} dummy={true} character={character} css={tokenStyle(0)}/>)
-  }else
-  {
-    for (let i = 0; i < tokensToDisplay; i++) {
-      tokens.push(<CharacterToken key={i} character={character} css={tokenStyle(i)}/>)
-    }
+  for (let i = 0; i < tokensToDisplay; i++) {
+    tokens.push(<CharacterToken key={i} character={character} css={tokenStyle(i)}/>)
   }
   if (animation) {
     if (animation.action.consequences.some(isCompleteConstruction)) {
@@ -60,6 +60,7 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   }
   return (
     <div ref={ref} {...props}>
+      {quantity === 0 && <img alt={placeDescription(t, character)} src={placeTokenImages[character]} css={tokenStyle(0)} /> }
       {tokens}
       <div css={tokenQuantityStyle}>{quantity}</div>
       <DragPreviewImage connect={preview} src={characterTokenImages[character]} css={characterTokenDraggingStyle}/>
@@ -72,6 +73,20 @@ const tokenStyle = (index: number) => css`
   width: 100%;
   transform: translate(${(index * 3)}%, ${(index * 5)}%);
 `
+
+const placeTokenImages = {
+  [Character.General]: zeroGeneral,
+  [Character.Financier]: zeroFinancier
+}
+
+function placeDescription(t: TFunction, character: Character) {
+  switch (character) {
+    case Character.Financier:
+      return t('Emplacement des jetons Financiers')
+    case Character.General:
+      return t('Emplacement des jetons Généraux')
+  }
+}
 
 const animateFromConstructedCard = (character: Character, index: number, duration: number) => {
   const pileX = character === Character.Financier ? financiersPileX : generalsPileX
