@@ -23,10 +23,10 @@ export const empireCardRatio = 343 / 400
 export const empireCardWidth = 9
 export const empireCardHeight = empireCardWidth * empireCardRatio * screenRatio // percentage of playing area cardWidth
 export const empireCardLeftMargin = 1
-export const empireCardBottomMargin = 1.5
-export const developmentCardVerticalShift = 2.5
+export const empireCardBottomMargin = 11
+export const developmentCardVerticalShift = 2.6
 export const constructedCardLeftMargin = 1.3
-export const constructedCardBottomMargin = 13.8
+export const constructedCardBottomMargin = 23.4
 export const playerPanelWidth = 19.5
 export const playerPanelHeight = 16.7
 export const playerPanelMargin = 1.5
@@ -39,7 +39,7 @@ export const areasX = areasCardX - areasBorders * 5 / screenRatio
 export const constructedCardY = (index: number) => 100 - cardHeight - constructedCardBottomMargin - index * developmentCardVerticalShift
 export const playerPanelY = (index: number) => headerHeight + playerPanelMargin + index * (playerPanelHeight + playerPanelMargin)
 export const playerPanelRightMargin = 1
-export const charactersPilesY = headerHeight + topMargin
+export const charactersPilesY = 90
 export const financiersPileX = empireCardLeftMargin
 export const generalsPileX = 6
 

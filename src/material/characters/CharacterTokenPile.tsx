@@ -39,8 +39,13 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   })
   const tokens = []
   const tokensToDisplay = Math.min(quantity, maxDisplayedTokens)
-  for (let i = 0; i < tokensToDisplay; i++) {
-    tokens.push(<CharacterToken key={i} character={character} css={tokenStyle(i)}/>)
+  if (tokensToDisplay === 0){
+      tokens.push(<CharacterToken key={-1} dummy={true} character={character} css={tokenStyle(0)}/>)
+  }else
+  {
+    for (let i = 0; i < tokensToDisplay; i++) {
+      tokens.push(<CharacterToken key={i} character={character} css={tokenStyle(i)}/>)
+    }
   }
   if (animation) {
     if (animation.action.consequences.some(isCompleteConstruction)) {
@@ -56,7 +61,7 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   return (
     <div ref={ref} {...props}>
       {tokens}
-      {quantity > 1 && <div css={tokenQuantityStyle}>{quantity}</div>}
+      <div css={tokenQuantityStyle}>{quantity}</div>
       <DragPreviewImage connect={preview} src={characterTokenImages[character]} css={characterTokenDraggingStyle}/>
     </div>
   )

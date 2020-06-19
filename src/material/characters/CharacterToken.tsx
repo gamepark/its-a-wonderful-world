@@ -5,12 +5,17 @@ import {useTranslation} from 'react-i18next'
 import Character from './Character'
 import Financier from './financier.png'
 import General from './general.png'
+import zeroFinancier from './financier-zero.png'
+import zeroGeneral from './general-zero.png'
 
-type Props = { character: Character } & React.HTMLAttributes<HTMLImageElement>
+type Props = { character: Character, dummy?:boolean } & React.HTMLAttributes<HTMLImageElement>
 
-const CharacterToken: FunctionComponent<Props> = ({character, ...props}) => {
+const CharacterToken: FunctionComponent<Props> = ({character, dummy=false, ...props}) => {
   const {t} = useTranslation()
-  return <img alt={getDescription(t, character)} src={images[character]} css={style} {...props}/>
+  if(dummy)
+    return <img alt={getDescription(t, character, dummy)} src={defaultImages[character]} css={style} {...props}/>
+  else
+    return <img alt={getDescription(t, character, dummy)} src={images[character]} css={style} {...props}/>
 }
 
 const style = css`
@@ -23,12 +28,23 @@ export const images = {
   [Character.Financier]: Financier
 }
 
-function getDescription(t: TFunction, character: Character) {
+export const defaultImages = {
+  [Character.General]: zeroGeneral,
+  [Character.Financier]: zeroFinancier
+}
+
+function getDescription(t: TFunction, character: Character, dummy: boolean) {
   switch (character) {
     case Character.Financier:
-      return t('Un jeton Financier')
+      if(dummy)
+        return t('Jetons Financiers')
+      else
+        return t('Un jeton Financier')
     case Character.General:
-      return t('Un jeton Général')
+      if(dummy)
+        return t('Jetons Généraux')
+      else
+        return t('Un jeton Général')
   }
 }
 
