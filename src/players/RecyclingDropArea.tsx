@@ -36,6 +36,7 @@ const getStyle = (isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(0, 0, 0, ${isOver ? 0.5 : 0.3});
   border: 0.3vh dashed grey;
   border-radius: 1vh;
+  z-index: 10;
 `
 
 const text = css`

@@ -52,18 +52,18 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     }
     const animation = animations[quantity - index - 1]
     const move = animation.move
-    const cubePosition = toHexagonalSpiralPosition(index)
+    const cubePosition = index === 0 ? {x: 0, y: 0} : toHexagonalSpiralPosition(index - 1)
     let translateX = -(getBoardResourceLeftPosition(resource) + cubePosition.x * resourceWidth / 2 + cubeDeltaX) * boardWidth / 100 - areasX
     let translateY = -(boardResourceTopPosition + cubeDeltaY + cubePosition.y * resourceHeight) * boardHeight / 100 - boardTop
     if (isPlaceResourceOnConstruction(move)) {
       const constructionIndex = player.constructionArea.findIndex(construction => construction.card === move.card)
-      translateX += getAreaCardX(constructionIndex, player.constructionArea.length, game.players.length === 2) + costSpaceDeltaX - cubeWidth / 2
+      translateX += getAreaCardX(constructionIndex, player.constructionArea.length, game.players.length === 2) + costSpaceDeltaX
       translateY += getAreaCardY(1) + costSpaceDeltaY(move.space)
     } else {
       const resourcePosition = player.empireCardResources.filter(resource => resource !== Krystallium).length
       const destination = empireCardResourcePosition[resourcePosition % 5]
-      translateX += empireCardLeftMargin + destination[0] * empireCardWidth / 100 - cubeWidth / 2
-      translateY += 100 - empireCardBottomMargin - empireCardHeight + destination[1] * empireCardHeight / 100 + cubeHeight
+      translateX += empireCardLeftMargin + destination[0] * empireCardWidth / 100
+      translateY += 100 - empireCardBottomMargin - empireCardHeight + destination[1] * empireCardHeight / 100
     }
     const keyframe = keyframes`
       from {transform: none;}
@@ -71,7 +71,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     `
     return css`
       z-index: 10;
-      animation: ${keyframe} ${animation.duration / 2}s ease-in-out forwards;
+      animation: ${keyframe} ${animation.duration}s ease-in-out forwards;
     `
   }
   const playerProduction = getProduction(player, resource)
@@ -104,7 +104,8 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
 const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 4
 const getHighlightLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 2.5
 const getNumberLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6
-const getCircleCharacterLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6.25
+export const getCircleCharacterLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6.25
+export const circleCharacterTopPosition = 6
 const boardResourceTopPosition = 30
 const cubeDeltaX = 2.6
 const cubeDeltaY = 3.3
@@ -262,7 +263,7 @@ const arrowStyle = css`
 const characterStyle = css`
   position:absolute;
   width: 2.6%;
-  top:6%;
+  top: ${circleCharacterTopPosition}%;
   transition: opacity 0.5s ease-in-out;
   opacity: 0.5;
 `

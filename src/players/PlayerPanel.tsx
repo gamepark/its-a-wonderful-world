@@ -9,7 +9,7 @@ import EmpireName from '../material/empires/EmpireName'
 import {getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
-import {empireBackground, playerPanelHeight, playerPanelWidth, playerPanelY} from '../util/Styles'
+import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
 import PlayerResourceProduction from './PlayerResourceProduction'
 import PlayerScore from './score/PlayerScore'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
@@ -52,7 +52,7 @@ const style = (empire: EmpireName, position: number, highlight: boolean) => css`
   position: absolute;
   z-index: 1;
   top: ${playerPanelY(position)}%;
-  right: 1%;
+  right: ${playerPanelRightMargin}%;
   width: ${playerPanelWidth}%;
   height: ${playerPanelHeight}%;
   background-image: url(${empireBackground[empire]});

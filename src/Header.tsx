@@ -1,26 +1,32 @@
 import {css} from '@emotion/core'
-import {useAnimation, useGame, usePlay, usePlayerId, usePlayers} from '@interlude-games/workshop'
+import {useActions, useAnimation, useGame, usePlay, usePlayerId, usePlayers, useUndo} from '@interlude-games/workshop'
 import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import PlayerInfo from '@interlude-games/workshop/dist/Types/Player'
+import fscreen from 'fscreen'
 import {TFunction} from 'i18next'
-import React from 'react'
+import NoSleep from 'nosleep.js'
+import React, {useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import Character from './material/characters/Character'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
+import {isCompleteConstruction} from './moves/CompleteConstruction'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
-import {receiveCharacter} from './moves/ReceiveCharacter'
+import {isReceiveCharacter, receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
-import {countCharacters, getNextProductionStep, getScore, numberOfRounds} from './Rules'
+import ItsAWonderfulWorldRules, {countCharacters, getNextProductionStep, getScore, numberOfRounds} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
+import FullScreenExitIcon from './util/FullScreenExitIcon'
+import FullScreenIcon from './util/FullScreenIcon'
+import IconButton from './util/IconButton'
+import LoadingSpinner from './util/LoadingSpinner'
 import {headerHeight} from './util/Styles'
-import MainMenu from './MainMenu'
-
+import UndoIcon from './util/UndoIcon'
 
 const headerStyle = css`
   position: absolute;
@@ -36,7 +42,7 @@ const textStyle = css`
   }
   color: #333333;
   padding: 1vh;
-  margin: 0 28vh 0 0;
+  margin: 0 6vh;
   line-height: 1.25;
   font-size: 4vh;
   white-space: nowrap;
@@ -44,23 +50,79 @@ const textStyle = css`
   overflow: hidden;
 `
 
+const loadingSpinnerStyle = css`
+  position: absolute;
+  left: 1vh;
+  top: 1vh;
+  transform-origin: top left;
+  transform: scale(0.6);
+`
+
+const undoButtonStyle = css`
+  @media all and (orientation:portrait) {
+    display: none;
+  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 4vh;
+  padding: 0.33em;
+`
+
+const fullScreenButtonStyle = css`
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 4vh;
+  padding: 0.33em;
+`
+
+const noSleep = new NoSleep()
 
 const Header = () => {
   const game = useGame<GameView>()
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const players = usePlayers<EmpireName>()
+  const actions = useActions<Move, EmpireName>()
+  const nonGuaranteedUndo = actions?.some(action => action.cancelled && action.cancelPending && !action.animation && !action.delayed)
   const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
+  const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const {t} = useTranslation()
-
+  const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
+  const onFullScreenChange = () => {
+    setFullScreen(fscreen.fullscreenElement != null)
+    if (fscreen.fullscreenElement) {
+      window.screen.orientation.lock('landscape')
+      noSleep.enable()
+    } else {
+      noSleep.disable()
+    }
+  }
+  useEffect(() => {
+    fscreen.addEventListener('fullscreenchange', onFullScreenChange)
+    return () => {
+      fscreen.removeEventListener('fullscreenchange', onFullScreenChange)
+    }
+  }, [])
   return (
     <header css={headerStyle}>
-
+      {actions === undefined || nonGuaranteedUndo ?
+        <LoadingSpinner css={loadingSpinnerStyle}/> :
+        <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={() => undo()}
+                    disabled={!canUndo()}><UndoIcon/></IconButton>}
       <h1 css={textStyle}>{getText(t, play, players, game, empire, animation)}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
-
-      <MainMenu/>
-
+      {fscreen.fullscreenEnabled && !fullScreen &&
+      <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
+                  onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
+        <FullScreenIcon/>
+      </IconButton>}
+      {fullScreen &&
+      <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
+                  onClick={() => fscreen.exitFullscreen()}>
+        <FullScreenExitIcon/>
+      </IconButton>}
     </header>
   )
 }
@@ -113,6 +175,15 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
         }
       }
     case Phase.Production:
+      if (animation && isReceiveCharacter(animation.move) && !animation.action.consequences.some(isCompleteConstruction)) {
+        if (animation.move.playerId === player?.empire) {
+          return t('Vous recevez un {character, select, Financier{Financier} other{Général}} pour votre suprématie en production {resource, select, Materials{de Matériaux} Energy{d’Énergie} Science{de Science} Gold{d’Or} other{d’Exploration}}',
+            {character: animation.move.character, resource: game.productionStep})
+        } else {
+          return t('{player} recoit un {character, select, Financier{Financier} other{Général}} pour sa suprématie en production {resource, select, Materials{de Matériaux} Energy{d’Énergie} Science{de Science} Gold{d’Or} other{d’Exploration}}',
+            {player: getPlayerName(animation.move.playerId), character: animation.move.character, resource: game.productionStep})
+        }
+      }
       if (player && !player.ready) {
         if (player.availableResources.length) {
           return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')
@@ -280,7 +351,7 @@ const portraitText = css`
   color: #333333;
   line-height: 1.25;
   font-size: 3vh;
-  margin: 0 6vh;
+  margin: 0 6vh 0 0;
   padding: 1.5vh 1vh 1.5vh 1vh;
 `
 

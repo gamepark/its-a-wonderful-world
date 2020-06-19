@@ -21,7 +21,7 @@ const OtherPlayerHand: FunctionComponent<Props> = ({player, players, round, pane
 
   const getItemProps = (index: number) => {
     const chosen = choosingCard && index === player.hand - 1
-    const undo = choosingCard && animation?.undo
+    const undo = choosingCard && animation?.action.cancelled
     const ignore = (chosen && !undo) || passingCard !== undefined
     return {
       ignore,

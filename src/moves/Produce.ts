@@ -1,4 +1,5 @@
 import Resource from '../material/resources/Resource'
+import Move, {MoveView} from './Move'
 import MoveType from './MoveType'
 
 export default interface Produce {
@@ -8,4 +9,8 @@ export default interface Produce {
 
 export function produce(resource: Resource): Produce {
   return {type: MoveType.Produce, resource}
+}
+
+export function isProduce(move: Move | MoveView): move is Produce {
+  return move.type === MoveType.Produce
 }

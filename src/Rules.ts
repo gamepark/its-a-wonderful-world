@@ -13,7 +13,7 @@ import Empires from './material/empires/Empires'
 import EmpireSide from './material/empires/EmpireSide'
 import Resource, {isResource, resources} from './material/resources/Resource'
 import {chooseDevelopmentCard, isChosenDevelopmentCardVisible} from './moves/ChooseDevelopmentCard'
-import {completeConstruction} from './moves/CompleteConstruction'
+import {completeConstruction, isCompleteConstruction} from './moves/CompleteConstruction'
 import {dealDevelopmentCards, isDealDevelopmentCardsView} from './moves/DealDevelopmentCards'
 import {discardLeftoverCards, isDiscardLeftoverCardsView} from './moves/DiscardLeftoverCards'
 import Move, {MoveView} from './moves/Move'
@@ -444,12 +444,12 @@ const ItsAWonderfulWorldRules: GameType = {
       case MoveType.PassCards:
         return {...move, receivedCards: playerId ? game.players.find(player => player.empire === playerId)!.hand : undefined}
       case MoveType.DiscardLeftoverCards:
-        return {...move, discardedCards: game.discard.slice()}
+        return {...move, discardedCards: game.discard.slice((numberOfCardsToDraft - numberOfCardsDeal2Players) * game.players.length)}
     }
     return move
   },
 
-  getAnimationDuration(move: MoveView, game: GameView, currentPlayerId: EmpireName, displayedPlayerId: EmpireName) {
+  getAnimationDuration(move: MoveView, {action, game, playerId: currentPlayerId, displayState: displayedPlayerId}) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return move.playerId === displayedPlayerId ? 0.5 : 0
@@ -471,6 +471,12 @@ const ItsAWonderfulWorldRules: GameType = {
           }
         }
         return 0.2
+      case MoveType.ReceiveCharacter:
+        if (action.consequences.some(isCompleteConstruction)) {
+          return move.playerId === displayedPlayerId ? 0.5 : 0
+        } else {
+          return 1
+        }
       default:
         return 0
     }
