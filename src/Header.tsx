@@ -1,12 +1,11 @@
 import {css} from '@emotion/core'
-import {useActions, useAnimation, useGame, usePlay, usePlayerId, usePlayers, useUndo} from '@interlude-games/workshop'
+import {useAnimation, useGame, usePlay, usePlayerId, usePlayers} from '@interlude-games/workshop'
 import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import PlayerInfo from '@interlude-games/workshop/dist/Types/Player'
-import fscreen from 'fscreen'
 import {TFunction} from 'i18next'
-import NoSleep from 'nosleep.js'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {Trans, useTranslation} from 'react-i18next'
+import MainMenu from './MainMenu'
 import Character from './material/characters/Character'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
@@ -16,17 +15,13 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import {isReceiveCharacter, receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
-import ItsAWonderfulWorldRules, {countCharacters, getNextProductionStep, getScore, numberOfRounds} from './Rules'
+import {countCharacters, getNextProductionStep, getScore, numberOfRounds} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
-import FullScreenExitIcon from './util/FullScreenExitIcon'
-import FullScreenIcon from './util/FullScreenIcon'
-import IconButton from './util/IconButton'
-import LoadingSpinner from './util/LoadingSpinner'
 import {headerHeight} from './util/Styles'
-import UndoIcon from './util/UndoIcon'
+
 
 const headerStyle = css`
   position: absolute;
@@ -42,7 +37,7 @@ const textStyle = css`
   }
   color: #333333;
   padding: 1vh;
-  margin: 0 6vh;
+  margin: 0 28vh 0 0;
   line-height: 1.25;
   font-size: 4vh;
   white-space: nowrap;
@@ -50,79 +45,20 @@ const textStyle = css`
   overflow: hidden;
 `
 
-const loadingSpinnerStyle = css`
-  position: absolute;
-  left: 1vh;
-  top: 1vh;
-  transform-origin: top left;
-  transform: scale(0.6);
-`
-
-const undoButtonStyle = css`
-  @media all and (orientation:portrait) {
-    display: none;
-  }
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 4vh;
-  padding: 0.33em;
-`
-
-const fullScreenButtonStyle = css`
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 4vh;
-  padding: 0.33em;
-`
-
-const noSleep = new NoSleep()
 
 const Header = () => {
   const game = useGame<GameView>()
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const players = usePlayers<EmpireName>()
-  const actions = useActions<Move, EmpireName>()
-  const nonGuaranteedUndo = actions?.some(action => action.cancelled && action.cancelPending && !action.animation && !action.delayed)
-  const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards, MoveType.ReceiveCharacter].includes(animation.move.type))
-  const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
+  const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
   const {t} = useTranslation()
-  const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
-  const onFullScreenChange = () => {
-    setFullScreen(fscreen.fullscreenElement != null)
-    if (fscreen.fullscreenElement) {
-      window.screen.orientation.lock('landscape')
-      noSleep.enable()
-    } else {
-      noSleep.disable()
-    }
-  }
-  useEffect(() => {
-    fscreen.addEventListener('fullscreenchange', onFullScreenChange)
-    return () => {
-      fscreen.removeEventListener('fullscreenchange', onFullScreenChange)
-    }
-  }, [])
+
   return (
     <header css={headerStyle}>
-      {actions === undefined || nonGuaranteedUndo ?
-        <LoadingSpinner css={loadingSpinnerStyle}/> :
-        <IconButton css={undoButtonStyle} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')} onClick={() => undo()}
-                    disabled={!canUndo()}><UndoIcon/></IconButton>}
       <h1 css={textStyle}>{getText(t, play, players, game, empire, animation)}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
-      {fscreen.fullscreenEnabled && !fullScreen &&
-      <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
-                  onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
-        <FullScreenIcon/>
-      </IconButton>}
-      {fullScreen &&
-      <IconButton css={fullScreenButtonStyle} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
-                  onClick={() => fscreen.exitFullscreen()}>
-        <FullScreenExitIcon/>
-      </IconButton>}
+      <MainMenu/>
     </header>
   )
 }
