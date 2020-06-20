@@ -17,6 +17,7 @@ const style = css`
   border-radius: 100%;
   box-shadow: 0 0 5px black;
 `
+
 export const images = {
   [Character.General]: General,
   [Character.Financier]: Financier

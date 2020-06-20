@@ -1,7 +1,9 @@
 import {css, keyframes} from '@emotion/core'
 import {useAnimation} from '@interlude-games/workshop'
+import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
+import {useTranslation} from 'react-i18next'
 import {characterTokenFromEmpire} from '../../drag-objects/CharacterTokenFromEmpire'
 import {isCompleteConstruction} from '../../moves/CompleteConstruction'
 import Move from '../../moves/Move'
@@ -17,10 +19,8 @@ import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from '../boa
 import Resource from '../resources/Resource'
 import Character from './Character'
 import CharacterToken, {images as characterTokenImages} from './CharacterToken'
-import zeroGeneral from './general-zero.png'
 import zeroFinancier from './financier-zero.png'
-import {TFunction} from 'i18next'
-import {useTranslation} from 'react-i18next'
+import zeroGeneral from './general-zero.png'
 
 type Props = {
   player: Player | PlayerView
@@ -60,7 +60,7 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   }
   return (
     <div ref={ref} {...props}>
-      {quantity === 0 && <img alt={placeDescription(t, character)} src={placeTokenImages[character]} css={tokenStyle(0)} /> }
+      {quantity === 0 && <img alt={emptySpaceDescription[character](t)} src={emptySpaceImages[character]} css={tokenStyle(0)}/>}
       {tokens}
       <div css={tokenQuantityStyle}>{quantity}</div>
       <DragPreviewImage connect={preview} src={characterTokenImages[character]} css={characterTokenDraggingStyle}/>
@@ -71,21 +71,17 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
 const tokenStyle = (index: number) => css`
   position: absolute;
   width: 100%;
-  transform: translate(${(index * 3)}%, ${(index * 5)}%);
+  transform: translate(${(index * 3)}%, ${-(index * 5)}%);
 `
 
-const placeTokenImages = {
-  [Character.General]: zeroGeneral,
-  [Character.Financier]: zeroFinancier
+const emptySpaceImages = {
+  [Character.Financier]: zeroFinancier,
+  [Character.General]: zeroGeneral
 }
 
-function placeDescription(t: TFunction, character: Character) {
-  switch (character) {
-    case Character.Financier:
-      return t('Emplacement des jetons Financiers')
-    case Character.General:
-      return t('Emplacement des jetons Généraux')
-  }
+const emptySpaceDescription = {
+  [Character.Financier]: (t: TFunction) => t('Emplacement des jetons Financiers'),
+  [Character.General]: (t: TFunction) => t('Emplacement des jetons Généraux')
 }
 
 const animateFromConstructedCard = (character: Character, index: number, duration: number) => {
