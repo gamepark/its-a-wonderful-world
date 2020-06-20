@@ -5,6 +5,7 @@ import PlayerInfo from '@interlude-games/workshop/dist/Types/Player'
 import {TFunction} from 'i18next'
 import React from 'react'
 import {Trans, useTranslation} from 'react-i18next'
+import MainMenu from './MainMenu'
 import Character from './material/characters/Character'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
@@ -20,7 +21,6 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 import {headerHeight} from './util/Styles'
-import MainMenu from './MainMenu'
 
 
 const headerStyle = css`
@@ -56,12 +56,9 @@ const Header = () => {
 
   return (
     <header css={headerStyle}>
-
       <h1 css={textStyle}>{getText(t, play, players, game, empire, animation)}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
-
       <MainMenu/>
-
     </header>
   )
 }

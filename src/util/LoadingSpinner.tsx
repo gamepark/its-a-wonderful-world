@@ -20,25 +20,23 @@ const keyframe = keyframes`
 `
 
 const style = css`
-  display: inline-block;
-  position: relative;
-  width: 8vh;
-  height: 8vh;
+  width: 4vh;
+  height: 4vh;
   & > div {
     animation-name: ${keyframe};
     animation-duration: 1.2s;
     animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
     animation-iteration-count: infinite;
-    transform-origin: 4vh 4vh;
+    transform-origin: 2vh 2vh;
     &:after {
       content: " ";
       display: block;
       position: absolute;
-      width: 0.7vh;
-      height: 0.7vh;
+      width: 0.35vh;
+      height: 0.35vh;
       border-radius: 50%;
-      background: #333;
-      margin: -0.4vh 0 0 -0.4vh;
+      background: #EEE;
+      margin: -0.2vh 0 0 -0.2vh;
     }
   }
 `
@@ -46,64 +44,64 @@ const style = css`
 const bullet1 = css`
   animation-delay: -0.036s;
   &:after {
-    top: 6.3vh;
-    left: 6.3vh;
+    top: 3.15vh;
+    left: 3.15vh;
   }
 `
 
 const bullet2 = css`
   animation-delay: -0.072s;
   &:after {
-    top: 6.8vh;
-    left: 5.6vh;
+    top: 3.4vh;
+    left: 2.8vh;
   }
 `
 
 const bullet3 = css`
   animation-delay: -0.108s;
   &:after {
-    top: 7.1vh;
-    left: 4.8vh;
+    top: 3.55vh;
+    left: 2.4vh;
   }
 `
 
 const bullet4 = css`
   animation-delay: -0.144s;
   &:after {
-    top: 7.2vh;
-    left: 4vh;
+    top: 3.6vh;
+    left: 2vh;
   }
 `
 
 const bullet5 = css`
   animation-delay: -0.18s;
   &:after {
-    top: 7.1vh;
-    left: 3.2vh;
+    top: 3.55vh;
+    left: 1.6vh;
   }
 `
 
 const bullet6 = css`
   animation-delay: -0.216s;
   &:after {
-    top: 6.8vh;
-    left: 2.4vh;
+    top: 3.4vh;
+    left: 1.2vh;
   }
 `
 
 const bullet7 = css`
   animation-delay: -0.252s;
   &:after {
-    top: 6.3vh;
-    left: 1.7vh;
+    top: 3.15vh;
+    left: 0.85vh;
   }
 `
 
 const bullet8 = css`
   animation-delay: -0.288s;
   &:after {
-    top: 5.6vh;
-    left: 1.2vh;
+    top: 2.8vh;
+    left: 0.6vh;
   }
 `
 
