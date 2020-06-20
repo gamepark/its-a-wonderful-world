@@ -147,9 +147,10 @@ const getResourceStyle = (index: number) => css`
 
 const getKrystalliumStyle = (index: number) => css`
   position: absolute;
-  width: 12%;
-  right: -15%;
-  bottom: ${empireCardBottomMargin + (index * 12)}%;
+  width: ${cubeWidth * 100 / empireCardWidth}%;
+  height: ${cubeHeight * 100 / empireCardHeight}%;
+  right: ${- cubeWidth * 1.2 * 100 / empireCardWidth}%;
+  bottom: ${index * cubeHeight * 0.8 * 100 / empireCardHeight}%;
 `
 
 export const resourcePosition = [

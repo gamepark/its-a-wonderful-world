@@ -1,7 +1,9 @@
 import {css, keyframes} from '@emotion/core'
 import {useAnimation} from '@interlude-games/workshop'
+import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
+import {useTranslation} from 'react-i18next'
 import {characterTokenFromEmpire} from '../../drag-objects/CharacterTokenFromEmpire'
 import {isCompleteConstruction} from '../../moves/CompleteConstruction'
 import Move from '../../moves/Move'
@@ -17,6 +19,8 @@ import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from '../boa
 import Resource from '../resources/Resource'
 import Character from './Character'
 import CharacterToken, {images as characterTokenImages} from './CharacterToken'
+import zeroFinancier from './financier-zero.png'
+import zeroGeneral from './general-zero.png'
 
 type Props = {
   player: Player | PlayerView
@@ -28,6 +32,7 @@ type Props = {
 const maxDisplayedTokens = 5
 
 const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quantity, draggable = false, ...props}) => {
+  const {t} = useTranslation()
   const animation = useAnimation<Move>(animation => isReceiveCharacter(animation.move) && animation.move.character === character
     && animation.move.playerId === player.empire)
   const [, ref, preview] = useDrag({
@@ -55,8 +60,9 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   }
   return (
     <div ref={ref} {...props}>
+      {quantity === 0 && <img alt={emptySpaceDescription[character](t)} src={emptySpaceImages[character]} css={tokenStyle(0)}/>}
       {tokens}
-      {quantity > 1 && <div css={tokenQuantityStyle}>{quantity}</div>}
+      <div css={tokenQuantityStyle}>{quantity}</div>
       <DragPreviewImage connect={preview} src={characterTokenImages[character]} css={characterTokenDraggingStyle}/>
     </div>
   )
@@ -65,8 +71,18 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
 const tokenStyle = (index: number) => css`
   position: absolute;
   width: 100%;
-  transform: translate(${(index * 3)}%, ${(index * 5)}%);
+  transform: translate(${(index * 3)}%, ${-(index * 5)}%);
 `
+
+const emptySpaceImages = {
+  [Character.Financier]: zeroFinancier,
+  [Character.General]: zeroGeneral
+}
+
+const emptySpaceDescription = {
+  [Character.Financier]: (t: TFunction) => t('Emplacement des jetons Financiers'),
+  [Character.General]: (t: TFunction) => t('Emplacement des jetons Généraux')
+}
 
 const animateFromConstructedCard = (character: Character, index: number, duration: number) => {
   const pileX = character === Character.Financier ? financiersPileX : generalsPileX
