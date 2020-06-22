@@ -159,6 +159,7 @@ const areaHighlight = css`
   height: 50%;
   top: ${boardResourceTopPosition - 8}%;
   border-radius: 100%;
+  z-index:5;
 `
 
 const resourceAreaHighlight = {
