@@ -55,16 +55,16 @@ const scoreStyle = css`
   color: white;
   text-shadow: 0 0 3px black;
   padding: 1vh;
-  width: 7vh;
+  width: 6vh;
   height: fit-content;
   text-align: center;
-  margin-left: 5vh;
+  margin-left: 4vh;
 `
 
 const multiplierStyle = css`
   position: absolute;
   bottom: 100%;
-  height: 80%;
+  height: 60%;
   right: 5%;
   left: 5%;
   justify-content: flex-end;

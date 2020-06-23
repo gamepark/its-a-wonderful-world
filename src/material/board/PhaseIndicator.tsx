@@ -22,9 +22,9 @@ const phaseStyle = css`
   position: absolute;
   background-image: url(${GreyBackgroundImage});
   background-size: cover;
-  padding: 0.45% 0 0.55% 0.5%;
-  width: 9%;
-  font-size: 1.5vh;
+  padding: 0.4% 0 0.6% 0.5%;
+  width: 8.2%;
+  font-size: 1.3vh;
   color: white;
   text-transform: uppercase;
   text-align: center;
@@ -35,20 +35,20 @@ const phaseStyle = css`
     position: absolute;
     background-image: url(${CircleBackgroundImage});
     background-size: cover;
-    font-size: 2vh;
+    font-size: 1.9vh;
     color: #888;
     top: -10%;
     left: -10%;
     width: 25%;
     height: 120%;
-    padding: 6.5% 6% 6% 8%;
+    padding: 7% 6% 6% 9%;
   }
 `
 
 const draftStyle = css`
   z-index: -1;
-  left: 18.2%;
-  top: ${headerHeight + 0.5}%;
+  left: 18.4%;
+  top: ${headerHeight + 0.4}%;
   &:after {
     content: 'I';
   }
@@ -56,7 +56,7 @@ const draftStyle = css`
 
 const planningStyle = css`
   z-index: -2;
-  left: 18.5%;
+  left: 18.6%;
   top: ${headerHeight + 4}%;
   &:after {
     content: 'II';
@@ -65,7 +65,7 @@ const planningStyle = css`
 
 const productionStyle = css`
   z-index: -3;
-  left: 17.9%;
+  left: 17.8%;
   top: ${headerHeight + 7.5}%;
   &:after {
     content: 'III';

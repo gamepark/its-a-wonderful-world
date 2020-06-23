@@ -25,6 +25,7 @@ import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from './util/Styles'
+import ScorePanel from './players/score/ScorePanel'
 
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
@@ -77,15 +78,11 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
     <Letterbox css={hiddenOnPortrait}>
-      {!gameOver &&
-      <>
-        <Board game={game} player={displayedPlayer}/>
-        <RoundTracker round={game.round}/>
-        <PhaseIndicator phase={game.phase}/>
-        <DrawPile game={game}/>
-        <DiscardPile game={game}/>
-      </>
-      }
+      <Board game={game} player={displayedPlayer}/>
+      <RoundTracker round={game.round}/>
+      <PhaseIndicator phase={game.phase}/>
+      <DrawPile game={game}/>
+      <DiscardPile game={game}/>
       <DisplayedEmpire game={game} player={displayedPlayer} gameOver={gameOver} panelIndex={displayedPlayerPanelIndex}/>
       {game.players.length > 2 && game.phase === Phase.Draft &&
       <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players}/>}
@@ -93,6 +90,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
         <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
                      highlight={player.empire === displayedEmpire} showScore={gameOver}/>
       )}
+      {gameOver && <ScorePanel game={game} /> }
       {revealedCards && revealedCards.map((card, index) =>
         <DevelopmentCard key={card} development={developmentCards[card]}
                          css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index),
@@ -104,7 +102,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   )
 }
 
-const getPlayersStartingWith = (game: GameView, playerId?: EmpireName) => {
+export const getPlayersStartingWith = (game: GameView, playerId?: EmpireName) => {
   if (playerId) {
     const playerIndex = game.players.findIndex(player => player.empire === playerId)
     return [...game.players.slice(playerIndex, game.players.length), ...game.players.slice(0, playerIndex)]
@@ -159,5 +157,7 @@ const supremacyBonusAnimation = (resource: Resource, panelIndex: number, duratio
     animation: ${keyframe} ${duration}s ease-in-out forwards;
   `
 }
+
+
 
 export default GameDisplay
