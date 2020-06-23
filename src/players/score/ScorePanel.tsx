@@ -17,7 +17,7 @@ const ScorePanel: FunctionComponent<Props> = ({game}) => {
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
   const [displayScorePanel, setDisplayScorePanel] = useState(true)
   return (
-     <div  css={scorePanelStyle}>
+     <div  css={[scorePanelStyle, !displayScorePanel && hideScorePanelStyle]}>
       {players.map((player, index) =>
           <>
           <button css={[arrowStyle(index), !displayScorePanel && arrowReverseStyle(index)]} onClick={() => setDisplayScorePanel(!displayScorePanel)} title={displayScorePanel?t('Réduire les Scores'):t('Afficher les Scores')}/>
@@ -37,6 +37,14 @@ const scorePanelStyle = css`
     display: flex;
     flex-direction: column;
     z-index:5;
+    max-width:100%;
+    transition:max-width 0.3s ease-in-out;
+    overflow:hidden;
+`
+
+const hideScorePanelStyle = css`
+    max-width:10%;
+    transition:max-width 0.3s ease-in-out;
 `
 
 const arrowStyle = (index: number) => css`

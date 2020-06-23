@@ -33,13 +33,9 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) =
   return (
     <>
       <EmpireCard player={player} withResourceDrop={isPlayer(player)}/>
-      {!isOver(game) &&
-      <>
-        <DraftArea game={game} player={player}/>
-        {(game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} player={player}/>}
-        <RecyclingDropArea empire={player.empire}/>
-      </>
-      }
+      <DraftArea game={game} player={player}/>
+      {(game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} player={player}/>}
+      {!isOver(game) && <RecyclingDropArea empire={player.empire}/>}
       <ConstructedCardsArea player={player}/>
       <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} player={player}
                           title={isPlayer(player) ?

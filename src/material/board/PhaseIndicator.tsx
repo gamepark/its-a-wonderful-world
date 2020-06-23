@@ -6,6 +6,7 @@ import {headerHeight} from '../../util/Styles'
 import CircleBackgroundImage from './circle-metal.png'
 import BlueBackgroundImage from './title-blue.png'
 import GreyBackgroundImage from './title-grey.png'
+import {roundTrackerX} from './RoundTracker'
 
 const PhaseIndicator: FunctionComponent<{ phase: Phase }> = ({phase}) => {
   const {t} = useTranslation()
@@ -44,10 +45,13 @@ const phaseStyle = css`
     padding: 7% 6% 6% 9%;
   }
 `
+const draftPhaseX = roundTrackerX + 6.6
+const planningPhaseX = roundTrackerX + 6.8
+const productionPhaseX = roundTrackerX + 6
 
 const draftStyle = css`
   z-index: -1;
-  left: 18.4%;
+  left: ${draftPhaseX}%;
   top: ${headerHeight + 0.4}%;
   &:after {
     content: 'I';
@@ -56,7 +60,7 @@ const draftStyle = css`
 
 const planningStyle = css`
   z-index: -2;
-  left: 18.6%;
+  left: ${planningPhaseX}%;
   top: ${headerHeight + 4}%;
   &:after {
     content: 'II';
@@ -65,7 +69,7 @@ const planningStyle = css`
 
 const productionStyle = css`
   z-index: -3;
-  left: 17.8%;
+  left: ${productionPhaseX}%;
   top: ${headerHeight + 7.5}%;
   &:after {
     content: 'III';
