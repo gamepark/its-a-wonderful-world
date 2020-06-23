@@ -18,7 +18,7 @@ import ReceiveCharacter, {isReceiveCharacter} from './moves/ReceiveCharacter'
 import {isRevealChosenCards, RevealChosenCardsView} from './moves/RevealChosenCards'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
-import {isActive, numberOfRounds} from './Rules'
+import {isActive, isOver} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import {
@@ -29,7 +29,6 @@ import {
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
 const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
-  const gameOver = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
   const playerId = usePlayerId<EmpireName>()
   const [displayedEmpire, setDisplayedEmpire] = useDisplayState(playerId || game.players[0].empire)
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
@@ -77,7 +76,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
     <Letterbox css={hiddenOnPortrait}>
-      {!gameOver &&
+      {!isOver(game) &&
       <>
         <Board game={game} player={displayedPlayer}/>
         <RoundTracker round={game.round}/>
@@ -86,12 +85,12 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
         <DiscardPile game={game}/>
       </>
       }
-      <DisplayedEmpire game={game} player={displayedPlayer} gameOver={gameOver} panelIndex={displayedPlayerPanelIndex}/>
+      <DisplayedEmpire game={game} player={displayedPlayer} panelIndex={displayedPlayerPanelIndex}/>
       {game.players.length > 2 && game.phase === Phase.Draft &&
       <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players}/>}
       {players.map((player, index) =>
         <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
-                     highlight={player.empire === displayedEmpire} showScore={gameOver}/>
+                     highlight={player.empire === displayedEmpire} showScore={isOver(game)}/>
       )}
       {revealedCards && revealedCards.map((card, index) =>
         <DevelopmentCard key={card} development={developmentCards[card]}

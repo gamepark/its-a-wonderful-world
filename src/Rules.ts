@@ -734,5 +734,9 @@ export function countCharacters(player: Player | PlayerView) {
   return player.characters.Financier + player.characters.General
 }
 
+export function isOver(game: Game | GameView): boolean {
+  return game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
+}
+
 // noinspection JSUnusedGlobalSymbols
 export default ItsAWonderfulWorldRules

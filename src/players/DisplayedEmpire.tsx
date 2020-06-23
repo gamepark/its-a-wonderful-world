@@ -6,6 +6,7 @@ import Character from '../material/characters/Character'
 import CharacterTokenPile from '../material/characters/CharacterTokenPile'
 import EmpireCard, {getEmpireName} from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
+import {isOver} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
@@ -22,18 +23,17 @@ import RecyclingDropArea from './RecyclingDropArea'
 type Props = {
   game: GameView
   player: Player | PlayerView
-  gameOver: boolean
   panelIndex: number
 }
 
-const DisplayedEmpire: FunctionComponent<Props> = ({game, player, gameOver, panelIndex}) => {
+const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) => {
   const {t} = useTranslation()
   const players = usePlayers<EmpireName>()
   const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
   return (
     <>
       <EmpireCard player={player} withResourceDrop={isPlayer(player)}/>
-      {!gameOver &&
+      {!isOver(game) &&
       <>
         <DraftArea game={game} player={player}/>
         {(game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} player={player}/>}

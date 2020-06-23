@@ -1,12 +1,13 @@
 import {css} from '@emotion/core'
-import {useActions, useUndo} from '@interlude-games/workshop'
+import {useActions, useGame, usePlayerId, useUndo} from '@interlude-games/workshop'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 import React, {useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import EmpireName from './material/empires/EmpireName'
 import Move from './moves/Move'
-import ItsAWonderfulWorldRules from './Rules'
+import ItsAWonderfulWorldRules, {isOver} from './Rules'
+import GameView from './types/GameView'
 import ArrowDownIcon from './util/ArrowDownIcon'
 import ArrowUpIcon from './util/ArrowUpIcon'
 import FullScreenExitIcon from './util/FullScreenExitIcon'
@@ -24,9 +25,11 @@ import UndoIcon from './util/UndoIcon'
 const noSleep = new NoSleep()
 
 const MainMenu = () => {
+  const game = useGame<GameView>()
   const actions = useActions<Move, EmpireName>()
   const nonGuaranteedUndoPending = actions?.some(action => action.cancelled && action.cancelPending && !action.animation && !action.delayed)
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
+  const isPlaying = !!usePlayerId<EmpireName>()
   const {t} = useTranslation()
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
   const [displayMenu, setDisplayMenu] = useState(false)
@@ -51,10 +54,12 @@ const MainMenu = () => {
   return (
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
+        {game && isPlaying && !isOver(game) &&
         <IconButton css={[menuButtonStyle, undoButtonStyle]} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')}
                     onClick={() => undo()} disabled={!canUndo()}>
           {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <UndoIcon/>}
         </IconButton>
+        }
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Sortir du plein écran')} aria-label={t('Sortir du plein écran')}
                         onClick={() => fscreen.exitFullscreen()}>
@@ -87,11 +92,13 @@ const MainMenu = () => {
               <FullScreenIcon/>
             </IconButton>
         )}
+        {game && isPlaying && !isOver(game) &&
         <IconButton css={[menuButtonStyle, undoButtonStyle]}
                     onClick={() => undo()} disabled={!canUndo()}>
           <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
           {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <UndoIcon/>}
         </IconButton>
+        }
         <IconButton css={[menuButtonStyle, homeButtonStyle]} onClick={() => window.location.href = platformUri}>
           <span css={subMenuTitle}>{t('Retour à l’accueil')}</span>
           <HomeIcon/>
