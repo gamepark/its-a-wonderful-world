@@ -1,4 +1,6 @@
 import {css, keyframes} from '@emotion/core'
+import {faChess, faChevronDown, faChevronUp, faCompress, faExpand, faHome, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions, useGame, usePlayerId, useUndo} from '@interlude-games/workshop'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
@@ -8,12 +10,6 @@ import EmpireName from './material/empires/EmpireName'
 import Move from './moves/Move'
 import ItsAWonderfulWorldRules, {isOver} from './Rules'
 import GameView from './types/GameView'
-import ArrowDownIcon from './util/ArrowDownIcon'
-import ArrowUpIcon from './util/ArrowUpIcon'
-import CrossedSwords from './util/CrossedSwords.svg'
-import FullScreenExitIcon from './util/FullScreenExitIcon'
-import FullScreenIcon from './util/FullScreenIcon'
-import HomeIcon from './util/HomeIcon'
 import IconButton from './util/IconButton'
 import LoadingSpinner from './util/LoadingSpinner'
 import FullScreenBackgroundImage from './util/menu-black.png'
@@ -21,7 +17,6 @@ import homeBackgroundImage from './util/menu-gold.png'
 import mainMenuBackgroundImage from './util/menu-grey.png'
 import RedMenuBackground from './util/menu-red.png'
 import MenuBackgroundImage from './util/texture-grey.jpg'
-import UndoIcon from './util/UndoIcon'
 
 const noSleep = new NoSleep()
 
@@ -71,64 +66,64 @@ const MainMenu = () => {
       <div css={[menuStyle, displayMenu && hidden]}>
         {game && isPlaying && (isOver(game) ?
             <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
-              <img css={rematchImage} src={CrossedSwords} alt={t('Proposer une revanche')}/>
+              <FontAwesomeIcon icon={faChess}/>
               {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche')}</span>}
             </IconButton> :
             <IconButton css={[menuButtonStyle, undoButtonStyle]} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')}
                         onClick={() => undo()} disabled={!canUndo()}>
-              {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <UndoIcon/>}
+              {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
             </IconButton>
         )
         }
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Sortir du plein écran')} aria-label={t('Sortir du plein écran')}
                         onClick={() => fscreen.exitFullscreen()}>
-              <FullScreenExitIcon/>
+              <FontAwesomeIcon icon={faCompress}/>
             </IconButton>
             :
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
                         onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
-              <FullScreenIcon/>
+              <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
         <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} title={t('Menu principal')} aria-label={t('Menu principal')}
                     onClick={() => setDisplayMenu(true)}>
-          <ArrowUpIcon/>
+          <FontAwesomeIcon icon={faChevronDown}/>
         </IconButton>
       </div>
       <div css={[menuStyle, openMenuStyle, !displayMenu && hidden]}>
         <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} onClick={() => setDisplayMenu(false)}>
           <span css={subMenuTitle}>{t('Cacher le Menu')}</span>
-          <ArrowDownIcon/>
+          <FontAwesomeIcon icon={faChevronUp}/>
         </IconButton>
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]}
                         onClick={() => fscreen.exitFullscreen()}>
               <span css={subMenuTitle}>{t('Quitter le plein écran')}</span>
-              <FullScreenExitIcon/>
+              <FontAwesomeIcon icon={faCompress}/>
             </IconButton> :
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]}
                         onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
               <span css={subMenuTitle}>{t('Passer en plein écran')}</span>
-              <FullScreenIcon/>
+              <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
         {game && isPlaying && (isOver(game) ?
             <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
               <span css={subMenuTitle}>{t('Proposer une revanche')}</span>
-              <img css={rematchImage} src={CrossedSwords} alt={t('Proposer une revanche')}/>
+              <FontAwesomeIcon icon={faChess}/>
             </IconButton>
             :
             <IconButton css={[menuButtonStyle, undoButtonStyle]}
                         onClick={() => undo()} disabled={!canUndo()}>
               <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
-              {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <UndoIcon/>}
+              {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
             </IconButton>
         )
         }
         <IconButton css={[menuButtonStyle, homeButtonStyle]} onClick={() => window.location.href = platformUri}>
           <span css={subMenuTitle}>{t('Retour à l’accueil')}</span>
-          <HomeIcon/>
+          <FontAwesomeIcon icon={faHome}/>
         </IconButton>
       </div>
     </>
@@ -141,6 +136,7 @@ const menuStyle = css`
   right: 0;
   transition: opacity 0.5s ease-in-out;
   background-image: url(${MenuBackgroundImage});
+  background-position: top right;
   padding: 0.1em;
   border-radius: 0 0 0 1em;
   border: solid 0.1em #ccc;
@@ -186,10 +182,11 @@ const subMenuTitle = css`
 
 const menuButtonStyle = css`
   width: fit-content;
-  font-size: 5vh;
+  min-width: 8vh;
+  font-size: 4vh;
   color: #EEE;
   margin: 0.1em;
-  padding: 0.3em;
+  padding: 0.5em 0.55em;
   background-size: contain;
   background-position: right;
   background-repeat: no-repeat;
@@ -204,6 +201,7 @@ const menuButtonStyle = css`
   }
 `
 const homeButtonStyle = css`
+  padding-right: 0.4em;
   background-image: url(${homeBackgroundImage});
 `
 const mainMenuButtonStyle = css`
@@ -230,10 +228,6 @@ const loadingSpinnerStyle = css`
 
 const rematchButtonStyle = css`
   background-image: url(${RedMenuBackground});
-`
-
-const rematchImage = css`
-  width: 5vh;
 `
 
 const displayForAMoment = keyframes`
