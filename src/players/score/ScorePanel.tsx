@@ -58,6 +58,12 @@ const arrowStyle = (index: number) => css`
   background-color:transparent;
   border:none;
   z-index:6;
+  &:focus {
+    outline:0;
+  }
+  &:hover {
+    cursor:pointer;
+  }
 `
 
 const arrowReverseStyle = (index: number) => css`

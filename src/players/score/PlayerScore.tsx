@@ -36,10 +36,11 @@ const style = css`
   background:#05214a;
   border-radius:2vh 0 0 2vh;
   opacity:0.95;
-  margin: 1.2vh 0 1.6vh 0;
+  margin: 2vh 0 1vh 0;
   padding: 6vh 0 0.5vh 7vh;
   transition:margin 0.3s ease-in-out,padding 0.3s ease-in-out;
   width:auto;
+  overflow:hidden;
 `
 const hidePlayerScore = css`
   margin: 3.6vh 0 3.6vh 0;
