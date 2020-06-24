@@ -51,7 +51,7 @@ const arrowStyle = (index: number) => css`
   position:absolute;
   width: 8vh;
   height: 10vh;
-  top:${(5 + index*20)}%;
+  top:${(4.5 + index*20)}%;
   background-image: url(${boardArrow});
   background-size: cover;
   background-repeat:no-repeat;
@@ -64,7 +64,7 @@ const arrowReverseStyle = (index: number) => css`
   transform: scaleX(-1);
   width: 4vh;
   height: 5vh;
-  top:${(7 + index*20)}%;
+  top:${(7.5 + index*20)}%;
 `
 
 export default ScorePanel

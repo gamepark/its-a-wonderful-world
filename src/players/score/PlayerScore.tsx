@@ -33,7 +33,7 @@ const style = css`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  background:#333;
+  background:#05214a;
   border-radius:2vh 0 0 2vh;
   opacity:0.95;
   margin: 1.2vh 0 1.6vh 0;
