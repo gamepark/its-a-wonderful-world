@@ -1,13 +1,14 @@
 import {css, keyframes} from '@emotion/core'
 import {faChess, faChevronDown, faChevronUp, faCompress, faExpand, faHome, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useActions, useGame, usePlayerId, useUndo} from '@interlude-games/workshop'
+import {useActions, useGame, usePlayerId, useRematch, useUndo} from '@interlude-games/workshop'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 import React, {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import EmpireName from './material/empires/EmpireName'
 import Move from './moves/Move'
+import RematchPopup from './RematchPopup'
 import ItsAWonderfulWorldRules, {isOver} from './Rules'
 import GameView from './types/GameView'
 import IconButton from './util/IconButton'
@@ -31,6 +32,7 @@ const MainMenu = () => {
   const [displayMenu, setDisplayMenu] = useState(false)
   const gameOverRef = useRef<boolean | undefined>()
   const [displayRematchTooltip, setDisplayRematchTooltip] = useState(false)
+  const {rematch, rematchOffer, ignoreRematch} = useRematch<EmpireName>()
   useEffect(() => {
     if (game) {
       if (isOver(game)) {
@@ -65,7 +67,7 @@ const MainMenu = () => {
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
         {game && isPlaying && (isOver(game) ?
-            <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
+            <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
               {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche')}</span>}
             </IconButton> :
@@ -126,6 +128,7 @@ const MainMenu = () => {
           <FontAwesomeIcon icon={faHome}/>
         </IconButton>
       </div>
+      <RematchPopup rematchOffer={rematchOffer} onClose={ignoreRematch}/>
     </>
   )
 }
@@ -198,6 +201,9 @@ const menuButtonStyle = css`
   &:hover, &:active, &:focus, &:visited, &:before {
     opacity: 1;
     background-color: transparent;
+  }
+  &:active {
+    transform: translateY(1px);
   }
 `
 const homeButtonStyle = css`
