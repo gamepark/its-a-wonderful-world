@@ -4,9 +4,9 @@ import {useTranslation} from 'react-i18next'
 import Phase from '../../types/Phase'
 import {headerHeight} from '../../util/Styles'
 import CircleBackgroundImage from './circle-metal.png'
+import {roundTrackerX} from './RoundTracker'
 import BlueBackgroundImage from './title-blue.png'
 import GreyBackgroundImage from './title-grey.png'
-import {roundTrackerX} from './RoundTracker'
 
 const PhaseIndicator: FunctionComponent<{ phase: Phase }> = ({phase}) => {
   const {t} = useTranslation()
@@ -42,7 +42,7 @@ const phaseStyle = css`
     left: -10%;
     width: 25%;
     height: 120%;
-    padding: 7% 6% 6% 9%;
+    padding: 6% 6% 6% 9%;
   }
 `
 const draftPhaseX = roundTrackerX + 6.6

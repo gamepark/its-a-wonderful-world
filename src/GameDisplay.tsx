@@ -18,6 +18,7 @@ import ReceiveCharacter, {isReceiveCharacter} from './moves/ReceiveCharacter'
 import {isRevealChosenCards, RevealChosenCardsView} from './moves/RevealChosenCards'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
+import ScorePanel from './players/score/ScorePanel'
 import {isActive, isOver} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
@@ -25,7 +26,6 @@ import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from './util/Styles'
-import ScorePanel from './players/score/ScorePanel'
 
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
@@ -89,7 +89,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
         <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
                      highlight={player.empire === displayedEmpire} showScore={isOver(game)}/>
       )}
-      {isOver(game) && <ScorePanel game={game} /> }
+      {isOver(game) && <ScorePanel game={game}/>}
       {revealedCards && revealedCards.map((card, index) =>
         <DevelopmentCard key={card} development={developmentCards[card]}
                          css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index),

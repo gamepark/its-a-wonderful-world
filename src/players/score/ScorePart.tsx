@@ -28,11 +28,11 @@ const ScorePart: FunctionComponent<Props> = ({player, item}) => {
 }
 
 const style = css`
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items:flex-end;
-  height:100%;
+  align-items: flex-end;
+  height: 100%;
   &:not(:first-of-type) {
     div:last-of-type:before {
       content: '+';
@@ -67,7 +67,7 @@ const scoreStyle = css`
 const multiplierStyle = css`
   height: 40%;
   width: 0;
-  margin-right:15%;
+  margin-right: 15%;
   filter: drop-shadow(0 0 1px black);
   & img {
     filter: none;
