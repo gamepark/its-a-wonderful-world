@@ -141,6 +141,15 @@
       "Choisir": "Choose",
       "Valider": "Validate",
       "Proposer une revanche": "Offer a rematch",
+      "Vous avez proposé une revanche": "You offered a rematch",
+      "Votre proposition a été transmise aux autres joueurs": "You offer was sent to the other players",
+      "Voir la nouvelle partie": "See the new game",
+      "Proposition de revanche": "Rematch offer",
+      "Veuillez patienter...": "Please stand by...",
+      "{player} vous propose une revanche !": "{player} offers a rematch!",
+      "Cliquez sur le lien ci-dessous pour accéder à la nouvelle partie :": "Click the following link to go to the new game:",
+      "Réduire les Scores": "Hide Scores",
+      "Afficher les Scores": "Display Scores",
       "Avatar du joueur": "Player avatar",
       "Le marqueur de tour": "Round-tracker token ",
       "Sens de passage des cartes": "Draft direction",
@@ -178,9 +187,7 @@
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)": "This player scores {quantity, plural, one{1 point} other{# points}} per black development (the Vehicles)",
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement vert (les Recherches)": "This player scores {quantity, plural, one{1 point} other{# points}} per green development (the Researches)",
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement jaune (les Projets)": "This player scores {quantity, plural, one{1 point} other{# points}} per yellow development (the Projects)",
-      "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "This player scores {quantity, plural, one{1 point} other{# points}} per blue development (the Discoveries)",
-      "Réduire les Scores": "Hide Scores",
-      "Afficher les Scores": "Display Scores"
+      "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "This player scores {quantity, plural, one{1 point} other{# points}} per blue development (the Discoveries)"
     }
   },
   "fr": {
@@ -325,6 +332,15 @@
       "Choisir": "Choisir",
       "Valider": "Valider",
       "Proposer une revanche": "Proposer une revanche",
+      "Vous avez proposé une revanche": "Vous avez proposé une revanche",
+      "Votre proposition a été transmise aux autres joueurs": "Votre proposition a été transmise aux autres joueurs",
+      "Voir la nouvelle partie": "Voir la nouvelle partie",
+      "Proposition de revanche": "Proposition de revanche",
+      "Veuillez patienter...": "Veuillez patienter...",
+      "{player} vous propose une revanche !": "{player} vous propose une revanche !",
+      "Cliquez sur le lien ci-dessous pour accéder à la nouvelle partie :": "Cliquez sur le lien ci-dessous pour accéder à la nouvelle partie :",
+      "Réduire les Scores": "Réduire les Scores",
+      "Afficher les Scores": "Afficher les Scores",
       "Avatar du joueur": "Avatar du joueur",
       "Le marqueur de tour": "Le marqueur de tour",
       "Sens de passage des cartes": "Sens de passage des cartes",
@@ -362,9 +378,7 @@
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)",
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement vert (les Recherches)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement vert (les Recherches)",
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement jaune (les Projets)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement jaune (les Projets)",
-      "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)",
-      "Réduire les Scores": "Réduire les Scores",
-      "Afficher les Scores": "Afficher les Scores"
+      "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)"
     }
   }
 }
