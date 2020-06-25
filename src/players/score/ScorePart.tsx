@@ -43,6 +43,7 @@ const style = css`
       top: 50%;
       transform: translateY(-50%);
     }
+  }
 `
 
 const scoreStyle = css`

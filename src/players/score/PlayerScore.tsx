@@ -133,7 +133,7 @@ const equalSign = css`
   &:before {
     content: '=';
     position: absolute;
-    right: 105%;
+    right: 110%;
     font-size: 5vh;
     top: 50%;
     transform: translateY(-50%);
