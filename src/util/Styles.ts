@@ -98,6 +98,15 @@ export const glow = (color: string) => keyframes`
     box-shadow: 0 0 30px ${color};
   }
 `
+export const opacity = (opacity: number) => keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: ${opacity};
+
+  }
+`
 
 export const popupBackgroundStyle = css`
   position: fixed;

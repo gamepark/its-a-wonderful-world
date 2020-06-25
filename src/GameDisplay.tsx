@@ -18,6 +18,7 @@ import ReceiveCharacter, {isReceiveCharacter} from './moves/ReceiveCharacter'
 import {isRevealChosenCards, RevealChosenCardsView} from './moves/RevealChosenCards'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
+import ScorePanel from './players/score/ScorePanel'
 import {isActive, isOver} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
@@ -76,15 +77,11 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
     <Letterbox css={hiddenOnPortrait}>
-      {!isOver(game) &&
-      <>
-        <Board game={game} player={displayedPlayer}/>
-        <RoundTracker round={game.round}/>
-        <PhaseIndicator phase={game.phase}/>
-        <DrawPile game={game}/>
-        <DiscardPile game={game}/>
-      </>
-      }
+      <Board game={game} player={displayedPlayer}/>
+      <RoundTracker round={game.round}/>
+      <PhaseIndicator phase={game.phase}/>
+      <DrawPile game={game}/>
+      <DiscardPile game={game}/>
       <DisplayedEmpire game={game} player={displayedPlayer} panelIndex={displayedPlayerPanelIndex}/>
       {game.players.length > 2 && game.phase === Phase.Draft &&
       <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players}/>}
@@ -92,6 +89,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
         <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
                      highlight={player.empire === displayedEmpire} showScore={isOver(game)}/>
       )}
+      {isOver(game) && <ScorePanel game={game}/>}
       {revealedCards && revealedCards.map((card, index) =>
         <DevelopmentCard key={card} development={developmentCards[card]}
                          css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index),
@@ -103,7 +101,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   )
 }
 
-const getPlayersStartingWith = (game: GameView, playerId?: EmpireName) => {
+export const getPlayersStartingWith = (game: GameView, playerId?: EmpireName) => {
   if (playerId) {
     const playerIndex = game.players.findIndex(player => player.empire === playerId)
     return [...game.players.slice(playerIndex, game.players.length), ...game.players.slice(0, playerIndex)]

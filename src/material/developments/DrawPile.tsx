@@ -20,7 +20,7 @@ const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
 
 export const drawPileMaxSize = 8
 export const drawPileScale = 0.4
-export const drawPileCardX = (index: number) => 68 + index * 0.05
+export const drawPileCardX = (index: number) => 10 + index * 0.05
 export const drawPileCardY = (index: number) => headerHeight + topMargin + cardHeight * (drawPileScale - 1) / 2 + index * 0.05
 
 export default DrawPile

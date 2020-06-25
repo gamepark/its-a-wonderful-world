@@ -11,7 +11,6 @@ import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
 import PlayerResourceProduction from './PlayerResourceProduction'
-import PlayerScore from './score/PlayerScore'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 
 type Props = {
@@ -43,7 +42,6 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
         <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier}
                                  css={victoryPointsMultiplierStyle(index)}/>
       )}
-      {showScore && <PlayerScore player={player}/>}
     </div>
   )
 }
