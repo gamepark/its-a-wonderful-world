@@ -22,15 +22,17 @@ const ScorePart: FunctionComponent<Props> = ({player, item}) => {
     <div css={style}>
       {item && <VictoryPointsMultiplier css={multiplierStyle} item={item} multiplier={getVictoryPointsMultiplier(player, item)}
                                         quantity={getItemQuantity(player, item)}/>}
-      <div css={scoreStyle}>
-        {score}
-      </div>
+      <div css={scoreStyle}>{score}</div>
     </div>
   )
 }
 
 const style = css`
-  position: relative;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:flex-end;
+  height:100%;
   &:not(:first-of-type) {
     div:last-of-type:before {
       content: '+';
@@ -41,7 +43,6 @@ const style = css`
       top: 50%;
       transform: translateY(-50%);
     }
-  }
 `
 
 const scoreStyle = css`
@@ -54,20 +55,18 @@ const scoreStyle = css`
   font-weight: bold;
   color: white;
   text-shadow: 0 0 3px black;
-  padding: 1vh;
-  width: 6vh;
+  padding: 0;
+  width: 10vh;
   height: fit-content;
   text-align: center;
   margin-left: 4vh;
+  margin-top: 2%;
 `
 
 const multiplierStyle = css`
-  position: absolute;
-  bottom: 100%;
-  height: 60%;
-  right: 5%;
-  left: 5%;
-  justify-content: flex-end;
+  height: 40%;
+  width: 0;
+  margin-right:15%;
   filter: drop-shadow(0 0 1px black);
   & img {
     filter: none;
