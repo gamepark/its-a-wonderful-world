@@ -1,26 +1,23 @@
-import {css} from '@emotion/core'
-import {useActions, useGame, usePlayerId, useUndo} from '@interlude-games/workshop'
+import {css, keyframes} from '@emotion/core'
+import {faChess, faChevronDown, faChevronUp, faCompress, faExpand, faHome, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {useActions, useGame, usePlayerId, useRematch, useUndo} from '@interlude-games/workshop'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import EmpireName from './material/empires/EmpireName'
 import Move from './moves/Move'
+import RematchPopup from './RematchPopup'
 import ItsAWonderfulWorldRules, {isOver} from './Rules'
 import GameView from './types/GameView'
-import ArrowDownIcon from './util/ArrowDownIcon'
-import ArrowUpIcon from './util/ArrowUpIcon'
-import FullScreenExitIcon from './util/FullScreenExitIcon'
-import FullScreenIcon from './util/FullScreenIcon'
-import HomeIcon from './util/HomeIcon'
 import IconButton from './util/IconButton'
 import LoadingSpinner from './util/LoadingSpinner'
 import FullScreenBackgroundImage from './util/menu-black.png'
 import homeBackgroundImage from './util/menu-gold.png'
 import mainMenuBackgroundImage from './util/menu-grey.png'
-import UndoBackgroundImage from './util/menu-red.png'
+import RedMenuBackground from './util/menu-red.png'
 import MenuBackgroundImage from './util/texture-grey.jpg'
-import UndoIcon from './util/UndoIcon'
 
 const noSleep = new NoSleep()
 
@@ -33,6 +30,21 @@ const MainMenu = () => {
   const {t} = useTranslation()
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
   const [displayMenu, setDisplayMenu] = useState(false)
+  const gameOverRef = useRef<boolean | undefined>()
+  const [displayRematchTooltip, setDisplayRematchTooltip] = useState(false)
+  const {rematch, rematchOffer, ignoreRematch} = useRematch<EmpireName>()
+  useEffect(() => {
+    if (game) {
+      if (isOver(game)) {
+        if (gameOverRef.current === false) {
+          setDisplayRematchTooltip(true)
+          gameOverRef.current = true
+        }
+      } else {
+        gameOverRef.current = false
+      }
+    }
+  }, [game, gameOverRef])
 
   const onFullScreenChange = () => {
     setFullScreen(fscreen.fullscreenElement != null)
@@ -54,56 +66,69 @@ const MainMenu = () => {
   return (
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
-        {game && isPlaying && !isOver(game) &&
-        <IconButton css={[menuButtonStyle, undoButtonStyle]} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')}
-                    onClick={() => undo()} disabled={!canUndo()}>
-          {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <UndoIcon/>}
-        </IconButton>
+        {game && isPlaying && (isOver(game) ?
+            <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
+              <FontAwesomeIcon icon={faChess}/>
+              {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche')}</span>}
+            </IconButton> :
+            <IconButton css={[menuButtonStyle, undoButtonStyle]} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')}
+                        onClick={() => undo()} disabled={!canUndo()}>
+              {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
+            </IconButton>
+        )
         }
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Sortir du plein écran')} aria-label={t('Sortir du plein écran')}
                         onClick={() => fscreen.exitFullscreen()}>
-              <FullScreenExitIcon/>
-            </IconButton> :
+              <FontAwesomeIcon icon={faCompress}/>
+            </IconButton>
+            :
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
                         onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
-              <FullScreenIcon/>
+              <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
         <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} title={t('Menu principal')} aria-label={t('Menu principal')}
                     onClick={() => setDisplayMenu(true)}>
-          <ArrowUpIcon/>
+          <FontAwesomeIcon icon={faChevronDown}/>
         </IconButton>
       </div>
       <div css={[menuStyle, openMenuStyle, !displayMenu && hidden]}>
         <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} onClick={() => setDisplayMenu(false)}>
           <span css={subMenuTitle}>{t('Cacher le Menu')}</span>
-          <ArrowDownIcon/>
+          <FontAwesomeIcon icon={faChevronUp}/>
         </IconButton>
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]}
                         onClick={() => fscreen.exitFullscreen()}>
               <span css={subMenuTitle}>{t('Quitter le plein écran')}</span>
-              <FullScreenExitIcon/>
+              <FontAwesomeIcon icon={faCompress}/>
             </IconButton> :
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]}
                         onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
               <span css={subMenuTitle}>{t('Passer en plein écran')}</span>
-              <FullScreenIcon/>
+              <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
-        {game && isPlaying && !isOver(game) &&
-        <IconButton css={[menuButtonStyle, undoButtonStyle]}
-                    onClick={() => undo()} disabled={!canUndo()}>
-          <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
-          {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <UndoIcon/>}
-        </IconButton>
+        {game && isPlaying && (isOver(game) ?
+            <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
+              <span css={subMenuTitle}>{t('Proposer une revanche')}</span>
+              <FontAwesomeIcon icon={faChess}/>
+            </IconButton>
+            :
+            <IconButton css={[menuButtonStyle, undoButtonStyle]}
+                        onClick={() => undo()} disabled={!canUndo()}>
+              <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
+              {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
+            </IconButton>
+        )
         }
         <IconButton css={[menuButtonStyle, homeButtonStyle]} onClick={() => window.location.href = platformUri}>
           <span css={subMenuTitle}>{t('Retour à l’accueil')}</span>
-          <HomeIcon/>
+          <FontAwesomeIcon icon={faHome}/>
         </IconButton>
       </div>
+      <RematchPopup rematchOffer={rematchOffer} onClose={ignoreRematch}/>
     </>
   )
 }
@@ -114,6 +139,7 @@ const menuStyle = css`
   right: 0;
   transition: opacity 0.5s ease-in-out;
   background-image: url(${MenuBackgroundImage});
+  background-position: top right;
   padding: 0.1em;
   border-radius: 0 0 0 1em;
   border: solid 0.1em #ccc;
@@ -159,10 +185,11 @@ const subMenuTitle = css`
 
 const menuButtonStyle = css`
   width: fit-content;
-  font-size: 5vh;
+  min-width: 8vh;
+  font-size: 4vh;
   color: #EEE;
   margin: 0.1em;
-  padding: 0.3em;
+  padding: 0.5em 0.55em;
   background-size: contain;
   background-position: right;
   background-repeat: no-repeat;
@@ -175,15 +202,19 @@ const menuButtonStyle = css`
     opacity: 1;
     background-color: transparent;
   }
+  &:active {
+    transform: translateY(1px);
+  }
 `
 const homeButtonStyle = css`
+  padding-right: 0.4em;
   background-image: url(${homeBackgroundImage});
 `
 const mainMenuButtonStyle = css`
   background-image: url(${mainMenuBackgroundImage});
 `
 const undoButtonStyle = css`
-  background-image: url(${UndoBackgroundImage});
+  background-image: url(${RedMenuBackground});
   &:disabled {
     background-image: url(${mainMenuBackgroundImage});
     pointer-events: none;
@@ -199,6 +230,39 @@ const fullScreenButtonStyle = css`
 const loadingSpinnerStyle = css`
   margin: 0.5vh;
   transform: scale(1.3);
+`
+
+const rematchButtonStyle = css`
+  background-image: url(${RedMenuBackground});
+`
+
+const displayForAMoment = keyframes`
+  from, to, 50% {opacity: 0}
+  60%, 90% {opacity: 1}
+`
+
+const tooltipStyle = css`
+  position: absolute;
+  padding: 0.5vh;
+  bottom: -7vh;
+  border-radius: 1vh;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: auto;
+  background: black;
+  animation: ${displayForAMoment} 20s forwards;
+  &:before {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 1vh solid transparent;
+    border-right: 1vh solid transparent;
+    top: -1vh;
+    left: 50%;
+    margin-left: -1vh;
+    border-bottom: 1vh solid black;
+  }
 `
 
 export default MainMenu
