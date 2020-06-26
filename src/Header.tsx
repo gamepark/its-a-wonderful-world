@@ -21,21 +21,25 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 import {headerHeight} from './util/Styles'
+import {useTheme} from 'emotion-theming'
+import Theme, {LightTheme} from './Theme'
 
 
-const headerStyle = css`
+const headerStyle = (theme:Theme) => css`
   position: absolute;
   width: 100%;
   height: ${headerHeight}%;
   text-align: center;
-  background: rgba(255, 255, 255, 0.5);
+  background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 30, 0.5)'};
+  transition: background-color 1s ease-in;
 `
 
-const textStyle = css`
+const textStyle = (theme:Theme) => css`
   @media all and (orientation:portrait) {
     display: none;
   }
-  color: #333333;
+  color: ${theme.color === LightTheme ? '#333' : '#FFF'};
+  transition: color 1s ease-in;
   padding: 1vh;
   margin: 0 28vh 0 0;
   line-height: 1.25;
@@ -53,10 +57,10 @@ const Header = () => {
   const players = usePlayers<EmpireName>()
   const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
   const {t} = useTranslation()
-
+  const theme = useTheme<Theme>()
   return (
-    <header css={headerStyle}>
-      <h1 css={textStyle}>{getText(t, play, players, game, empire, animation)}</h1>
+    <header css={headerStyle(theme)}>
+      <h1 css={textStyle(theme)}>{getText(t, play, players, game, empire, animation)}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
       <MainMenu/>
     </header>

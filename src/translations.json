@@ -187,7 +187,9 @@
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)": "This player scores {quantity, plural, one{1 point} other{# points}} per black development (the Vehicles)",
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement vert (les Recherches)": "This player scores {quantity, plural, one{1 point} other{# points}} per green development (the Researches)",
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement jaune (les Projets)": "This player scores {quantity, plural, one{1 point} other{# points}} per yellow development (the Projects)",
-      "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "This player scores {quantity, plural, one{1 point} other{# points}} per blue development (the Discoveries)"
+      "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "This player scores {quantity, plural, one{1 point} other{# points}} per blue development (the Discoveries)",
+      "Activer le mode nuit": "Enable dark mode",
+      "Activer le mode jour": "Enable light mode"
     }
   },
   "fr": {
@@ -378,7 +380,9 @@
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)",
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement vert (les Recherches)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement vert (les Recherches)",
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement jaune (les Projets)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement jaune (les Projets)",
-      "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)"
+      "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)",
+      "Activer le mode nuit": "Activer le mode nuit",
+      "Activer le mode jour": "Activer le mode jour"
     }
   }
 }
