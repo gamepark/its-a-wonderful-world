@@ -1,5 +1,5 @@
 import {css, keyframes} from '@emotion/core'
-import {faChess, faChevronDown, faChevronUp, faCompress, faExpand, faHome, faLightbulb, faMoon, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
+import {faChess, faChevronDown, faChevronUp, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions, useGame, usePlayerId, useRematch, useUndo} from '@interlude-games/workshop'
 import fscreen from 'fscreen'
@@ -141,7 +141,7 @@ const MainMenu = () => {
             :
             <>
               <span css={subMenuTitle}>{t('Activer le mode jour')}</span>
-              <FontAwesomeIcon css={lightInconStyle} icon={faLightbulb}/>
+              <FontAwesomeIcon icon={faSun}/>
             </>
           }
         </IconButton>
@@ -233,9 +233,6 @@ const homeButtonStyle = css`
 const themeButtonStyle = css`
   padding-right: 0.5em;
   background-image: url(${BlueMenuBackground});
-`
-const lightInconStyle = css`
-  margin: 0 0.15em;
 `
 const mainMenuButtonStyle = css`
   background-image: url(${GoldMenuBackground});
