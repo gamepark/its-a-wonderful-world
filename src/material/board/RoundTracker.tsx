@@ -2,16 +2,15 @@ import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {areasX, cardWidth, headerHeight} from '../../util/Styles'
-import roundTracker1 from './round-tracker-1-3.png'
-import roundTracker2 from './round-tracker-2-4.png'
 import {drawPileScale} from '../developments/DrawPile'
+import Images from '../Images'
 
 
 const RoundTracker: FunctionComponent<{ round: number }> = ({round}) => {
   const {t} = useTranslation()
   return (
     <>
-      <img alt={t('Le marqueur de tour')} src={round % 2 ? roundTracker1 : roundTracker2} draggable="false" css={roundTrackerStyle}/>
+      <img alt={t('Le marqueur de tour')} src={round % 2 ? Images.roundTrackerRecto : Images.roundTrackerVerso} draggable="false" css={roundTrackerStyle}/>
       <span css={roundTextStyle}>{round}</span>
     </>
   )

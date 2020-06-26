@@ -4,9 +4,9 @@ import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
-import chooseButtonBackground from '../material/board/title-orange-2.png'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
+import Images from '../material/Images'
 import ChooseDevelopmentCard, {chooseDevelopmentCard, isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
 import {isPassCards, PassCardsView} from '../moves/PassCards'
@@ -17,7 +17,7 @@ import {
   bottomMargin, cardHeight, cardRatio, cardStyle, cardWidth, constructedCardLeftMargin, getAreaCardX, getAreaCardY, playerPanelHeight, playerPanelWidth,
   playerPanelY, popupBackgroundStyle
 } from '../util/Styles'
-import {textButton} from './DraftArea'
+import {textButton, textButtonLeft} from './DraftArea'
 
 type Props = { player: Player, players: number, round: number }
 
@@ -101,7 +101,7 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
         <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
         <DevelopmentCard development={developmentCards[focusedCard]} css={focusCardStyle}/>
         {canChooseCard &&
-        <button css={chooseCardButton} onClick={() => play(chooseDevelopmentCard(player.empire, focusedCard))}>
+        <button css={[textButton, textButtonLeft, chooseCardButton]} onClick={() => play(chooseDevelopmentCard(player.empire, focusedCard))}>
           {t('Choisir')}
         </button>}
       </>
@@ -244,8 +244,9 @@ const focusCardStyle = css`
 const chooseCardButton = css`
   top: 45%;
   right: ${51 + cardWidth * 1.5}%;
-  background-image: url(${chooseButtonBackground});
-  ${textButton};
+  &:before {
+    background-image: url(${Images.titleOrange});
+  }
 `
 
 export default PlayerHand

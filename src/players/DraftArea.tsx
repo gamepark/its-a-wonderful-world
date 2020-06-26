@@ -7,17 +7,12 @@ import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromCons
 import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
 import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
 import DragObjectType from '../drag-objects/DragObjectType'
-import WhiteRecyclingBackgroundImage from '../material/board/title-white.png'
-import BlackRecyclingBackgroundImage from '../material/board/title-black.png'
-import GreenRecyclingBackgroundImage from '../material/board/title-green.png'
-import YellowRecyclingBackgroundImage from '../material/board/title-yellow.png'
-import BlueRecyclingBackgroundImage from '../material/board/title-blue.png'
-import RedRecyclingBackgroundImage from '../material/board/title-orange.png'
-import ConstructBackgroundImage from '../material/board/title-orange-2.png'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
 import EmpireName from '../material/empires/EmpireName'
+import Images from '../material/Images'
+import Resource from '../material/resources/Resource'
 import ChooseDevelopmentCard, {
   chooseDevelopmentCard, ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
 } from '../moves/ChooseDevelopmentCard'
@@ -33,7 +28,6 @@ import {isPlayer} from '../types/typeguards'
 import {
   areaCardStyle, cardHeight, cardStyle, cardWidth, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
-import Resource from '../material/resources/Resource'
 
 const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -102,10 +96,11 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
         {isPlayer(player) && game.phase === Phase.Planning &&
         <>
-          <button css={draftConstructionButton} onClick={() => play(slateForConstruction(player.empire, focusedCard))}>
+          <button css={[textButton, textButtonLeft, draftConstructionButton]} onClick={() => play(slateForConstruction(player.empire, focusedCard))}>
             {t('Construire')}
           </button>
-          <button css={draftRecyclingButton(developmentCards[focusedCard].recyclingBonus)} onClick={() => play(recycle(player.empire, focusedCard))}>
+          <button css={[textButton, textButtonRight, draftRecyclingButton(developmentCards[focusedCard].recyclingBonus)]}
+                  onClick={() => play(recycle(player.empire, focusedCard))}>
             {t('Recycler')}
           </button>
         </>
@@ -180,11 +175,8 @@ export const textButton = css`
   position: absolute;
   z-index: 100;
   width: 20%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: bottom center;
-  background-color:transparent;
   ${textButtonFontStyle};
+  background-color: transparent;
   padding: 0.5% 1.5%;
   border:none;
   &:hover, &:focus {
@@ -199,29 +191,58 @@ export const textButton = css`
   }
 `
 
+export const textButtonRight = css`
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+`
+
+export const textButtonLeft = css`
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    transform: scaleX(-1);
+    z-index: -1;
+  }
+`
+
 const draftConstructionButton = css`
   bottom: 26%;
   right: ${51 + cardWidth * 1.5}%;
-  background-image: url(${ConstructBackgroundImage});
-  ${textButton};
   text-align: right;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(${Images.titleOrange});
+    transform: scaleX(-1);
+  }
 `
 
 const draftRecyclingButton = (resource: Resource) => css`
   bottom: 26%;
   left: ${51 + cardWidth * 1.5}%;
   background-image: url(${buttonImages.get(resource)});
-  ${textButton};
   text-align:left;
 `
 
 const buttonImages = new Map<Resource, any>()
 
-buttonImages.set(Resource.Materials, WhiteRecyclingBackgroundImage)
-buttonImages.set(Resource.Energy, BlackRecyclingBackgroundImage)
-buttonImages.set(Resource.Science, GreenRecyclingBackgroundImage)
-buttonImages.set(Resource.Gold, YellowRecyclingBackgroundImage)
-buttonImages.set(Resource.Exploration, BlueRecyclingBackgroundImage)
-buttonImages.set(Resource.Krystallium, RedRecyclingBackgroundImage)
+buttonImages.set(Resource.Materials, Images.titleWhite)
+buttonImages.set(Resource.Energy, Images.titleBlack)
+buttonImages.set(Resource.Science, Images.titleGreen)
+buttonImages.set(Resource.Gold, Images.titleYellow)
+buttonImages.set(Resource.Exploration, Images.titleBlue)
 
 export default DraftArea

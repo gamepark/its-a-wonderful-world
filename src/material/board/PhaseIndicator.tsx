@@ -3,10 +3,10 @@ import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Phase from '../../types/Phase'
 import {headerHeight} from '../../util/Styles'
-import CircleBackgroundImage from './circle-metal.png'
+import Images from '../Images'
+import BlueBackgroundImage from '../menus/title-blue.png'
+import GreyBackgroundImage from '../menus/title-grey.png'
 import {roundTrackerX} from './RoundTracker'
-import BlueBackgroundImage from './title-blue.png'
-import GreyBackgroundImage from './title-grey.png'
 
 const PhaseIndicator: FunctionComponent<{ phase: Phase }> = ({phase}) => {
   const {t} = useTranslation()
@@ -34,7 +34,7 @@ const phaseStyle = css`
   transform-origin: left;
   &:after {
     position: absolute;
-    background-image: url(${CircleBackgroundImage});
+    background-image: url(${Images.circleMetal});
     background-size: cover;
     font-size: 1.9vh;
     color: #888;

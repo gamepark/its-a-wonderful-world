@@ -2,9 +2,8 @@ import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
+import Images from '../Images'
 import Character from './Character'
-import Financier from './financier.png'
-import General from './general.png'
 
 type Props = { character: Character } & React.HTMLAttributes<HTMLImageElement>
 
@@ -19,8 +18,8 @@ const style = css`
 `
 
 export const images = {
-  [Character.General]: General,
-  [Character.Financier]: Financier
+  [Character.Financier]: Images.financier,
+  [Character.General]: Images.general
 }
 
 function getDescription(t: TFunction, character: Character) {

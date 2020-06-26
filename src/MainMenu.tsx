@@ -2,26 +2,20 @@ import {css, keyframes} from '@emotion/core'
 import {faChess, faChevronDown, faChevronUp, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions, useGame, usePlayerId, useRematch, useUndo} from '@interlude-games/workshop'
+import {useTheme} from 'emotion-theming'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 import React, {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import EmpireName from './material/empires/EmpireName'
+import Images from './material/Images'
 import Move from './moves/Move'
 import RematchPopup from './RematchPopup'
 import ItsAWonderfulWorldRules, {isOver} from './Rules'
+import Theme, {LightTheme} from './Theme'
 import GameView from './types/GameView'
 import IconButton from './util/IconButton'
 import LoadingSpinner from './util/LoadingSpinner'
-import BlackMenuBackground from './util/menu-black.png'
-import GreyMenuBackground from './util/menu-grey.png'
-import GoldMenuBackground from './util/menu-gold.png'
-import RedMenuBackground from './util/menu-red.png'
-import BlueMenuBackground from './util/menu-blue.png'
-import GreenMenuBackground from './util/menu-green.png'
-import MenuBackgroundImage from './util/texture-grey.jpg'
-import {useTheme} from 'emotion-theming'
-import Theme, {LightTheme} from './Theme'
 
 const noSleep = new NoSleep()
 
@@ -135,8 +129,8 @@ const MainMenu = () => {
         <IconButton css={[menuButtonStyle, themeButtonStyle]} onClick={theme.switchThemeColor}>
           {theme.color === LightTheme ?
             <>
-            <span css={subMenuTitle}>{t('Activer le mode nuit')}</span>
-            <FontAwesomeIcon icon={faMoon}/>
+              <span css={subMenuTitle}>{t('Activer le mode nuit')}</span>
+              <FontAwesomeIcon icon={faMoon}/>
             </>
             :
             <>
@@ -157,7 +151,7 @@ const menuStyle = css`
   top: 0;
   right: 0;
   transition: opacity 0.5s ease-in-out;
-  background-image: url(${MenuBackgroundImage});
+  background-image: url(${Images.textureGrey});
   background-position: top right;
   padding: 0.1em;
   border-radius: 0 0 0 1em;
@@ -227,20 +221,20 @@ const menuButtonStyle = css`
 `
 const homeButtonStyle = css`
   padding-right: 0.4em;
-  background-image: url(${GreenMenuBackground});
+  background-image: url(${Images.buttonGreen});
 `
 
 const themeButtonStyle = css`
   padding-right: 0.5em;
-  background-image: url(${BlueMenuBackground});
+  background-image: url(${Images.buttonBlue});
 `
 const mainMenuButtonStyle = css`
-  background-image: url(${GoldMenuBackground});
+  background-image: url(${Images.buttonYellow});
 `
 const undoButtonStyle = css`
-  background-image: url(${RedMenuBackground});
+  background-image: url(${Images.buttonRed});
   &:disabled {
-    background-image: url(${GreyMenuBackground});
+    background-image: url(${Images.buttonGrey});
     pointer-events: none;
   }
   @media all and (orientation:portrait) {
@@ -248,14 +242,14 @@ const undoButtonStyle = css`
   }
 `
 const fullScreenButtonStyle = css`
-  background-image: url(${BlackMenuBackground});
+  background-image: url(${Images.buttonBlack});
 `
 const loadingSpinnerStyle = css`
   margin: 0.5vh;
   transform: scale(1.3);
 `
 const rematchButtonStyle = css`
-  background-image: url(${RedMenuBackground});
+  background-image: url(${Images.buttonRed});
 `
 
 const displayForAMoment = keyframes`

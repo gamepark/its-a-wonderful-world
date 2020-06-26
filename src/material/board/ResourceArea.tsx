@@ -1,5 +1,6 @@
 import {css, keyframes} from '@emotion/core'
 import {useAnimations, usePlay} from '@interlude-games/workshop'
+import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
@@ -11,6 +12,7 @@ import PlaceResource, {isPlaceResourceOnConstruction} from '../../moves/PlaceRes
 import {tellYourAreReady} from '../../moves/TellYouAreReady'
 import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
 import {getProduction} from '../../Rules'
+import Theme, {LightTheme} from '../../Theme'
 import GameView from '../../types/GameView'
 import Phase from '../../types/Phase'
 import Player from '../../types/Player'
@@ -19,21 +21,11 @@ import {isPlayer} from '../../types/typeguards'
 import {
   areasX, boardHeight, boardTop, boardWidth, empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, getAreaCardX, getAreaCardY, glow
 } from '../../util/Styles'
-import resourceCircleFinancierGeneral from '../characters/circle-financier-general.png'
-import resourceCircleFinancier from '../characters/circle-financier.png'
-import resourceCircleGeneral from '../characters/circle-general.png'
 import {resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
+import Images from '../Images'
+import boardArrowWhite from '../menus/arrow-white.png'
 import Resource, {resources} from '../resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
-import boardArrowWhite from './arrow-white.png'
-import boardArrowGreen from './arrow-green.png'
-import resourceCircleBlack from './board-circle-black.png'
-import resourceCircleBlue from './board-circle-blue.png'
-import resourceCircleGreen from './board-circle-green.png'
-import resourceCircleGrey from './board-circle-grey.png'
-import resourceCircleYellow from './board-circle-yellow.png'
-import Theme, {LightTheme} from '../../Theme'
-import {useTheme} from 'emotion-theming'
 
 const {Materials, Energy, Science, Gold, Exploration, Krystallium} = Resource
 
@@ -86,7 +78,8 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     <>
       <img src={resourceCircle[resource]} css={[circleStyle, game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle]}
            alt={resourceAreaText[resource](t)} title={resourceAreaText[resource](t)} draggable="false"/>
-      <button disabled={!canPlayerValidate} css={arrowStyle(theme)} onClick={() => play(tellYourAreReady(player.empire))} draggable="false" title={t('Valider')}/>
+      <button disabled={!canPlayerValidate} css={arrowStyle(theme)} onClick={() => play(tellYourAreReady(player.empire))} draggable="false"
+              title={t('Valider')}/>
       <img src={resourceCharacter[resource]} alt={resourceCharacterText[resource](t)} title={resourceCharacterText[resource](t)} draggable="false"
            css={[characterStyle, hasMostProduction && characterHighlightStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
       {quantity !== 0 &&
@@ -126,19 +119,19 @@ const resourceColor = {
 }
 
 const resourceCircle = {
-  [Materials]: resourceCircleGrey,
-  [Energy]: resourceCircleBlack,
-  [Science]: resourceCircleGreen,
-  [Gold]: resourceCircleYellow,
-  [Exploration]: resourceCircleBlue
+  [Materials]: Images.boardCircleGrey,
+  [Energy]: Images.boardCircleBlack,
+  [Science]: Images.boardCircleGreen,
+  [Gold]: Images.boardCircleYellow,
+  [Exploration]: Images.boardCircleBlue
 }
 
 const resourceCharacter = {
-  [Materials]: resourceCircleFinancier,
-  [Energy]: resourceCircleGeneral,
-  [Science]: resourceCircleFinancierGeneral,
-  [Gold]: resourceCircleFinancier,
-  [Exploration]: resourceCircleGeneral
+  [Materials]: Images.circleFinancier,
+  [Energy]: Images.circleGeneral,
+  [Science]: Images.circleFinancierGeneral,
+  [Gold]: Images.circleFinancier,
+  [Exploration]: Images.circleGeneral
 }
 
 const resourceAreaText = {
@@ -242,7 +235,7 @@ const pulse = keyframes`
   to {transform: scale(1.4);}
 `
 
-const arrowStyle = (theme:Theme) => css`
+const arrowStyle = (theme: Theme) => css`
   width: 5%;
   height: 32%;
   vertical-align: middle;
@@ -259,8 +252,8 @@ const arrowStyle = (theme:Theme) => css`
   &:enabled {
     animation: ${pulse} 0.8s linear alternate infinite;
     cursor: pointer;
-    background-image: url(${boardArrowGreen});
-    filter: drop-shadow(0 0 0 ${theme.color === LightTheme ? 'white':'black'});
+    background-image: url(${Images.arrowGreen});
+    filter: drop-shadow(0 0 0 ${theme.color === LightTheme ? 'white' : 'black'});
   }
   &:focus {
     outline: 0;

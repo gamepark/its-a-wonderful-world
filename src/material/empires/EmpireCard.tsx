@@ -10,55 +10,41 @@ import {placeResource} from '../../moves/PlaceResource'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, glow} from '../../util/Styles'
+import Images from '../Images'
 import Resource from '../resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth} from '../resources/ResourceCube'
-import AztecEmpireA from './aztec-empire-A.jpg'
-import AztecEmpireAvatar from './aztec-empire-avatar.png'
-import AztecEmpireB from './aztec-empire-B.jpg'
 import EmpireName from './EmpireName'
 import EmpireSide from './EmpireSide'
-import FederationOfAsiaA from './federation-of-asia-A.jpg'
-import FederationOfAsiaAvatar from './federation-of-asia-avatar.png'
-import FederationOfAsiaB from './federation-of-asia-B.jpg'
-import NoramStatesA from './noram-states-A.jpg'
-import NoramStatesAvatar from './noram-states-avatar.png'
-import NoramStatesB from './noram-states-B.jpg'
-import PanafricanUnionA from './panafrican-union-A.jpg'
-import PanafricanUnionAvatar from './panafrican-union-avatar.png'
-import PanafricanUnionB from './panafrican-union-B.jpg'
-import RepublicOfEuropeA from './republic-of-europe-A.jpg'
-import RepublicOfEuropeAvatar from './republic-of-europe-avatar.png'
-import RepublicOfEuropeB from './republic-of-europe-B.jpg'
 
 const empiresImages = {
   [EmpireName.AztecEmpire]: {
-    [EmpireSide.A]: AztecEmpireA,
-    [EmpireSide.B]: AztecEmpireB
+    [EmpireSide.A]: Images.aztecEmpireA,
+    [EmpireSide.B]: Images.aztecEmpireB
   },
   [EmpireName.FederationOfAsia]: {
-    [EmpireSide.A]: FederationOfAsiaA,
-    [EmpireSide.B]: FederationOfAsiaB
+    [EmpireSide.A]: Images.federationOfAsiaA,
+    [EmpireSide.B]: Images.federationOfAsiaB
   },
   [EmpireName.NoramStates]: {
-    [EmpireSide.A]: NoramStatesA,
-    [EmpireSide.B]: NoramStatesB
+    [EmpireSide.A]: Images.noramStatesA,
+    [EmpireSide.B]: Images.noramStatesB
   },
   [EmpireName.PanafricanUnion]: {
-    [EmpireSide.A]: PanafricanUnionA,
-    [EmpireSide.B]: PanafricanUnionB
+    [EmpireSide.A]: Images.panafricanUnionA,
+    [EmpireSide.B]: Images.panafricanUnionB
   },
   [EmpireName.RepublicOfEurope]: {
-    [EmpireSide.A]: RepublicOfEuropeA,
-    [EmpireSide.B]: RepublicOfEuropeB
+    [EmpireSide.A]: Images.republicOfEuropeA,
+    [EmpireSide.B]: Images.republicOfEuropeB
   }
 }
 
 export const empireAvatar = {
-  [EmpireName.AztecEmpire]: AztecEmpireAvatar,
-  [EmpireName.FederationOfAsia]: FederationOfAsiaAvatar,
-  [EmpireName.NoramStates]: NoramStatesAvatar,
-  [EmpireName.PanafricanUnion]: PanafricanUnionAvatar,
-  [EmpireName.RepublicOfEurope]: RepublicOfEuropeAvatar
+  [EmpireName.AztecEmpire]: Images.aztecEmpireAvatar,
+  [EmpireName.FederationOfAsia]: Images.federationOfAsiaAvatar,
+  [EmpireName.NoramStates]: Images.noramStatesAvatar,
+  [EmpireName.PanafricanUnion]: Images.panafricanUnionAvatar,
+  [EmpireName.RepublicOfEurope]: Images.republicOfEuropeAvatar
 }
 
 type Props = {
@@ -149,7 +135,7 @@ const getKrystalliumStyle = (index: number) => css`
   position: absolute;
   width: ${cubeWidth * 100 / empireCardWidth}%;
   height: ${cubeHeight * 100 / empireCardHeight}%;
-  right: ${- cubeWidth * 1.2 * 100 / empireCardWidth}%;
+  right: ${-cubeWidth * 1.2 * 100 / empireCardWidth}%;
   bottom: ${index * cubeHeight * 0.8 * 100 / empireCardHeight}%;
 `
 

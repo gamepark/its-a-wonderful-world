@@ -1,10 +1,6 @@
 import {css, keyframes} from '@emotion/core'
-import AztecEmpireBackground from '../material/empires/aztec-empire-artwork.jpg'
 import EmpireName from '../material/empires/EmpireName'
-import FederationOfAsiaBackground from '../material/empires/federation-of-asia-artwork.jpg'
-import NoramStatesBackground from '../material/empires/noram-states-artwork.jpg'
-import PanafricanUnionBackground from '../material/empires/panafrican-union-artwork.jpg'
-import RepublicOfEuropeBackground from '../material/empires/republic-of-europe-artwork.jpg'
+import Images from '../material/Images'
 import {numberOfCardsToDraft} from '../Rules'
 
 export const screenRatio = 16 / 9
@@ -119,9 +115,9 @@ export const popupBackgroundStyle = css`
 `
 
 export const empireBackground: Record<EmpireName, string> = {
-  [EmpireName.AztecEmpire]: AztecEmpireBackground,
-  [EmpireName.FederationOfAsia]: FederationOfAsiaBackground,
-  [EmpireName.NoramStates]: NoramStatesBackground,
-  [EmpireName.PanafricanUnion]: PanafricanUnionBackground,
-  [EmpireName.RepublicOfEurope]: RepublicOfEuropeBackground
+  [EmpireName.AztecEmpire]: Images.aztecEmpireArtwork,
+  [EmpireName.FederationOfAsia]: Images.federationOfAsiaArtwork,
+  [EmpireName.NoramStates]: Images.noramStatesArtwork,
+  [EmpireName.PanafricanUnion]: Images.panafricanUnionArtwork,
+  [EmpireName.RepublicOfEurope]: Images.republicOfEuropeArtwork
 }
