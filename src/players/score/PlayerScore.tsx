@@ -1,7 +1,8 @@
 import {css, keyframes} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import boardArrow from '../../material/board/arrow-white-2.png'
+import boardArrowWhite from '../../material/board/arrow-white.png'
+import boardArrowOrange from '../../material/board/arrow-orange.png'
 import Character from '../../material/characters/Character'
 import DevelopmentType from '../../material/developments/DevelopmentType'
 import ScoreIcon from '../../material/score-icon.png'
@@ -10,6 +11,8 @@ import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {opacity} from '../../util/Styles'
 import ScorePart from './ScorePart'
+import {useTheme} from 'emotion-theming'
+import Theme, {LightTheme} from '../../Theme'
 
 type Props = {
   player: Player | PlayerView
@@ -21,10 +24,10 @@ type Props = {
 const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, setDisplayScore}) => {
   const {t} = useTranslation()
   const score = getScore(player)
-
+  const theme = useTheme<Theme>()
   return (
-    <div css={[style(position), displayScore ? displayPlayerScore : hidePlayerScore]}>
-      <button css={[arrowStyle, displayScore ? arrowStandardStyle : arrowReverseStyle]} onClick={() => setDisplayScore(!displayScore)}
+    <div css={[style(position,theme), displayScore ? displayPlayerScore : hidePlayerScore]}>
+      <button css={[arrowStyle(theme), displayScore ? arrowStandardStyle : arrowReverseStyle]} onClick={() => setDisplayScore(!displayScore)}
               title={displayScore ? t('Réduire les Scores') : t('Afficher les Scores')}/>
       <div css={scorePartStyle}>
         {Object.values(DevelopmentType).map(developmentType => <ScorePart key={developmentType} player={player} item={developmentType}/>)}
@@ -36,20 +39,19 @@ const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, 
   )
 }
 
-const style = (index: number) => css`
+const style = (index: number,theme:Theme) => css`
   position: absolute;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  background: #05214a;
+  background-color: ${theme.color === LightTheme ? 'rgba(0, 0, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
   border-radius: 2vh 0 0 2vh;
-  opacity: 0.95;
   width: auto;
   height: 17%;
   overflow: hidden;
   top: ${(1 + index * 20.2)}%;
-  transition: max-width 0.5s linear;
+  transition: max-width 0.5s linear, background-color 1s ease-in;
   animation: ${revealScore} 10s linear;
 `
 const displayPlayerScore = css`
@@ -68,11 +70,11 @@ const revealScore = keyframes`
   }
 `
 
-const arrowStyle = css`
+const arrowStyle = (theme:Theme) => css`
   flex-shrink: 0;
   position: relative;
   max-height: 100%;
-  background-image: url(${boardArrow});
+  background-image: url(${theme.color === LightTheme ? boardArrowWhite : boardArrowOrange });
   background-size: cover;
   background-repeat: no-repeat;
   background-color: transparent;

@@ -3,7 +3,7 @@ import {useDisplayState, useFailures, useGame} from '@interlude-games/workshop'
 import normalize from 'emotion-normalize'
 import i18next from 'i18next'
 import ICU from 'i18next-icu'
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {initReactI18next, useTranslation} from 'react-i18next'
@@ -17,11 +17,14 @@ import translations from './translations.json'
 import GameView from './types/GameView'
 import RotateScreenIcon from './util/RotateScreenIcon'
 import {empireBackground} from './util/Styles'
+import {ThemeProvider} from 'emotion-theming'
+import Theme, {DarkTheme, LightTheme} from './Theme'
 
 i18next.use(initReactI18next).use(ICU)
 
 const query = new URLSearchParams(window.location.search)
 const locale = query.get('locale') || 'en'
+const userTheme = 'userTheme'
 
 i18next.init({
   lng: locale,
@@ -33,16 +36,27 @@ i18next.init({
 
 const App: FunctionComponent = () => {
   const {t} = useTranslation()
+  const [themeColor, setThemeColor] = useState(() => localStorage.getItem(userTheme) || LightTheme)
   const game = useGame<GameView>()
   const [failures, clearFailures] = useFailures<Move>()
   const [displayedEmpire] = useDisplayState<EmpireName>()
+  const theme = {
+    color: themeColor,
+    switchThemeColor: () => {
+      let newThemeColor = themeColor === LightTheme ? DarkTheme : LightTheme
+      setThemeColor(newThemeColor)
+      localStorage.setItem(userTheme, newThemeColor)
+    }
+  }
   return (
     <DndProvider options={HTML5ToTouch}>
-      <Global styles={[globalStyle, backgroundImage(displayedEmpire)]}/>
-      {game && <GameDisplay game={game}/>}
-      <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
-      <Header/>
-      {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
+      <ThemeProvider theme={theme}>
+        <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
+        {game && <GameDisplay game={game}/>}
+        <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
+        <Header/>
+        {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
+      </ThemeProvider>
     </DndProvider>
   )
 }
@@ -88,8 +102,14 @@ const globalStyle = css`
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(255, 255, 255, 0.7);
     }
+  }
+`
+
+const themeStyle = (theme: Theme) => css`
+  #root:before {
+    background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 30, 0.7)'};
+    transition: background-color 1s ease-in;
   }
 `
 

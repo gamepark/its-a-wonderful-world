@@ -25,12 +25,15 @@ import resourceCircleGeneral from '../characters/circle-general.png'
 import {resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
 import Resource, {resources} from '../resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
-import boardArrow from './arrow-white-2.png'
+import boardArrowWhite from './arrow-white.png'
+import boardArrowGreen from './arrow-green.png'
 import resourceCircleBlack from './board-circle-black.png'
 import resourceCircleBlue from './board-circle-blue.png'
 import resourceCircleGreen from './board-circle-green.png'
 import resourceCircleGrey from './board-circle-grey.png'
 import resourceCircleYellow from './board-circle-yellow.png'
+import Theme, {LightTheme} from '../../Theme'
+import {useTheme} from 'emotion-theming'
 
 const {Materials, Energy, Science, Gold, Exploration, Krystallium} = Resource
 
@@ -78,11 +81,12 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
   const hasMostProduction = !game.players.some(p => p.empire !== player.empire && getProduction(p, resource) >= playerProduction)
   const play = usePlay<Move>()
   const canPlayerValidate = isPlayer(player) && game.phase === Phase.Production && player.availableResources.length === 0 && !player.ready && game.productionStep === resource && player.bonuses.length === 0
+  const theme = useTheme<Theme>()
   return (
     <>
       <img src={resourceCircle[resource]} css={[circleStyle, game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle]}
            alt={resourceAreaText[resource](t)} title={resourceAreaText[resource](t)} draggable="false"/>
-      <button disabled={!canPlayerValidate} css={arrowStyle} onClick={() => play(tellYourAreReady(player.empire))} draggable="false" title={t('Valider')}/>
+      <button disabled={!canPlayerValidate} css={arrowStyle(theme)} onClick={() => play(tellYourAreReady(player.empire))} draggable="false" title={t('Valider')}/>
       <img src={resourceCharacter[resource]} alt={resourceCharacterText[resource](t)} title={resourceCharacterText[resource](t)} draggable="false"
            css={[characterStyle, hasMostProduction && characterHighlightStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
       {quantity !== 0 &&
@@ -238,13 +242,13 @@ const pulse = keyframes`
   to {transform: scale(1.4);}
 `
 
-const arrowStyle = css`
+const arrowStyle = (theme:Theme) => css`
   width: 5%;
   height: 32%;
   vertical-align: middle;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
   transition: opacity 0.5s ease-in-out;
-  background-image: url(${boardArrow});
+  background-image: url(${boardArrowWhite});
   background-size: cover;
   background-repeat:no-repeat;
   background-color:transparent;
@@ -255,6 +259,8 @@ const arrowStyle = css`
   &:enabled {
     animation: ${pulse} 0.8s linear alternate infinite;
     cursor: pointer;
+    background-image: url(${boardArrowGreen});
+    filter: drop-shadow(0 0 0 ${theme.color === LightTheme ? 'white':'black'});
   }
   &:focus {
     outline: 0;
