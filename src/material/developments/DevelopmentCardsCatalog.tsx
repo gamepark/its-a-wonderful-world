@@ -4,6 +4,8 @@ import {Swipeable} from 'react-swipeable'
 import {cardHeight, cardWidth, popupBackgroundStyle} from '../../util/Styles'
 import Development from './Development'
 import DevelopmentCard, {cardTitleFontSize} from './DevelopmentCard'
+import {useTranslation} from 'react-i18next'
+import boardArrowWhite from '../../material/board/arrow-white.png'
 
 type Props = {
   developments: Development[],
@@ -12,6 +14,7 @@ type Props = {
 }
 
 const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, onClose, developments}) => {
+  const {t} = useTranslation()
   const [focusedIndex, setFocusedIndex] = useState(initialIndex)
   const [deltaX, setDeltaX] = useState(0)
   const slide = (deltaX: number, velocity: number) => {
@@ -19,9 +22,11 @@ const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, on
     setFocusedIndex(Math.max(0, Math.min(focusedIndex + diff, developments.length - 1)))
     setDeltaX(0)
   }
+  const discardLength = developments.length
   return (
     <>
       <div css={popupBackgroundStyle} onClick={onClose}/>
+      {discardLength > 3 && <button css={[arrowStyle,leftArrowStyle]} onClick={() => slide(-manualShift,3)} title={t('Faire défiler les cartes' )}/>}
       <Swipeable css={swipeZoneStyle} trackMouse={true} preventDefaultTouchmoveEvent={true} delta={3}
                  onSwiping={event => setDeltaX(event.deltaX)}
                  onSwiped={event => slide(event.deltaX, event.velocity)}>
@@ -29,34 +34,62 @@ const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, on
           <DevelopmentCard key={index} development={development} css={[cardStyle, cardPosition(index, focusedIndex, deltaX), deltaX === 0 && cardTransition]}/>
         )}
       </Swipeable>
+      {discardLength > 3 && <button css={[arrowStyle,rightArrowStyle]} onClick={() => slide(manualShift,3)} title={t('Faire défiler les cartes' )}/>}
     </>
   )
 }
 
-const scale = 2.5
+export const swipeableScale = 2.5
+const manualShift = cardWidth * swipeableScale * 6
 
 const swipeZoneStyle = css`
   position: absolute;
   width: 100%;
-  height: ${cardHeight * scale}%;
-  top: ${50 - cardHeight * scale / 2}%;
+  height: ${cardHeight * swipeableScale}%;
+  top: ${50 - cardHeight * swipeableScale / 2}%;
 `
 
 const cardStyle = css`
   position: absolute;
-  left: ${50 - cardWidth * scale / 2}%;
-  width: ${cardWidth * scale}%;
+  left: ${50 - cardWidth * swipeableScale / 2}%;
+  width: ${cardWidth * swipeableScale}%;
   height: 100%;
   z-index: 100;
   & > h3 {
-    font-size: ${cardTitleFontSize * scale}vh;
+    font-size: ${cardTitleFontSize * swipeableScale}vh;
   }
+`
+const arrowStyle = css`
+  position: absolute;
+  top: 38vh;
+  width: 20vh;
+  height: 24vh;
+  z-index: 101;
+  background-image: url(${boardArrowWhite});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  &:focus {
+    outline: 0;
+  }
+  &:hover {
+    cursor:pointer;
+  }
+`
+
+const leftArrowStyle = css`
+  left: 0;
+  transform: scaleX(-1);
+`
+
+const rightArrowStyle = css`
+  right:0;
 `
 
 const cardPosition = (index: number, focusedIndex: number, deltaX: number) => css`
   transform: translateX(${(index - focusedIndex) * 110}%) translateX(${-deltaX}px);
 `
-
 const cardTransition = css`
   transition: transform 1s ease-in-out;
 `

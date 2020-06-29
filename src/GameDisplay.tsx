@@ -26,6 +26,7 @@ import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from './util/Styles'
+import ReactTooltip from 'react-tooltip'
 
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
@@ -81,6 +82,10 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
       <RoundTracker round={game.round}/>
       <PhaseIndicator phase={game.phase}/>
       <DrawPile game={game}/>
+      <a data-tip data-for='sadFace'> இдஇ </a>
+      <ReactTooltip id='sadFace' type='warning' effect='solid'>
+        <span>Show sad face</span>
+      </ReactTooltip>
       <DiscardPile game={game}/>
       <DisplayedEmpire game={game} player={displayedPlayer} panelIndex={displayedPlayerPanelIndex}/>
       {game.players.length > 2 && game.phase === Phase.Draft &&
