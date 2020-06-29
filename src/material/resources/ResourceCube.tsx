@@ -53,7 +53,7 @@ const getDescription = (t: TFunction, resource: Resource) => {
 export const images = {
   [Resource.Materials]: Images.materialsCube,
   [Resource.Energy]: Images.energyCube,
-  [Resource.Science]: Images.science,
+  [Resource.Science]: Images.scienceCube,
   [Resource.Gold]: Images.goldCube,
   [Resource.Exploration]: Images.explorationCube,
   [Resource.Krystallium]: Images.krystalliumCube
