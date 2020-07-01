@@ -80,7 +80,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
       <Board game={game} player={displayedPlayer}/>
       <RoundTracker round={game.round}/>
       <PhaseIndicator phase={game.phase}/>
-      <DrawPile game={game}/>
+      <DrawPile game={game} />
       <DiscardPile game={game}/>
       <DisplayedEmpire game={game} player={displayedPlayer} panelIndex={displayedPlayerPanelIndex}/>
       {game.players.length > 2 && game.phase === Phase.Draft &&
@@ -115,7 +115,6 @@ const hiddenOnPortrait = css`
     display: none !important;
   }
 `
-
 const revealedCardStyle = css`
   position: absolute;
   z-index: 10;
