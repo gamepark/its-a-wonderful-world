@@ -211,7 +211,9 @@ const constructAreaText = css`
 const getPlaceConstructionButton = (index: number) => css`
   top: ${index * 6.5 + 16.5}%;
   right: ${51 + cardWidth * 1.5}%;
-  background-image: url(${Images.titleOrange});
+  &:before {
+    background-image: url(${Images.titleOrange});
+  }
 `
 
 const buttonItemStyle = css`

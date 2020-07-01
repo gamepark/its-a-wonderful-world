@@ -219,14 +219,7 @@ const draftConstructionButton = css`
   right: ${51 + cardWidth * 1.5}%;
   text-align: right;
   &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
     background-image: url(${Images.titleOrange});
-    transform: scaleX(-1);
   }
 `
 
