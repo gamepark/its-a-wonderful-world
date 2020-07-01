@@ -2,7 +2,7 @@ import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
 import React, {forwardRef} from 'react'
 import {useTranslation} from 'react-i18next'
-import CardBack from './back.jpg'
+import Images from '../Images'
 import Development from './Development'
 import {
   AirborneLaboratory, AircraftCarrier, AlexandersTomb, AncientAstronauts, Aquaculture, ArkOfTheCovenant, Atlantis, BermudaTriangle, BionicCrafts,
@@ -14,84 +14,6 @@ import {
   Supercomputer, SuperSoldiers, SuperSonar, TankDivision, Teleportation, TimeTravel, Transmutation, TransportationNetwork, TreasureOfTheTemplars,
   UndergroundCity, UnderwaterCity, UniversalExposition, UniversalVaccine, University, UnknownTechnology, VirtualReality, WindTurbines, WorldCongress, Zeppelin
 } from './Developments'
-import AlexandersTombImage from './discovery/alexanders-tomb.jpg'
-import AncientAstronautsImage from './discovery/ancient-astronauts.jpg'
-import ArkOfTheCovenantImage from './discovery/ark-of-the-covenant.jpg'
-import AtlantisImage from './discovery/atlantis.jpg'
-import BermudaTriangleImage from './discovery/bermuda-triangle.jpg'
-import BlackBeardsTreasureImage from './discovery/blackbeards-treasure.jpg'
-import CenterOfTheEarthImage from './discovery/center-of-the-earth.jpg'
-import CitiesOfGoldImage from './discovery/cities-of-gold.jpg'
-import CityOfAgarthaImage from './discovery/city-of-agartha.jpg'
-import FountainOfYouthImage from './discovery/fountain-of-youth.jpg'
-import GardensOfTheHesperidesImage from './discovery/gardens-of-the-hesperides.jpg'
-import IslandOfAvalonImage from './discovery/island-of-avalon.jpg'
-import KingSolomonsMinesImage from './discovery/king-solomons-mines.jpg'
-import LostContinentOfMuImage from './discovery/lost-continent-of-mu.jpg'
-import ParallelDimensionImage from './discovery/parallel-dimension.jpg'
-import RoswellImage from './discovery/roswell.jpg'
-import TreasureOfTheTemplarsImage from './discovery/treasure-of-the-templars.jpg'
-import CasinoCityImage from './project/casino-city.jpg'
-import EspionageAgencyImage from './project/espionage-agency.jpg'
-import GiantDamImage from './project/giant-dam.jpg'
-import GiantTowerImage from './project/giant-tower.jpg'
-import HarborZoneImage from './project/harbor-zone.jpg'
-import LunarBaseImage from './project/lunar-base.jpg'
-import MagneticTrainImage from './project/magnetic-train.jpg'
-import MuseumImage from './project/museum.jpg'
-import NationalMonumentImage from './project/national-monument.jpg'
-import PolarBaseImage from './project/polar-base.jpg'
-import PropagandaCenterImage from './project/propaganda-center.jpg'
-import SecretLaboratoryImage from './project/secret-laboratory.jpg'
-import SecretSocietyImage from './project/secret-society.jpg'
-import SolarCannonImage from './project/solar-cannon.jpg'
-import SpaceElevatorImage from './project/space-elevator.jpg'
-import UndergroundCityImage from './project/underground-city.jpg'
-import UnderwaterCityImage from './project/underwater-city.jpg'
-import UniversalExpositionImage from './project/universal-exposition.jpg'
-import UniversityImage from './project/university.jpg'
-import WorldCongressImage from './project/world-congress.jpg'
-import AquacultureImage from './research/aquaculture.jpg'
-import BionicCraftsImage from './research/bionic-crafts.jpg'
-import ClimateControlImage from './research/climate-control.jpg'
-import CryopreservationImage from './research/cryopreservation.jpg'
-import GeneticUpgradesImage from './research/genetic-upgrades.jpg'
-import GravityInverterImage from './research/gravity-inverter.jpg'
-import HumanCloningImage from './research/human-cloning.jpg'
-import MegaBombImage from './research/mega-bomb.jpg'
-import NeuroscienceImage from './research/neuroscience.jpg'
-import QuantumGeneratorImage from './research/quantum-generator.jpg'
-import RobotAssistantsImage from './research/robot-assistants.jpg'
-import RoboticAnimalsImage from './research/robotic-animals.jpg'
-import SatellitesImage from './research/satellites.jpg'
-import SecurityAutomatonsImage from './research/security-automatons.jpg'
-import SuperSoldiersImage from './research/super-soldiers.jpg'
-import SuperSonarImage from './research/super-sonar.jpg'
-import SupercomputerImage from './research/supercomputer.jpg'
-import TeleportationImage from './research/teleportation.jpg'
-import TimeTravelImage from './research/time-travel.jpg'
-import TransmutationImage from './research/transmutation.jpg'
-import UniversalVaccineImage from './research/universal-vaccine.jpg'
-import UnknownTechnologyImage from './research/unknown-technology.jpg'
-import VirtualRealityImage from './research/virtual-reality.jpg'
-import FinancialCenterImage from './structure/financial-center.jpg'
-import IndustrialComplexImage from './structure/industrial-complex.jpg'
-import MilitaryBaseImage from './structure/military-base.jpg'
-import NuclearPlantImage from './structure/nuclear-plant.jpg'
-import OffshoreOilRigImage from './structure/offshore-oil-rig.jpg'
-import RecyclingPlantImage from './structure/recycling-plant.jpg'
-import ResearchCenterImage from './structure/research-center.jpg'
-import TransportationNetworkImage from './structure/transportation-network.jpg'
-import WindTurbinesImage from './structure/wind-turbines.jpg'
-import AirborneLaboratoryImage from './vehicle/airborne-laboratory.jpg'
-import AircraftCarrierImage from './vehicle/aircraft-carrier.jpg'
-import IcebreakerImage from './vehicle/icebreaker.jpg'
-import JuggernautImage from './vehicle/juggernaut.jpg'
-import MegaDrillImage from './vehicle/mega-drill.jpg'
-import SaucerSquadronImage from './vehicle/saucer-squadron.jpg'
-import SubmarineImage from './vehicle/submarine.jpg'
-import TankDivisionImage from './vehicle/tank-division.jpg'
-import ZeppelinImage from './vehicle/zeppelin.jpg'
 
 type Props = { development?: Development } & React.HTMLAttributes<HTMLDivElement>
 
@@ -132,7 +54,7 @@ const style = css`
     top: 1px;
     bottom: 1px;
     border-radius: 6% / ${65 / 100 * 6}%;
-    background-image: url(${CardBack});
+    background-image: url(${Images.developmentBack});
     background-size: cover;
     transform: translateZ(-2px) rotateY(180deg);
     transform-style: preserve-3d;
@@ -140,7 +62,7 @@ const style = css`
 `
 
 const getBackgroundImage = (development?: Development) => css`
-  background-image: url(${development ? images.get(development) : CardBack});
+  background-image: url(${development ? images.get(development) : Images.developmentBack});
 `
 
 export const cardTitleFontSize = 0.85
@@ -159,84 +81,84 @@ const cardTitle = css`
 `
 const images = new Map<Development, any>()
 
-images.set(FinancialCenter, FinancialCenterImage)
-images.set(IndustrialComplex, IndustrialComplexImage)
-images.set(MilitaryBase, MilitaryBaseImage)
-images.set(NuclearPlant, NuclearPlantImage)
-images.set(OffshoreOilRig, OffshoreOilRigImage)
-images.set(RecyclingPlant, RecyclingPlantImage)
-images.set(ResearchCenter, ResearchCenterImage)
-images.set(TransportationNetwork, TransportationNetworkImage)
-images.set(WindTurbines, WindTurbinesImage)
-images.set(AirborneLaboratory, AirborneLaboratoryImage)
-images.set(AircraftCarrier, AircraftCarrierImage)
-images.set(Icebreaker, IcebreakerImage)
-images.set(Juggernaut, JuggernautImage)
-images.set(MegaDrill, MegaDrillImage)
-images.set(SaucerSquadron, SaucerSquadronImage)
-images.set(Submarine, SubmarineImage)
-images.set(TankDivision, TankDivisionImage)
-images.set(Zeppelin, ZeppelinImage)
-images.set(Aquaculture, AquacultureImage)
-images.set(BionicCrafts, BionicCraftsImage)
-images.set(ClimateControl, ClimateControlImage)
-images.set(Cryopreservation, CryopreservationImage)
-images.set(GeneticUpgrades, GeneticUpgradesImage)
-images.set(GravityInverter, GravityInverterImage)
-images.set(HumanCloning, HumanCloningImage)
-images.set(MegaBomb, MegaBombImage)
-images.set(Neuroscience, NeuroscienceImage)
-images.set(QuantumGenerator, QuantumGeneratorImage)
-images.set(RobotAssistants, RobotAssistantsImage)
-images.set(RoboticAnimals, RoboticAnimalsImage)
-images.set(Satellites, SatellitesImage)
-images.set(SecurityAutomatons, SecurityAutomatonsImage)
-images.set(SuperSoldiers, SuperSoldiersImage)
-images.set(SuperSonar, SuperSonarImage)
-images.set(Supercomputer, SupercomputerImage)
-images.set(Teleportation, TeleportationImage)
-images.set(TimeTravel, TimeTravelImage)
-images.set(Transmutation, TransmutationImage)
-images.set(UniversalVaccine, UniversalVaccineImage)
-images.set(UnknownTechnology, UnknownTechnologyImage)
-images.set(VirtualReality, VirtualRealityImage)
-images.set(CasinoCity, CasinoCityImage)
-images.set(EspionageAgency, EspionageAgencyImage)
-images.set(GiantDam, GiantDamImage)
-images.set(GiantTower, GiantTowerImage)
-images.set(HarborZone, HarborZoneImage)
-images.set(LunarBase, LunarBaseImage)
-images.set(MagneticTrain, MagneticTrainImage)
-images.set(Museum, MuseumImage)
-images.set(NationalMonument, NationalMonumentImage)
-images.set(PolarBase, PolarBaseImage)
-images.set(PropagandaCenter, PropagandaCenterImage)
-images.set(SecretLaboratory, SecretLaboratoryImage)
-images.set(SecretSociety, SecretSocietyImage)
-images.set(SolarCannon, SolarCannonImage)
-images.set(SpaceElevator, SpaceElevatorImage)
-images.set(UndergroundCity, UndergroundCityImage)
-images.set(UnderwaterCity, UnderwaterCityImage)
-images.set(UniversalExposition, UniversalExpositionImage)
-images.set(University, UniversityImage)
-images.set(WorldCongress, WorldCongressImage)
-images.set(AlexandersTomb, AlexandersTombImage)
-images.set(AncientAstronauts, AncientAstronautsImage)
-images.set(ArkOfTheCovenant, ArkOfTheCovenantImage)
-images.set(Atlantis, AtlantisImage)
-images.set(BermudaTriangle, BermudaTriangleImage)
-images.set(BlackBeardsTreasure, BlackBeardsTreasureImage)
-images.set(CenterOfTheEarth, CenterOfTheEarthImage)
-images.set(CitiesOfGold, CitiesOfGoldImage)
-images.set(CityOfAgartha, CityOfAgarthaImage)
-images.set(FountainOfYouth, FountainOfYouthImage)
-images.set(GardensOfTheHesperides, GardensOfTheHesperidesImage)
-images.set(IslandOfAvalon, IslandOfAvalonImage)
-images.set(KingSolomonsMines, KingSolomonsMinesImage)
-images.set(LostContinentOfMu, LostContinentOfMuImage)
-images.set(ParallelDimension, ParallelDimensionImage)
-images.set(Roswell, RoswellImage)
-images.set(TreasureOfTheTemplars, TreasureOfTheTemplarsImage)
+images.set(FinancialCenter, Images.financialCenter)
+images.set(IndustrialComplex, Images.industrialComplex)
+images.set(MilitaryBase, Images.militaryBase)
+images.set(NuclearPlant, Images.nuclearPlant)
+images.set(OffshoreOilRig, Images.offshoreOilRig)
+images.set(RecyclingPlant, Images.recyclingPlant)
+images.set(ResearchCenter, Images.researchCenter)
+images.set(TransportationNetwork, Images.transportationNetwork)
+images.set(WindTurbines, Images.windTurbines)
+images.set(AirborneLaboratory, Images.airborneLaboratory)
+images.set(AircraftCarrier, Images.aircraftCarrier)
+images.set(Icebreaker, Images.icebreaker)
+images.set(Juggernaut, Images.juggernaut)
+images.set(MegaDrill, Images.megaDrill)
+images.set(SaucerSquadron, Images.saucerSquadron)
+images.set(Submarine, Images.submarine)
+images.set(TankDivision, Images.tankDivision)
+images.set(Zeppelin, Images.zeppelin)
+images.set(Aquaculture, Images.aquaculture)
+images.set(BionicCrafts, Images.bionicCrafts)
+images.set(ClimateControl, Images.climateControl)
+images.set(Cryopreservation, Images.cryopreservation)
+images.set(GeneticUpgrades, Images.geneticUpgrades)
+images.set(GravityInverter, Images.gravityInverter)
+images.set(HumanCloning, Images.humanCloning)
+images.set(MegaBomb, Images.megaBomb)
+images.set(Neuroscience, Images.neuroscience)
+images.set(QuantumGenerator, Images.quantumGenerator)
+images.set(RobotAssistants, Images.robotAssistants)
+images.set(RoboticAnimals, Images.roboticAnimals)
+images.set(Satellites, Images.satellites)
+images.set(SecurityAutomatons, Images.securityAutomatons)
+images.set(SuperSoldiers, Images.superSoldiers)
+images.set(SuperSonar, Images.superSonar)
+images.set(Supercomputer, Images.supercomputer)
+images.set(Teleportation, Images.teleportation)
+images.set(TimeTravel, Images.timeTravel)
+images.set(Transmutation, Images.transmutation)
+images.set(UniversalVaccine, Images.universalVaccine)
+images.set(UnknownTechnology, Images.unknownTechnology)
+images.set(VirtualReality, Images.virtualReality)
+images.set(CasinoCity, Images.casinoCity)
+images.set(EspionageAgency, Images.espionageAgency)
+images.set(GiantDam, Images.giantDam)
+images.set(GiantTower, Images.giantTower)
+images.set(HarborZone, Images.harborZone)
+images.set(LunarBase, Images.lunarBase)
+images.set(MagneticTrain, Images.magneticTrain)
+images.set(Museum, Images.museum)
+images.set(NationalMonument, Images.nationalMonument)
+images.set(PolarBase, Images.polarBase)
+images.set(PropagandaCenter, Images.propagandaCenter)
+images.set(SecretLaboratory, Images.secretLaboratory)
+images.set(SecretSociety, Images.secretSociety)
+images.set(SolarCannon, Images.solarCannon)
+images.set(SpaceElevator, Images.spaceElevator)
+images.set(UndergroundCity, Images.undergroundCity)
+images.set(UnderwaterCity, Images.underwaterCity)
+images.set(UniversalExposition, Images.universalExposition)
+images.set(University, Images.university)
+images.set(WorldCongress, Images.worldCongress)
+images.set(AlexandersTomb, Images.alexandersTomb)
+images.set(AncientAstronauts, Images.ancientAstronauts)
+images.set(ArkOfTheCovenant, Images.arkOfTheCovenant)
+images.set(Atlantis, Images.atlantis)
+images.set(BermudaTriangle, Images.bermudaTriangle)
+images.set(BlackBeardsTreasure, Images.blackBeardsTreasure)
+images.set(CenterOfTheEarth, Images.centerOfTheEarth)
+images.set(CitiesOfGold, Images.citiesOfGold)
+images.set(CityOfAgartha, Images.cityOfAgartha)
+images.set(FountainOfYouth, Images.fountainOfYouth)
+images.set(GardensOfTheHesperides, Images.gardensOfTheHesperides)
+images.set(IslandOfAvalon, Images.islandOfAvalon)
+images.set(KingSolomonsMines, Images.kingSolomonsMines)
+images.set(LostContinentOfMu, Images.lostContinentOfMu)
+images.set(ParallelDimension, Images.parallelDimension)
+images.set(Roswell, Images.roswell)
+images.set(TreasureOfTheTemplars, Images.treasureOfTheTemplars)
 
 const titles = new Map<Development, (t: TFunction) => string>()
 

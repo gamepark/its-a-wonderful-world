@@ -16,11 +16,10 @@ import {
   financiersPileX, generalsPileX, tokenHeight, tokenWidth
 } from '../../util/Styles'
 import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from '../board/ResourceArea'
+import Images from '../Images'
 import Resource from '../resources/Resource'
 import Character from './Character'
 import CharacterToken, {images as characterTokenImages} from './CharacterToken'
-import zeroFinancier from './financier-zero.png'
-import zeroGeneral from './general-zero.png'
 
 type Props = {
   player: Player | PlayerView
@@ -75,8 +74,8 @@ const tokenStyle = (index: number) => css`
 `
 
 const emptySpaceImages = {
-  [Character.Financier]: zeroFinancier,
-  [Character.General]: zeroGeneral
+  [Character.Financier]: Images.financierShadowed,
+  [Character.General]: Images.generalShadowed
 }
 
 const emptySpaceDescription = {

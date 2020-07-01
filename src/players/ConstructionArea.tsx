@@ -5,7 +5,6 @@ import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
-import ConstructBackgroundImage from '../material/board/title-orange-2.png'
 import Character from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
 import Construction from '../material/developments/Construction'
@@ -13,7 +12,7 @@ import constructionCost from '../material/developments/ConstructionCost'
 import {developmentCards} from '../material/developments/Developments'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
 import EmpireName from '../material/empires/EmpireName'
-import ButtonArrow from '../material/resources/button-arrow.png'
+import Images from '../material/Images'
 import Resource, {isResource} from '../material/resources/Resource'
 import ResourceCube from '../material/resources/ResourceCube'
 import CompleteConstruction, {isCompleteConstruction} from '../moves/CompleteConstruction'
@@ -31,7 +30,7 @@ import {
   cardHeight, cardWidth, constructedCardLeftMargin, constructedCardY, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
-import {textButton, textButtonFontStyle} from './DraftArea'
+import {textButton, textButtonFontStyle, textButtonLeft} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -112,7 +111,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
         {[...Array(maxSpendableResources)].map((_, index) => <ResourceCube key={index} resource={game.productionStep!} css={buttonItemStyle}/>)}
       </button>}
       {isPlayer(player) && canBuild(player, construction.card) &&
-      <button css={getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 2 : 2))}
+      <button css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 2 : 2))]}
               onClick={() => build(construction)}>{t('Construire')}</button>
       }
     </>}
@@ -212,8 +211,7 @@ const constructAreaText = css`
 const getPlaceConstructionButton = (index: number) => css`
   top: ${index * 6.5 + 16.5}%;
   right: ${51 + cardWidth * 1.5}%;
-  background-image: url(${ConstructBackgroundImage});
-  ${textButton};
+  background-image: url(${Images.titleOrange});
 `
 
 const buttonItemStyle = css`
@@ -249,7 +247,7 @@ const getPlaceItemButtonStyle = (index: number) => css`
     transform: translateY(1px);
   }
   &:after{
-    background-image: url(${ButtonArrow});
+    background-image: url(${Images.buttonArrow});
     width: 3.5vh;
     height: 3.5vh;
     content: '';

@@ -3,13 +3,8 @@ import {TFunction} from 'i18next'
 import React, {Fragment, FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {getEmpireName} from '../material/empires/EmpireCard'
-import Energy from '../material/resources/energy.png'
-import Exploration from '../material/resources/exploration.png'
-import Gold from '../material/resources/gold.png'
-import Krystallium from '../material/resources/krytallium.png'
-import Materials from '../material/resources/materials.png'
+import Images from '../material/Images'
 import Resource, {resources} from '../material/resources/Resource'
-import Science from '../material/resources/science.png'
 import {getProduction} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
@@ -76,12 +71,12 @@ type ProductionDisplay = {
 }
 
 const resourceIcon = {
-  [Resource.Materials]: Materials,
-  [Resource.Energy]: Energy,
-  [Resource.Science]: Science,
-  [Resource.Gold]: Gold,
-  [Resource.Exploration]: Exploration,
-  [Resource.Krystallium]: Krystallium
+  [Resource.Materials]: Images.materials,
+  [Resource.Energy]: Images.energy,
+  [Resource.Science]: Images.science,
+  [Resource.Gold]: Images.gold,
+  [Resource.Exploration]: Images.exploration,
+  [Resource.Krystallium]: Images.krystallium
 }
 
 const productionStyle = (index: number) => {

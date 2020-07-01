@@ -5,13 +5,7 @@ import {useTranslation} from 'react-i18next'
 import Character, {isCharacter} from '../material/characters/Character'
 import CharacterToken from '../material/characters/CharacterToken'
 import DevelopmentType from '../material/developments/DevelopmentType'
-import Discovery from '../material/developments/discovery-icon.jpg'
-import Project from '../material/developments/project-icon.jpg'
-import Research from '../material/developments/research-icon.jpg'
-import Structure from '../material/developments/structure-icon.jpg'
-import Vehicle from '../material/developments/vehicle-icon.jpg'
-import ScoreBackground from '../material/score-background.png'
-import ScoreIcon from '../material/score-icon.png'
+import Images from '../material/Images'
 
 type Props = {
   item: DevelopmentType | Character
@@ -33,7 +27,7 @@ const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, qu
 }
 
 const backgroundStyle = css`
-  background-image: url(${ScoreBackground});
+  background-image: url(${Images.scoreBackground});
   background-size: cover;
   border-radius: 0.8vh;
   box-shadow: 0 0 2px black;
@@ -47,15 +41,15 @@ const style = css`
 `
 
 const developmentTypeImage = {
-  [DevelopmentType.Structure]: Structure,
-  [DevelopmentType.Vehicle]: Vehicle,
-  [DevelopmentType.Research]: Research,
-  [DevelopmentType.Project]: Project,
-  [DevelopmentType.Discovery]: Discovery
+  [DevelopmentType.Structure]: Images.structureIcon,
+  [DevelopmentType.Vehicle]: Images.vehicleIcon,
+  [DevelopmentType.Research]: Images.researchIcon,
+  [DevelopmentType.Project]: Images.projectIcon,
+  [DevelopmentType.Discovery]: Images.discoveryIcon
 }
 
 const numberStyle = css`
-  background-image: url(${ScoreIcon});
+  background-image: url(${Images.scoreIcon});
   filter: drop-shadow(0 0 1px black);
   background-size: contain;
   background-repeat: no-repeat;

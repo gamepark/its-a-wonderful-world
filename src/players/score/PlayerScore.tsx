@@ -1,18 +1,16 @@
 import {css, keyframes} from '@emotion/core'
+import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import boardArrowWhite from '../../material/board/arrow-white.png'
-import boardArrowOrange from '../../material/board/arrow-orange.png'
 import Character from '../../material/characters/Character'
 import DevelopmentType from '../../material/developments/DevelopmentType'
-import ScoreIcon from '../../material/score-icon.png'
+import Images from '../../material/Images'
 import {getScore} from '../../Rules'
+import Theme, {LightTheme} from '../../Theme'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {opacity} from '../../util/Styles'
 import ScorePart from './ScorePart'
-import {useTheme} from 'emotion-theming'
-import Theme, {LightTheme} from '../../Theme'
 
 type Props = {
   player: Player | PlayerView
@@ -26,7 +24,7 @@ const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, 
   const score = getScore(player)
   const theme = useTheme<Theme>()
   return (
-    <div css={[style(position,theme), displayScore ? displayPlayerScore : hidePlayerScore]}>
+    <div css={[style(position, theme), displayScore ? displayPlayerScore : hidePlayerScore]}>
       <button css={[arrowStyle(theme), displayScore ? arrowStandardStyle : arrowReverseStyle]} onClick={() => setDisplayScore(!displayScore)}
               title={displayScore ? t('Réduire les Scores') : t('Afficher les Scores')}/>
       <div css={scorePartStyle}>
@@ -39,7 +37,7 @@ const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, 
   )
 }
 
-const style = (index: number,theme:Theme) => css`
+const style = (index: number, theme: Theme) => css`
   position: absolute;
   display: flex;
   flex-direction: row;
@@ -70,11 +68,11 @@ const revealScore = keyframes`
   }
 `
 
-const arrowStyle = (theme:Theme) => css`
+const arrowStyle = (theme: Theme) => css`
   flex-shrink: 0;
   position: relative;
   max-height: 100%;
-  background-image: url(${theme.color === LightTheme ? boardArrowWhite : boardArrowOrange });
+  background-image: url(${theme.color === LightTheme ? Images.arrowWhite : Images.arrowOrange});
   background-size: cover;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -106,7 +104,7 @@ const arrowReverseStyle = css`
 
 const scoreStyle = css`
   flex-shrink: 0;
-  background-image: url(${ScoreIcon});
+  background-image: url(${Images.scoreIcon});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

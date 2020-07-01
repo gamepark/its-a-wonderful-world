@@ -1,9 +1,10 @@
 import {css} from '@emotion/core'
-import {useAnimation, useGame, usePlay, usePlayerId, usePlayers} from '@interlude-games/workshop'
+import {useAnimation, usePlay, usePlayerId, usePlayers} from '@interlude-games/workshop'
 import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import PlayerInfo from '@interlude-games/workshop/dist/Types/Player'
+import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
-import React from 'react'
+import React, {FunctionComponent} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import MainMenu from './MainMenu'
 import Character from './material/characters/Character'
@@ -16,16 +17,15 @@ import MoveType from './moves/MoveType'
 import {isReceiveCharacter, receiveCharacter} from './moves/ReceiveCharacter'
 import {tellYourAreReady} from './moves/TellYouAreReady'
 import {countCharacters, getNextProductionStep, getScore, numberOfRounds} from './Rules'
+import Theme, {LightTheme} from './Theme'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 import {headerHeight} from './util/Styles'
-import {useTheme} from 'emotion-theming'
-import Theme, {LightTheme} from './Theme'
 
 
-const headerStyle = (theme:Theme) => css`
+const headerStyle = (theme: Theme) => css`
   position: absolute;
   width: 100%;
   height: ${headerHeight}%;
@@ -34,7 +34,7 @@ const headerStyle = (theme:Theme) => css`
   transition: background-color 1s ease-in;
 `
 
-const textStyle = (theme:Theme) => css`
+const textStyle = (theme: Theme) => css`
   @media all and (orientation:portrait) {
     display: none;
   }
@@ -49,9 +49,12 @@ const textStyle = (theme:Theme) => css`
   overflow: hidden;
 `
 
+type Props = {
+  game?: GameView
+  imagesLoaded: boolean
+}
 
-const Header = () => {
-  const game = useGame<GameView>()
+const Header: FunctionComponent<Props> = ({game, imagesLoaded}) => {
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const players = usePlayers<EmpireName>()
@@ -60,17 +63,14 @@ const Header = () => {
   const theme = useTheme<Theme>()
   return (
     <header css={headerStyle(theme)}>
-      <h1 css={textStyle(theme)}>{getText(t, play, players, game, empire, animation)}</h1>
+      <h1 css={textStyle(theme)}>{game && imagesLoaded ? getText(t, play, players, game, empire, animation) : t('Chargement de la partie...')}</h1>
       <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
       <MainMenu/>
     </header>
   )
 }
 
-function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game?: GameView, empire?: EmpireName, animation?: Animation<Move>) {
-  if (!game) {
-    return t('Chargement de la partie...')
-  }
+function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   const player = game.players.find(player => player.empire === empire)
   const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
   switch (game.phase) {

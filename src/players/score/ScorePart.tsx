@@ -2,7 +2,7 @@ import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
 import Character from '../../material/characters/Character'
 import DevelopmentType from '../../material/developments/DevelopmentType'
-import ScoreIcon from '../../material/score-icon.png'
+import Images from '../../material/Images'
 import {getComboVictoryPoints, getFlatVictoryPoints, getItemQuantity, getVictoryPointsMultiplier} from '../../Rules'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
@@ -47,7 +47,7 @@ const style = css`
 `
 
 const scoreStyle = css`
-  background-image: url(${ScoreIcon});
+  background-image: url(${Images.scoreIcon});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

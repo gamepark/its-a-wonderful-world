@@ -1,6 +1,7 @@
 import {css, Global} from '@emotion/core'
 import {useDisplayState, useFailures, useGame} from '@interlude-games/workshop'
 import normalize from 'emotion-normalize'
+import {ThemeProvider} from 'emotion-theming'
 import i18next from 'i18next'
 import ICU from 'i18next-icu'
 import React, {FunctionComponent, useState} from 'react'
@@ -11,14 +12,14 @@ import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
 import Header from './Header'
 import EmpireName from './material/empires/EmpireName'
-import artwork from './material/its-cover-artwork.jpg'
+import Images from './material/Images'
 import Move from './moves/Move'
+import Theme, {DarkTheme, LightTheme} from './Theme'
 import translations from './translations.json'
 import GameView from './types/GameView'
+import ImagesLoader from './util/ImageLoader'
 import RotateScreenIcon from './util/RotateScreenIcon'
 import {empireBackground} from './util/Styles'
-import {ThemeProvider} from 'emotion-theming'
-import Theme, {DarkTheme, LightTheme} from './Theme'
 
 i18next.use(initReactI18next).use(ICU)
 
@@ -40,6 +41,7 @@ const App: FunctionComponent = () => {
   const game = useGame<GameView>()
   const [failures, clearFailures] = useFailures<Move>()
   const [displayedEmpire] = useDisplayState<EmpireName>()
+  const [imagesLoaded, setImagesLoaded] = useState(false)
   const theme = {
     color: themeColor,
     switchThemeColor: () => {
@@ -48,15 +50,17 @@ const App: FunctionComponent = () => {
       localStorage.setItem(userTheme, newThemeColor)
     }
   }
+  const onImagesLoad = () => setImagesLoaded(true)
   return (
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
-        {game && <GameDisplay game={game}/>}
+        {game && imagesLoaded && <GameDisplay game={game}/>}
         <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
-        <Header/>
+        <Header game={game} imagesLoaded={imagesLoaded}/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
       </ThemeProvider>
+      <ImagesLoader images={Object.values(Images)} onImagesLoad={onImagesLoad}/>
     </DndProvider>
   )
 }
@@ -65,7 +69,7 @@ export default App
 
 const backgroundImage = (empire?: EmpireName) => css`
   #root {
-    background-image: url(${empire ? empireBackground[empire] : artwork});
+    background-image: url(${empire ? empireBackground[empire] : Images.coverArtwork});
   }
 `
 

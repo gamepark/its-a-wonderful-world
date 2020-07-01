@@ -5,13 +5,8 @@ import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {krystalliumFromEmpire} from '../../drag-objects/KrystalliumCube'
 import {screenRatio} from '../../util/Styles'
-import Energy from './energy-cube-2.png'
-import Exploration from './exploration-cube-2.png'
-import Gold from './gold-cube-2.png'
-import Krystallium from './krytallium-cube-2.png'
-import Materials from './materials-cube-2.png'
+import Images from '../Images'
 import Resource from './Resource'
-import Science from './science-cube-2.png'
 
 type Props = {
   resource: Resource
@@ -56,12 +51,12 @@ const getDescription = (t: TFunction, resource: Resource) => {
 }
 
 export const images = {
-  [Resource.Materials]: Materials,
-  [Resource.Energy]: Energy,
-  [Resource.Science]: Science,
-  [Resource.Gold]: Gold,
-  [Resource.Exploration]: Exploration,
-  [Resource.Krystallium]: Krystallium
+  [Resource.Materials]: Images.materialsCube,
+  [Resource.Energy]: Images.energyCube,
+  [Resource.Science]: Images.scienceCube,
+  [Resource.Gold]: Images.goldCube,
+  [Resource.Exploration]: Images.explorationCube,
+  [Resource.Krystallium]: Images.krystalliumCube
 }
 
 export default ResourceCube
