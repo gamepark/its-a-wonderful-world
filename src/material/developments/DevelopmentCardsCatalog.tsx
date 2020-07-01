@@ -5,7 +5,7 @@ import {cardHeight, cardWidth, popupBackgroundStyle} from '../../util/Styles'
 import Development from './Development'
 import DevelopmentCard, {cardTitleFontSize} from './DevelopmentCard'
 import {useTranslation} from 'react-i18next'
-import boardArrowWhite from '../../material/board/arrow-white.png'
+import boardArrowWhite from '../menus/arrow-white.png'
 
 type Props = {
   developments: Development[],
