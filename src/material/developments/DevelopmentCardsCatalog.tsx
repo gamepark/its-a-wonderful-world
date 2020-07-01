@@ -5,7 +5,7 @@ import {cardHeight, cardWidth, popupBackgroundStyle} from '../../util/Styles'
 import Development from './Development'
 import DevelopmentCard, {cardTitleFontSize} from './DevelopmentCard'
 import {useTranslation} from 'react-i18next'
-import boardArrowWhite from '../menus/arrow-white.png'
+import Images from '../../material/Images'
 
 type Props = {
   developments: Development[],
@@ -67,7 +67,7 @@ const arrowStyle = css`
   width: 20vh;
   height: 24vh;
   z-index: 101;
-  background-image: url(${boardArrowWhite});
+  background-image: url(${Images.arrowWhite});
   background-size: cover;
   background-repeat: no-repeat;
   background-color: transparent;

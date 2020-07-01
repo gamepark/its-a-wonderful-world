@@ -190,9 +190,9 @@
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "This player scores {quantity, plural, one{1 point} other{# points}} per blue development (the Discoveries)",
       "Activer le mode nuit": "Enable dark mode",
       "Activer le mode jour": "Enable light mode",
-      "Nombre de cartes dans la Défausse : ": "Number of cards in the Discard Pile: ",
+      "Il y a {discardLength} cartes dans la défausse.": "There is {discardLength} cards in the discard pile.",
       "Faire défiler les cartes": "Swipe cards",
-      "Nb de cartes : ": "Nb of cards: "
+      "Nb de cartes : {nbDeck}/{nbCards}": "Nb of cards : {nbDeck}/{nbCards}"
     }
   },
   "fr": {
@@ -386,9 +386,9 @@
       "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)": "Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)",
       "Activer le mode nuit": "Activer le mode nuit",
       "Activer le mode jour": "Activer le mode jour",
-      "Nombre de cartes dans la Défausse : ": "Nombre de cartes dans la Défausse : ",
+      "Il y a {discardLength} cartes dans la défausse.": "Il y a {discardLength} cartes dans la défausse.",
       "Faire défiler les cartes": "Faire défiler les cartes",
-      "Nb de cartes : ": "Nb de cartes :"
+      "Nb de cartes : {nbDeck}/{nbCards}": "Nb de cartes : {nbDeck}/{nbCards}"
     }
   }
 }

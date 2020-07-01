@@ -9,6 +9,8 @@ import {developmentCards} from './Developments'
 
 const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
   const {t} = useTranslation()
+  const nbDeck = game.deck
+  const nbCards = developmentCards.length
   return <>
     {[...Array(Math.min(game.deck, drawPileMaxSize))].map((_, index) => <DevelopmentCard key={index} css={[cardStyle, css`
       position: absolute;
@@ -19,9 +21,9 @@ const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
         box-shadow: 0 0 3px black;
       }
     `]}/>)}
-    <div css={drawPileTooltip} data-tip data-for='sadFace'></div>
-    <ReactTooltip id='sadFace' type='warning' effect='solid' place='left' >
-      <span>{t('Nb de cartes : ') + game.deck + '/' +  developmentCards.length }  </span>
+    <div css={drawPileTooltip} data-tip />
+    <ReactTooltip type='warning' effect='solid' place='left' >
+      <span>{t('Nb de cartes : {nbDeck}/{nbCards}',{nbDeck,nbCards})}  </span>
     </ReactTooltip>
   </>
 }
