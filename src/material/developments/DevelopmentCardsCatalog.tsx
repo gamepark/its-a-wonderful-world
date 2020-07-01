@@ -23,10 +23,12 @@ const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, on
     setDeltaX(0)
   }
   const discardLength = developments.length
+  const disableLeftArrow = focusedIndex === 0
+  const disableRightArrow = focusedIndex >=  ( developments.length - 1)
   return (
     <>
       <div css={popupBackgroundStyle} onClick={onClose}/>
-      {discardLength > 3 && <button css={[arrowStyle,leftArrowStyle]} onClick={() => slide(-manualShift,3)} title={t('Faire défiler les cartes' )}/>}
+      {discardLength > 3 && <button disabled={disableLeftArrow} css={[arrowStyle,leftArrowStyle]} onClick={() => slide(-manualShift,3)} title={t('Faire défiler les cartes' )}/>}
       <Swipeable css={swipeZoneStyle} trackMouse={true} preventDefaultTouchmoveEvent={true} delta={3}
                  onSwiping={event => setDeltaX(event.deltaX)}
                  onSwiped={event => slide(event.deltaX, event.velocity)}>
@@ -34,7 +36,7 @@ const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, on
           <DevelopmentCard key={index} development={development} css={[cardStyle, cardPosition(index, focusedIndex, deltaX), deltaX === 0 && cardTransition]}/>
         )}
       </Swipeable>
-      {discardLength > 3 && <button css={[arrowStyle,rightArrowStyle]} onClick={() => slide(manualShift,3)} title={t('Faire défiler les cartes' )}/>}
+      {discardLength > 3 && <button disabled={disableRightArrow} css={[arrowStyle,rightArrowStyle]} onClick={() => slide(manualShift,3)} title={t('Faire défiler les cartes' )}/>}
     </>
   )
 }
@@ -70,21 +72,31 @@ const arrowStyle = css`
   background-repeat: no-repeat;
   background-color: transparent;
   border: none;
+  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
   &:focus {
     outline: 0;
   }
   &:hover {
     cursor:pointer;
   }
+  &:disabled {
+    display:none;
+  }
 `
 
 const leftArrowStyle = css`
   left: 0;
   transform: scaleX(-1);
+  &:active {
+    transform: scaleX(-1) translateX(2px);
+  }
 `
 
 const rightArrowStyle = css`
   right:0;
+  &:active {
+    transform: translateX(2px);
+  }
 `
 
 const cardPosition = (index: number, focusedIndex: number, deltaX: number) => css`
