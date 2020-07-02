@@ -12,6 +12,12 @@ import financierShadowed from './characters/financier-shadowed.png'
 import financier from './characters/financier.png'
 import generalShadowed from './characters/general-shadowed.png'
 import general from './characters/general.png'
+import financierOn from './characters/financier-on.png'
+import financierOff from './characters/financier-off.png'
+import generalOn from './characters/general-on.png'
+import generalOff from './characters/general-off.png'
+import financierGeneralOn from './characters/financier-general-on.png'
+import financierGeneralOff from './characters/financier-general-off.png'
 import developmentBack from './developments/development-back.jpg'
 import discoveryIcon from './developments/discovery-icon.jpg'
 import alexandersTomb from './developments/discovery/alexanders-tomb.jpg'
@@ -154,6 +160,7 @@ import scoreIcon from './score-icon.png'
 const Images = {
   boardCircleGrey, boardCircleBlack, boardCircleGreen, boardCircleYellow, boardCircleBlue, roundTrackerRecto, roundTrackerVerso,
   circleFinancierGeneral, circleFinancier, circleGeneral, financier, financierShadowed, general, generalShadowed,
+  financierOn,financierOff,generalOn,generalOff,financierGeneralOn,financierGeneralOff,
   developmentBack, discoveryIcon, projectIcon, researchIcon, structureIcon, vehicleIcon,
   alexandersTomb, ancientAstronauts, arkOfTheCovenant, atlantis, bermudaTriangle, blackBeardsTreasure, centerOfTheEarth, citiesOfGold, cityOfAgartha,
   fountainOfYouth, gardensOfTheHesperides, islandOfAvalon, kingSolomonsMines, lostContinentOfMu, parallelDimension, roswell, treasureOfTheTemplars,
