@@ -5,9 +5,6 @@ import boardCircleGrey from './board/board-circle-grey.png'
 import boardCircleYellow from './board/board-circle-yellow.png'
 import roundTrackerRecto from './board/round-tracker-recto.png'
 import roundTrackerVerso from './board/round-tracker-verso.png'
-import circleFinancierGeneral from './characters/circle-financier-general.png'
-import circleFinancier from './characters/circle-financier.png'
-import circleGeneral from './characters/circle-general.png'
 import financierShadowed from './characters/financier-shadowed.png'
 import financier from './characters/financier.png'
 import generalShadowed from './characters/general-shadowed.png'
@@ -159,7 +156,7 @@ import scoreIcon from './score-icon.png'
 
 const Images = {
   boardCircleGrey, boardCircleBlack, boardCircleGreen, boardCircleYellow, boardCircleBlue, roundTrackerRecto, roundTrackerVerso,
-  circleFinancierGeneral, circleFinancier, circleGeneral, financier, financierShadowed, general, generalShadowed,
+  financier, financierShadowed, general, generalShadowed,
   financierOn,financierOff,generalOn,generalOff,financierGeneralOn,financierGeneralOff,
   developmentBack, discoveryIcon, projectIcon, researchIcon, structureIcon, vehicleIcon,
   alexandersTomb, ancientAstronauts, arkOfTheCovenant, atlantis, bermudaTriangle, blackBeardsTreasure, centerOfTheEarth, citiesOfGold, cityOfAgartha,
