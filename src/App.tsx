@@ -22,6 +22,7 @@ import GameView from './types/GameView'
 import ImagesLoader from './util/ImageLoader'
 import RotateScreenIcon from './util/RotateScreenIcon'
 import {empireBackground} from './util/Styles'
+import LoadingScreen from './util/LoadingScreen'
 
 i18next.use(initReactI18next).use(ICU)
 
@@ -63,6 +64,7 @@ const App: FunctionComponent = () => {
         <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
         <Header game={game} imagesLoaded={imagesLoaded}/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
+        {!imagesLoaded && <LoadingScreen />}
       </ThemeProvider>
       <ImagesLoader images={Object.values(Images)} onImagesLoad={onImagesLoad}/>
     </DndProvider>
