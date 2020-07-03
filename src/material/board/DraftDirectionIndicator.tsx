@@ -6,15 +6,20 @@ import PlayerView from '../../types/PlayerView'
 import DownArrowIcon from '../../util/DownArrowIcon'
 import {headerHeight, playerPanelHeight, playerPanelMargin} from '../../util/Styles'
 import UpArrowIcon from '../../util/UpArrowIcon'
+import {useTheme} from 'emotion-theming'
+import Theme, {LightTheme} from '../../Theme'
 
 const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: (Player | PlayerView)[] }> = ({clockwise, players}) => {
   const {t} = useTranslation()
+  const theme = useTheme<Theme>()
+  const greenColor = theme.color === LightTheme ? 'forestgreen' : 'lightgreen'
+  const purpleColor = theme.color === LightTheme ? 'purple' : 'lightpink'
   return (
     <Fragment>
       {players.slice(1).map((_, index) => clockwise ?
-        <DescendingArrows key={index} color="forestgreen" css={css`top: ${headerHeight + (index + 1) * (playerPanelHeight + playerPanelMargin)}%;`}
+        <DescendingArrows key={index} color={greenColor} css={css`top: ${headerHeight + (index + 1) * (playerPanelHeight + playerPanelMargin)}%;`}
                           title={t('Sens de passage des cartes')}/> :
-        <AscendingArrows key={index} color="purple" css={css`top: ${25.2 + index * 18.5}%;`}
+        <AscendingArrows key={index} color={purpleColor} css={css`top: ${25.2 + index * 18}%;`}
                          title={t('Sens de passage des cartes')}/>
       )}
     </Fragment>
