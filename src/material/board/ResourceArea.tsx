@@ -80,7 +80,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
            alt={resourceAreaText[resource](t)} title={resourceAreaText[resource](t)} draggable="false"/>
       <button disabled={!canPlayerValidate} css={arrowStyle(theme)} onClick={() => play(tellYourAreReady(player.empire))} draggable="false"
               title={t('Valider')}/>
-      <img src={resourceCharacter[resource]} alt={resourceCharacterText[resource](t)} title={resourceCharacterText[resource](t)} draggable="false"
+      <img src={hasMostProduction?resourceCharacterOn[resource]:resourceCharacterOff[resource]} alt={resourceCharacterText[resource](t)} title={resourceCharacterText[resource](t)} draggable="false"
            css={[characterStyle, hasMostProduction && characterHighlightStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
       {quantity !== 0 &&
       <>
@@ -101,8 +101,8 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
 const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 4
 const getHighlightLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 2.5
 const getNumberLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6
-export const getCircleCharacterLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6.25
-export const circleCharacterTopPosition = 6
+export const getCircleCharacterLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 4.9
+export const circleCharacterTopPosition = 2.5
 const boardResourceTopPosition = 30
 const cubeDeltaX = 2.6
 const cubeDeltaY = 3.3
@@ -126,12 +126,20 @@ const resourceCircle = {
   [Exploration]: Images.boardCircleBlue
 }
 
-const resourceCharacter = {
-  [Materials]: Images.circleFinancier,
-  [Energy]: Images.circleGeneral,
-  [Science]: Images.circleFinancierGeneral,
-  [Gold]: Images.circleFinancier,
-  [Exploration]: Images.circleGeneral
+const resourceCharacterOn = {
+  [Materials]: Images.financierOn,
+  [Energy]: Images.generalOn,
+  [Science]: Images.financierGeneralOn,
+  [Gold]: Images.financierOn,
+  [Exploration]: Images.generalOn
+}
+
+const resourceCharacterOff = {
+  [Materials]: Images.financierOff,
+  [Energy]: Images.generalOff,
+  [Science]: Images.financierGeneralOff,
+  [Gold]: Images.financierOff,
+  [Exploration]: Images.generalOff
 }
 
 const resourceAreaText = {
@@ -262,15 +270,11 @@ const arrowStyle = (theme: Theme) => css`
 
 const characterStyle = css`
   position:absolute;
-  width: 2.6%;
+  width: 5.1%;
   top: ${circleCharacterTopPosition}%;
-  transition: opacity 0.5s ease-in-out;
-  opacity: 0.5;
 `
 
 const characterHighlightStyle = css`
-  opacity: 1;
-  filter: drop-shadow(0 0 5px white);
 `
 
 const resourceStyle = css`
