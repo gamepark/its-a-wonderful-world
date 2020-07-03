@@ -42,7 +42,7 @@ const phaseStyle = css`
     left: -10%;
     width: 25%;
     height: 120%;
-    padding: 6% 6% 6% 9%;
+    padding: 7% 6% 6% 9%;
   }
 `
 const draftPhaseX = roundTrackerX + 6.6

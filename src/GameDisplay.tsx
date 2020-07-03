@@ -23,7 +23,8 @@ import {isActive, isOver} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import {
-  areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
+  areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, fadeIn, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY,
+  tokenHeight,
   tokenWidth
 } from './util/Styles'
 
@@ -111,6 +112,7 @@ export const getPlayersStartingWith = (game: GameView, playerId?: EmpireName) =>
 }
 
 const hiddenOnPortrait = css`
+  animation: ${fadeIn} 2s ease-in forwards;
   @media all and (orientation:portrait) {
     display: none !important;
   }

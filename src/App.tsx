@@ -6,7 +6,7 @@ import i18next from 'i18next'
 import ICU from 'i18next-icu'
 import moment from 'moment'
 import 'moment/locale/fr'
-import React, {FunctionComponent, useState} from 'react'
+import React, {FunctionComponent, useEffect, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {initReactI18next, useTranslation} from 'react-i18next'
@@ -56,15 +56,18 @@ const App: FunctionComponent = () => {
     }
   }
   const onImagesLoad = () => setImagesLoaded(true)
+  const [threeSecondsElapse, setThreeSecondsElapse] = useState(false)
+  useEffect(() => { setTimeout(() => setThreeSecondsElapse(true),3000) }, [])
+  const introEnded = imagesLoaded && threeSecondsElapse
   return (
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
-        {game && imagesLoaded && <GameDisplay game={game}/>}
+        {game && introEnded && <GameDisplay game={game}/>}
         <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
         <Header game={game} imagesLoaded={imagesLoaded}/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
-        {!imagesLoaded && <LoadingScreen />}
+        {!introEnded && <LoadingScreen/> }
       </ThemeProvider>
       <ImagesLoader images={Object.values(Images)} onImagesLoad={onImagesLoad}/>
     </DndProvider>

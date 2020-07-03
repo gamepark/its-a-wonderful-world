@@ -7,13 +7,15 @@ import {faLightbulb,faPaintBrush,faWrench} from '@fortawesome/free-solid-svg-ico
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useTheme} from 'emotion-theming'
 import Theme, {LightTheme} from '../Theme'
+// @ts-ignore
+import PreloadImage from 'react-preload-image'
 
-const LoadingScreen: FunctionComponent = () =>  {
+const LoadingScreen: FunctionComponent = () => {
   const {t} = useTranslation()
   const theme = useTheme<Theme>()
   return (
     <div css={loadingScreenStyle(theme)}>
-      <img src={IWWBox} css={gameBox} alt={t('It’s a Wonderful World')}/>
+      <PreloadImage css={gameBox} src={IWWBox} alt={t('It’s a Wonderful World')} />
       <h2 css={gameTitle}>{t('It’s a Wonderful World')}</h2>
       <p css={gamePeople}><FontAwesomeIcon css={iconStyle} icon={faLightbulb}/>{t('Auteur : Frédéric Guérard')}
       <br/><FontAwesomeIcon css={iconStyle} icon={faPaintBrush}/>{t('Artiste : Anthony Wolff')}
@@ -22,7 +24,7 @@ const LoadingScreen: FunctionComponent = () =>  {
   )
 }
 
-const loadingScreenStyle = (theme:Theme) =>css`
+const loadingScreenStyle = (theme:Theme) => css`
   z-index: 100;
   position:absolute;
   top:${headerHeight}%;
@@ -37,18 +39,20 @@ const loadingScreenStyle = (theme:Theme) =>css`
 `
 
 const gameBox = css`
-  max-width:50%;
+  position:relative;
+  width:62vh;
+  height:66vh;
 `
 
 const gameTitle = css`
-  font-size:3em;
+  font-size:5vh;
   margin:0;
 `
 const gamePeople = css`
-  font-size:1.5em;
+  font-size:3vh;
 `
 const iconStyle = css`
-  min-width: 2em;
+  min-width: 6vh;
   position: relative;
 `
 export default LoadingScreen

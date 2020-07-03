@@ -94,13 +94,12 @@ export const glow = (color: string) => keyframes`
     box-shadow: 0 0 30px ${color};
   }
 `
-export const opacity = (opacity: number) => keyframes`
+export const fadeIn = keyframes`
   from {
     opacity: 0;
   }
   to {
-    opacity: ${opacity};
-
+    opacity: 1;
   }
 `
 
