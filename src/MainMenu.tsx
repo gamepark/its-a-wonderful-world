@@ -1,5 +1,5 @@
 import {css, keyframes} from '@emotion/core'
-import {faChess, faChevronDown, faChevronUp, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
+import {faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions, useGame, usePlayerId, useRematch, useUndo} from '@interlude-games/workshop'
 import {useTheme} from 'emotion-theming'
@@ -13,6 +13,7 @@ import Move from './moves/Move'
 import RematchPopup from './RematchPopup'
 import ItsAWonderfulWorldRules, {isOver} from './Rules'
 import Theme, {LightTheme} from './Theme'
+import TimePopup from './TimePopup'
 import GameView from './types/GameView'
 import IconButton from './util/IconButton'
 import LoadingSpinner from './util/LoadingSpinner'
@@ -31,6 +32,7 @@ const MainMenu = () => {
   const [displayMenu, setDisplayMenu] = useState(false)
   const gameOverRef = useRef<boolean | undefined>()
   const [displayRematchTooltip, setDisplayRematchTooltip] = useState(false)
+  const [timePopupOpen, setTimePopupOpen] = useState(false)
   const {rematch, rematchOffer, ignoreRematch} = useRematch<EmpireName>()
   useEffect(() => {
     if (game) {
@@ -139,9 +141,13 @@ const MainMenu = () => {
             </>
           }
         </IconButton>
-
+        <IconButton css={[menuButtonStyle, clockButtonStyle]} onClick={() => setTimePopupOpen(true)}>
+          <span css={subMenuTitle}>{t('Temps de réflexion')}</span>
+          <FontAwesomeIcon icon={faClock}/>
+        </IconButton>
       </div>
       <RematchPopup rematchOffer={rematchOffer} onClose={ignoreRematch}/>
+      {timePopupOpen && <TimePopup onClose={() => setTimePopupOpen(false)}/>}
     </>
   )
 }
@@ -228,6 +234,11 @@ const themeButtonStyle = css`
   padding-right: 0.5em;
   background-image: url(${Images.buttonBlue});
 `
+
+const clockButtonStyle = css`
+  background-image: url(${Images.buttonGrey});
+`
+
 const mainMenuButtonStyle = css`
   background-image: url(${Images.buttonYellow});
 `

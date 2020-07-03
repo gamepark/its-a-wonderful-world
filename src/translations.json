@@ -192,7 +192,15 @@
       "Activer le mode jour": "Enable light mode",
       "Il y a {discardLength} cartes dans la défausse.": "There is {discardLength} cards in the discard pile.",
       "Faire défiler les cartes": "Swipe cards",
-      "Nb de cartes : {nbDeck}/{nbCards}": "Nb of cards : {nbDeck}/{nbCards}"
+      "Nb de cartes : {nbDeck}/{nbCards}": "Nb of cards : {nbDeck}/{nbCards}",
+      "Temps de réflexion": "Thinking time",
+      "Joueur": "Players",
+      "Temps d’attente maximum": "Maximum down time",
+      "Temps d’attente total": "Total down time",
+      "Temps de réflexion maximum": "Maximum thinking time",
+      "Temps de réflexion total": "Total thinking time",
+      "A fait attendre les autres joueurs": "Made other players wait",
+      "A fait attendre les autres (pondéré par le nombre de joueurs attendus)": "Made others wait (weighted by the number of awaited players)"
     }
   },
   "fr": {
@@ -388,7 +396,15 @@
       "Activer le mode jour": "Activer le mode jour",
       "Il y a {discardLength} cartes dans la défausse.": "Il y a {discardLength} cartes dans la défausse.",
       "Faire défiler les cartes": "Faire défiler les cartes",
-      "Nb de cartes : {nbDeck}/{nbCards}": "Nb de cartes : {nbDeck}/{nbCards}"
+      "Nb de cartes : {nbDeck}/{nbCards}": "Nb de cartes : {nbDeck}/{nbCards}",
+      "Temps de réflexion": "Temps de réflexion",
+      "Joueur": "Joueur",
+      "Temps d’attente maximum": "Temps d’attente maximum",
+      "Temps d’attente total": "Temps d’attente total",
+      "Temps de réflexion maximum": "Temps de réflexion maximum",
+      "Temps de réflexion total": "Temps de réflexion total",
+      "A fait attendre les autres joueurs": "A fait attendre les autres joueurs",
+      "A fait attendre les autres (pondéré par le nombre de joueurs attendus)": "A fait attendre les autres (pondéré par le nombre de joueurs attendus)"
     }
   }
 }

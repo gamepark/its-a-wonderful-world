@@ -1302,10 +1302,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interlude-games/workshop@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.3.0.tgz#380fe7900aba013d5ff881e2ba90e933fbf00890"
-  integrity sha512-z8hey4LsjrgqqOt7fAmIs82NSdlj4ofIKXLfLcvt7zDiRPXfPk0ychFPkBU2p3Xl+dUL/E+KJ+MncRO18E3Ykg==
+"@interlude-games/workshop@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-0.4.0.tgz#b51042e427a84c67b2415c38cae2847d91a26f4c"
+  integrity sha512-TtFFLbbLKyHgNyX6Vgkp3oy6ZhkBugzJtZME5llluwUQ8GUGTQOGuW2OPMosFuQHtfuJwK3oOfCQ6PT6j0NJZw==
   dependencies:
     "@datadog/browser-logs" "^1.11.4"
     apollo-cache-inmemory "^1.6.5"
@@ -7375,6 +7375,11 @@ mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@~0.5.1:
   integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
   dependencies:
     minimist "^1.2.5"
+
+moment@^2.27.0:
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
+  integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
 
 move-concurrently@^1.0.1:
   version "1.0.1"

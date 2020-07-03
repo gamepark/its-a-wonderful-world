@@ -4,6 +4,8 @@ import normalize from 'emotion-normalize'
 import {ThemeProvider} from 'emotion-theming'
 import i18next from 'i18next'
 import ICU from 'i18next-icu'
+import moment from 'moment'
+import 'moment/locale/fr'
 import React, {FunctionComponent, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
@@ -34,6 +36,8 @@ i18next.init({
   nsSeparator: false,
   resources: translations
 })
+
+moment.locale(locale)
 
 const App: FunctionComponent = () => {
   const {t} = useTranslation()
