@@ -2,6 +2,7 @@ import {css, keyframes} from '@emotion/core'
 import EmpireName from '../material/empires/EmpireName'
 import Images from '../material/Images'
 import {numberOfCardsToDraft} from '../Rules'
+import Theme, {LightTheme} from '../Theme'
 
 export const screenRatio = 16 / 9
 export const boardWidth = 66
@@ -87,21 +88,13 @@ export const getCardFocusTransform = css`
 `
 
 export const glow = (color: string) => keyframes`
-  from {
-    box-shadow: 0 0 5px ${color};
-  }
-  to {
-    box-shadow: 0 0 30px ${color};
-  }
+  from { box-shadow: 0 0 5px ${color}; }
+  to { box-shadow: 0 0 30px ${color}; }
 `
-export const opacity = (opacity: number) => keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: ${opacity};
 
-  }
+export const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
 `
 
 export const popupBackgroundStyle = css`
@@ -121,3 +114,15 @@ export const empireBackground: Record<EmpireName, string> = {
   [EmpireName.PanafricanUnion]: Images.panafricanUnionArtwork,
   [EmpireName.RepublicOfEurope]: Images.republicOfEuropeArtwork
 }
+
+export const textColor = (theme: Theme) => css`
+  color: ${theme.color === LightTheme ? '#333' : '#FFF'};
+  fill: ${theme.color === LightTheme ? '#333' : '#FFF'};
+`
+
+export const backgroundColor = (theme: Theme) => css`
+  &:before {
+    background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 30, 0.7)'};
+    transition: background-color 1s ease-in;
+  }
+`

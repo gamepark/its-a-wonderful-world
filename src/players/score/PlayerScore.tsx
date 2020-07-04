@@ -9,7 +9,7 @@ import {getScore} from '../../Rules'
 import Theme, {LightTheme} from '../../Theme'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {opacity} from '../../util/Styles'
+import {fadeIn} from '../../util/Styles'
 import ScorePart from './ScorePart'
 
 type Props = {
@@ -86,9 +86,7 @@ const arrowStyle = (theme: Theme) => css`
   }
   transition: all 0.5s linear;
   opacity: 0;
-  animation: ${opacity(1)} 5s ease-in;
-  animation-delay: 6s;
-  animation-fill-mode: forwards;
+  animation: ${fadeIn} 5s 6s ease-in forwards;
 `
 
 const arrowStandardStyle = css`
@@ -118,9 +116,7 @@ const scoreStyle = css`
   text-align: center;
   transition: margin 0.5s linear;
   opacity: 0;
-  animation: ${opacity(1)} 4s ease-in;
-  animation-delay: 6s;
-  animation-fill-mode: forwards;
+  animation: ${fadeIn} 4s 6s ease-in forwards;
 `
 const displayScoreStyle = css`
   margin: 0 1vh 0 4vh;

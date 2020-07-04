@@ -22,7 +22,7 @@ import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
-import {headerHeight} from './util/Styles'
+import {headerHeight, textColor} from './util/Styles'
 
 
 const headerStyle = (theme: Theme) => css`
@@ -34,11 +34,10 @@ const headerStyle = (theme: Theme) => css`
   transition: background-color 1s ease-in;
 `
 
-const textStyle = (theme: Theme) => css`
+const textStyle = css`
   @media all and (orientation:portrait) {
     display: none;
   }
-  color: ${theme.color === LightTheme ? '#333' : '#FFF'};
   transition: color 1s ease-in;
   padding: 1vh;
   margin: 0 28vh 0 0;
@@ -51,10 +50,10 @@ const textStyle = (theme: Theme) => css`
 
 type Props = {
   game?: GameView
-  imagesLoaded: boolean
+  loading: boolean
 }
 
-const Header: FunctionComponent<Props> = ({game, imagesLoaded}) => {
+const Header: FunctionComponent<Props> = ({game, loading}) => {
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const players = usePlayers<EmpireName>()
@@ -63,8 +62,8 @@ const Header: FunctionComponent<Props> = ({game, imagesLoaded}) => {
   const theme = useTheme<Theme>()
   return (
     <header css={headerStyle(theme)}>
-      <h1 css={textStyle(theme)}>{game && imagesLoaded ? getText(t, play, players, game, empire, animation) : t('Chargement de la partie...')}</h1>
-      <p css={portraitText}>{t('Passer en plein écran') + ' →'}</p>
+      <h1 css={[textStyle, textColor(theme)]}>{loading ? t('Chargement de la partie...') : getText(t, play, players, game!, empire, animation)}</h1>
+      <p css={[portraitText, textColor(theme)]}>{t('Passer en plein écran') + ' →'}</p>
       <MainMenu/>
     </header>
   )
@@ -288,7 +287,6 @@ const portraitText = css`
   @media all and (orientation:landscape) {
     display: none;
   }
-  color: #333333;
   line-height: 1.25;
   font-size: 3vh;
   margin: 0 6vh 0 0;

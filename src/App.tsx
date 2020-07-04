@@ -6,7 +6,7 @@ import i18next from 'i18next'
 import ICU from 'i18next-icu'
 import moment from 'moment'
 import 'moment/locale/fr'
-import React, {FunctionComponent, useState} from 'react'
+import React, {FunctionComponent, useEffect, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {initReactI18next, useTranslation} from 'react-i18next'
@@ -20,8 +20,9 @@ import Theme, {DarkTheme, LightTheme} from './Theme'
 import translations from './translations.json'
 import GameView from './types/GameView'
 import ImagesLoader from './util/ImageLoader'
+import LoadingScreen from './util/LoadingScreen'
 import RotateScreenIcon from './util/RotateScreenIcon'
-import {empireBackground} from './util/Styles'
+import {backgroundColor, empireBackground, textColor} from './util/Styles'
 
 i18next.use(initReactI18next).use(ICU)
 
@@ -45,7 +46,7 @@ const App: FunctionComponent = () => {
   const game = useGame<GameView>()
   const [failures, clearFailures] = useFailures<Move>()
   const [displayedEmpire] = useDisplayState<EmpireName>()
-  const [imagesLoaded, setImagesLoaded] = useState(false)
+  const [imagesLoading, setImagesLoading] = useState(true)
   const theme = {
     color: themeColor,
     switchThemeColor: () => {
@@ -54,17 +55,25 @@ const App: FunctionComponent = () => {
       localStorage.setItem(userTheme, newThemeColor)
     }
   }
-  const onImagesLoad = () => setImagesLoaded(true)
+  const [isJustDisplayed, setJustDisplayed] = useState(true)
+  useEffect(() => {
+    setTimeout(() => setJustDisplayed(false), 2000)
+  }, [])
+  const loading = !game || imagesLoading || isJustDisplayed
   return (
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
-        {game && imagesLoaded && <GameDisplay game={game}/>}
-        <p css={portraitInfo}>{t('Pour jouer, veuillez incliner votre mobile')}<RotateScreenIcon/></p>
-        <Header game={game} imagesLoaded={imagesLoaded}/>
+        <LoadingScreen display={loading}/>
+        {!loading && <GameDisplay game={game!}/>}
+        <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
+          {t('Pour jouer, veuillez incliner votre mobile')}
+          <RotateScreenIcon css={(theme: Theme) => textColor(theme)}/>
+        </p>
+        <Header game={game} loading={loading}/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
       </ThemeProvider>
-      <ImagesLoader images={Object.values(Images)} onImagesLoad={onImagesLoad}/>
+      <ImagesLoader images={Object.values(Images)} onImagesLoad={() => setImagesLoading(false)}/>
     </DndProvider>
   )
 }
@@ -115,9 +124,8 @@ const globalStyle = css`
 `
 
 const themeStyle = (theme: Theme) => css`
-  #root:before {
-    background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 30, 0.7)'};
-    transition: background-color 1s ease-in;
+  #root {
+    ${backgroundColor(theme)}
   }
 `
 
