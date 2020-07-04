@@ -80,49 +80,48 @@ const ItsAWonderfulWorldRules: GameType = {
   },
 
   getAutomaticMove(game: Game | GameView) {
-    switch (game.phase) {
-      case Phase.Draft:
-        if (isGameView(game)) {
-          return // There is hidden information during Draft phase, so consequences of actions cannot be predicted on client side
-        }
-        const anyPlayer = game.players![0]
-        if (!anyPlayer.hand.length && !anyPlayer.draftArea.length) {
-          return dealDevelopmentCards()
-        } else if (game.players.every(player => player.chosenCard !== undefined)) {
-          return revealChosenCards()
-        } else if (anyPlayer.cardsToPass) {
-          return passCards()
-        } else if (anyPlayer.draftArea.length === numberOfCardsToDraft) {
-          if (anyPlayer.hand.length) {
-            return discardLeftoverCards()
+    if (!isGameView(game)) {
+      switch (game.phase) {
+        case Phase.Draft:
+          const anyPlayer = game.players![0]
+          if (!anyPlayer.hand.length && !anyPlayer.draftArea.length) {
+            return dealDevelopmentCards()
+          } else if (game.players.every(player => player.chosenCard !== undefined)) {
+            return revealChosenCards()
+          } else if (anyPlayer.cardsToPass) {
+            return passCards()
+          } else if (anyPlayer.draftArea.length === numberOfCardsToDraft) {
+            if (anyPlayer.hand.length) {
+              return discardLeftoverCards()
+            } else {
+              return startPhase(Phase.Planning)
+            }
           } else {
-            return startPhase(Phase.Planning)
-          }
-        } else {
-          for (const player of game.players) {
-            if (player.chosenCard === undefined && player.hand.length === 1) {
-              return chooseDevelopmentCard(player.empire, player.hand[0])
+            for (const player of game.players) {
+              if (player.chosenCard === undefined && player.hand.length === 1) {
+                return chooseDevelopmentCard(player.empire, player.hand[0])
+              }
             }
           }
-        }
-        break
-      case Phase.Planning:
-        if (game.players.every(player => player.ready)) {
-          return startPhase(Phase.Production)
-        }
-        break
-      case Phase.Production:
-        if (!game.productionStep) {
-          return produce(Resource.Materials)
-        } else if (game.players.every(player => player.ready)) {
-          const nextProductionStep = getNextProductionStep(game)
-          if (nextProductionStep) {
-            return produce(nextProductionStep)
-          } else if (game.round < numberOfRounds) {
-            return startPhase(Phase.Draft)
+          break
+        case Phase.Planning:
+          if (game.players.every(player => player.ready)) {
+            return startPhase(Phase.Production)
           }
-        }
-        break
+          break
+        case Phase.Production:
+          if (!game.productionStep) {
+            return produce(Resource.Materials)
+          } else if (game.players.every(player => player.ready)) {
+            const nextProductionStep = getNextProductionStep(game)
+            if (nextProductionStep) {
+              return produce(nextProductionStep)
+            } else if (game.round < numberOfRounds) {
+              return startPhase(Phase.Draft)
+            }
+          }
+          break
+      }
     }
     for (const player of game.players) {
       for (const construction of player.constructionArea) {
