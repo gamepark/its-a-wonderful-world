@@ -23,8 +23,7 @@ import {isActive, isOver} from './Rules'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import {
-  areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, fadeIn, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY,
-  tokenHeight,
+  areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from './util/Styles'
 
@@ -77,7 +76,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   const revealedCards = revealingCards && sortByPanel(Object.entries(revealingCards.revealedCards) as [EmpireName, number][])
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
-    <Letterbox css={hiddenOnPortrait}>
+    <Letterbox css={letterBoxStyle}>
       <Board game={game} player={displayedPlayer}/>
       <RoundTracker round={game.round}/>
       <PhaseIndicator phase={game.phase}/>
@@ -111,12 +110,18 @@ export const getPlayersStartingWith = (game: GameView, playerId?: EmpireName) =>
   }
 }
 
-const hiddenOnPortrait = css`
-  animation: ${fadeIn} 2s ease-in forwards;
+const fadeIn = keyframes`
+  from, 50% { opacity: 0; }
+  to { opacity: 1; }
+`
+
+const letterBoxStyle = css`
+  animation: ${fadeIn} 3s ease-in forwards;
   @media all and (orientation:portrait) {
-    display: none !important;
+    visibility: hidden;
   }
 `
+
 const revealedCardStyle = css`
   position: absolute;
   z-index: 10;
