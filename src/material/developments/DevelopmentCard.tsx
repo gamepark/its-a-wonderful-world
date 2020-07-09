@@ -20,8 +20,10 @@ type Props = { development?: Development } & React.HTMLAttributes<HTMLDivElement
 const DevelopmentCard = forwardRef<HTMLDivElement, Props>(({development, ...props}, ref) => {
   const {t} = useTranslation()
   return (
-    <div ref={ref} {...props} css={[style, getBackgroundImage(development)]}>
-      {development && <h3 css={cardTitle}>{titles.get(development)!(t)}</h3>}
+    <div ref={ref} {...props} css={[style, !development && hidden]}>
+      <div css={[frontFace, getBackgroundImage(development)]}>
+        {development && <h3 css={cardTitle}>{titles.get(development)!(t)}</h3>}
+      </div>
     </div>
   )
 })
@@ -30,35 +32,33 @@ const style = css`
   height: 100%;
   border-radius: 6% / ${65 / 100 * 6}%;
   box-shadow: 0 0 5px black;
-  background-size: cover;
   transform-style: preserve-3d;
   transform: translateZ(0);
   -webkit-font-smoothing: subpixel-antialiased;
-  &:before { // Used to have a thickness so the cards does not disappear at half rotation
-    content: '';
-    background-color: grey;
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    z-index: -10;
-    transform-origin: left;
-    transform: rotateY(90deg);
-  }
   &:after {
     content: '';
     position: absolute;
-    right: 1px;
-    left: 1px;
-    top: 1px;
-    bottom: 1px;
+    width: 100%;
+    height: 100%;
     border-radius: 6% / ${65 / 100 * 6}%;
     background-image: url(${Images.developmentBack});
     background-size: cover;
-    transform: translateZ(-2px) rotateY(180deg);
-    transform-style: preserve-3d;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
   }
+`
+
+const hidden = css`
+    transform: rotateY(180deg);
+`
+
+const frontFace = css`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-size: cover;
+  border-radius: 6% / ${65 / 100 * 6}%;
 `
 
 const getBackgroundImage = (development?: Development) => css`
