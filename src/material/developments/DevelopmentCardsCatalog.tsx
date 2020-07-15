@@ -1,11 +1,11 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent, useState} from 'react'
+import {useTranslation} from 'react-i18next'
 import {Swipeable} from 'react-swipeable'
+import Images from '../../material/Images'
 import {cardHeight, cardWidth, popupBackgroundStyle} from '../../util/Styles'
 import Development from './Development'
 import DevelopmentCard, {cardTitleFontSize} from './DevelopmentCard'
-import {useTranslation} from 'react-i18next'
-import Images from '../../material/Images'
 
 type Props = {
   developments: Development[],
@@ -57,7 +57,7 @@ const cardStyle = css`
   width: ${cardWidth * swipeableScale}%;
   height: 100%;
   z-index: 100;
-  & > h3 {
+  h3 {
     font-size: ${cardTitleFontSize * swipeableScale}vh;
   }
 `
