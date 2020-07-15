@@ -75,7 +75,7 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
   switch (game.phase) {
     case Phase.Draft:
       if (animation && animation.move.type === MoveType.RevealChosenCards) {
-        return t('Les joueurs révèlent la carte qu’ils ont choisi')
+        return t('Les joueurs révèlent la carte qu’ils ont choisie')
       } else if (animation && animation.move.type === MoveType.PassCards) {
         if (game.round % 2 === 1) {
           return t('Les joueurs passent le reste du paquet à gauche')
