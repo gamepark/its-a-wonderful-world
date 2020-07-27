@@ -102,7 +102,7 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
       } else if (player && !player.ready) {
         return <Trans values={{resource: Resource.Materials}}
                       defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                      components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}/>
+                      components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 1) {
@@ -128,18 +128,18 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
           return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')
         } else if (player.bonuses.some(bonus => bonus === 'CHOOSE_CHARACTER')) {
           return <Trans defaults="Vous pouvez récupérer un <0>Financier</0> ou un <1>Général</1>"
-                        components={[<button onClick={() => play(receiveCharacter(player.empire, Character.Financier))} css={buttonStyle}>Financier</button>,
-                          <button onClick={() => play(receiveCharacter(player.empire, Character.General))} css={buttonStyle}>Général</button>]}/>
+                        components={[<button onClick={() => play(receiveCharacter(player.empire, Character.Financier))} css={getButtonStyle}>Financier</button>,
+                          <button onClick={() => play(receiveCharacter(player.empire, Character.General))} css={getButtonStyle}>Général</button>]}/>
         } else if (game.productionStep !== Resource.Exploration) {
           return <Trans values={{resource: getNextProductionStep(game)}}
                         defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}/>
+                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
         } else if (game.round < numberOfRounds) {
           return <Trans defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer au tour suivant"
-                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}/>
+                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
         } else {
           return <Trans defaults="Cliquez sur <0>Valider</0> pour passer au calcul des scores"
-                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={buttonStyle}>Valider</button>]}/>
+                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
         }
       } else {
         const players = game.players.filter(player => !player.ready)
@@ -246,19 +246,18 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
   }
 }
 
+const getButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
+
 const buttonStyle = css`
   display: inline-block;
   position: relative;
   cursor: pointer;
-  border: 2px solid darkcyan;
-  color: darkcyan;
   font-size: 3.4vh;
   font-weight: bold;
   padding: 0 1vh;
   margin: 0 1vh;
   text-decoration: none;
   text-transform: uppercase;
-  text-shadow: 1px 1px 3px darkslategrey;
   transition: translate 0.2s ease-in-out;
   background: none;
   &:focus {
@@ -274,12 +273,28 @@ const buttonStyle = css`
     left: 0;
     right: 0;
     bottom: 0;
-    box-shadow: inset 0 0 2vh cadetblue;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }
   &:hover:after, &:focus:after {
     opacity: 1;
+  }
+`
+
+const darkButton = css`
+  border: 2px solid darkcyan;
+  color: darkcyan;
+  text-shadow: 1px 1px 3px darkslategrey;
+  &:after {
+    box-shadow: inset 0 0 2vh cadetblue;
+  }
+`
+
+const lightButton = css`
+  border: 2px solid cyan;
+  color: cyan;
+  &:after {
+    box-shadow: inset 0 0 1vh white;
   }
 `
 
