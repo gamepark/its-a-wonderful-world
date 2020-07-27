@@ -4,8 +4,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-// @ts-ignore
-import PreloadImage from 'react-preload-image'
 import Images from '../material/Images'
 import IWWBox from '../material/IWW_BOX_3D.png'
 import Theme from '../Theme'
@@ -16,7 +14,7 @@ const LoadingScreen: FunctionComponent<{ display: boolean }> = ({display}) => {
   const theme = useTheme<Theme>()
   return (
     <div css={[loadingScreenStyle, textColor(theme), backgroundColor(theme), !display && css`opacity: 0`]}>
-      <PreloadImage css={gameBox} src={IWWBox} alt={t('It’s a Wonderful World')}/>
+      <img css={gameBox} src={IWWBox} alt={t('It’s a Wonderful World')}/>
       <h2 css={gameTitle}>{t('It’s a Wonderful World')}</h2>
       <p css={gamePeople}>
         <FontAwesomeIcon css={iconStyle} icon={faLightbulb}/>{t('Auteur : Frédéric Guérard')}
