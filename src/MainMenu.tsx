@@ -1,7 +1,9 @@
 import {css, keyframes} from '@emotion/core'
-import {faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt} from '@fortawesome/free-solid-svg-icons'
+import {
+  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt, faVolumeMute, faVolumeUp
+} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useActions, useGame, usePlayerId, useRematch, useUndo} from '@interlude-games/workshop'
+import {useActions, useGame, usePlayerId, useRematch, useSound, useUndo} from '@interlude-games/workshop'
 import {useTheme} from 'emotion-theming'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
@@ -12,6 +14,7 @@ import Images from './material/Images'
 import Move from './moves/Move'
 import RematchPopup from './RematchPopup'
 import ItsAWonderfulWorldRules, {isOver} from './Rules'
+import toggleSound from './sounds/toggle.ogg'
 import Theme, {LightTheme} from './Theme'
 import TimePopup from './TimePopup'
 import GameView from './types/GameView'
@@ -34,6 +37,16 @@ const MainMenu = () => {
   const [displayRematchTooltip, setDisplayRematchTooltip] = useState(false)
   const [timePopupOpen, setTimePopupOpen] = useState(false)
   const {rematch, rematchOffer, ignoreRematch} = useRematch<EmpireName>()
+  const [toggle, {mute, unmute, muted}] = useSound(toggleSound)
+  function toggleSounds() {
+    if (muted) {
+      unmute()
+      toggle.play()
+    } else {
+      toggle.play()
+      mute()
+    }
+  }
   useEffect(() => {
     if (game) {
       if (isOver(game)) {
@@ -73,40 +86,40 @@ const MainMenu = () => {
               {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche')}</span>}
             </IconButton> :
             <IconButton css={[menuButtonStyle, undoButtonStyle]} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')}
-                        onClick={() => undo()} disabled={!canUndo()}>
+                        onClick={() => toggle.play() && undo()} disabled={!canUndo()}>
               {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
             </IconButton>
         )
         }
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Sortir du plein écran')} aria-label={t('Sortir du plein écran')}
-                        onClick={() => fscreen.exitFullscreen()}>
+                        onClick={() => toggle.play() && fscreen.exitFullscreen()}>
               <FontAwesomeIcon icon={faCompress}/>
             </IconButton>
             :
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Passer en plein écran')} aria-label={t('Passer en plein écran')}
-                        onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
+                        onClick={() => toggle.play() && fscreen.requestFullscreen(document.getElementById('root')!)}>
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
         <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} title={t('Menu principal')} aria-label={t('Menu principal')}
-                    onClick={() => setDisplayMenu(true)}>
+                    onClick={() => toggle.play() && setDisplayMenu(true)}>
           <FontAwesomeIcon icon={faChevronDown}/>
         </IconButton>
       </div>
       <div css={[menuStyle, openMenuStyle, !displayMenu && hidden]}>
-        <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} onClick={() => setDisplayMenu(false)}>
+        <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} onClick={() => toggle.play() && setDisplayMenu(false)}>
           <span css={subMenuTitle}>{t('Cacher le Menu')}</span>
           <FontAwesomeIcon icon={faChevronUp}/>
         </IconButton>
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]}
-                        onClick={() => fscreen.exitFullscreen()}>
+                        onClick={() => toggle.play() && fscreen.exitFullscreen()}>
               <span css={subMenuTitle}>{t('Quitter le plein écran')}</span>
               <FontAwesomeIcon icon={faCompress}/>
             </IconButton> :
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]}
-                        onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>
+                        onClick={() => toggle.play() && fscreen.requestFullscreen(document.getElementById('root')!)}>
               <span css={subMenuTitle}>{t('Passer en plein écran')}</span>
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
@@ -118,17 +131,21 @@ const MainMenu = () => {
             </IconButton>
             :
             <IconButton css={[menuButtonStyle, undoButtonStyle]}
-                        onClick={() => undo()} disabled={!canUndo()}>
+                        onClick={() => toggle.play() && undo()} disabled={!canUndo()}>
               <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
               {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
             </IconButton>
         )
         }
-        <IconButton css={[menuButtonStyle, homeButtonStyle]} onClick={() => window.location.href = platformUri}>
+        <IconButton css={[menuButtonStyle, homeButtonStyle]} onClick={() => toggle.play().then(() => window.location.href = platformUri)}>
           <span css={subMenuTitle}>{t('Retour à l’accueil')}</span>
           <FontAwesomeIcon icon={faHome}/>
         </IconButton>
-        <IconButton css={[menuButtonStyle, themeButtonStyle]} onClick={theme.switchThemeColor}>
+        <IconButton css={[menuButtonStyle, themeButtonStyle]} onClick={toggleSounds}>
+          <span css={subMenuTitle}>{muted ? t('Activer le son') : t('Couper le son')}</span>
+          <FontAwesomeIcon icon={muted ? faVolumeMute : faVolumeUp}/>
+        </IconButton>
+        <IconButton css={[menuButtonStyle, themeButtonStyle]} onClick={() => toggle.play() && theme.switchThemeColor()}>
           {theme.color === LightTheme ?
             <>
               <span css={subMenuTitle}>{t('Activer le mode nuit')}</span>
@@ -141,7 +158,7 @@ const MainMenu = () => {
             </>
           }
         </IconButton>
-        <IconButton css={[menuButtonStyle, clockButtonStyle]} onClick={() => setTimePopupOpen(true)}>
+        <IconButton css={[menuButtonStyle, clockButtonStyle]} onClick={() => toggle.play() && setTimePopupOpen(true)}>
           <span css={subMenuTitle}>{t('Temps de réflexion')}</span>
           <FontAwesomeIcon icon={faClock}/>
         </IconButton>

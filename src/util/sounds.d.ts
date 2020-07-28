@@ -1,4 +1,8 @@
 declare module "*.wav" {
-  const value: any;
-  export = value;
+  const value: string
+  export = value
+}
+declare module "*.ogg" {
+  const value: string
+  export = value
 }

@@ -1,7 +1,6 @@
 import {css, keyframes} from '@emotion/core'
-import {Letterbox, useAnimation, useDisplayState, usePlayerId} from '@interlude-games/workshop'
-import React, {FunctionComponent, useEffect, useMemo, useRef, useState} from 'react'
-import bellSound from './material/bell-sound.wav'
+import {Letterbox, useAnimation, useDisplayState, usePlayerId, useSound} from '@interlude-games/workshop'
+import React, {FunctionComponent, useEffect, useMemo, useRef} from 'react'
 import Board from './material/board/Board'
 import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
 import PhaseIndicator from './material/board/PhaseIndicator'
@@ -20,6 +19,7 @@ import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
 import ScorePanel from './players/score/ScorePanel'
 import {isActive, isOver} from './Rules'
+import bellSound from './sounds/bell.wav'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import {
@@ -59,7 +59,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
     return () => window.document.removeEventListener('keydown', onkeydown)
   }, [players, displayedEmpire, setDisplayedEmpire])
   const playerInactiveUntil = useRef<number | undefined>(Date.now())
-  const [bellAlert] = useState(new Audio(bellSound))
+  const [bellAlert] = useSound(bellSound)
   useEffect(() => {
     const isPlayerActive = playerId ? isActive(game, playerId) : false
     if (isPlayerActive) {
