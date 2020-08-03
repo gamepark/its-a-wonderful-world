@@ -18,7 +18,7 @@ import ResourceCube from '../material/resources/ResourceCube'
 import CompleteConstruction, {isCompleteConstruction} from '../moves/CompleteConstruction'
 import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
-import Recycle, {isRecycle} from '../moves/Recycle'
+import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
 import {canBuild, getMovesToBuild, getRemainingCost} from '../Rules'
 import GameView from '../types/GameView'
@@ -30,7 +30,7 @@ import {
   cardHeight, cardWidth, constructedCardLeftMargin, constructedCardY, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
 } from '../util/Styles'
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
-import {textButton, textButtonFontStyle, textButtonLeft} from './DraftArea'
+import {recyclingButton, textButton, textButtonFontStyle, textButtonLeft, textButtonRight} from './DraftArea'
 
 const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -114,6 +114,10 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
       <button css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 2 : 2))]}
               onClick={() => build(construction)}>{t('Construire')}</button>
       }
+      <button css={[textButton, textButtonRight, recyclingButton(developmentCards[construction.card].recyclingBonus)]}
+              onClick={() => play(recycle(player.empire, construction.card))}>
+        {t('Recycler')}
+      </button>
     </>}
     <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
       {!player.constructionArea.length && <span css={constructionAreaText}>{t('Zone de construction')}</span>}

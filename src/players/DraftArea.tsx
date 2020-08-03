@@ -99,7 +99,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
           <button css={[textButton, textButtonLeft, draftConstructionButton]} onClick={() => play(slateForConstruction(player.empire, focusedCard))}>
             {t('Construire')}
           </button>
-          <button css={[textButton, textButtonRight, draftRecyclingButton(developmentCards[focusedCard].recyclingBonus)]}
+          <button css={[textButton, textButtonRight, recyclingButton(developmentCards[focusedCard].recyclingBonus)]}
                   onClick={() => play(recycle(player.empire, focusedCard))}>
             {t('Recycler')}
           </button>
@@ -223,7 +223,7 @@ const draftConstructionButton = css`
   }
 `
 
-const draftRecyclingButton = (resource: Resource) => css`
+export const recyclingButton = (resource: Resource) => css`
   bottom: 26%;
   left: ${51 + cardWidth * 1.5}%;
   background-image: url(${buttonImages.get(resource)});
