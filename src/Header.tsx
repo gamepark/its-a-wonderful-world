@@ -8,6 +8,7 @@ import React, {FunctionComponent} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import MainMenu from './MainMenu'
 import Character from './material/characters/Character'
+import CharacterToken from './material/characters/CharacterToken'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
@@ -127,9 +128,13 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
         if (player.availableResources.length) {
           return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')
         } else if (player.bonuses.some(bonus => bonus === 'CHOOSE_CHARACTER')) {
-          return <Trans defaults="Vous pouvez récupérer un <0>Financier</0> ou un <1>Général</1>"
-                        components={[<button onClick={() => play(receiveCharacter(player.empire, Character.Financier))} css={getButtonStyle}>Financier</button>,
-                          <button onClick={() => play(receiveCharacter(player.empire, Character.General))} css={getButtonStyle}>Général</button>]}/>
+          return <Trans defaults="Vous pouvez récupérer <0/> ou <1/>"
+                        components={[
+                          <CharacterToken character={Character.Financier} onClick={() => play(receiveCharacter(player.empire, Character.Financier))}
+                                          css={characterTokenStyle}/>,
+                          <CharacterToken character={Character.General} onClick={() => play(receiveCharacter(player.empire, Character.General))}
+                                          css={characterTokenStyle}/>
+                        ]}/>
         } else if (game.productionStep !== Resource.Exploration) {
           return <Trans values={{resource: getNextProductionStep(game)}}
                         defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
@@ -247,6 +252,16 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
 }
 
 const getButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
+
+const characterTokenStyle = css`
+  width: 5vh;
+  height: 5vh;
+  vertical-align: bottom;
+  cursor: pointer;
+  &:hover, &:active {
+    transform: scale(1.1);
+  }
+`
 
 const buttonStyle = css`
   display: inline-block;
