@@ -28,6 +28,7 @@ const style = css`
   left: ${areasX}%;
   top: ${boardTop}%;
   transition: transform 0.5s ease-in-out;
+  white-space: nowrap;
 `
 
 const reducedSizeStyle = css`
