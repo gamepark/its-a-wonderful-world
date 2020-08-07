@@ -1,31 +1,45 @@
 import {css} from '@emotion/core'
 import {Failure} from '@interlude-games/workshop'
+import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
-import {useTranslation} from 'react-i18next'
+import {Trans, useTranslation} from 'react-i18next'
 
 const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () => {} }> = ({failures, clearFailures}) => {
   const {t} = useTranslation()
+  const description = failuresDescription[failures[0]] || fallbackDescription(failures[0])
   return (
     <div css={style} onClick={clearFailures}>
-      {failures.some(failure => failure === Failure.NETWORK) ?
-        <div>
-          <h2>{t('Oups...')}</h2>
-          <p>{t('Une action n’a pas pu aboutir et a été annulée. Êtes-vous toujours connecté à Internet ?')}</p>
-        </div>
-        : failures.some(failure => failure === Failure.UNDO_FORBIDDEN) ?
-          <div>
-            <h2>{t('Trop tard !')}</h2>
-            <p>{t('Les autres joueurs ont déjà joué, votre coup n’a pas pu être annulé.')}</p>
-          </div>
-          :
-          <div>
-            <h2>{t('Erreur inconnue :')}</h2>
-            <p>{failures[0]}</p>
-          </div>
-      }
+      <div>
+        <h2>{description.title(t)}</h2>
+        <p>{description.text(t)}</p>
+        {failures[0] === Failure.MOVE_FORBIDDEN && <p>
+          <Trans defaults="Si le problème persiste, vous pouvez <0>rafraîchir la partie</0>"
+                 components={[<button onClick={() => window.location.reload()}>rafraîchir la partie</button>]}/>
+        </p>}
+      </div>
     </div>
   )
 }
+
+const failuresDescription = {
+  [Failure.NETWORK]: {
+    title: (t: TFunction) => t('Oups...'),
+    text: (t: TFunction) => t('Une action n’a pas pu aboutir et a été annulée. Êtes-vous toujours connecté à Internet ?')
+  },
+  [Failure.MOVE_FORBIDDEN]: {
+    title: (t: TFunction) => t('Coup non autorisé !'),
+    text: (t: TFunction) => t('L’action que vous avez jouée n’est pas autorisée.')
+  },
+  [Failure.UNDO_FORBIDDEN]: {
+    title: (t: TFunction) => t('Trop tard !'),
+    text: (t: TFunction) => t('Les autres joueurs ont déjà joué, votre coup n’a pas pu être annulé.')
+  }
+}
+
+const fallbackDescription = (failure: string) => ({
+  title: (t: TFunction) => t('Erreur inconnue :'),
+  text: () => failure
+})
 
 const style = css`
   position: absolute;
