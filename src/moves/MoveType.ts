@@ -13,7 +13,8 @@ enum MoveType {
   TellYouAreReady = 'TELL_YOU_ARE_READY',
   Produce = 'PRODUCE',
   ReceiveCharacter = 'RECEIVE_CHARACTER',
-  PlaceCharacter = 'PLACE_CHARACTER'
+  PlaceCharacter = 'PLACE_CHARACTER',
+  Concede = 'CONCEDE'
 }
 
 export default MoveType

@@ -18,6 +18,7 @@ type Player = {
   ready: boolean
   characters: { [key in Character]: number }
   bonuses: (Resource | Character | typeof ChooseCharacter)[]
+  eliminated?: number
 }
 
 export default Player

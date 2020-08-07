@@ -106,7 +106,7 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
         </button>}
       </>
       }
-      <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} sizeRatio={cardRatio} getItemProps={getItemProps}>
+      <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players > 2 ? 5 : 10} sizeRatio={cardRatio} getItemProps={getItemProps}>
         {hand.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]} css={[playerHandCardStyle,
           choosingCard?.card === card && animation && getChosenCardAnimation(player, animation, players),
           animation && passingCard && (index < player.hand.length ?

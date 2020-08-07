@@ -3,6 +3,7 @@ import {
 } from '@interlude-games/workshop'
 import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
 import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
+import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
@@ -14,6 +15,7 @@ import EmpireSide from './material/empires/EmpireSide'
 import Resource, {isResource, resources} from './material/resources/Resource'
 import {chooseDevelopmentCard, isChosenDevelopmentCardVisible} from './moves/ChooseDevelopmentCard'
 import {completeConstruction, isCompleteConstruction} from './moves/CompleteConstruction'
+import {concede} from './moves/Concede'
 import {dealDevelopmentCards, isDealDevelopmentCardsView} from './moves/DealDevelopmentCards'
 import {discardLeftoverCards, isDiscardLeftoverCardsView} from './moves/DiscardLeftoverCards'
 import Move, {MoveView} from './moves/Move'
@@ -52,6 +54,7 @@ type GameType = SimultaneousGame<Game, Move, EmpireName>
   & WithAutomaticMoves<Game, Move>
   & WithUndo<Game, Move, EmpireName>
   & WithAnimations<GameView, MoveView, EmpireName, EmpireName>
+  & WithEliminations<Game, Move, EmpireName>
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: GameType = {
@@ -72,7 +75,7 @@ const ItsAWonderfulWorldRules: GameType = {
   getActivePlayers(game: Game) {
     switch (game.phase) {
       case Phase.Draft:
-        return game.players.filter(player => player.chosenCard === undefined).map(player => player.empire)
+        return game.players.filter(player => player.chosenCard === undefined && player.hand.length > 0).map(player => player.empire)
       case Phase.Planning:
       case Phase.Production:
         return game.players.filter(player => !player.ready).map(player => player.empire)
@@ -83,15 +86,15 @@ const ItsAWonderfulWorldRules: GameType = {
     if (!isGameView(game)) {
       switch (game.phase) {
         case Phase.Draft:
-          const anyPlayer = game.players![0]
-          if (!anyPlayer.hand.length && !anyPlayer.draftArea.length) {
+          const anyPlayer = game.players.filter(player => !player.eliminated)[0]
+          if (anyPlayer && !anyPlayer.hand.length && !anyPlayer.draftArea.length) {
             return dealDevelopmentCards()
-          } else if (game.players.every(player => player.chosenCard !== undefined)) {
+          } else if (game.players.every(player => player.chosenCard !== undefined || (player.eliminated && !player.hand.length))) {
             return revealChosenCards()
-          } else if (anyPlayer.cardsToPass) {
+          } else if (anyPlayer && anyPlayer.cardsToPass) {
             return passCards()
-          } else if (anyPlayer.draftArea.length === numberOfCardsToDraft) {
-            if (anyPlayer.hand.length) {
+          } else if (anyPlayer && anyPlayer.draftArea.length === numberOfCardsToDraft) {
+            if (anyPlayer && anyPlayer.hand.length) {
               return discardLeftoverCards()
             } else {
               return startPhase(Phase.Planning)
@@ -160,8 +163,12 @@ const ItsAWonderfulWorldRules: GameType = {
   play(move: Move | MoveView, game: Game | GameView, playerId: EmpireName) {
     switch (move.type) {
       case MoveType.DealDevelopmentCards: {
-        const cardsToDeal = game.players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft
-        game.players.forEach(player => {
+        const players = game.players.filter(player => !player.eliminated)
+        if (players.length === 1) {
+          players.push(game.players.filter(player => player.eliminated).sort((a, b) => b.eliminated! - a.eliminated!)[0])
+        }
+        const cardsToDeal = players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft
+        players.forEach(player => {
           if (isGameView(game)) {
             game.deck -= cardsToDeal
             if (playerId && player.empire === playerId && isDealDevelopmentCardsView(move)) {
@@ -197,10 +204,12 @@ const ItsAWonderfulWorldRules: GameType = {
           })
         } else if (!isGameView(game)) {
           game.players.forEach(player => {
-            player.draftArea.push(player.chosenCard!)
-            delete player.chosenCard
-            if (player.draftArea.length < numberOfCardsToDraft) {
-              player.cardsToPass = player.hand
+            if (player.chosenCard !== undefined) {
+              player.draftArea.push(player.chosenCard!)
+              delete player.chosenCard
+              if (player.draftArea.length < numberOfCardsToDraft) {
+                player.cardsToPass = player.hand
+              }
             }
           })
         }
@@ -211,12 +220,13 @@ const ItsAWonderfulWorldRules: GameType = {
           const player = getPlayer(game, playerId)
           player.hand = move.receivedCards
         } else if (!isGameView(game)) {
+          const players = game.players.filter(player => player.cardsToPass)
           const draftDirection = game.round % 2 ? -1 : 1
-          for (let i = 0; i < game.players.length; i++) {
-            let previousPlayer = game.players![(i + game.players.length + draftDirection) % game.players.length]
-            game.players![i].hand = previousPlayer.cardsToPass!
+          for (let i = 0; i < players.length; i++) {
+            let previousPlayer = players![(i + players.length + draftDirection) % players.length]
+            players![i].hand = previousPlayer.cardsToPass!
           }
-          game.players.forEach(player => delete player.cardsToPass)
+          players.forEach(player => delete player.cardsToPass)
         }
         break
       }
@@ -360,11 +370,19 @@ const ItsAWonderfulWorldRules: GameType = {
         player.constructionArea.find(construction => construction.card === move.card)!.costSpaces[move.space] = move.character
         break
       }
+      case MoveType.Concede: {
+        const player = getPlayer(game, move.playerId)
+        player.eliminated = game.players.filter(player => player.eliminated).length + 1
+        break
+      }
     }
   },
 
   rankPlayers(game: Game, empireA: EmpireName, empireB: EmpireName): number {
     const playerA = getPlayer(game, empireA), playerB = getPlayer(game, empireB)
+    if (playerA.eliminated || playerB.eliminated) {
+      return playerA.eliminated ? playerB.eliminated ? playerB.eliminated - playerA.eliminated : 1 : -1
+    }
     const scoreA = getScore(playerA), scoreB = getScore(playerB)
     if (scoreA !== scoreB) {
       return scoreB - scoreA
@@ -446,6 +464,14 @@ const ItsAWonderfulWorldRules: GameType = {
         return {...move, discardedCards: game.discard.slice((numberOfCardsToDraft - numberOfCardsDeal2Players) * game.players.length)}
     }
     return move
+  },
+
+  isEliminated(game: Game, playerId: EmpireName): boolean {
+    return !!getPlayer(game, playerId).eliminated
+  },
+
+  getConcedeMove(playerId: EmpireName): Move {
+    return concede(playerId)
   },
 
   getAnimationDuration(move: MoveView, {action, game, playerId: currentPlayerId, displayState: displayedPlayerId}) {

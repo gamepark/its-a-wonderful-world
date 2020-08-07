@@ -1,5 +1,6 @@
 import ChooseDevelopmentCard, {ChooseDevelopmentCardView} from './ChooseDevelopmentCard'
 import CompleteConstruction from './CompleteConstruction'
+import Concede from './Concede'
 import DealDevelopmentCards, {DealDevelopmentCardsView} from './DealDevelopmentCards'
 import DiscardLeftoverCards, {DiscardLeftoverCardsView} from './DiscardLeftoverCards'
 import PassCards, {PassCardsView} from './PassCards'
@@ -15,10 +16,10 @@ import TellYouAreReady from './TellYouAreReady'
 import TransformIntoKrystallium from './TransformIntoKrystallium'
 
 type Move = DealDevelopmentCards | ChooseDevelopmentCard | RevealChosenCards | PassCards | DiscardLeftoverCards | StartPhase | SlateForConstruction | Recycle
-  | PlaceResource | CompleteConstruction | TransformIntoKrystallium | TellYouAreReady | Produce | ReceiveCharacter | PlaceCharacter
+  | PlaceResource | CompleteConstruction | TransformIntoKrystallium | TellYouAreReady | Produce | ReceiveCharacter | PlaceCharacter | Concede
 
 export default Move
 
 export type MoveView = DealDevelopmentCards | DealDevelopmentCardsView | ChooseDevelopmentCardView | RevealChosenCardsView | PassCards | PassCardsView
   | DiscardLeftoverCardsView | StartPhase | SlateForConstruction | Recycle | PlaceResource | CompleteConstruction | TransformIntoKrystallium | TellYouAreReady
-  | Produce | ReceiveCharacter | PlaceCharacter
+  | Produce | ReceiveCharacter | PlaceCharacter | Concede

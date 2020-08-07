@@ -36,7 +36,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
       <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
-      <h3 css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</h3>
+      <h3 css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getEmpireName(t, player.empire)}</h3>
       <PlayerResourceProduction player={player}/>
       {victoryPointsMultipliers.slice(0, 3).map((victoryPointsMultiplier, index) =>
         <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier}
@@ -106,6 +106,10 @@ const nameStyle = css`
   margin: 0;
   font-size: 2.9vh;
   font-weight: bold;
+`
+
+const eliminatedStyle = css`
+  text-decoration: line-through;
 `
 
 const victoryPointsMultiplierStyle = (index: number) => css`
