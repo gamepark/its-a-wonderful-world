@@ -17,7 +17,7 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
   const {t} = useTranslation()
   const playerId = usePlayerId<EmpireName>()
   const players = usePlayers<EmpireName>()
-  const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
+  const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name || getEmpireName(t, empire)
   return (
     <div css={[style, !rematchOffer && css`display: none`]} onClick={onClose}>
       {rematchOffer && (

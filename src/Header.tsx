@@ -72,7 +72,7 @@ const Header: FunctionComponent<Props> = ({game, loading}) => {
 
 function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   const player = game.players.find(player => player.empire === empire)
-  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
+  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getEmpireName(t, empire)
   switch (game.phase) {
     case Phase.Draft:
       if (animation && animation.move.type === MoveType.RevealChosenCards) {
@@ -165,7 +165,7 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
 }
 
 function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], game: GameView, player?: Player | PlayerView) {
-  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
+  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getEmpireName(t, empire)
   let highestScore = -1
   let playersWithHighestScore = []
   for (const player of game.players) {

@@ -29,7 +29,7 @@ type Props = {
 const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) => {
   const {t} = useTranslation()
   const players = usePlayers<EmpireName>()
-  const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
+  const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name || getEmpireName(t, empire)
   const gameOver = isOver(game)
   return (
     <>
