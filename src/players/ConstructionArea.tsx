@@ -32,7 +32,7 @@ import {
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {recyclingButton, textButton, textButtonFontStyle, textButtonLeft, textButtonRight} from './DraftArea'
 
-const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
+const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, player: Player | PlayerView }> = ({game, gameOver, player}) => {
   const {t} = useTranslation()
   const playerId = usePlayerId<EmpireName>()
   const [focusedCard, setFocusedCard] = useState<number>()
@@ -97,7 +97,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
   return <>
     {construction && <>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
-      {isPlayer(player) && getSmartPlaceItemMoves(player, construction).map(move =>
+      {isPlayer(player) && !gameOver && getSmartPlaceItemMoves(player, construction).map(move =>
         <button key={move.space} css={getPlaceItemButtonStyle(move.space)} onClick={() => play(move)}>
           {isPlaceResource(move) ?
             <ResourceCube resource={move.resource} css={buttonItemStyle}/> :
@@ -110,7 +110,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
         <span css={getPlaceTextStyle}>{t('Placer')} </span>
         {[...Array(maxSpendableResources)].map((_, index) => <ResourceCube key={index} resource={game.productionStep!} css={buttonItemStyle}/>)}
       </button>}
-      {isPlayer(player) && <>
+      {isPlayer(player) && !gameOver && <>
         {canBuild(player, construction.card) &&
         <button
           css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 2 : 2))]}
@@ -127,7 +127,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, player: Player | Pla
       {isValidTarget && <span css={constructAreaText}>&rarr; {t('Mettre en Construction')}</span>}
     </div>
     {constructions.current.map((construction, index) => {
-        return <DevelopmentCardUnderConstruction key={construction.card} game={game} player={player} construction={construction}
+        return <DevelopmentCardUnderConstruction key={construction.card} game={game} gameOver={gameOver} player={player} construction={construction}
                                                  animation={{properties: ['transform', 'z-index'], seconds: animation?.duration ?? 0.2}}
                                                  postTransform={getTransform(construction.card, index)}
                                                  setFocus={() => setFocusedCard(construction.card)}

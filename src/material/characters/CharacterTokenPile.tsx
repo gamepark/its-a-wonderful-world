@@ -25,18 +25,19 @@ type Props = {
   player: Player | PlayerView
   character: Character
   quantity: number
+  gameOver: boolean
   draggable?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
 const maxDisplayedTokens = 5
 
-const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quantity, draggable = false, ...props}) => {
+const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quantity, gameOver, draggable = false, ...props}) => {
   const {t} = useTranslation()
   const animation = useAnimation<Move>(animation => isReceiveCharacter(animation.move) && animation.move.character === character
     && animation.move.playerId === player.empire)
   const [, ref, preview] = useDrag({
     item: characterTokenFromEmpire(character),
-    canDrag: quantity > 0,
+    canDrag: quantity > 0 && !gameOver,
     collect: monitor => ({
       dragging: monitor.isDragging()
     })
@@ -59,7 +60,7 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   }
   return (
     <div ref={ref} {...props}>
-      {quantity === 0 && <img alt={emptySpaceDescription[character](t)} src={emptySpaceImages[character]} css={tokenStyle(0)}/>}
+      {quantity === 0 && <img alt={emptySpaceDescription[character](t)} src={emptySpaceImages[character]} draggable={false} css={tokenStyle(0)}/>}
       {tokens}
       <div css={tokenQuantityStyle}>{quantity}</div>
       <DragPreviewImage connect={preview} src={characterTokenImages[character]} css={characterTokenDraggingStyle}/>

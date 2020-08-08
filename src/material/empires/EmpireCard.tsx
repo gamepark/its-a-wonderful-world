@@ -49,10 +49,11 @@ export const empireAvatar = {
 
 type Props = {
   player: Player | PlayerView
+  gameOver: boolean
   withResourceDrop?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false, ...props}) => {
+const EmpireCard: FunctionComponent<Props> = ({player, gameOver, withResourceDrop = false, ...props}) => {
   const {t} = useTranslation()
   const play = usePlay()
   const playerId = usePlayerId<EmpireName>()
@@ -71,7 +72,7 @@ const EmpireCard: FunctionComponent<Props> = ({player, withResourceDrop = false,
       {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={player.empire === playerId}/>)}
+        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={!gameOver && player.empire === playerId}/>)}
     </div>
   )
 }

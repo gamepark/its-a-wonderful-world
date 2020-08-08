@@ -30,21 +30,22 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) =
   const {t} = useTranslation()
   const players = usePlayers<EmpireName>()
   const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name ?? getEmpireName(t, empire)
+  const gameOver = isOver(game)
   return (
     <>
-      <EmpireCard player={player} withResourceDrop={isPlayer(player)}/>
+      <EmpireCard player={player} gameOver={gameOver} withResourceDrop={isPlayer(player)}/>
       <DraftArea game={game} player={player}/>
-      {(game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} player={player}/>}
-      {!isOver(game) && <RecyclingDropArea empire={player.empire}/>}
+      {(game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} gameOver={gameOver} player={player}/>}
+      {!gameOver && <RecyclingDropArea empire={player.empire}/>}
       <ConstructedCardsArea player={player}/>
-      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} player={player}
+      <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} player={player} gameOver={gameOver}
                           title={isPlayer(player) ?
                             t('Vous avez {quantity, plural, one{# jeton Financier} other{# jetons Financiers}}',
                               {quantity: player.characters[Character.Financier]}) :
                             t('{player} a {quantity, plural, one{# jeton Financier} other{# jetons Financiers}}',
                               {player: getPlayerName(player.empire), quantity: player.characters[Character.Financier]})}
                           css={financiersPilePosition} draggable={isPlayer(player)}/>
-      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} player={player}
+      <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} player={player} gameOver={gameOver}
                           title={isPlayer(player) ?
                             t('Vous avez {quantity, plural, one{# jeton Général} other{# jetons Généraux}}',
                               {quantity: player.characters[Character.General]}) :

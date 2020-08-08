@@ -33,6 +33,7 @@ import {useLongPress} from '../util/useLongPress'
 
 type Props = {
   game: GameView
+  gameOver: boolean
   player: Player | PlayerView
   construction: Construction
   canRecycle: boolean
@@ -40,7 +41,7 @@ type Props = {
   setFocus: () => void
 } & Omit<DragAroundProps, 'dragging'>
 
-const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, player, construction, canRecycle, focused, setFocus, ...props}) => {
+const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameOver, player, construction, canRecycle, focused, setFocus, ...props}) => {
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
   const legalMoves = isPlayer(player) ? getLegalMoves(player, game.phase) : []
@@ -127,7 +128,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, playe
   }
 
   return (
-    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={!canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]}
+    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={gameOver || !canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]}
                onDrop={onDrop} {...longPress} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>

@@ -9,7 +9,7 @@ type Props = { character: Character } & React.HTMLAttributes<HTMLImageElement>
 
 const CharacterToken: FunctionComponent<Props> = ({character, ...props}) => {
   const {t} = useTranslation()
-  return <img alt={getDescription(t, character)} src={images[character]} css={style} {...props}/>
+  return <img alt={getDescription(t, character)} src={images[character]} css={style} draggable={false} {...props}/>
 }
 
 const style = css`
