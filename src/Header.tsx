@@ -87,7 +87,9 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
         return t('Choisissez une carte et placez-la dans votre zone de draft')
       } else {
         const players = game.players.filter(player => player.chosenCard === undefined)
-        if (players.length === 1) {
+        if (players.length === 0) {
+          return t('Envoi du coup au Suprême Dirigeant...')
+        } else if (players.length === 1) {
           return t('{player} doit choisir une carte développement', {player: getPlayerName(players[0].empire)})
         } else if (player) {
           return t('Les autres joueurs doivent choisir une carte développement')
@@ -106,7 +108,9 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
                       components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
       } else {
         const players = game.players.filter(player => !player.ready)
-        if (players.length === 1) {
+        if (players.length === 0) {
+          return t('Envoi du coup au Suprême Dirigeant...')
+        } else if (players.length === 1) {
           return t('{player} doit faire sa planification', {player: getPlayerName(players[0].empire)})
         } else if (player) {
           return t('Les autres joueurs doivent faire leur planification')
@@ -149,7 +153,9 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length) {
-          if (players.length === 1) {
+          if (players.length === 0) {
+            return t('Envoi du coup au Suprême Dirigeant...')
+          } else if (players.length === 1) {
             return t('{player} doit utiliser les ressources produites', {player: getPlayerName(players[0].empire)})
           } else if (player) {
             return t('Les autres joueurs doivent utiliser les ressources produites')
@@ -160,8 +166,8 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
           return getEndOfGameText(t, playersInfo, game, player)
         }
       }
-      return ''
   }
+  return ''
 }
 
 function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], game: GameView, player?: Player | PlayerView) {
