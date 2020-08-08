@@ -23,7 +23,7 @@ import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
-import {headerHeight, textColor} from './util/Styles'
+import {buttonStyle, darkButton, headerHeight, lightButton, textColor} from './util/Styles'
 
 
 const headerStyle = (theme: Theme) => css`
@@ -257,8 +257,6 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
   }
 }
 
-const getButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
-
 const characterTokenStyle = css`
   width: 5vh;
   height: 5vh;
@@ -269,55 +267,7 @@ const characterTokenStyle = css`
   }
 `
 
-const buttonStyle = css`
-  display: inline-block;
-  position: relative;
-  cursor: pointer;
-  font-size: 3.4vh;
-  font-weight: bold;
-  padding: 0 1vh;
-  margin: 0 1vh;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: translate 0.2s ease-in-out;
-  background: none;
-  &:focus {
-    outline:0;
-  }
-  &:active {
-    transform: translateY(1px);
-  }
-  &:after {
-    content: ' ';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-  }
-  &:hover:after, &:focus:after {
-    opacity: 1;
-  }
-`
-
-const darkButton = css`
-  border: 2px solid darkcyan;
-  color: darkcyan;
-  text-shadow: 1px 1px 3px darkslategrey;
-  &:after {
-    box-shadow: inset 0 0 2vh cadetblue;
-  }
-`
-
-const lightButton = css`
-  border: 2px solid cyan;
-  color: cyan;
-  &:after {
-    box-shadow: inset 0 0 1vh white;
-  }
-`
+const getButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
 
 const portraitText = css`
   @media all and (orientation:landscape) {

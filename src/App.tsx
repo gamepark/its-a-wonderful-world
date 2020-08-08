@@ -42,7 +42,7 @@ moment.locale(locale)
 
 const App: FunctionComponent = () => {
   const {t} = useTranslation()
-  const [themeColor, setThemeColor] = useState(() => localStorage.getItem(userTheme) || LightTheme)
+  const [themeColor, setThemeColor] = useState(() => localStorage.getItem(userTheme) || DarkTheme)
   const game = useGame<GameView>()
   const [failures, clearFailures] = useFailures<Move>()
   const [displayedEmpire] = useDisplayState<EmpireName>()

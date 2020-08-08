@@ -20,13 +20,15 @@ import Move from '../moves/Move'
 import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
 import {canUndoSlateForConstruction} from '../Rules'
+import Theme, {LightTheme} from '../Theme'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
 import {
-  areaCardStyle, cardHeight, cardStyle, cardWidth, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, popupBackgroundStyle
+  areaCardStyle, buttonStyle, cardHeight, cardStyle, cardWidth, darkButton, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle,
+  getCardFocusTransform, lightButton, playerPanelMargin, playerPanelWidth, popupBackgroundStyle
 } from '../util/Styles'
 
 const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
@@ -84,10 +86,13 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
 
   function zIndexStyle(card: number) {
     if (card === slatingForConstruction?.card || card === recycling?.card) {
-      return css`z-index: 10`
+      return css`z-index: 100`
     }
     return
   }
+
+  const buildAll = () => player.draftArea.forEach(card => play(slateForConstruction(player.empire, card), true))
+  const recycleAll = () => player.draftArea.forEach(card => play(recycle(player.empire, card), true))
 
   return (
     <>
@@ -127,6 +132,10 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
                                                       cardStyle, areaCardStyle, focusedCard === chosenCard && getCardFocusTransform,
                                                       choosingDevelopment && css`opacity: 0;`]}
                                                     onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)}/>}
+      {isPlayer(player) && game.phase === Phase.Planning && player.draftArea.length > 0 && <div css={buttonsArea}>
+        <button onClick={buildAll} css={getBuildAllButtonStyle}>{t('Tout construire')}</button>
+        <button onClick={recycleAll} css={getRecycleAllButtonStyle}>{t('Tout recycler')}</button>
+      </div>}
     </>
   )
 }
@@ -237,5 +246,17 @@ buttonImages.set(Resource.Energy, Images.titleBlack)
 buttonImages.set(Resource.Science, Images.titleGreen)
 buttonImages.set(Resource.Gold, Images.titleYellow)
 buttonImages.set(Resource.Exploration, Images.titleBlue)
+
+const buttonsArea = css`
+  position: absolute;
+  top: 11%;
+  left: 38%;
+  right: ${playerPanelWidth + playerPanelMargin * 2}%;
+  display: flex;
+  justify-content: space-evenly;
+`
+
+const getBuildAllButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
+const getRecycleAllButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
 
 export default DraftArea
