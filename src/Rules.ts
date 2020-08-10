@@ -4,6 +4,7 @@ import {
 import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
 import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
 import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
+import WithTimeLimit from '@interlude-games/workshop/dist/Types/WithTimeLimit'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
@@ -55,6 +56,7 @@ type GameType = SimultaneousGame<Game, Move, EmpireName>
   & WithUndo<Game, Move, EmpireName>
   & WithAnimations<GameView, MoveView, EmpireName, EmpireName>
   & WithEliminations<Game, Move, EmpireName>
+  & WithTimeLimit<Game, EmpireName>
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: GameType = {
@@ -474,6 +476,21 @@ const ItsAWonderfulWorldRules: GameType = {
     return concede(playerId)
   },
 
+  giveTime(game: Game, playerId: EmpireName): number {
+    switch (game.phase) {
+      case Phase.Draft:
+        if (game.round === 1 && getPlayer(game, playerId).draftArea.length === 0) {
+          return 120
+        } else {
+          return (numberOfCardsToDraft - getPlayer(game, playerId).draftArea.length - 1) * 10
+        }
+      case Phase.Planning:
+        return (game.round + 1) * 60
+      case Phase.Production:
+        return 10
+    }
+  },
+
   getAnimationDuration(move: MoveView, {action, game, playerId: currentPlayerId, displayState: displayedPlayerId}) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
@@ -536,6 +553,8 @@ function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
   }
 }
 
+function getPlayer(game: Game, empire: EmpireName): Player
+function getPlayer(game: Game | GameView, empire: EmpireName): Player | PlayerView
 function getPlayer(game: Game | GameView, empire: EmpireName): Player | PlayerView {
   return game.players.find(player => player.empire === empire)!
 }

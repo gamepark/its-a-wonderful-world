@@ -18,7 +18,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
-    "@interlude-games/workshop": "^0.6.1",
+    "@interlude-games/workshop": "~1.0.0",
     "emotion-normalize": "^10.1.0",
     "emotion-theming": "^10.0.27",
     "fscreen": "^1.0.2",

@@ -1,10 +1,10 @@
 import {css} from '@emotion/core'
 import {usePlayers} from '@interlude-games/workshop'
-import moment from 'moment'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
+import {humanize} from './util/TimeUtil'
 
 type Props = {
   onClose: () => void
@@ -26,7 +26,7 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
               <th>{t('Temps de réflexion total')}</th>
               {players.length > 2 &&
               <>
-                  <th>{t('A fait attendre les autres joueurs')}</th>
+                <th>{t('A fait attendre les autres joueurs')}</th>
                 <th>{t('A fait attendre les autres (pondéré par le nombre de joueurs attendus)')}</th>
               </>
               }
@@ -53,19 +53,6 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
       </div>
     </div>
   )
-}
-
-const oneDay = moment.duration('1', 'day')
-const oneHour = moment.duration('1', 'hour')
-
-function humanize(duration: number) {
-  if (duration >= oneDay.asMilliseconds()) {
-    return moment.duration(duration).humanize()
-  } else if (duration >= oneHour.asMilliseconds()) {
-    return moment.utc(duration).format('HH:mm:ss')
-  } else {
-    return moment.utc(duration).format('mm:ss')
-  }
 }
 
 const style = css`

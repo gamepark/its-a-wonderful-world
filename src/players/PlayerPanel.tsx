@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {usePlayer} from '@interlude-games/workshop'
+import {GameSpeed, useOptions, usePlayer} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Character from '../material/characters/Character'
@@ -10,6 +10,7 @@ import {getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
+import {humanize} from '../util/TimeUtil'
 import PlayerResourceProduction from './PlayerResourceProduction'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 
@@ -22,7 +23,8 @@ type Props = {
 
 const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, showScore, ...props}) => {
   const {t} = useTranslation()
-  const playerInfo = usePlayer<EmpireName>(player.empire)
+  const options = useOptions()
+  const playerInfo = usePlayer<EmpireName>(player.empire, {withTimeUpdate: true})
   const victoryPointsMultipliers: { item: Character | DevelopmentType, multiplier: number }[] = []
   const completeVictoryPointsMultiplier = (item: Character | DevelopmentType) => {
     const multiplier = getVictoryPointsBonusMultiplier(player, item)
@@ -36,7 +38,12 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
       <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
-      <h3 css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getEmpireName(t, player.empire)}</h3>
+      <h3 css={[titleStyle, player.eliminated && eliminatedStyle]}>
+        <span css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
+        {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing &&
+        <span css={playerInfo.time.availableTime < 0 && timeoutStyle}>{humanize(Math.abs(playerInfo.time.availableTime))}</span>
+        }
+      </h3>
       <PlayerResourceProduction player={player}/>
       {victoryPointsMultipliers.slice(0, 3).map((victoryPointsMultiplier, index) =>
         <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier}
@@ -94,18 +101,30 @@ const avatarStyle = css`
   border-radius: 100%;
 `
 
-const nameStyle = css`
+const titleStyle = css`
   color: #333333;
   position: absolute;
   top: 8%;
   left: 18%;
   right: 3%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
   margin: 0;
   font-size: 2.9vh;
   font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+`
+
+const nameStyle = css`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`
+
+const timeoutStyle = css`
+  color: darkred;
+  &:before {
+    content: '-'
+  }
 `
 
 const eliminatedStyle = css`
