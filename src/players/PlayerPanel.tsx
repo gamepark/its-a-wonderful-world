@@ -10,8 +10,8 @@ import {getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
-import {humanize} from '../util/TimeUtil'
 import PlayerResourceProduction from './PlayerResourceProduction'
+import Timer from './Timer'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, showScore, ...props}) => {
   const {t} = useTranslation()
   const options = useOptions()
-  const playerInfo = usePlayer<EmpireName>(player.empire, {withTimeUpdate: true})
+  const playerInfo = usePlayer<EmpireName>(player.empire)
   const victoryPointsMultipliers: { item: Character | DevelopmentType, multiplier: number }[] = []
   const completeVictoryPointsMultiplier = (item: Character | DevelopmentType) => {
     const multiplier = getVictoryPointsBonusMultiplier(player, item)
@@ -41,7 +41,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
       <h3 css={[titleStyle, player.eliminated && eliminatedStyle]}>
         <span css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
         {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing &&
-        <span css={playerInfo.time.availableTime < 0 && timeoutStyle}>{humanize(Math.abs(playerInfo.time.availableTime))}</span>
+        <Timer time={playerInfo.time}/>
         }
       </h3>
       <PlayerResourceProduction player={player}/>
@@ -118,13 +118,6 @@ const nameStyle = css`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-`
-
-const timeoutStyle = css`
-  color: darkred;
-  &:before {
-    content: '-'
-  }
 `
 
 const eliminatedStyle = css`
