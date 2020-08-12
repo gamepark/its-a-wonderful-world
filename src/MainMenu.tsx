@@ -295,6 +295,7 @@ const tooltipStyle = css`
   margin: auto;
   background: black;
   animation: ${displayForAMoment} 20s forwards;
+  pointer-events: none;
   &:before {
     content: '';
     width: 0;
