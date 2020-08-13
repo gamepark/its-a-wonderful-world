@@ -20,7 +20,7 @@
       "Division de chars": "Tank Division",
       "Zeppelin": "Zeppelin",
       "Aquaculture": "Aquaculture",
-      "Greffes bioniques": "Bionic Crafts",
+      "Greffes bioniques": "Bionic Grafts",
       "Contrôle du climat": "Climate Control",
       "Cryogénisation": "Cryopreservation",
       "Amélioration génétique": "Genetic Upgrades",
@@ -74,7 +74,7 @@
       "Fontaine de jouvence": "Fountain Of Youth",
       "Jardin des Hespérides": "Gardens Of The Hesperides",
       "Île d’Avalon": "Island Of Avalon",
-      "Mines du roi Salomon": "King' Solomon’s Mines",
+      "Mines du roi Salomon": "King Solomon’s Mines",
       "Continent perdu de Mu": "Lost Continent Of Mu",
       "Dimension parallèle": "Parallel Dimension",
       "Roswell": "Roswell",
@@ -212,7 +212,12 @@
       "It’s a Wonderful World":"It’s a Wonderful World",
       "Auteur : Frédéric Guérard": "Author: Frédéric Guérard",
       "Artiste : Anthony Wolff": "Artist: Anthony Wolff",
-      "Éditeurs : La Boite de Jeu, Origames": "Publishers: La Boite de Jeu, Origames"
+      "Éditeurs : La Boite de Jeu, Origames": "Publishers: La Boite de Jeu, Origames",
+      "Expulser un joueur": "Eject a player",
+      "{player} a dépassé son temps de réflexion": "{player} has exceeded their thinking time",
+      "Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.": "Beyond {duration} you will be allowed to eject them and continue the game.",
+      "Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.": "If you don't think they are coming back, you have the option of ejecting them from the game.",
+      "Expulser {player}": "Eject {player}"
     }
   },
   "fr": {

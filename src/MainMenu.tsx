@@ -1,14 +1,15 @@
 import {css, keyframes} from '@emotion/core'
 import {
-  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt, faVolumeMute, faVolumeUp
+  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt, faUserSlash, faVolumeMute, faVolumeUp
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useActions, useGame, usePlayerId, useRematch, useSound, useUndo} from '@interlude-games/workshop'
+import {GameSpeed, useActions, useGame, useNow, useOptions, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@interlude-games/workshop'
 import {useTheme} from 'emotion-theming'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 import React, {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
+import EjectPopup from './EjectPopup'
 import EmpireName from './material/empires/EmpireName'
 import Images from './material/Images'
 import Move from './moves/Move'
@@ -28,16 +29,23 @@ const MainMenu = () => {
   const actions = useActions<Move, EmpireName>()
   const nonGuaranteedUndoPending = actions?.some(action => action.cancelled && action.cancelPending && !action.animation && !action.delayed)
   const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
-  const isPlaying = !!usePlayerId<EmpireName>()
+  const playerId = usePlayerId<EmpireName>()
   const {t} = useTranslation()
   const theme = useTheme<Theme>()
+  const players = usePlayers<EmpireName>()
+  const isPlaying = players.find(player => player.id === playerId)?.time?.playing
+  const now = useNow()
+  const options = useOptions()
+  const playerTimeout = options?.speed === GameSpeed.RealTime && players.some(player => player.time?.playing && player.time.availableTime < now - Date.parse(player.time.lastChange))
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
+  const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
   const [displayMenu, setDisplayMenu] = useState(false)
   const gameOverRef = useRef<boolean | undefined>()
   const [displayRematchTooltip, setDisplayRematchTooltip] = useState(false)
   const [timePopupOpen, setTimePopupOpen] = useState(false)
   const {rematch, rematchOffer, ignoreRematch} = useRematch<EmpireName>()
   const [toggle, {mute, unmute, muted}] = useSound(toggleSound)
+
   function toggleSounds() {
     if (muted) {
       unmute()
@@ -47,6 +55,7 @@ const MainMenu = () => {
       mute()
     }
   }
+
   useEffect(() => {
     if (game) {
       if (isOver(game)) {
@@ -80,7 +89,13 @@ const MainMenu = () => {
   return (
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
-        {game && isPlaying && (isOver(game) ?
+        {playerTimeout && !!playerId && !isPlaying &&
+        <IconButton css={[menuButtonStyle, ejectButtonStyle]} title={t('Expulser un joueur')} aria-label={t('Expulser un joueur')}
+                    onClick={() => toggle.play() && setEjectPopupOpen(true)}>
+          <FontAwesomeIcon icon={faUserSlash}/>
+        </IconButton>
+        }
+        {game && !!playerId && (isOver(game) ?
             <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
               {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche')}</span>}
@@ -124,7 +139,7 @@ const MainMenu = () => {
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
-        {game && isPlaying && (isOver(game) ?
+        {game && !!playerId && (isOver(game) ?
             <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
               <span css={subMenuTitle}>{t('Proposer une revanche')}</span>
               <FontAwesomeIcon icon={faChess}/>
@@ -162,9 +177,16 @@ const MainMenu = () => {
           <span css={subMenuTitle}>{t('Temps de réflexion')}</span>
           <FontAwesomeIcon icon={faClock}/>
         </IconButton>
+        {playerTimeout && !!playerId && !isPlaying &&
+        <IconButton css={[menuButtonStyle, ejectButtonStyle]} onClick={() => toggle.play() && setEjectPopupOpen(true)}>
+          <span css={subMenuTitle}>{t('Expulser un joueur')}</span>
+          <FontAwesomeIcon icon={faUserSlash}/>
+        </IconButton>
+        }
       </div>
       <RematchPopup rematchOffer={rematchOffer} onClose={ignoreRematch}/>
       {timePopupOpen && <TimePopup onClose={() => setTimePopupOpen(false)}/>}
+      {ejectPopupOpen && <EjectPopup playerId={playerId!} players={players} now={now} onClose={() => setEjectPopupOpen(false)}/>}
     </>
   )
 }
@@ -278,6 +300,11 @@ const loadingSpinnerStyle = css`
 `
 const rematchButtonStyle = css`
   background-image: url(${Images.buttonRed});
+`
+const ejectButtonStyle = css`
+  background-image: url(${Images.buttonRed});
+  padding-left: 0.35em;
+  padding-right: 0.35em;
 `
 
 const displayForAMoment = keyframes`
