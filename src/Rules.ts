@@ -480,14 +480,14 @@ const ItsAWonderfulWorldRules: GameType = {
     switch (game.phase) {
       case Phase.Draft:
         if (game.round === 1 && getPlayer(game, playerId).draftArea.length === 0) {
-          return 120
+          return 180
         } else {
           return (numberOfCardsToDraft - getPlayer(game, playerId).draftArea.length - 1) * 10
         }
       case Phase.Planning:
         return (game.round + 1) * 60
       case Phase.Production:
-        return 10
+        return 15
     }
   },
 
