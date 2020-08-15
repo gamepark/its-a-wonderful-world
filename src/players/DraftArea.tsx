@@ -91,8 +91,20 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     return
   }
 
-  const buildAll = () => player.draftArea.forEach(card => play(slateForConstruction(player.empire, card), true))
-  const recycleAll = () => player.draftArea.forEach(card => play(recycle(player.empire, card), true))
+  const [buildingOrRecyclingAll, setBuildingOrRecyclingAll] = useState(false)
+  useEffect(() => {
+    if (buildingOrRecyclingAll && player.draftArea.length === 0) {
+      setBuildingOrRecyclingAll(false)
+    }
+  }, [player, buildingOrRecyclingAll])
+  const buildAll = () => {
+    setBuildingOrRecyclingAll(true)
+    player.draftArea.forEach(card => play(slateForConstruction(player.empire, card), true))
+  }
+  const recycleAll = () => {
+    setBuildingOrRecyclingAll(true)
+    player.draftArea.forEach(card => play(recycle(player.empire, card), true))
+  }
 
   return (
     <>
@@ -132,7 +144,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
                                                       cardStyle, areaCardStyle, focusedCard === chosenCard && getCardFocusTransform,
                                                       choosingDevelopment && css`opacity: 0;`]}
                                                     onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)}/>}
-      {isPlayer(player) && game.phase === Phase.Planning && player.draftArea.length > 0 && <div css={buttonsArea}>
+      {isPlayer(player) && game.phase === Phase.Planning && player.draftArea.length > 0 && !buildingOrRecyclingAll && <div css={buttonsArea}>
         <button onClick={buildAll} css={getBuildAllButtonStyle}>{t('Tout construire')}</button>
         <button onClick={recycleAll} css={getRecycleAllButtonStyle}>{t('Tout recycler')}</button>
       </div>}
