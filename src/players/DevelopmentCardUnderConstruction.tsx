@@ -49,6 +49,9 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
   const longPress = useLongPress({
     onClick: () => setFocus(),
     onLongPress: () => {
+      if (player.empire !== playerId) {
+        return
+      }
       const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
       getRemainingCost(construction).forEach(cost => {
         if (isResource(cost.item)) {
