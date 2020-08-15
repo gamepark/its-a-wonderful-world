@@ -28,12 +28,13 @@ import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from 
 
 const {Materials, Energy, Science, Gold, Exploration, Krystallium} = Resource
 
-type Props = { game: GameView, player: Player | PlayerView, resource: Resource, canDrag: boolean, quantity: number }
+type Props = { game: GameView, player: Player | PlayerView, resource: Resource, quantity: number }
 
-const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag, quantity}) => {
+const ResourceArea: FunctionComponent<Props> = ({game, player, resource, quantity}) => {
   const {t} = useTranslation()
   const [{dragging}, ref, preview] = useDrag({
-    canDrag, item: resourceFromBoard(resource),
+    item: resourceFromBoard(resource),
+    canDrag: isPlayer(player) && quantity > 0,
     collect: monitor => ({
       dragging: monitor.isDragging()
     })
@@ -74,15 +75,15 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
   const canPlayerValidate = isPlayer(player) && game.phase === Phase.Production && player.availableResources.length === 0 && !player.ready && game.productionStep === resource && player.bonuses.length === 0
   return (
     <>
-      <img src={resourceCircle[resource]}
-           css={[circleStyle, circleStylePosition(resource), game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle]}
-           alt={resourceAreaText[resource](t)} title={resourceAreaText[resource](t)} draggable="false"/>
-      <button disabled={!canPlayerValidate} css={(theme: Theme) => [arrowStyle, arrowTheme(theme), arrowPosition(resource)]} onClick={() => play(tellYourAreReady(player.empire))} draggable="false"
+      <div ref={ref}
+           css={[circleStyle, circleStylePosition(resource), game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle, isPlayer(player) && quantity > 0 && canDragStyle]}/>
+      <button disabled={!canPlayerValidate} css={(theme: Theme) => [arrowStyle, arrowTheme(theme), arrowPosition(resource)]}
+              onClick={() => play(tellYourAreReady(player.empire))}
               title={t('Valider')}/>
       <img src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]} alt={resourceCharacterText[resource](t)}
            title={resourceCharacterText[resource](t)} draggable="false"
-           css={[characterStyle, hasMostProduction && characterHighlightStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
-      {quantity !== 0 &&
+           css={[characterStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
+      {quantity > 0 &&
       <>
         <DragPreviewImage connect={preview} src={resourceCubeImages[resource]}/>
         {[...Array(quantity)].map((_, index) =>
@@ -90,9 +91,11 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
                         css={[resourceStyle, getResourcePosition(index, resource), dragging && index === quantity - 1 && css`opacity: 0;`, getAnimation(index)]}/>
         )
         }
-        <div ref={ref} key={resource} css={[areaHighlight, resourceAreaHighlight[resource], canDrag && canDragStyle]}/>
         <div css={[numberStyle, resourceNumberStyle[resource]]}>{quantity}</div>
       </>
+      }
+      {(game.phase === Phase.Production && game.productionStep === resource || quantity > 0) &&
+      <div css={[areaHighlight, resourceAreaHighlight[resource]]}/>
       }
     </>
   )
@@ -142,14 +145,6 @@ const resourceCharacterOff = {
   [Exploration]: Images.generalOff
 }
 
-const resourceAreaText = {
-  [Materials]: (t: TFunction) => t('Zone de production des Matériaux (cubes blancs)'),
-  [Energy]: (t: TFunction) => t('Zone de production de l’Énergie (cubes noirs)'),
-  [Science]: (t: TFunction) => t('Zone de production de la Science (cubes verts)'),
-  [Gold]: (t: TFunction) => t('Zone de production de l’Or (cubes jaunes)'),
-  [Exploration]: (t: TFunction) => t('Zone de production de l’Exploration (cubes bleus)')
-}
-
 const resourceCharacterText = {
   [Materials]: (t: TFunction) => t('Le joueur produisant seul le plus de Matériaux gagne un jeton Financier'),
   [Energy]: (t: TFunction) => t('Le joueur produisant seul le plus d’Énergie gagne un jeton Militaire'),
@@ -165,6 +160,7 @@ const areaHighlight = css`
   top: ${boardResourceTopPosition - 8}%;
   border-radius: 100%;
   z-index:5;
+  pointer-events: none;
 `
 
 const resourceAreaHighlight = {
@@ -231,12 +227,15 @@ const canDragStyle = css`
 const circleStyle = css`
   position: absolute;
   width: 15%;
+  height: 86%;
+  background-size: cover;
   vertical-align: middle;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
   transition: opacity 0.5s ease-in-out;
 `
 
 const circleStylePosition = (resource: Resource) => css`
+  background-image: url(${resourceCircle[resource]});
   left: ${getBoardResourceLeftPosition(resource)}%;
 `
 
@@ -288,13 +287,12 @@ const characterStyle = css`
   position:absolute;
   width: 5.1%;
   top: ${circleCharacterTopPosition}%;
-`
-
-const characterHighlightStyle = css`
+  pointer-events: none;
 `
 
 const resourceStyle = css`
   position: absolute;
+  pointer-events: none;
   width: ${resourceWidth}%;
   height: ${resourceHeight}%;
 `

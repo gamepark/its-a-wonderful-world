@@ -4,7 +4,6 @@ import GameView from '../../types/GameView'
 import Phase from '../../types/Phase'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {isPlayer} from '../../types/typeguards'
 import {areasX, boardHeight, boardTop, boardWidth} from '../../util/Styles'
 import {isResource, productionSteps} from '../resources/Resource'
 import ResourceArea from './ResourceArea'
@@ -15,7 +14,7 @@ const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> 
   return (
     <div css={[style, reducedSize && reducedSizeStyle]}>
       {productionSteps.map(resource =>
-        <ResourceArea key={resource} game={game} player={player} resource={resource} canDrag={isPlayer(player)}
+        <ResourceArea key={resource} game={game} player={player} resource={resource}
                       quantity={playerResources.filter(r => r === resource).length}/>)}
     </div>
   )

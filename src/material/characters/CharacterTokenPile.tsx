@@ -11,6 +11,7 @@ import {isProduce} from '../../moves/Produce'
 import {isReceiveCharacter} from '../../moves/ReceiveCharacter'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
+import {isPlayer} from '../../types/typeguards'
 import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardWidth, charactersPilesY, constructedCardLeftMargin, constructedCardY, developmentCardVerticalShift,
   financiersPileX, generalsPileX, tokenHeight, tokenWidth
@@ -37,7 +38,7 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
     && animation.move.playerId === player.empire)
   const [, ref, preview] = useDrag({
     item: characterTokenFromEmpire(character),
-    canDrag: quantity > 0 && !gameOver,
+    canDrag: isPlayer(player) && quantity > 0 && !gameOver,
     collect: monitor => ({
       dragging: monitor.isDragging()
     })
