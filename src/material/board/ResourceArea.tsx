@@ -1,6 +1,5 @@
 import {css, keyframes} from '@emotion/core'
 import {useAnimations, usePlay} from '@interlude-games/workshop'
-import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
@@ -48,7 +47,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
     const animation = animations[quantity - index - 1]
     const move = animation.move
     const cubePosition = index === 0 ? {x: 0, y: 0} : toHexagonalSpiralPosition(index - 1)
-    let translateX = -(getBoardResourceLeftPosition(resource) + cubePosition.x * resourceWidth / 2 + cubeDeltaX) * boardWidth / 100 - areasX
+    let translateX = -(getBoardResourceLeftPosition(resource) + 4 + cubePosition.x * resourceWidth / 2 + cubeDeltaX) * boardWidth / 100 - areasX
     let translateY = -(boardResourceTopPosition + cubeDeltaY + cubePosition.y * resourceHeight) * boardHeight / 100 - boardTop
     if (isPlaceResourceOnConstruction(move)) {
       const constructionIndex = player.constructionArea.findIndex(construction => construction.card === move.card)
@@ -73,14 +72,15 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
   const hasMostProduction = !game.players.some(p => p.empire !== player.empire && getProduction(p, resource) >= playerProduction)
   const play = usePlay<Move>()
   const canPlayerValidate = isPlayer(player) && game.phase === Phase.Production && player.availableResources.length === 0 && !player.ready && game.productionStep === resource && player.bonuses.length === 0
-  const theme = useTheme<Theme>()
   return (
     <>
-      <img src={resourceCircle[resource]} css={[circleStyle, game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle]}
+      <img src={resourceCircle[resource]}
+           css={[circleStyle, circleStylePosition(resource), game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle]}
            alt={resourceAreaText[resource](t)} title={resourceAreaText[resource](t)} draggable="false"/>
-      <button disabled={!canPlayerValidate} css={arrowStyle(theme)} onClick={() => play(tellYourAreReady(player.empire))} draggable="false"
+      <button disabled={!canPlayerValidate} css={(theme: Theme) => [arrowStyle, arrowTheme(theme), arrowPosition(resource)]} onClick={() => play(tellYourAreReady(player.empire))} draggable="false"
               title={t('Valider')}/>
-      <img src={hasMostProduction?resourceCharacterOn[resource]:resourceCharacterOff[resource]} alt={resourceCharacterText[resource](t)} title={resourceCharacterText[resource](t)} draggable="false"
+      <img src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]} alt={resourceCharacterText[resource](t)}
+           title={resourceCharacterText[resource](t)} draggable="false"
            css={[characterStyle, hasMostProduction && characterHighlightStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
       {quantity !== 0 &&
       <>
@@ -98,7 +98,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, canDrag
   )
 }
 
-const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 4
+const getBoardResourceLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20
 const getHighlightLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 2.5
 const getNumberLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 6
 export const getCircleCharacterLeftPosition = (resource: Resource) => resources.indexOf(resource) * 20 + 4.9
@@ -229,10 +229,15 @@ const canDragStyle = css`
 `
 
 const circleStyle = css`
+  position: absolute;
   width: 15%;
   vertical-align: middle;
   filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
   transition: opacity 0.5s ease-in-out;
+`
+
+const circleStylePosition = (resource: Resource) => css`
+  left: ${getBoardResourceLeftPosition(resource)}%;
 `
 
 const circleShadowedStyle = css`
@@ -243,7 +248,9 @@ const pulse = keyframes`
   to {transform: scale(1.4);}
 `
 
-const arrowStyle = (theme: Theme) => css`
+const arrowStyle = css`
+  position: absolute;
+  top: 29%;
   width: 5%;
   height: 32%;
   vertical-align: middle;
@@ -251,9 +258,9 @@ const arrowStyle = (theme: Theme) => css`
   transition: opacity 0.5s ease-in-out;
   background-image: url(${boardArrowWhite});
   background-size: cover;
-  background-repeat:no-repeat;
-  background-color:transparent;
-  border:0 solid #FFF;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: 0 solid #FFF;
   &:disabled {
     opacity: 0.6;
   }
@@ -261,11 +268,20 @@ const arrowStyle = (theme: Theme) => css`
     animation: ${pulse} 0.8s linear alternate infinite;
     cursor: pointer;
     background-image: url(${Images.arrowGreen});
-    filter: drop-shadow(0 0 0 ${theme.color === LightTheme ? 'white' : 'black'});
   }
   &:focus {
     outline: 0;
   }
+`
+
+const arrowTheme = (theme: Theme) => css`
+  &:enabled {
+    filter: drop-shadow(0 0 0 ${theme.color === LightTheme ? 'white' : 'black'});
+  }
+`
+
+const arrowPosition = (resource: Resource) => css`
+  left: ${getBoardResourceLeftPosition(resource) + 15}%;
 `
 
 const characterStyle = css`
@@ -286,7 +302,7 @@ const resourceStyle = css`
 const getResourcePosition = (index: number, resource: Resource) => {
   const cubeDispersion = index === 0 ? {x: 0, y: 0} : toHexagonalSpiralPosition(index - 1)
   return css`
-    left: ${getBoardResourceLeftPosition(resource) + cubeDispersion.x * resourceWidth / 2 + cubeDeltaX}%;
+    left: ${getBoardResourceLeftPosition(resource) + 4 + cubeDispersion.x * resourceWidth / 2 + cubeDeltaX}%;
     top: ${boardResourceTopPosition + cubeDispersion.y * resourceHeight + cubeDeltaY}%;
   `
 }
