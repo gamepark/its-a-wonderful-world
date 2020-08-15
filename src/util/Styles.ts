@@ -87,9 +87,9 @@ export const getCardFocusTransform = css`
   transform: translate(${50 * 100 / cardWidth - 50}%, ${50 * 100 / cardHeight - 50}%) scale(3) !important;
 `
 
-export const glow = (color: string) => keyframes`
-  from { box-shadow: 0 0 5px ${color}; }
-  to { box-shadow: 0 0 30px ${color}; }
+export const glow = (color: string, from = '5px', to = '30px') => keyframes`
+  from { box-shadow: 0 0 ${from} ${color}; }
+  to { box-shadow: 0 0 ${to} ${color}; }
 `
 
 export const fadeIn = keyframes`

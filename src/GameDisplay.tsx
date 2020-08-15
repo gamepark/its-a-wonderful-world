@@ -1,7 +1,7 @@
 import {css, keyframes} from '@emotion/core'
-import {Letterbox, useAnimation, useDisplayState, usePlay, usePlayerId, useSound} from '@interlude-games/workshop'
+import {Letterbox, useAnimation, useDisplayState, usePlayerId, useSound} from '@interlude-games/workshop'
 import React, {FunctionComponent, useEffect, useMemo, useRef} from 'react'
-import {useTranslation} from 'react-i18next'
+import GlobalActions from './GlobalActions'
 import Board from './material/board/Board'
 import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
 import PhaseIndicator from './material/board/PhaseIndicator'
@@ -14,19 +14,16 @@ import DiscardPile from './material/developments/DiscardPile'
 import DrawPile from './material/developments/DrawPile'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
-import Move from './moves/Move'
 import ReceiveCharacter, {isReceiveCharacter} from './moves/ReceiveCharacter'
 import {isRevealChosenCards, RevealChosenCardsView} from './moves/RevealChosenCards'
-import {isTellYouAreReady, tellYourAreReady} from './moves/TellYouAreReady'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
 import ScorePanel from './players/score/ScorePanel'
-import {getLegalMoves, isActive, isOver} from './Rules'
+import {isActive, isOver} from './Rules'
 import bellSound from './sounds/bell.wav'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import {isPlayer} from './types/typeguards'
-import Button from './util/Button'
 import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
@@ -35,14 +32,11 @@ import {
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
 const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
-  const {t} = useTranslation()
   const playerId = usePlayerId<EmpireName>()
-  const play = usePlay<Move>()
   const [displayedEmpire, setDisplayedEmpire] = useDisplayState(playerId || game.players[0].empire)
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
   const displayedPlayerPanelIndex = players.findIndex(player => player.empire === displayedEmpire)
   const displayedPlayer = players[displayedPlayerPanelIndex]!
-  const canValidate = isPlayer(displayedPlayer) && getLegalMoves(displayedPlayer, game.phase).some(isTellYouAreReady)
   const animation = useAnimation<RevealChosenCardsView | ReceiveCharacter>(animation => isRevealChosenCards(animation.move)
     || (isReceiveCharacter(animation.move) && animation.move.playerId !== displayedPlayer.empire))
   const revealingCards = animation && isRevealChosenCards(animation.move) ? animation.move : undefined
@@ -105,7 +99,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
 
       {supremacyBonus && <CharacterToken character={supremacyBonus.character}
                                          css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
-      {canValidate && <Button onClick={() => play(tellYourAreReady(displayedPlayer.empire))} css={validateButtonStyle}>{t('Valider')}</Button>}
+      {isPlayer(displayedPlayer) && <GlobalActions game={game} player={displayedPlayer}/>}
     </Letterbox>
   )
 }
@@ -171,12 +165,5 @@ const supremacyBonusAnimation = (resource: Resource, panelIndex: number, duratio
     animation: ${keyframe} ${duration}s ease-in-out forwards;
   `
 }
-
-const validateButtonStyle = css`
-  position: absolute;
-  font-size: 5vh;
-  top: 10%;
-  left: 50%;
-`
 
 export default GameDisplay
