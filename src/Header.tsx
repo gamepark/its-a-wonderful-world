@@ -23,7 +23,8 @@ import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
-import {buttonStyle, darkButton, headerHeight, lightButton, textColor} from './util/Styles'
+import Button from './util/Button'
+import {headerHeight, textColor} from './util/Styles'
 
 
 const headerStyle = (theme: Theme) => css`
@@ -105,7 +106,7 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
       } else if (player && !player.ready) {
         return <Trans values={{resource: Resource.Materials}}
                       defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                      components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
+                      components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 0) {
@@ -142,13 +143,13 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
         } else if (game.productionStep !== Resource.Exploration) {
           return <Trans values={{resource: getNextProductionStep(game)}}
                         defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
+                        components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
         } else if (game.round < numberOfRounds) {
           return <Trans defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer au tour suivant"
-                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
+                        components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
         } else {
           return <Trans defaults="Cliquez sur <0>Valider</0> pour passer au calcul des scores"
-                        components={[<button onClick={() => play(tellYourAreReady(player.empire))} css={getButtonStyle}>Valider</button>]}/>
+                        components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
         }
       } else {
         const players = game.players.filter(player => !player.ready)
@@ -266,8 +267,6 @@ const characterTokenStyle = css`
     transform: scale(1.1);
   }
 `
-
-const getButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
 
 const portraitText = css`
   @media all and (orientation:landscape) {

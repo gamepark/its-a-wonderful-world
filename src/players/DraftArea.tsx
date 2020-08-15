@@ -20,15 +20,15 @@ import Move from '../moves/Move'
 import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
 import {canUndoSlateForConstruction} from '../Rules'
-import Theme, {LightTheme} from '../Theme'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
+import Button from '../util/Button'
 import {
-  areaCardStyle, buttonStyle, cardHeight, cardStyle, cardWidth, darkButton, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle,
-  getCardFocusTransform, lightButton, playerPanelMargin, playerPanelWidth, popupBackgroundStyle
+  areaCardStyle, cardHeight, cardStyle, cardWidth, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, playerPanelMargin,
+  playerPanelWidth, popupBackgroundStyle
 } from '../util/Styles'
 
 const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
@@ -145,8 +145,8 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
                                                       choosingDevelopment && css`opacity: 0;`]}
                                                     onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)}/>}
       {isPlayer(player) && game.phase === Phase.Planning && player.draftArea.length > 0 && !buildingOrRecyclingAll && <div css={buttonsArea}>
-        <button onClick={buildAll} css={getBuildAllButtonStyle}>{t('Tout construire')}</button>
-        <button onClick={recycleAll} css={getRecycleAllButtonStyle}>{t('Tout recycler')}</button>
+        <Button onClick={buildAll}>{t('Tout construire')}</Button>
+        <Button onClick={recycleAll}>{t('Tout recycler')}</Button>
       </div>}
     </>
   )
@@ -263,12 +263,10 @@ const buttonsArea = css`
   position: absolute;
   top: 11%;
   left: 38%;
+  font-size: 4vh;
   right: ${playerPanelWidth + playerPanelMargin * 2}%;
   display: flex;
   justify-content: space-evenly;
 `
-
-const getBuildAllButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
-const getRecycleAllButtonStyle = (theme: Theme) => [buttonStyle, theme.color === LightTheme ? darkButton : lightButton]
 
 export default DraftArea
