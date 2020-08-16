@@ -78,7 +78,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
   const revealedCards = revealingCards && sortByPanel(Object.entries(revealingCards.revealedCards) as [EmpireName, number][])
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
-    <Letterbox css={letterBoxStyle}>
+    <Letterbox css={letterBoxStyle} top={0}>
       <Board game={game} player={displayedPlayer}/>
       <RoundTracker round={game.round}/>
       <PhaseIndicator phase={game.phase}/>
@@ -120,9 +120,6 @@ const fadeIn = keyframes`
 
 const letterBoxStyle = css`
   animation: ${fadeIn} 3s ease-in forwards;
-  @media all and (orientation:portrait) {
-    visibility: hidden;
-  }
 `
 
 const revealedCardStyle = css`

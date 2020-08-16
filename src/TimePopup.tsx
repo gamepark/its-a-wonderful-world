@@ -73,25 +73,25 @@ const content = css`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 1vh;
+  border-radius: 1em;
 `
 
 const tableStyle = css`
-  margin: 1vh;
+  margin: 1em;
   border-collapse: collapse;
-  font-size: 3vh;
+  font-size: 3em;
   tbody tr {
     border-top: 1px solid black;
   }
   td {
-    min-width: 7vh;
+    min-width: 2.5em;
   }
   th, td {
-    min-width: 10vw;
-    padding: 1vh;
+    min-width: 3.5em;
+    padding: 0.35em;
     text-align: left;
     &:not(:first-of-type) {
-      border-left: 1px solid black;
+      border-left: 0.1em solid black;
     }
   }
 `

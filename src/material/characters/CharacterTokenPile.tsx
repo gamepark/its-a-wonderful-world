@@ -64,7 +64,7 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
       {quantity === 0 && <img alt={emptySpaceDescription[character](t)} src={emptySpaceImages[character]} draggable={false} css={tokenStyle(0)}/>}
       {tokens}
       <div css={tokenQuantityStyle}>{quantity}</div>
-      <DragPreviewImage connect={preview} src={characterTokenImages[character]} css={characterTokenDraggingStyle}/>
+      <DragPreviewImage connect={preview} src={characterTokenImages[character]}/>
     </div>
   )
 }
@@ -113,16 +113,12 @@ const animateFromBoard = (character: Character, resource: Resource, duration: an
 
 const tokenQuantityStyle = css`
   position: absolute;
-  font-size: 3.5vh;
+  font-size: 3.5em;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 5px black, 0 0 5px black, 0 0 5px black, 0 0 5px black;
-  top: 1.5vh;
-  left: 0.5vh;
-`
-
-const characterTokenDraggingStyle = css`
-  height: 3vh;
+  text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
+  top: 0.4em;
+  left: 0.2em;
 `
 
 export default CharacterTokenPile

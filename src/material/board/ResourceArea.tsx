@@ -192,9 +192,9 @@ const numberStyle = css`
   height: 13%;
   top: 57%;
   text-align:center;
-  font-size: 2.5vh;
+  font-size: 2.5em;
   font-weight: bold;
-  text-shadow: 0 0 5px black, 0 0 5px black, 0 0 5px black, 0 0 5px black;
+  text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
 `
 
 const resourceNumberStyle = {
@@ -230,7 +230,7 @@ const circleStyle = css`
   height: 86%;
   background-size: cover;
   vertical-align: middle;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  filter: drop-shadow(0.1em 0.1em 0.5em black);
   transition: opacity 0.5s ease-in-out;
 `
 
@@ -253,7 +253,7 @@ const arrowStyle = css`
   width: 5%;
   height: 32%;
   vertical-align: middle;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  filter: drop-shadow(0.1em 0.1em 0.5em black);
   transition: opacity 0.5s ease-in-out;
   background-image: url(${boardArrowWhite});
   background-size: cover;

@@ -27,7 +27,7 @@ const scorePanelStyle = css`
   justify-content: flex-end;
   top: 8.5%;
   right: 20.6%;
-  min-width: 58%;
+  min-width: 65%;
   height: 90%;
   z-index: 5;   
   overflow: hidden;

@@ -80,15 +80,15 @@ const style = (empire: EmpireName, position: number, highlight: boolean) => css`
 `
 
 const borderStyle = (highlight: boolean) => highlight ? css`
-  border: 0.2vh solid gold;
-  box-shadow: 0.2vh 0.2vh 1vh gold;
+  border: 0.2em solid gold;
+  box-shadow: 0.2em 0.2em 1em gold;
 ` : css`
-  border: 0.2vh solid lightslategrey;
-  box-shadow: 0.2vh 0.2vh 1vh black;
+  border: 0.2em solid lightslategrey;
+  box-shadow: 0.2em 0.2em 1em black;
   cursor: pointer;
   &:hover {
-    border: 0.2vh solid rgba(255, 215, 0, 0.5);
-    box-shadow: 0 0 0.5vh gold;
+    border: 0.2em solid rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 0.5em gold;
   }
 `
 
@@ -97,7 +97,7 @@ const avatarStyle = css`
   height: 25%;
   top: 5%;
   left: 3%;
-  border: 1px solid white;
+  border: 0.1em solid white;
   border-radius: 100%;
 `
 
@@ -108,7 +108,7 @@ const titleStyle = css`
   left: 18%;
   right: 3%;
   margin: 0;
-  font-size: 2.9vh;
+  font-size: 2.9em;
   font-weight: bold;
   display: flex;
   justify-content: space-between;

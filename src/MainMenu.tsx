@@ -202,7 +202,7 @@ const menuStyle = css`
   border-radius: 0 0 0 1em;
   border: solid 0.1em #ccc;
   border-top: solid 0 #ccc;
-  box-shadow: 0 0 6px #000;
+  box-shadow: 0 0 1em #000;
 `
 
 const openMenuStyle = css`
@@ -211,21 +211,9 @@ const openMenuStyle = css`
   align-items: flex-end;
   color: #EEE;
   text-align: right;
-  font-size: 2.5vh;
   font-weight: lighter;
-  text-shadow: 0 0 0.3vh #000, 0 0 0.3vh #000;
+  text-shadow: 0 0 0.3em #000, 0 0 0.3em #000;
   text-transform: uppercase;
-  & a {
-    color:#EEE;
-    font-size: 2.5vh;
-    font-weight: lighter;
-    text-shadow: 0 0 0.3vh #000, 0 0 0.3vh #000;
-    text-transform:uppercase;
-    text-decoration:none;
-  }
-  & a:hover{
-    text-decoration:underline;
-  }
 `
 
 const hidden = css`
@@ -234,17 +222,17 @@ const hidden = css`
 `
 
 const subMenuTitle = css`
-  font-size: 2.5vh;
+  font-size: 0.9em;
   font-weight: lighter;
-  text-shadow: 0 0 0.5vh #000, 0 0 0.5vh #000, 0 0 0.5vh #000, 0 0 0.5vh #000;
+  text-shadow: 0 0 0.2em #000, 0 0 0.2em #000, 0 0 0.2em #000, 0 0 0.2em #000;
   text-transform: uppercase;
-    margin-right: 3vh;
+  margin-right: 1em;
 `
 
 const menuButtonStyle = css`
   width: fit-content;
-  min-width: 8vh;
-  font-size: 4vh;
+  min-width: 2em;
+  font-size: 4em;
   color: #EEE;
   margin: 0.1em;
   padding: 0.5em 0.55em;
@@ -265,7 +253,7 @@ const menuButtonStyle = css`
   }
 `
 const homeButtonStyle = css`
-  padding-right: 0.4em;
+  padding-right: 0.5em;
   background-image: url(${Images.buttonGreen});
 `
 
@@ -282,6 +270,7 @@ const mainMenuButtonStyle = css`
   background-image: url(${Images.buttonYellow});
 `
 const undoButtonStyle = css`
+  padding-right: 0.5em;
   background-image: url(${Images.buttonRed});
   &:disabled {
     background-image: url(${Images.buttonGrey});
@@ -295,8 +284,9 @@ const fullScreenButtonStyle = css`
   background-image: url(${Images.buttonBlack});
 `
 const loadingSpinnerStyle = css`
-  margin: 0.5vh;
-  transform: scale(1.3);
+  font-size: 0.25em;
+  margin: 0.125em;
+  transform: scale(1.25);
 `
 const rematchButtonStyle = css`
   background-image: url(${Images.buttonRed});
@@ -314,9 +304,9 @@ const displayForAMoment = keyframes`
 
 const tooltipStyle = css`
   position: absolute;
-  padding: 0.5vh;
-  bottom: -7vh;
-  border-radius: 1vh;
+  padding: 0.25em;
+  bottom: -2em;
+  border-radius: 0.25em;
   left: 50%;
   transform: translateX(-50%);
   margin: auto;
@@ -328,12 +318,12 @@ const tooltipStyle = css`
     width: 0;
     height: 0;
     position: absolute;
-    border-left: 1vh solid transparent;
-    border-right: 1vh solid transparent;
-    top: -1vh;
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    top: -0.5em;
     left: 50%;
-    margin-left: -1vh;
-    border-bottom: 1vh solid black;
+    margin-left: -0.5em;
+    border-bottom: 0.5em solid black;
   }
 `
 

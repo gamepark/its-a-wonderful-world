@@ -29,22 +29,28 @@ import {headerHeight, textColor} from './util/Styles'
 
 const headerStyle = (theme: Theme) => css`
   position: absolute;
+  display: flex;
   width: 100%;
-  height: ${headerHeight}%;
+  height: ${headerHeight}em;
+  padding: 0 30em 0 0;
   text-align: center;
   background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 30, 0.5)'};
   transition: background-color 1s ease-in;
 `
 
+const bufferArea = css`
+  width: 30em;
+  flex-shrink: 1;
+`
+
 const textStyle = css`
-  @media all and (orientation:portrait) {
-    display: none;
-  }
+  flex-grow: 1;
+  flex-shrink: 0;
   transition: color 1s ease-in;
-  padding: 1vh;
-  margin: 0 28vh 0 0;
+  padding: 0.25em;
+  margin: 0;
   line-height: 1.25;
-  font-size: 4vh;
+  font-size: 4em;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -64,8 +70,8 @@ const Header: FunctionComponent<Props> = ({game, loading}) => {
   const theme = useTheme<Theme>()
   return (
     <header css={headerStyle(theme)}>
+      <div css={bufferArea}/>
       <h1 css={[textStyle, textColor(theme)]}>{loading ? t('Chargement de la partie...') : getText(t, play, players, game!, empire, animation)}</h1>
-      <p css={[portraitText, textColor(theme)]}>{t('Passer en plein écran') + ' →'}</p>
       <MainMenu/>
     </header>
   )
@@ -259,23 +265,13 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
 }
 
 const characterTokenStyle = css`
-  width: 5vh;
-  height: 5vh;
+  width: 1.25em;
+  height: 1.25em;
   vertical-align: bottom;
   cursor: pointer;
   &:hover, &:active {
     transform: scale(1.1);
   }
-`
-
-const portraitText = css`
-  @media all and (orientation:landscape) {
-    display: none;
-  }
-  line-height: 1.25;
-  font-size: 3vh;
-  margin: 0 6vh 0 0;
-  padding: 1.5vh 1vh 1.5vh 1vh;
 `
 
 export default Header

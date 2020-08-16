@@ -29,9 +29,9 @@ const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, qu
 const backgroundStyle = css`
   background-image: url(${Images.scoreBackground});
   background-size: cover;
-  border-radius: 0.8vh;
-  box-shadow: 0 0 2px black;
-  padding: 0.2vh;
+  border-radius: 0.8em;
+  box-shadow: 0 0 0.2em black;
+  padding: 0.2em;
 `
 
 const style = css`
@@ -55,22 +55,22 @@ const numberStyle = css`
   background-repeat: no-repeat;
   background-position: center;
   text-align: center;
-  font-size: 2.5vh;
+  font-size: 2.5em;
   flex-shrink: 0;
-  width: 2.5vh;
+  width: 1em;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 3px black;
+  text-shadow: 0 0 0.2em black;
 `
 
 const multiplierStyle = css`
   z-index: 1;
-  font-size: 1.5vh;
+  font-size: 1.5em;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 3px black;
+  text-shadow: 0 0 0.2em black;
   position: relative;
-  transform: translateX(-0.4vh);
+  transform: translateX(-0.3em);
   width: 0;
 `
 
@@ -79,22 +79,22 @@ const characterTokenImageStyle = css`
 `
 
 const developmentTypeImageStyle = css`
-  box-shadow: 0 0 1px black;
+  box-shadow: 0 0 0.1em black;
   height: 80%;
-  border-radius: 0.5vh;
+  border-radius: 0.5em;
 `
 
 const quantityStyle = css`
-  filter: drop-shadow(0 0 1px black);
+  filter: drop-shadow(0 0 0.1em black);
   position: relative;
   width: 0;
-  left: 1vh;
+  left: 0.4em;
   z-index: 1;
   text-align: center;
-  font-size: 2.5vh;
+  font-size: 2.5em;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 3px black;
+  text-shadow: 0 0 0.5em black;
 `
 
 const getDevelopmentTypeDescription = (t: TFunction, developmentType: DevelopmentType, quantity: number) => {

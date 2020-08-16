@@ -1361,10 +1361,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@interlude-games/workshop@~1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-1.3.1.tgz#f9edceaaa25dc7f7464081f417ddd0aff93e64e8"
-  integrity sha512-g2AYhk3JJe2HBLngultgxhOi1xIdWVHGawIsZSX5PgHfaHuYlHN2KVco9Nhykby4/5h3epitW9EsfBIuia1h8A==
+"@interlude-games/workshop@~1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@interlude-games/workshop/-/workshop-1.3.2.tgz#2895fa97fab8892d0090a4754dfb838224a054b4"
+  integrity sha512-76VAocRKnrjDHoV5kqWITbrHkHUwR6rG6p6hGmA+ma6/3shIZYJE9ArARZpJQkPmQmELVhBxahSKxkshEhLD7w==
   dependencies:
     "@apollo/client" "^3.1.3"
     "@datadog/browser-logs" "^1.11.4"

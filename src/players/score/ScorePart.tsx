@@ -39,7 +39,6 @@ const style = css`
       display: block;
       position: absolute;
       right: 115%;
-      font-size: 5vh;
       top: 50%;
       transform: translateY(-50%);
     }
@@ -51,16 +50,16 @@ const scoreStyle = css`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  font-size: 5vh;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  font-size: 5em;
+  filter: drop-shadow(0.05em 0.05em 0.1em black);
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 3px black;
+  text-shadow: 0 0 0.3em black;
   padding: 0;
-  width: 10vh;
+  width: 1.67em;
   height: fit-content;
   text-align: center;
-  margin-left: 4vh;
+  margin-left: 0.8em;
   margin-top: 2%;
 `
 

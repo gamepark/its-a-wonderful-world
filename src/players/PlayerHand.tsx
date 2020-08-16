@@ -237,7 +237,7 @@ const focusCardStyle = css`
   transform: translate(-50%, -50%);
   z-index: 100;
   h3 {
-    font-size: 2.55vh;
+    font-size: 2.55em;
   }
 `
 

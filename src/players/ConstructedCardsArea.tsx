@@ -65,27 +65,27 @@ const buildDropArea = css`
   width: ${empireCardWidth}%;
   top: ${headerHeight + topMargin}%;
   bottom: ${constructedCardBottomMargin}%;
-  border-radius: 1vh;
+  border-radius: 1em;
   z-index: 10;
 `
 
 const validDropAreaColor = (isOver: boolean) => css`
   background-color: rgba(0, 255, 0, ${isOver ? 0.5 : 0.3});
-  border: 0.3vh dashed green;
+  border: 0.3em dashed green;
 `
 
 const invalidDropAreaColor = css`
   background-color: rgba(255, 0, 0, 0.3);
-  border: 0.3vh dashed red;
+  border: 0.3em dashed red;
 `
 
 const dropAreaText = css`
   position: absolute;
   width: 100%;
   margin: 0;
-  padding: 10vh 1vh;
+  padding: 4em 0.4em;
   text-align: center;
-  font-size: 2.5vh;
+  font-size: 2.5em;
 `
 
 const validDropTextColor = css`

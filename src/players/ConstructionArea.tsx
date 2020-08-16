@@ -186,7 +186,7 @@ export const maxResourcesToPlace = (player: Player, construction: Construction, 
 const getConstructionAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(247, 166, 0, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
   border-color: #f7a600;
-  box-shadow: 0 0 0.7vh #f7a600;
+  box-shadow: 0 0 0.7em #f7a600;
   ${getAreasStyle(row, fullWidth, isValidTarget)};
 `
 
@@ -194,11 +194,11 @@ const constructionAreaText = css`
   position: absolute;
   width: 100%;
   margin: 0;
-  padding: 0 1vh;
+  padding: 0 0.25em;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
-  font-size: 4vh;
+  font-size: 4em;
   color: #f7a600;
 `
 
@@ -206,13 +206,13 @@ const constructAreaText = css`
   position: absolute;
   width: 100%;
   margin: 0;
-  padding: 0 1vh;
+  padding: 0 0.2em;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
   color: antiquewhite;
-  font-size: 6vh;
-  text-shadow: 0 0 1vh #333;
+  font-size: 6em;
+  text-shadow: 0 0 0.2em #333;
 `
 
 const getPlaceConstructionButton = (index: number) => css`
@@ -225,11 +225,11 @@ const getPlaceConstructionButton = (index: number) => css`
 
 const buttonItemStyle = css`
   display: inline;
-  height: 6vh;
+  height: 1.8em;
 `
 
 const getPlaceTextStyle = css`
-  margin:0 1vh;
+  margin:0 0.3em;
 `
 
 const getPlaceItemButtonStyle = (index: number) => css`
@@ -240,11 +240,10 @@ const getPlaceItemButtonStyle = (index: number) => css`
   display: inline-flex;
   background-color:transparent;
   border: 0;
-  border-radius: 2vh;
   padding: 0.5%;
-  margin-right: 1.5vh;
+  margin-right: 0.5em;
   align-items: center;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  filter: drop-shadow(0.1em 0.1em 0.5em black);
   ${textButtonFontStyle};
   &:hover, &:focus {
     outline: 0;
@@ -257,10 +256,10 @@ const getPlaceItemButtonStyle = (index: number) => css`
   }
   &:after{
     background-image: url(${Images.buttonArrow});
-    width: 3.5vh;
-    height: 3.5vh;
+    width: 1em;
+    height: 1em;
     content: '';
-    right: -3.5vh;
+    right: -1em;
     position: absolute;
     background-size: cover;
     background-repeat: no-repeat;

@@ -44,7 +44,7 @@ const style = (index: number, theme: Theme) => css`
   justify-content: flex-end;
   align-items: center;
   background-color: ${theme.color === LightTheme ? 'rgba(0, 0, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
-  border-radius: 2vh 0 0 2vh;
+  border-radius: 2em 0 0 2em;
   width: auto;
   height: 17%;
   overflow: hidden;
@@ -56,12 +56,12 @@ const displayPlayerScore = css`
   max-width: 100%;
 `
 const hidePlayerScore = css`
-  max-width: 17vh;
+  max-width: 17em;
 `
 
 const revealScore = keyframes`
   from {
-    max-width: 17vh;
+    max-width: 17em;
   }
   to {
     max-width: 100%;
@@ -90,14 +90,14 @@ const arrowStyle = (theme: Theme) => css`
 `
 
 const arrowStandardStyle = css`
-  width: 8vh;
-  height: 10vh;
+  width: 8em;
+  height: 10em;
 `
 
 const arrowReverseStyle = css`
   transform: scaleX(-1);
-  width: 5vh;
-  height: 7vh;
+  width: 5em;
+  height: 7em;
 `
 
 const scoreStyle = css`
@@ -106,24 +106,24 @@ const scoreStyle = css`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  font-size: 6vh;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  font-size: 6em;
+  filter: drop-shadow(0.05em 0.05em 0.1em black);
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 3px black;
-  width: 11vh;
-  height: 10vh;
+  text-shadow: 0 0 0.3em black;
+  width: 1.8em;
+  height: 1.67em;
   text-align: center;
   transition: margin 0.5s linear;
   opacity: 0;
   animation: ${fadeIn} 4s 6s ease-in forwards;
 `
 const displayScoreStyle = css`
-  margin: 0 1vh 0 4vh;
+  margin: 0 0.2em 0 0.8em;
 `
 
 const hideScoreStyle = css`
-  margin: 0 1vh 0 0;
+  margin: 0 0.2em 0 0;
 `
 
 const equalSign = css`
@@ -131,7 +131,6 @@ const equalSign = css`
     content: '=';
     position: absolute;
     right: 110%;
-    font-size: 5vh;
     top: 50%;
     transform: translateY(-50%);
   }

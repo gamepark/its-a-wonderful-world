@@ -52,6 +52,7 @@ const style = css`
   top: 0;
   width: 100vw;
   height: 100vh;
+  font-size: 3em;
   background: rgba(0, 0, 0, 0.5);
 `
 
@@ -65,7 +66,7 @@ const content = css`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 1vh;
+  border-radius: 0.3em;
 `
 
 const rotate = keyframes`
@@ -74,9 +75,9 @@ const rotate = keyframes`
 `
 
 const spinnerStyle = css`
-  font-size: 5vh;
+  font-size: 2em;
   animation: ${rotate} 1s ease-in-out infinite;
-  margin-bottom: 1vh;
+  margin-bottom: 0.5em;
 `
 
 export default RematchPopup

@@ -34,8 +34,8 @@ const getStyle = (isValidTarget: boolean, isOver: boolean) => css`
   left: ${areasX}%;
   top: 8%;
   background-color: rgba(0, 0, 0, ${isOver ? 0.5 : 0.3});
-  border: 0.3vh dashed grey;
-  border-radius: 1vh;
+  border: 0.3em dashed grey;
+  border-radius: 1em;
   z-index: 10;
 `
 
@@ -43,12 +43,12 @@ const text = css`
 position: absolute;
 width: 100%;
 margin: 0;
-padding: 0 1vh;
+padding: 0 0.2em;
 top: 50%;
 transform: translateY(-50%);
 text-align: center;
 color: antiquewhite;
-font-size: 6vh;
+font-size: 6em;
 `
 
 export default RecyclingDropArea

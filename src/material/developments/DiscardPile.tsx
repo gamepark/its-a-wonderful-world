@@ -50,7 +50,7 @@ const discardLengthStyle = css`
   z-index: 101;
   color:#EEE;
   text-shadow: 0 0 2px black;
-  font-size:5vh;
+  font-size: 5em;
 `
 
 export default DiscardPile

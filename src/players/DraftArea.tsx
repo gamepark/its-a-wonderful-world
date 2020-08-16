@@ -155,7 +155,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
 const getDraftAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
   background-color: rgba(175, 202, 11, ${isValidTarget ? isOver ? 0.5 : 0.3 : 0.1});
   border-color: #afca0b;
-  box-shadow: 0 0 0.7vh #afca0b;
+  box-shadow: 0 0 0.7em #afca0b;
   ${getAreasStyle(row, fullWidth, isValidTarget)}; 
 `
 
@@ -163,32 +163,32 @@ const draftAreaText = css`
   position: absolute;
   width: 100%;
   margin: 0;
-  padding: 0 1vh;
+  padding: 0 0.25em;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
   color: #879d12;
-  font-size: 4vh;
+  font-size: 4em;
 `
 const draftActionAreaText = css`
   position: absolute;
   width: 100%;
   margin: 0;
-  padding: 0 1vh;
+  padding: 0 0.2em;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
   color: antiquewhite;
-  font-size: 6vh;
-  text-shadow: 0 0 1vh #333;
+  font-size: 6em;
+  text-shadow: 0 0 0.2em #333;
 `
 
 export const textButtonFontStyle = css`
-  font-size: 3vh;
-  line-height: 6.5vh;
+  font-size: 3.2em;
+  line-height: 2em;
   color: #EEE;
   font-weight: lighter;
-  text-shadow: 0 0 1vh #000, 0 0 1vh #000;
+  text-shadow: 0 0 0.3em #000, 0 0 0.3em #000;
   text-transform: uppercase;
 `
 
@@ -219,6 +219,7 @@ export const textButtonRight = css`
 `
 
 export const textButtonLeft = css`
+  text-align: right;
   &:before {
     content: '';
     display: block;
@@ -236,16 +237,15 @@ export const textButtonLeft = css`
 `
 
 const draftConstructionButton = css`
-  bottom: 26%;
+  bottom: 27%;
   right: ${51 + cardWidth * 1.5}%;
-  text-align: right;
   &:before {
     background-image: url(${Images.titleOrange});
   }
 `
 
 export const recyclingButton = (resource: Resource) => css`
-  bottom: 26%;
+  bottom: 27%;
   left: ${51 + cardWidth * 1.5}%;
   background-image: url(${buttonImages.get(resource)});
   text-align:left;
@@ -263,7 +263,7 @@ const buttonsArea = css`
   position: absolute;
   top: 11%;
   left: 38%;
-  font-size: 4vh;
+  font-size: 4em;
   right: ${playerPanelWidth + playerPanelMargin * 2}%;
   display: flex;
   justify-content: space-evenly;

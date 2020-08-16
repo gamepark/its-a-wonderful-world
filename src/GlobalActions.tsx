@@ -11,7 +11,7 @@ import {getLegalMoves} from './Rules'
 import GameView from './types/GameView'
 import Player from './types/Player'
 import Button from './util/Button'
-import {glow} from './util/Styles'
+import {glow, screenRatio} from './util/Styles'
 
 const GlobalActions: FunctionComponent<{ game: GameView, player: Player }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -32,7 +32,7 @@ const GlobalActions: FunctionComponent<{ game: GameView, player: Player }> = ({g
 
 const validateButtonStyle = css`
   position: absolute;
-  font-size: 5vh;
+  font-size: 5em;
   top: 10%;
   left: 50%;
 `
@@ -40,10 +40,10 @@ const validateButtonStyle = css`
 const characterTokenStyle = css`
   position: absolute;
   top: 9%;
-  width: 10vh;
-  height: 10vh;
+  width: ${10 / screenRatio}%;
+  height: 10%;
   cursor: pointer;
-  animation: ${glow('cyan', '0px', '10px')} 1s ease-in-out infinite alternate;
+  animation: ${glow('cyan', '0', '1em')} 1s ease-in-out infinite alternate;
   &:hover, &:active {
     transform: scale(1.1);
   }

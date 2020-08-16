@@ -2,6 +2,7 @@ import {css, Global} from '@emotion/core'
 import {useDisplayState, useFailures, useGame} from '@interlude-games/workshop'
 import normalize from 'emotion-normalize'
 import {ThemeProvider} from 'emotion-theming'
+import fscreen from 'fscreen'
 import i18next from 'i18next'
 import ICU from 'i18next-icu'
 import moment from 'moment'
@@ -19,9 +20,9 @@ import Move from './moves/Move'
 import Theme, {DarkTheme, LightTheme} from './Theme'
 import translations from './translations.json'
 import GameView from './types/GameView'
+import Button from './util/Button'
 import ImagesLoader from './util/ImageLoader'
 import LoadingScreen from './util/LoadingScreen'
-import RotateScreenIcon from './util/RotateScreenIcon'
 import {backgroundColor, empireBackground, textColor} from './util/Styles'
 
 i18next.use(initReactI18next).use(ICU)
@@ -67,8 +68,9 @@ const App: FunctionComponent = () => {
         <LoadingScreen display={loading}/>
         {!loading && <GameDisplay game={game!}/>}
         <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
-          {t('Pour jouer, veuillez incliner votre mobile')}
-          <RotateScreenIcon css={(theme: Theme) => textColor(theme)}/>
+          {t('La résolution idéale pour jouer est en mode paysage, en 16/9.')}
+          <br/>
+          <Button onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>{t('Passer en plein écran')}</Button>
         </p>
         <Header game={game} loading={loading}/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
@@ -101,6 +103,10 @@ const globalStyle = css`
   body {
     margin: 0;
     font-family: 'Oswald', "Roboto Light", serif;
+    font-size: 1vh;
+    @media (max-aspect-ratio: 16/9) {
+      font-size: calc(9vw / 16);
+    }
   }
   #root {
     position: absolute;
@@ -130,14 +136,14 @@ const themeStyle = (theme: Theme) => css`
 `
 
 const portraitInfo = css`
-  @media all and (orientation:landscape) {
+    @media (min-aspect-ratio: 4/3) {
     display: none;
   }
   text-align: center;
   position: absolute;
   line-height: 1.5;
-  font-size: 2em;
-  top: 30%;
+  font-size: 5em;
+  bottom: 2%;
   left: 10%;
   right: 10%;
   & > svg {

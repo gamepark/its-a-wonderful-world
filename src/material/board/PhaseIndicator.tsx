@@ -25,7 +25,7 @@ const phaseStyle = css`
   background-size: cover;
   padding: 0.4% 0 0.6% 0.5%;
   width: 8.2%;
-  font-size: 1.3vh;
+  font-size: 1.3em;
   color: white;
   text-transform: uppercase;
   text-align: center;
@@ -36,7 +36,7 @@ const phaseStyle = css`
     position: absolute;
     background-image: url(${Images.circleMetal});
     background-size: cover;
-    font-size: 1.9vh;
+    font-size: 1.6em;
     color: #888;
     top: -10%;
     left: -10%;

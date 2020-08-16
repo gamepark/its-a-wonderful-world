@@ -58,21 +58,21 @@ const cardStyle = css`
   height: 100%;
   z-index: 100;
   h3 {
-    font-size: ${cardTitleFontSize * swipeableScale}vh;
+    font-size: ${cardTitleFontSize * swipeableScale}em;
   }
 `
 const arrowStyle = css`
   position: absolute;
-  top: 38vh;
-  width: 20vh;
-  height: 24vh;
+  top: 38em;
+  width: 20em;
+  height: 24em;
   z-index: 101;
   background-image: url(${Images.arrowWhite});
   background-size: cover;
   background-repeat: no-repeat;
   background-color: transparent;
   border: none;
-  filter: drop-shadow(0.1vh 0.1vh 0.5vh black);
+  filter: drop-shadow(0.1em 0.1em 0.5em black);
   &:focus {
     outline: 0;
   }

@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'
 import IWWBox from '../material/IWW_BOX_3D.png'
 import Theme from '../Theme'
-import {backgroundColor, headerHeight, textColor} from './Styles'
+import {backgroundColor, textColor} from './Styles'
 
 const LoadingScreen: FunctionComponent<{ display: boolean }> = ({display}) => {
   const {t} = useTranslation()
@@ -32,7 +32,6 @@ const loadingScreenStyle = css`
   left: 0;
   height: 100%;
   width: 100%;
-  padding-top: ${headerHeight}%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -57,19 +56,20 @@ const loadingScreenStyle = css`
 
 const gameBox = css`
   position: relative;
-  width: 62vh;
-  height: 66vh;
+  width: 62em;
+  height: 66em;
+  margin: 3em;
 `
 
 const gameTitle = css`
-  font-size: 5vh;
+  font-size: 5em;
   margin: 0;
 `
 const gamePeople = css`
-  font-size: 3vh;
+  font-size: 3em;
 `
 const iconStyle = css`
-  min-width: 6vh;
+  min-width: 6em;
   position: relative;
 `
 export default LoadingScreen

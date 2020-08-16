@@ -124,10 +124,10 @@ const productionMultiplierStyle = (index: number) => {
 }
 
 const productionMultiplierQuantityStyle = css`
-  font-size: 3vh;
+  font-size: 3em;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
+  text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
 `
 
 const getDescription = (t: TFunction, player: string, resource: Resource, quantity: number) => {

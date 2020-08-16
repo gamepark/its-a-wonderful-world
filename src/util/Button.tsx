@@ -51,11 +51,12 @@ const animateLeft = keyframes`
 
 const style = css`
   background: linear-gradient(-30deg, #0b3d3d 50%, #082b2b 50%);
-  padding: 0.5vh 1vh;
+  padding: 0.2em 0.4em;
   margin: 0;
   display: inline-block;
   -webkit-transform: translate(0%, 0%);
   transform: translate(0%, 0%);
+  cursor: pointer;
   overflow: hidden;
   color: #d4f7f7;
   text-align: center;

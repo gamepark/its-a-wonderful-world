@@ -65,7 +65,7 @@ const getBackgroundImage = (development?: Development) => css`
   background-image: url(${development ? images.get(development) : Images.developmentBack});
 `
 
-export const cardTitleFontSize = 0.85
+export const cardTitleFontSize = 0.9
 
 const cardTitle = css`
   position: absolute;
@@ -74,9 +74,9 @@ const cardTitle = css`
   width: 68%;
   text-align: center;
   color: #EEE;
-  font-size: ${cardTitleFontSize}vh;
+  font-size: ${cardTitleFontSize}em;
   font-weight: lighter;
-  text-shadow: 0 0 0.3vh #000, 0 0 0.3vh #000;
+  text-shadow: 0 0 0.3em #000, 0 0 0.3em #000;
   text-transform:uppercase;
 `
 const images = new Map<Development, any>()

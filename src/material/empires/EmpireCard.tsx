@@ -101,9 +101,9 @@ export const empireCardTitle = css`
   width: 80%;
   color: #EEE;
   text-align:center;
-  font-size: 1vh;
+  font-size: 1em;
   font-weight: lighter;
-  text-shadow: 0 0 0.3vh #000, 0 0 0.3vh #000;
+  text-shadow: 0 0 0.3em #000, 0 0 0.3em #000;
   text-transform:uppercase;
 `
 
