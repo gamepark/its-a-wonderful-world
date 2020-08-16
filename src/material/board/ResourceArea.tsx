@@ -94,7 +94,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, quantit
         <div css={[numberStyle, resourceNumberStyle[resource]]}>{quantity}</div>
       </>
       }
-      {(game.phase === Phase.Production && game.productionStep === resource || quantity > 0) &&
+      {((game.phase === Phase.Production && game.productionStep === resource) || quantity > 0) &&
       <div css={[areaHighlight, resourceAreaHighlight[resource]]}/>
       }
     </>

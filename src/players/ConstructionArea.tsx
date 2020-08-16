@@ -37,7 +37,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
   const playerId = usePlayerId<EmpireName>()
   const [focusedCard, setFocusedCard] = useState<number>()
   const construction = player.constructionArea.find(construction => construction.card === focusedCard)
-  const maxSpendableResources = isPlayer(player) && game.productionStep && construction ? maxResourcesToPlace(player, construction, game.productionStep) : 0
+  const maxSpendableResources = isPlayer(player) && construction ? maxResourcesToPlace(player, construction) : []
   const row = game.phase === Phase.Draft ? 2 : 1
   const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
   const play = usePlay()
@@ -52,10 +52,13 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
     constructions.current = player.constructionArea
   }
   const removeIndex = player.constructionArea.findIndex(construction => construction.card === completingConstruction?.card)
-  const placeResources = (construction: Construction, resource: Resource, quantity: number) => {
-    getRemainingCost(construction).filter(cost => cost.item === resource).slice(0, quantity).forEach(cost =>
-      play(placeResource(player.empire, resource, construction.card, cost.space))
-    )
+  const placeResources = (construction: Construction, resources: Resource[]) => {
+    getRemainingCost(construction).forEach(cost => {
+      if (isResource(cost.item) && resources.some(resource => resource === cost.item)) {
+        play(placeResource(player.empire, cost.item, construction.card, cost.space))
+        resources.splice(resources.findIndex(resource => resource === cost.item), 1)
+      }
+    })
   }
   const build = (construction: Construction) => {
     getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
@@ -105,15 +108,15 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
           }
         </button>
       )}
-      {maxSpendableResources > 1 && <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card) + 0.5)}
-                                            onClick={() => placeResources(construction, game.productionStep!, maxSpendableResources)}>
+      {maxSpendableResources.length > 1 && <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card) + 0.5)}
+                                                   onClick={() => placeResources(construction, maxSpendableResources)}>
         <span css={getPlaceTextStyle}>{t('Placer')} </span>
-        {[...Array(maxSpendableResources)].map((_, index) => <ResourceCube key={index} resource={game.productionStep!} css={buttonItemStyle}/>)}
+        {maxSpendableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={buttonItemStyle}/>)}
       </button>}
       {isPlayer(player) && !gameOver && <>
         {canBuild(player, construction.card) &&
         <button
-          css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources > 1 ? 2 : 2))]}
+          css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources.length > 1 ? 2 : 2))]}
           onClick={() => build(construction)}>{t('Construire')}</button>
         }
         <button css={[textButton, textButtonRight, recyclingButton(developmentCards[construction.card].recyclingBonus)]}
@@ -177,10 +180,15 @@ function getSmartPlaceItemMoves(player: Player, construction: Construction): (Pl
 
 const getTotalConstructionCost = (card: number) => Object.values(constructionCost(developmentCards[card].constructionCost)).reduce((value, sum) => sum + value)
 
-export const maxResourcesToPlace = (player: Player, construction: Construction, resource: Resource) => {
-  const availableResources = player.availableResources.filter(r => r === resource).length
-  const requiredResources = getRemainingCost(construction).filter(cost => cost.item === resource).length
-  return Math.min(availableResources, requiredResources)
+export const maxResourcesToPlace = (player: Player, construction: Construction) => {
+  const resources: Resource[] = []
+  const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
+  getRemainingCost(construction).forEach(cost => {
+    if (isResource(cost.item) && availableResource.some(resource => resource === cost.item)) {
+      resources.push(...availableResource.splice(availableResource.findIndex(resource => resource === cost.item), 1))
+    }
+  })
+  return resources
 }
 
 const getConstructionAreaStyle = (row: number, fullWidth: boolean, isValidTarget: boolean, isOver: boolean) => css`
