@@ -60,6 +60,12 @@ const style = css`
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 1em;
+    & > h2 {
+      font-size: 5em;
+    }
+    & > p {
+      font-size: 4em;
+    }
   }
 `
 
