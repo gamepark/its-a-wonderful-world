@@ -9,6 +9,8 @@ import {Trans, useTranslation} from 'react-i18next'
 import MainMenu from './MainMenu'
 import Character from './material/characters/Character'
 import CharacterToken from './material/characters/CharacterToken'
+import DevelopmentCardsTitles from './material/developments/DevelopmentCardsTitles'
+import {FinancialCenter} from './material/developments/Developments'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
@@ -23,6 +25,7 @@ import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
+import {isPlayer} from './types/typeguards'
 import Button from './util/Button'
 import {headerHeight, textColor} from './util/Styles'
 
@@ -80,6 +83,12 @@ const Header: FunctionComponent<Props> = ({game, loading}) => {
 function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   const player = game.players.find(player => player.empire === empire)
   const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getEmpireName(t, empire)
+  if (game.tutorial && game.round === 1 && !animation && player && isPlayer(player)) {
+    const tutorialText = getTutorialText(t, game, player)
+    if (tutorialText) {
+      return tutorialText
+    }
+  }
   switch (game.phase) {
     case Phase.Draft:
       if (animation && animation.move.type === MoveType.RevealChosenCards) {
@@ -175,6 +184,17 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
       }
   }
   return ''
+}
+
+function getTutorialText(t: TFunction, game: GameView, player: Player): string | undefined {
+  switch (game.phase) {
+    case Phase.Draft:
+      if (player.hand.length === 10) {
+        return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(FinancialCenter)!(t)})
+      }
+      break
+  }
+  return
 }
 
 function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], game: GameView, player?: Player | PlayerView) {

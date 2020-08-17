@@ -33,6 +33,10 @@ const failuresDescription = {
   [Failure.UNDO_FORBIDDEN]: {
     title: (t: TFunction) => t('Trop tard !'),
     text: (t: TFunction) => t('Les autres joueurs ont déjà joué, votre coup n’a pas pu être annulé.')
+  },
+  [Failure.TUTORIAL_MOVE_EXPECTED]: {
+    title: (t: TFunction) => t('Coup non autorisé !'),
+    text: (t: TFunction) => t('Vous devez jouer le coup prévu par le tutoriel')
   }
 }
 
