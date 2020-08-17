@@ -34,7 +34,6 @@ const loadingScreenStyle = css`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   transition: opacity 2s;
   background-image: url(${Images.coverArtwork});
@@ -58,7 +57,8 @@ const gameBox = css`
   position: relative;
   width: 62em;
   height: 66em;
-  margin: 3em;
+  margin-top: 8em;
+  margin-bottom: 3em;
 `
 
 const gameTitle = css`

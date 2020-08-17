@@ -142,8 +142,8 @@ const portraitInfo = css`
   text-align: center;
   position: absolute;
   line-height: 1.5;
-  font-size: 5em;
-  bottom: 2%;
+  font-size: 3.5vw;
+  top: 55vw;
   left: 10%;
   right: 10%;
   & > svg {
