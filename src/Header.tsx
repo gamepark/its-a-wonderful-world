@@ -139,7 +139,7 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
         if (player.availableResources.length) {
           return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')
         } else if (player.bonuses.some(bonus => bonus === 'CHOOSE_CHARACTER')) {
-          return <Trans defaults="Recevez un Financier [<0/>] ou une Générale [<1/>] (Bonus de Suprématie en Science)"
+          return <Trans defaults="Recevez un Financier <0/> ou une Générale <1/> (Bonus de Suprématie en Science)"
                         components={[
                           <CharacterToken character={Character.Financier} onClick={() => play(receiveCharacter(player.empire, Character.Financier))}
                                           css={characterTokenStyle}/>,
