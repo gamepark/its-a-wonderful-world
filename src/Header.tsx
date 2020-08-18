@@ -10,7 +10,6 @@ import MainMenu from './MainMenu'
 import Character from './material/characters/Character'
 import CharacterToken from './material/characters/CharacterToken'
 import DevelopmentCardsTitles from './material/developments/DevelopmentCardsTitles'
-import {FinancialCenter} from './material/developments/Developments'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
@@ -28,6 +27,9 @@ import PlayerView from './types/PlayerView'
 import {isPlayer} from './types/typeguards'
 import Button from './util/Button'
 import {headerHeight, textColor} from './util/Styles'
+import {
+  IndustrialComplex, NationalMonument, PropagandaCenter, SecretSociety, TreasureOfTheTemplars, WindTurbines, Zeppelin
+} from './material/developments/Developments'
 
 
 const headerStyle = (theme: Theme) => css`
@@ -189,8 +191,21 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
 function getTutorialText(t: TFunction, game: GameView, player: Player): string | undefined {
   switch (game.phase) {
     case Phase.Draft:
-      if (player.hand.length === 10) {
-        return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(FinancialCenter)!(t)})
+      switch (player.hand.length) {
+        case 7 :
+          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(NationalMonument)!(t)})
+        case 6 :
+          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+        case 5 :
+          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+        case 4 :
+          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
+        case 3 :
+          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
+        case 2 :
+          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(TreasureOfTheTemplars)!(t)})
+        case 1 :
+          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(Zeppelin)!(t)})
       }
       break
   }
