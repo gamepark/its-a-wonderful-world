@@ -9,7 +9,7 @@ import EmpireName from './material/empires/EmpireName'
 import Resource, {isResource, resources} from './material/resources/Resource'
 import {chooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
 import Move from './moves/Move'
-import {isPlaceResource, placeResource} from './moves/PlaceResource'
+import {placeResource} from './moves/PlaceResource'
 import {produce as produceResources} from './moves/Produce'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {recycle} from './moves/Recycle'
@@ -25,14 +25,17 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 
+const maxThinkingTime = 1000
+
 export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
-  private planTime: number = 0
+  private playTime: number = 0
 
   public constructor(playerId: EmpireName) {
     super(playerId)
   }
 
   play(game: Game): Move[] {
+    this.playTime = new Date().getTime()
     const player = game.players.find(player => player.empire === this.playerId) as Player
     switch (game.phase) {
       case Phase.Draft:
@@ -62,15 +65,15 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
   }
 
   private rateDevelopment(development: Development, player: Player, game: Game) {
-    return this.buildRate(development, player, game) + this.discardRate(development, player, game) + this.counterRate(development, player, game)
+    return this.buildRate(development, player, game.round) + this.discardRate(development, player, game.round) + this.counterRate(development, player, game)
   }
 
-  private buildRate(development: Development, player: Player | PlayerView, game: Game) {
-    return this.expectedProductionRate(development, player, game) + this.expectedScore(development, player)
+  private buildRate(development: Development, player: Player | PlayerView, round: number) {
+    return this.expectedProductionRate(development, player, round) + this.expectedScore(development, player)
   }
 
-  private expectedProductionRate(development: Development, player: Player | PlayerView, game: Game) {
-    const roundsLeft = numberOfRounds - game.round
+  private expectedProductionRate(development: Development, player: Player | PlayerView, round: number) {
+    const roundsLeft = numberOfRounds - round
     const productionMultiplier = roundsLeft * (roundsLeft + 1) / 2
     if (!development.production) {
       return 0
@@ -82,7 +85,7 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
         if (isDevelopmentType(production)) {
           sum += (player.constructedDevelopments.filter(card => developmentCards[card].type === production).length + productionMultiplier) * productionMultiplier
         } else if (production) {
-          sum += empiresProductionRate[player.empire][production] * productionMultiplier
+          sum += empiresProductionRate[player.empire][resource] * production * productionMultiplier
         }
         return sum
       }, 0)
@@ -113,25 +116,24 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
     return Math.max(0, expectedScore - (development.constructionCost.Financier || 0) * expectedScores.Financier - (development.constructionCost.General || 0) * expectedScores.General)
   }
 
-  private discardRate(development: Development, player: Player | PlayerView, game: Game) {
+  private discardRate(development: Development, player: Player | PlayerView, round: number) {
     const resource = development.recyclingBonus
     const need = player.constructionArea.reduce((sum, construction) => {
       sum += getRemainingCost(construction).filter(cost => cost.item === resource).length
       return sum
     }, 0)
     const produce = getProduction(player, resource)
-    return 1 + Math.max(0, need - produce * (numberOfRounds + 1 - game.round))
+    return 1 + Math.max(0, need - produce * (numberOfRounds + 1 - round))
   }
 
   private counterRate(development: Development, player: Player, game: Game) {
     return game.players.filter(otherPlayer => otherPlayer.empire !== player.empire).reduce((sum, player) => {
-      sum += this.buildRate(development, player, game) + this.discardRate(development, player, game)
+      sum += this.buildRate(development, player, game.round) + this.discardRate(development, player, game.round)
       return sum
     }, 0) / game.players.length
   }
 
   private plan(game: Game): Move[] {
-    this.planTime = new Date().getTime()
     return this.planScore(game)[1]
   }
 
@@ -139,60 +141,94 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
     return this.placeResourcesScore(game, [])[1]
   }
 
+  private evaluateOptions(game: Game, options: { moves: Move[], next: (game: Game) => [number, Move[]] }[]): [number, Move[]] {
+    let bestPlan: [number, Move[]] = [-Infinity, []]
+    for (const option of options) {
+      const newState = produce(game, draft => {
+        option.moves.forEach(move => ItsAWonderfulWorldRules.play(move, draft, this.playerId))
+        applyAutomaticMoves(ItsAWonderfulWorldRules, draft, this.playerId)
+      })
+      const evaluation = option.next(newState)
+      if (bestPlan[0] < evaluation[0]) {
+        bestPlan = [evaluation[0], [...option.moves, ...evaluation[1]]]
+      }
+      if (this.playTime + maxThinkingTime < new Date().getTime()) {
+        break
+      }
+    }
+    return bestPlan
+  }
+
   private planScore(game: Game): [number, Move[]] {
     const player = game.players.find(player => player.empire === this.playerId)!
     if (!player.draftArea.length) {
       return this.placeResourcesScore(game, [])
     }
-    let buildPlan: [number, Move[]], recyclePlan: [number, Move[]]
-    const build = slateForConstruction(this.playerId, player.draftArea[0])
-    const buildResult = produce(game, draft => {
-      ItsAWonderfulWorldRules.play(build, draft, this.playerId)
-    })
-    buildPlan = this.planScore(buildResult)
-    buildPlan[1] = [build, ...buildPlan[1]]
-    if (this.planTime + 5000 < new Date().getTime()) {
-      return buildPlan // limit plan to a few seconds.
-    }
-    const recycleMove = recycle(this.playerId, player.draftArea[0])
-    const recycleResult = produce(game, draft => {
-      ItsAWonderfulWorldRules.play(recycleMove, draft, this.playerId)
-    })
-    recyclePlan = this.planScore(recycleResult)
-    recyclePlan[1] = [recycleMove, ...recyclePlan[1]]
-    return buildPlan[0] >= recyclePlan[0] ? buildPlan : recyclePlan
+    // TODO: not always slate for construction before recycle, evaluate build vs discard benefits first
+    return this.evaluateOptions(game, [
+      {moves: [slateForConstruction(this.playerId, player.draftArea[0])], next: (game: Game) => this.planScore(game)},
+      {moves: [recycle(this.playerId, player.draftArea[0])], next: (game: Game) => this.planScore(game)}
+    ])
   }
 
   private placeResourcesScore(game: Game, doNotBuild: Construction[]): [number, Move[]] {
     const player = game.players.find(player => player.empire === this.playerId) as Player
-    if (player.availableResources.filter(resource => resource !== Resource.Krystallium).length) {
+    if (player.availableResources.length) {
       const constructions = constructionsThatMayReceiveCubes(player).filter(construction => !doNotBuild.includes(construction))
-      let bestPlan = this.placeResourcesOnEmpireCard(game, player, [...doNotBuild, ...constructions])
-      for (const construction of constructions) {
-        const plan = this.placeResourcesOnConstruction(game, player, construction, doNotBuild)
-        if (plan[0] >= bestPlan[0]) {
-          bestPlan = plan
+      return this.evaluateOptions(game, [
+        ...constructions.map(construction => ({
+          moves: placeAvailableCubesMoves(player, construction),
+          next: (game: Game) => {
+            const player = game.players.find(player => player.empire === this.playerId) as Player
+            if (player.constructedDevelopments[player.constructedDevelopments.length - 1] === construction.card) {
+              return this.placeResourcesScore(game, [])
+            } else {
+              return this.placeResourcesScore(game, doNotBuild)
+            }
+          },
+          mergeMoves: true
+        })),
+        {
+          moves: player.availableResources.map(resource => placeResource(this.playerId, resource)),
+          next: (game: Game) => this.placeResourcesScore(game, doNotBuild),
+          mergeMoves: true
         }
-        doNotBuild = [...doNotBuild, construction]
-      }
-      return bestPlan
+      ])
     }
     if (player.bonuses.includes(ChooseCharacter)) {
-      const financierPlan = this.chooseCharacter(game, Character.Financier, doNotBuild)
-      const generalPlan = this.chooseCharacter(game, Character.General, doNotBuild)
-      return financierPlan[0] >= generalPlan[0] ? financierPlan : generalPlan
+      return this.evaluateOptions(game, [Character.Financier, Character.General].map(character => ({
+        moves: [receiveCharacter(this.playerId, character)],
+        next: (game: Game) => this.placeResourcesScore(game, doNotBuild),
+        mergeMoves: true
+      })))
     }
-    let bestPlan = this.pass(game, doNotBuild)
-    for (const construction of player.constructionArea) {
-      if (canBuild(player, construction.card) && (game.productionStep === Resource.Exploration || this.wouldIncreaseNextProduction(game, player, construction.card))) {
-        const moves = getMovesToBuild(player, construction.card)
-        const buildPlan = this.buildPlan(game, moves)
-        if (!moves.some(move => isPlaceResource(move) && move.resource === Resource.Krystallium) || buildPlan[0] > bestPlan[0]) {
-          bestPlan = buildPlan
+    return this.evaluateOptions(game, [
+      {
+        moves: [tellYourAreReady(this.playerId)],
+        next: (game: Game) => {
+          game = produce(game, draft => {
+            if (draft.phase === Phase.Planning) {
+              ItsAWonderfulWorldRules.play(startPhase(Phase.Production), draft, this.playerId)
+              ItsAWonderfulWorldRules.play(produceResources(Resource.Materials), draft, this.playerId)
+            } else {
+              const nextProductionStep = getNextProductionStep(draft)
+              if (nextProductionStep) {
+                ItsAWonderfulWorldRules.play(produceResources(nextProductionStep), draft, this.playerId)
+              }
+            }
+          })
+          const roundOver = game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.find(player => player.empire === this.playerId)!.availableResources.length === 0
+          const bestScore = roundOver ? this.score(game) : this.placeResourcesScore(game, doNotBuild)[0]
+          return [bestScore, []]
         }
-      }
-    }
-    return bestPlan
+      },
+      ...player.constructionArea.filter(construction => canBuild(player, construction.card))
+        .filter(construction => game.productionStep === Resource.Exploration || this.wouldIncreaseNextProduction(game, player, construction.card))
+        .map(construction => ({
+          moves: getMovesToBuild(player, construction.card),
+          next: (game: Game) => this.placeResourcesScore(game, [])
+        }))
+    ])
   }
 
   private wouldIncreaseNextProduction(game: Game, player: Player, card: number) {
@@ -203,80 +239,22 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
     return getProduction(newPlayer, resource) > getProduction(player, resource)
   }
 
-  private placeResourcesOnEmpireCard(game: Game, player: Player, doNotBuild: Construction[]): [number, Move[]] {
-    const moves: Move[] = []
-    const newState = produce(game, draft => {
-      player.availableResources.forEach(resource => {
-        const move = placeResource(player.empire, resource)
-        moves.push(move)
-        ItsAWonderfulWorldRules.play(move, draft, player.empire)
-        applyAutomaticMoves(ItsAWonderfulWorldRules, draft, this.playerId)
-      })
-    })
-    const bestScore = this.placeResourcesScore(newState, doNotBuild)
-    bestScore[1] = [...moves, ...bestScore[1]]
-    return bestScore
+  private score(game: Game) {
+    const player = game.players.find(player => player.empire === this.playerId) as Player
+    const roundsLeft = numberOfRounds - game.round
+    const potentialScore = roundsLeft > 0 ? this.potentialScore(player, game.round) : 0
+    return getScore(player) + roundsLeft * (roundsLeft + 1) / 2 * this.expectedProductionScore(player) + potentialScore
   }
 
-  private placeResourcesOnConstruction(game: Game, player: Player, construction: Construction, doNotBuild: Construction[]) {
-    const moves = placeAvailableCubesMoves(player, construction)
-    const newState = produce(game, draft => {
-      moves.forEach(move => ItsAWonderfulWorldRules.play(move, draft, player.empire))
-      applyAutomaticMoves(ItsAWonderfulWorldRules, draft, this.playerId)
-    })
-    // if we finish a building, we may now consider again all the constructions we ignored before
-    const newPlayer = newState.players.find(player => player.empire === this.playerId) as Player
-    if (newPlayer.constructedDevelopments[newPlayer.constructedDevelopments.length - 1] === construction.card) {
-      doNotBuild = []
-    }
-    const bestScore = this.placeResourcesScore(newState, doNotBuild)
-    bestScore[1] = [...moves, ...bestScore[1]]
-    return bestScore
-  }
-
-  private chooseCharacter(game: Game, character: Character, doNotBuild: Construction[]): [number, Move[]] {
-    const move = receiveCharacter(this.playerId, character)
-    const newState = produce(game, draft => {
-      ItsAWonderfulWorldRules.play(move, draft, this.playerId)
-    })
-    const bestScore = this.placeResourcesScore(newState, doNotBuild)
-    bestScore[1] = [move, ...bestScore[1]]
-    return bestScore
-  }
-
-  private pass(game: Game, doNotBuild: Construction[]): [number, Move[]] {
-    const move = tellYourAreReady(this.playerId)
-    const newState = produce(game, draft => {
-      ItsAWonderfulWorldRules.play(move, draft, this.playerId)
-      if (draft.phase === Phase.Planning) {
-        ItsAWonderfulWorldRules.play(startPhase(Phase.Production), draft, this.playerId)
-        ItsAWonderfulWorldRules.play(produceResources(Resource.Materials), draft, this.playerId)
-      } else {
-        const nextProductionStep = getNextProductionStep(game)
-        if (nextProductionStep) {
-          ItsAWonderfulWorldRules.play(produceResources(nextProductionStep), draft, this.playerId)
-        }
-      }
-    })
-    const roundOver = game.phase === Phase.Production && game.productionStep === Resource.Exploration && newState.players.find(player => player.empire === this.playerId)!.availableResources.filter(resource => resource !== Resource.Krystallium).length === 0
-    const bestScore = roundOver ? this.score(newState) : this.placeResourcesScore(newState, doNotBuild)[0]
-    return [bestScore, [move]]
-  }
-
-  private buildPlan(game: Game, moves: Move[]): [number, Move[]] {
-    const newState = produce(game, draft => {
-      moves.forEach(move => ItsAWonderfulWorldRules.play(move, draft, this.playerId))
-      applyAutomaticMoves(ItsAWonderfulWorldRules, draft, this.playerId)
-    })
-    const bestScore = this.placeResourcesScore(newState, [])
-    return [bestScore[0], [...moves, ...bestScore[1]]]
-  }
-
-  private score(newState: Game) {
-    const player = newState.players.find(player => player.empire === this.playerId) as Player
-    const roundsLeft = numberOfRounds - newState.round
-    const startedConstructionBonus = roundsLeft > 0 ? TutorialAI.startedConstructionBonus(player) : 0
-    return getScore(player) + roundsLeft * (roundsLeft + 1) / 2 * this.expectedProductionScore(player) + startedConstructionBonus
+  private potentialScore(player: Player, round: number) {
+    const constructionAreaPotential = player.constructionArea.reduce((sum, construction) => {
+      const rate = this.buildRate(developmentCards[construction.card], player, round + 1)
+      const totalCost = construction.costSpaces.length
+      const costLeft = construction.costSpaces.filter(costSpace => !!costSpace).length
+      return sum + rate * (costLeft + 1) / (totalCost + 1)
+    }, 0)
+    const resourcesPotential = player.empireCardResources.reduce((sum, resource) => resource === Resource.Krystallium ? sum + 2 : sum + 0.4, 0)
+    return constructionAreaPotential + resourcesPotential
   }
 
   private expectedProductionScore(player: Player) {
@@ -285,55 +263,48 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
       return sum
     }, 0)
   }
-
-  private static startedConstructionBonus(player: Player) {
-    return player.constructionArea.reduce((sum, construction) => {
-      sum += construction.costSpaces.filter(costSpace => !!costSpace).length + 1
-      return sum
-    }, 0)
-  }
 }
 
 const empiresProductionRate: Record<EmpireName, Record<Resource, number>> = {
   [EmpireName.AztecEmpire]: {
-    [Resource.Materials]: 0.1,
-    [Resource.Energy]: 1,
-    [Resource.Science]: 0.5,
-    [Resource.Gold]: 1.5,
-    [Resource.Exploration]: 3,
-    [Resource.Krystallium]: 3
+    [Resource.Materials]: 0.4,
+    [Resource.Energy]: 0.9,
+    [Resource.Science]: 0.7,
+    [Resource.Gold]: 1.2,
+    [Resource.Exploration]: 1.8,
+    [Resource.Krystallium]: 2
   },
   [EmpireName.RepublicOfEurope]: {
-    [Resource.Materials]: 0.3,
-    [Resource.Energy]: 1.5,
+    [Resource.Materials]: 0.7,
+    [Resource.Energy]: 1.1,
     [Resource.Science]: 1,
     [Resource.Gold]: 0.8,
-    [Resource.Exploration]: 2,
-    [Resource.Krystallium]: 3
+    [Resource.Exploration]: 1.4,
+    [Resource.Krystallium]: 2
   },
   [EmpireName.NoramStates]: {
-    [Resource.Materials]: 0.8,
+    [Resource.Materials]: 1,
     [Resource.Energy]: 0.8,
     [Resource.Science]: 1,
-    [Resource.Gold]: 2,
-    [Resource.Exploration]: 0.5,
-    [Resource.Krystallium]: 3
+    [Resource.Gold]: 1.5,
+    [Resource.Exploration]: 0.7,
+    [Resource.Krystallium]: 2
   },
   [EmpireName.FederationOfAsia]: {
-    [Resource.Materials]: 0.5,
-    [Resource.Energy]: 0.1,
+    [Resource.Materials]: 0.8,
+    [Resource.Energy]: 0.4,
     [Resource.Science]: 1,
-    [Resource.Gold]: 3,
+    [Resource.Gold]: 1.8,
     [Resource.Exploration]: 1,
-    [Resource.Krystallium]: 3
+    [Resource.Krystallium]: 2
   },
   [EmpireName.PanafricanUnion]: {
-    [Resource.Materials]: 0.5,
-    [Resource.Energy]: 0.3,
-    [Resource.Science]: 3,
-    [Resource.Gold]: 1.5,
+    [Resource.Materials]: 0.6,
+    [Resource.Energy]: 0.4,
+    [Resource.Science]: 1.8,
+    [Resource.Gold]: 1.2,
     [Resource.Exploration]: 1,
-    [Resource.Krystallium]: 3
+    [Resource.Krystallium]: 2
   }
 }
 
