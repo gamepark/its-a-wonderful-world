@@ -70,18 +70,19 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
   }
 
   private expectedProductionRate(development: Development, player: Player | PlayerView, game: Game) {
-    const roundsLeft = numberOfRounds + 1 - game.round
+    const roundsLeft = numberOfRounds - game.round
+    const productionMultiplier = roundsLeft * (roundsLeft + 1) / 2
     if (!development.production) {
       return 0
     } else if (isResource(development.production)) {
-      return empiresProductionRate[player.empire][development.production] * roundsLeft
+      return empiresProductionRate[player.empire][development.production] * productionMultiplier
     } else {
       return resources.reduce((sum, resource) => {
         const production = development.production![resource] as number | DevelopmentType | undefined
         if (isDevelopmentType(production)) {
-          sum += (2 * player.constructedDevelopments.filter(card => developmentCards[card].type === production).length + roundsLeft) * roundsLeft / 2
+          sum += (player.constructedDevelopments.filter(card => developmentCards[card].type === production).length + productionMultiplier) * productionMultiplier
         } else if (production) {
-          sum += production
+          sum += empiresProductionRate[player.empire][production] * productionMultiplier
         }
         return sum
       }, 0)
@@ -275,7 +276,7 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
     const player = newState.players.find(player => player.empire === this.playerId) as Player
     const roundsLeft = numberOfRounds - newState.round
     const startedConstructionBonus = roundsLeft > 0 ? TutorialAI.startedConstructionBonus(player) : 0
-    return getScore(player) + roundsLeft * roundsLeft * this.expectedProductionScore(player) + startedConstructionBonus
+    return getScore(player) + roundsLeft * (roundsLeft + 1) / 2 * this.expectedProductionScore(player) + startedConstructionBonus
   }
 
   private expectedProductionScore(player: Player) {
@@ -295,44 +296,44 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
 
 const empiresProductionRate: Record<EmpireName, Record<Resource, number>> = {
   [EmpireName.AztecEmpire]: {
-    [Resource.Materials]: 0.5,
-    [Resource.Energy]: 2,
-    [Resource.Science]: 1,
-    [Resource.Gold]: 2,
-    [Resource.Exploration]: 10,
-    [Resource.Krystallium]: 1
+    [Resource.Materials]: 0.1,
+    [Resource.Energy]: 1,
+    [Resource.Science]: 0.5,
+    [Resource.Gold]: 1.5,
+    [Resource.Exploration]: 3,
+    [Resource.Krystallium]: 3
   },
   [EmpireName.RepublicOfEurope]: {
-    [Resource.Materials]: 1,
-    [Resource.Energy]: 5,
-    [Resource.Science]: 3,
-    [Resource.Gold]: 1,
-    [Resource.Exploration]: 5,
-    [Resource.Krystallium]: 1
+    [Resource.Materials]: 0.3,
+    [Resource.Energy]: 1.5,
+    [Resource.Science]: 1,
+    [Resource.Gold]: 0.8,
+    [Resource.Exploration]: 2,
+    [Resource.Krystallium]: 3
   },
   [EmpireName.NoramStates]: {
-    [Resource.Materials]: 5,
-    [Resource.Energy]: 3,
-    [Resource.Science]: 3,
-    [Resource.Gold]: 5,
-    [Resource.Exploration]: 1,
-    [Resource.Krystallium]: 1
+    [Resource.Materials]: 0.8,
+    [Resource.Energy]: 0.8,
+    [Resource.Science]: 1,
+    [Resource.Gold]: 2,
+    [Resource.Exploration]: 0.5,
+    [Resource.Krystallium]: 3
   },
   [EmpireName.FederationOfAsia]: {
-    [Resource.Materials]: 3,
-    [Resource.Energy]: 0.5,
-    [Resource.Science]: 3,
-    [Resource.Gold]: 10,
-    [Resource.Exploration]: 3,
-    [Resource.Krystallium]: 1
+    [Resource.Materials]: 0.5,
+    [Resource.Energy]: 0.1,
+    [Resource.Science]: 1,
+    [Resource.Gold]: 3,
+    [Resource.Exploration]: 1,
+    [Resource.Krystallium]: 3
   },
   [EmpireName.PanafricanUnion]: {
-    [Resource.Materials]: 2,
-    [Resource.Energy]: 1,
-    [Resource.Science]: 10,
-    [Resource.Gold]: 3,
-    [Resource.Exploration]: 3,
-    [Resource.Krystallium]: 1
+    [Resource.Materials]: 0.5,
+    [Resource.Energy]: 0.3,
+    [Resource.Science]: 3,
+    [Resource.Gold]: 1.5,
+    [Resource.Exploration]: 1,
+    [Resource.Krystallium]: 3
   }
 }
 
