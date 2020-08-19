@@ -9,11 +9,7 @@ import WithTutorial from '@interlude-games/workshop/dist/Types/WithTutorial'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
-import {
-  AirborneLaboratory, ArkOfTheCovenant, CenterOfTheEarth, CityOfAgartha, developmentCards, GeneticUpgrades, GravityInverter, HumanCloning, IndustrialComplex,
-  Juggernaut, LunarBase, MilitaryBase, NationalMonument, OffshoreOilRig, PropagandaCenter, RecyclingPlant, SecretSociety, Submarine, TransportationNetwork,
-  TreasureOfTheTemplars, WindTurbines, Zeppelin
-} from './material/developments/Developments'
+import {developmentCards} from './material/developments/Developments'
 import DevelopmentType, {isDevelopmentType} from './material/developments/DevelopmentType'
 import EmpireName from './material/empires/EmpireName'
 import Empires from './material/empires/Empires'
@@ -37,6 +33,7 @@ import {isSlateForConstruction, slateForConstruction} from './moves/SlateForCons
 import {startPhase} from './moves/StartPhase'
 import {isTellYouAreReady, tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
+import {setupTutorial, tutorialMoves} from './Tutorial'
 import Game from './types/Game'
 import GameOptions from './types/GameOptions'
 import GameView from './types/GameView'
@@ -48,9 +45,9 @@ import {isGameView, isPlayerView} from './types/typeguards'
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
 export const numberOfRounds = 4
-export const defaultNumberOfPlayers = 3
 const playersMin = 2
 const playersMax = 5
+export const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
 type GameType = SimultaneousGame<Game, Move, EmpireName>
@@ -541,102 +538,11 @@ const ItsAWonderfulWorldRules: GameType = {
   },
 
   setupTutorial(): Game {
-    const initialCards = [
-                          // Tutorial Active Player cards
-                          developmentCards.findIndex(development => development === NationalMonument),
-                          developmentCards.findIndex(development => development === Zeppelin),
-                          developmentCards.findIndex(development => development === Submarine),
-                          developmentCards.findIndex(development => development === SecretSociety),
-                          developmentCards.findIndex(development => development === OffshoreOilRig),
-                          developmentCards.findIndex(development => development === MilitaryBase),
-                          developmentCards.findIndex(development => development === ArkOfTheCovenant),
-                          // Tutorial Second Player cards
-                          developmentCards.findIndex(development => development === HumanCloning),
-                          developmentCards.findIndex(development => development === TransportationNetwork),
-                          developmentCards.findIndex(development => development === IndustrialComplex),
-                          developmentCards.findIndex(development => development === TreasureOfTheTemplars),
-                          developmentCards.findIndex(development => development === GravityInverter),
-                          developmentCards.findIndex(development => development === RecyclingPlant),
-                          developmentCards.findIndex(development => development === AirborneLaboratory),
-                          // Tutorial Third Player cards
-                          developmentCards.findIndex(development => development === WindTurbines),
-                          developmentCards.findIndex(development => development === LunarBase),
-                          developmentCards.findIndex(development => development === PropagandaCenter),
-                          developmentCards.findIndex(development => development === CenterOfTheEarth),
-                          developmentCards.findIndex(development => development === GeneticUpgrades),
-                          developmentCards.findIndex(development => development === Juggernaut),
-                          developmentCards.findIndex(development => development === CityOfAgartha),
-
-
-                        ]
-    return {
-      players: setupPlayers([{empire: EmpireName.NoramStates}, {empire: EmpireName.RepublicOfEurope}, {empire: EmpireName.FederationOfAsia}]),
-      deck: [...initialCards, ...shuffle(Array.from(developmentCards.keys()).filter(card => !initialCards.includes(card)))],
-      discard: [],
-      round: 1,
-      phase: Phase.Draft,
-      tutorial: true
-    }
+    return setupTutorial(setupPlayers)
   },
 
   expectedMoves(): Move[] {
-    return [
-      // Automatic Tutorial Draft Phase
-      chooseDevelopmentCard(EmpireName.NoramStates, developmentCards.findIndex(development => development === NationalMonument)),
-      chooseDevelopmentCard(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === GravityInverter)),
-      chooseDevelopmentCard(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === CenterOfTheEarth)),
-      chooseDevelopmentCard(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === MilitaryBase)),
-      chooseDevelopmentCard(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === HumanCloning)),
-      chooseDevelopmentCard(EmpireName.NoramStates, developmentCards.findIndex(development => development === PropagandaCenter)),
-      chooseDevelopmentCard(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === CityOfAgartha)),
-      chooseDevelopmentCard(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === ArkOfTheCovenant)),
-      chooseDevelopmentCard(EmpireName.NoramStates, developmentCards.findIndex(development => development === IndustrialComplex)),
-      chooseDevelopmentCard(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === RecyclingPlant)),
-      chooseDevelopmentCard(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === LunarBase)),
-      chooseDevelopmentCard(EmpireName.NoramStates, developmentCards.findIndex(development => development === SecretSociety)),
-      chooseDevelopmentCard(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === Submarine)),
-      chooseDevelopmentCard(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === TransportationNetwork)),
-      chooseDevelopmentCard(EmpireName.NoramStates, developmentCards.findIndex(development => development === WindTurbines)),
-      chooseDevelopmentCard(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === GeneticUpgrades)),
-      chooseDevelopmentCard(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === OffshoreOilRig)),
-      chooseDevelopmentCard(EmpireName.NoramStates, developmentCards.findIndex(development => development === TreasureOfTheTemplars)),
-
-      // Active Player Planification Phase
-      slateForConstruction(EmpireName.NoramStates, developmentCards.findIndex(development => development === NationalMonument)),
-      slateForConstruction(EmpireName.NoramStates, developmentCards.findIndex(development => development === PropagandaCenter)),
-      slateForConstruction(EmpireName.NoramStates, developmentCards.findIndex(development => development === IndustrialComplex)),
-      slateForConstruction(EmpireName.NoramStates, developmentCards.findIndex(development => development === SecretSociety)),
-      recycle(EmpireName.NoramStates, developmentCards.findIndex(development => development === WindTurbines)),
-      recycle(EmpireName.NoramStates, developmentCards.findIndex(development => development === TreasureOfTheTemplars)),
-      recycle(EmpireName.NoramStates, developmentCards.findIndex(development => development === Zeppelin)),
-      // placeResource(EmpireName.NoramStates, Resoucre.Energy, developmentCards.findIndex(development => development === IndustrialComplex)),
-      // placeResource(EmpireName.NoramStates, Resource.Gold, developmentCards.findIndex(development => development === PropagandaCenter)),
-      placeResource(EmpireName.NoramStates, Resource.Exploration),
-
-
-      // Second Player Planification Phase
-      slateForConstruction(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === MilitaryBase)),
-      slateForConstruction(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === AirborneLaboratory)),
-      slateForConstruction(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === CityOfAgartha)),
-      slateForConstruction(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === Submarine)),
-      slateForConstruction(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === GravityInverter)),
-      recycle(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === RecyclingPlant)),
-      recycle(EmpireName.RepublicOfEurope, developmentCards.findIndex(development => development === GeneticUpgrades)),
-      // placeResource(EmpireName.NoramStates, Resource.Materials, developmentCards.findIndex(development => development === MilitaryBase)),
-      // placeResource(EmpireName.NoramStates, Resource.Science, developmentCards.findIndex(development => development === GravityInverter)),
-      //
-      // // Second Player Planification Phase
-      slateForConstruction(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === ArkOfTheCovenant)),
-      slateForConstruction(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === LunarBase)),
-      slateForConstruction(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === OffshoreOilRig)),
-      slateForConstruction(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === HumanCloning)),
-      recycle(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === CenterOfTheEarth)),
-      recycle(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === Juggernaut)),
-      recycle(EmpireName.FederationOfAsia, developmentCards.findIndex(development => development === TransportationNetwork))
-      // placeResource(EmpireName.FederationOfAsia, Resource.Exploration, developmentCards.findIndex(development => development === OffshoreOilRig)),
-      // placeResource(EmpireName.FederationOfAsia, Resource.Materials, developmentCards.findIndex(development => development === OffshoreOilRig)),
-      // placeResource(EmpireName.FederationOfAsia, Resource.Materials, developmentCards.findIndex(development => development === OffshoreOilRig)),
-    ]
+    return tutorialMoves
   }
 }
 
