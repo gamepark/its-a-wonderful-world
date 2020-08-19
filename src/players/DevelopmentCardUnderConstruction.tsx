@@ -23,7 +23,9 @@ import PlaceCharacter, {isPlaceCharacter, placeCharacter} from '../moves/PlaceCh
 import {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import Recycle, {isRecycle} from '../moves/Recycle'
 import SlateForConstruction, {slateForConstruction} from '../moves/SlateForConstruction'
-import ItsAWonderfulWorldRules, {canUndoSlateForConstruction, getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard} from '../Rules'
+import ItsAWonderfulWorldRules, {
+  canUndoSlateForConstruction, getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard, placeAvailableCubesMoves
+} from '../Rules'
 import GameView from '../types/GameView'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
@@ -52,15 +54,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
       if (player.empire !== playerId) {
         return
       }
-      const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
-      getRemainingCost(construction).forEach(cost => {
-        if (isResource(cost.item)) {
-          if (availableResource.some(resource => resource === cost.item)) {
-            play(placeResource(player.empire, cost.item, construction.card, cost.space))
-            availableResource.splice(availableResource.findIndex(resource => resource === cost.item), 1)
-          }
-        }
-      })
+      placeAvailableCubesMoves(player, construction).forEach(move => play(move))
       window.navigator.vibrate(200)
     }
   })
@@ -131,7 +125,8 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
   }
 
   return (
-    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={gameOver || !canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]}
+    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={gameOver || !canRecycle || canDrop || focused}
+               css={[cardStyle, areaCardStyle]}
                onDrop={onDrop} {...longPress} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>

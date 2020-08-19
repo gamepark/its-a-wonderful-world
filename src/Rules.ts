@@ -24,7 +24,7 @@ import Move, {MoveView} from './moves/Move'
 import MoveType from './moves/MoveType'
 import {isPassCardsView, passCards} from './moves/PassCards'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter} from './moves/PlaceCharacter'
-import {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from './moves/PlaceResource'
+import PlaceResource, {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from './moves/PlaceResource'
 import {produce} from './moves/Produce'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {recycle} from './moves/Recycle'
@@ -791,6 +791,24 @@ export function countCharacters(player: Player | PlayerView) {
 
 export function isOver(game: Game | GameView): boolean {
   return game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
+}
+
+export function constructionsThatMayReceiveCubes(player: Player | PlayerView): Construction[] {
+  return player.constructionArea.filter(construction => getRemainingCost(construction).some(cost => isResource(cost.item) && player.availableResources.includes(cost.item)))
+}
+
+export function placeAvailableCubesMoves(player: Player | PlayerView, construction: Construction): PlaceResource[] {
+  const moves: PlaceResource[] = []
+  const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
+  getRemainingCost(construction).forEach(cost => {
+    if (isResource(cost.item)) {
+      if (availableResource.some(resource => resource === cost.item)) {
+        moves.push(placeResource(player.empire, cost.item, construction.card, cost.space))
+        availableResource.splice(availableResource.findIndex(resource => resource === cost.item), 1)
+      }
+    }
+  })
+  return moves
 }
 
 // noinspection JSUnusedGlobalSymbols
