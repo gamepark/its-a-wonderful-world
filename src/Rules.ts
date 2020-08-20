@@ -1,5 +1,5 @@
 import {
-  Action, GameWithIncompleteInformation, shuffle, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo
+  Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo
 } from '@interlude-games/workshop'
 import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
 import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
@@ -809,6 +809,14 @@ export function placeAvailableCubesMoves(player: Player | PlayerView, constructi
     }
   })
   return moves
+}
+
+function shuffle<T>(array: T[]): T[] {
+  for (let index = array.length - 1; index > 0; index--) {
+    const newIndex = Math.floor(Math.random() * (index + 1));
+    [array[index], array[newIndex]] = [array[newIndex], array[index]]
+  }
+  return array
 }
 
 // noinspection JSUnusedGlobalSymbols

@@ -1,4 +1,3 @@
-import {applyAutomaticMoves, GameAI} from '@interlude-games/workshop'
 import produce from 'immer'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
@@ -25,13 +24,14 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 
-const maxThinkingTime = 1000
+const maxThinkingTime = 10000
 
-export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
+export default class TutorialAI {
   private playTime: number = 0
+  private readonly playerId: EmpireName
 
   public constructor(playerId: EmpireName) {
-    super(playerId)
+    this.playerId = playerId
   }
 
   play(game: Game): Move[] {
@@ -146,7 +146,7 @@ export default class TutorialAI extends GameAI<Game, Move, EmpireName> {
     for (const option of options) {
       const newState = produce(game, draft => {
         option.moves.forEach(move => ItsAWonderfulWorldRules.play(move, draft, this.playerId))
-        applyAutomaticMoves(ItsAWonderfulWorldRules, draft, this.playerId)
+        applyAutomaticMoves(draft, this.playerId)
       })
       const evaluation = option.next(newState)
       if (bestPlan[0] < evaluation[0]) {
@@ -353,5 +353,18 @@ const empiresExpectedScore: Record<EmpireName, Record<Character | DevelopmentTyp
     [DevelopmentType.Research]: 0,
     [DevelopmentType.Vehicle]: 1,
     [DevelopmentType.Structure]: 0
+  }
+}
+
+function applyAutomaticMoves(game: Game, playerId?: EmpireName): Move[] {
+  const moves: Move[] = []
+  while (true) {
+    const move = ItsAWonderfulWorldRules.getAutomaticMove(game)
+    if (move) {
+      ItsAWonderfulWorldRules.play(move, game, playerId)
+      moves.push(move)
+    } else {
+      return moves
+    }
   }
 }

@@ -3,13 +3,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import App from './App'
-import EmpireName from './material/empires/EmpireName'
 import ItsAWonderfulWorldRules from './Rules'
-import TutorialAI from './TutorialAI'
+import {ai} from './TutorialAI.worker'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={createGameStore('its-a-wonderful-world', ItsAWonderfulWorldRules, (playerId: EmpireName) => new TutorialAI(playerId))}>
+    <Provider store={createGameStore('its-a-wonderful-world', ItsAWonderfulWorldRules, ai)}>
       <App/>
     </Provider>
   </React.StrictMode>,
