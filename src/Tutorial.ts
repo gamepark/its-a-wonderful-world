@@ -90,7 +90,7 @@ export const tutorialMoves = [
   placeResource(EmpireName.RepublicOfEurope, Resource.Science, gravityInverter, 1),
   tellYourAreReady(EmpireName.RepublicOfEurope),
 
-  // Second Player Planning Phase
+  // Third Player Planning Phase
   slateForConstruction(EmpireName.FederationOfAsia, arkOfTheCovenant),
   slateForConstruction(EmpireName.FederationOfAsia, lunarBase),
   slateForConstruction(EmpireName.FederationOfAsia, offshoreOilRig),
@@ -109,10 +109,10 @@ export const tutorialMoves = [
   slateForConstruction(EmpireName.NoramStates, industrialComplex),
   slateForConstruction(EmpireName.NoramStates, secretSociety),
   recycle(EmpireName.NoramStates, windTurbine),
-  recycle(EmpireName.NoramStates, treasureOfTheTemplars),
-  recycle(EmpireName.NoramStates, zeppelin),
   placeResource(EmpireName.NoramStates, Resource.Energy, industrialComplex, 3),
+  recycle(EmpireName.NoramStates, treasureOfTheTemplars),
   placeResource(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 0),
+  recycle(EmpireName.NoramStates, zeppelin),
   tellYourAreReady(EmpireName.NoramStates),
 
   // Material production

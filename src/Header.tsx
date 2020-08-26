@@ -193,20 +193,50 @@ function getTutorialText(t: TFunction, game: GameView, player: Player): string |
     case Phase.Draft:
       switch (player.hand.length) {
         case 7 :
-          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(NationalMonument)!(t)})
+          return t('Tutoriel: choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(NationalMonument)!(t)})
         case 6 :
-          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+          return t('Tutoriel: choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
         case 5 :
-          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+          return t('Tutoriel: choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
         case 4 :
-          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
+          return t('Tutoriel: choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
         case 3 :
-          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
+          return t('Tutoriel: choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
         case 2 :
-          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(TreasureOfTheTemplars)!(t)})
+          return t('Tutoriel: choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(TreasureOfTheTemplars)!(t)})
         case 1 :
-          return t('Tutoriel: choisissez la carte {card} et placez la dans votre zone de draft', {card: DevelopmentCardsTitles.get(Zeppelin)!(t)})
+          return t('Tutoriel: choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(Zeppelin)!(t)})
       }
+      break
+    case Phase.Planning:
+      switch (player.draftArea.length) {
+        case 7 :
+          return t('Tutoriel: sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(NationalMonument)!(t)})
+        case 6 :
+          return t('Tutoriel: sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+        case 5 :
+          return t('Tutoriel: sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+        case 4 :
+          return t('Tutoriel: sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
+        case 3 :
+          return t('Tutoriel: sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
+        case 2 :
+          if(player.availableResources.length > 0)
+            return t('Tutoriel: placez le cube d’Énergie généré sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+          else
+            return t('Tutoriel: sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(TreasureOfTheTemplars)!(t)})
+        case 1 :
+          if(player.availableResources.length > 0)
+            return t('Tutoriel: placez le cube d’Or généré sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+          else
+            return t('Tutoriel: sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(Zeppelin)!(t)})
+      }
+      break
+    case Phase.Production:
+      if(player.availableResources.filter(r => r === Resource.Materials).length > 0 )
+        return t('Tutoriel: placez vos Matériaux (cubes blancs) sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+      else if(player.availableResources.filter(r => r === Resource.Gold).length > 0 )
+        return t('Tutoriel: placez vos Ors (cubes jaunes) sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
       break
   }
   return
