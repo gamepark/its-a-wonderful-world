@@ -218,7 +218,7 @@
       "Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.": "Beyond {duration} you will be allowed to eject them and continue the game.",
       "Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.": "If you don't think they are coming back, you have the option of ejecting them from the game.",
       "Expulser {player}": "Eject {player}",
-      "La partie est terminée, qui sera le Suprême Leader ?...": "The game is over, who will become the Glorious Leader?..."
+      "Calcul du score... Qui sera le Suprême Leader ?": "Score calculation... Who will be the Supreme Leader?"
 
     }
   },
@@ -441,7 +441,7 @@
       "Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.": "Beyond {duration} you will be allowed to eject them and continue the game.",
       "Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.": "Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.",
       "Expulser {player}": "Expulser {player}",
-      "La partie est terminée, qui sera le Suprême Leader ?...": "La partie est terminée, qui sera le Suprême Leader ?..."
+      "Calcul du score... Qui sera le Suprême Leader ?": "Calcul du score... Qui sera le Suprême Leader ?"
     }
   }
 }
