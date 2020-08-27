@@ -12,6 +12,7 @@ import {placeResource} from './moves/PlaceResource'
 import {produce as produceResources} from './moves/Produce'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {recycle} from './moves/Recycle'
+import {revealChosenCards} from './moves/RevealChosenCards'
 import {slateForConstruction} from './moves/SlateForConstruction'
 import {startPhase} from './moves/StartPhase'
 import {tellYourAreReady} from './moves/TellYouAreReady'
@@ -24,10 +25,19 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 
-const maxThinkingTime = 10000
+type AIOptions = {
+  moves: Move[]
+  next: (game: Game) => OptionsEvaluation
+  rate: number
+}
+type OptionsEvaluation = {
+  note: number
+  moves: Move[]
+  improve?: () => OptionsEvaluation
+}
 
 export default class TutorialAI {
-  private playTime: number = 0
+  private timeLimit: number = 0
   private readonly playerId: EmpireName
 
   public constructor(playerId: EmpireName) {
@@ -35,33 +45,38 @@ export default class TutorialAI {
   }
 
   play(game: Game): Move[] {
-    this.playTime = new Date().getTime()
+    this.timeLimit = new Date().getTime()
     const player = game.players.find(player => player.empire === this.playerId) as Player
     switch (game.phase) {
       case Phase.Draft:
-        return [this.draft(game, player)]
+        this.timeLimit += 5000
+        return this.draft(game, player)
       case Phase.Planning:
+        this.timeLimit += 10000
         return this.plan(game)
       case Phase.Production:
+        this.timeLimit += 5000
         return this.placeResources(game)
     }
   }
 
-  private draft(game: Game, player: Player): Move {
+  private draft(game: Game, player: Player): Move[] {
     const cardRates = player.hand.reduce<Map<number, number>>((map, card) => {
       const rate = this.rateDevelopment(developmentCards[card], player, game)
       map.set(card, rate * rate)
       return map
     }, new Map<number, number>())
-    const rateSum = [...cardRates.values()].reduce((sum, rate) => sum + rate)
-    let random = Math.random() * rateSum
-    for (const cardRate of cardRates) {
-      if (random < cardRate[1]) {
-        return chooseDevelopmentCard(player.empire, cardRate[0])
-      }
-      random -= cardRate[1]
-    }
-    throw new Error('Implementation error: there should always be a random card chosen by the draft method')
+    return this.evaluateOptions(game, player.hand.map(card => ({
+      moves: [chooseDevelopmentCard(this.playerId, card)],
+      next: (game: Game) => {
+        const planningSimulation = produce(game, draft => {
+          ItsAWonderfulWorldRules.play(revealChosenCards(), draft, this.playerId)
+          ItsAWonderfulWorldRules.play(startPhase(Phase.Planning), draft, this.playerId)
+        })
+        return ({note: this.planScore(planningSimulation).note, moves: []})
+      },
+      rate: cardRates[card]
+    }))).moves
   }
 
   private rateDevelopment(development: Development, player: Player, game: Game) {
@@ -128,54 +143,63 @@ export default class TutorialAI {
 
   private counterRate(development: Development, player: Player, game: Game) {
     return game.players.filter(otherPlayer => otherPlayer.empire !== player.empire).reduce((sum, player) => {
-      sum += this.buildRate(development, player, game.round) + this.discardRate(development, player, game.round)
+      sum += this.buildRate(development, player, game.round)
       return sum
     }, 0) / game.players.length
   }
 
   private plan(game: Game): Move[] {
-    return this.planScore(game)[1]
+    return this.planScore(game).moves
   }
 
   private placeResources(game: Game): Move[] {
-    return this.placeResourcesScore(game, [])[1]
+    return this.placeResourcesScore(game, []).moves
   }
 
-  private evaluateOptions(game: Game, options: { moves: Move[], next: (game: Game) => [number, Move[]] }[]): [number, Move[]] {
-    let bestPlan: [number, Move[]] = [-Infinity, []]
+  private evaluateOptions(game: Game, options: AIOptions[]): OptionsEvaluation {
+    let bestPlan: OptionsEvaluation = {note: -Infinity, moves: []}
+    options.sort((a, b) => b.rate - a.rate)
     for (const option of options) {
       const newState = produce(game, draft => {
         option.moves.forEach(move => ItsAWonderfulWorldRules.play(move, draft, this.playerId))
         applyAutomaticMoves(draft, this.playerId)
       })
       const evaluation = option.next(newState)
-      if (bestPlan[0] < evaluation[0]) {
-        bestPlan = [evaluation[0], [...option.moves, ...evaluation[1]]]
+      if (bestPlan.note < evaluation.note) {
+        bestPlan = {
+          note: evaluation.note,
+          moves: [...option.moves, ...evaluation.moves]
+        }
       }
-      if (this.playTime + maxThinkingTime < new Date().getTime()) {
+      if (this.timeLimit < new Date().getTime()) {
         break
       }
     }
     return bestPlan
   }
 
-  private planScore(game: Game): [number, Move[]] {
+  private planScore(game: Game): OptionsEvaluation {
     const player = game.players.find(player => player.empire === this.playerId)!
     if (!player.draftArea.length) {
       return this.placeResourcesScore(game, [])
     }
     // TODO: not always slate for construction before recycle, evaluate build vs discard benefits first
     return this.evaluateOptions(game, [
-      {moves: [slateForConstruction(this.playerId, player.draftArea[0])], next: (game: Game) => this.planScore(game)},
-      {moves: [recycle(this.playerId, player.draftArea[0])], next: (game: Game) => this.planScore(game)}
+      {moves: [slateForConstruction(this.playerId, player.draftArea[0])], next: (game: Game) => this.planScore(game), rate: 0},
+      {moves: [recycle(this.playerId, player.draftArea[0])], next: (game: Game) => this.planScore(game), rate: 0}
     ])
   }
 
-  private placeResourcesScore(game: Game, doNotBuild: Construction[]): [number, Move[]] {
+  private placeResourcesScore(game: Game, doNotBuild: Construction[]): OptionsEvaluation {
     const player = game.players.find(player => player.empire === this.playerId) as Player
     if (player.availableResources.length) {
       const constructions = constructionsThatMayReceiveCubes(player).filter(construction => !doNotBuild.includes(construction))
       return this.evaluateOptions(game, [
+        {
+          moves: player.availableResources.map(resource => placeResource(this.playerId, resource)),
+          next: (game: Game) => this.placeResourcesScore(game, doNotBuild),
+          rate: 0
+        },
         ...constructions.map(construction => ({
           moves: placeAvailableCubesMoves(player, construction),
           next: (game: Game) => {
@@ -186,23 +210,25 @@ export default class TutorialAI {
               return this.placeResourcesScore(game, doNotBuild)
             }
           },
-          mergeMoves: true
-        })),
-        {
-          moves: player.availableResources.map(resource => placeResource(this.playerId, resource)),
-          next: (game: Game) => this.placeResourcesScore(game, doNotBuild),
-          mergeMoves: true
-        }
+          rate: 0
+        }))
       ])
     }
     if (player.bonuses.includes(ChooseCharacter)) {
       return this.evaluateOptions(game, [Character.Financier, Character.General].map(character => ({
         moves: [receiveCharacter(this.playerId, character)],
         next: (game: Game) => this.placeResourcesScore(game, doNotBuild),
-        mergeMoves: true
+        rate: 0
       })))
     }
     return this.evaluateOptions(game, [
+      ...player.constructionArea.filter(construction => canBuild(player, construction.card))
+        .filter(construction => game.productionStep === Resource.Exploration || this.wouldIncreaseNextProduction(game, player, construction.card))
+        .map(construction => ({
+          moves: getMovesToBuild(player, construction.card),
+          next: (game: Game) => this.placeResourcesScore(game, []),
+          rate: 0
+        })),
       {
         moves: [tellYourAreReady(this.playerId)],
         next: (game: Game) => {
@@ -218,16 +244,11 @@ export default class TutorialAI {
             }
           })
           const roundOver = game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.find(player => player.empire === this.playerId)!.availableResources.length === 0
-          const bestScore = roundOver ? this.score(game) : this.placeResourcesScore(game, doNotBuild)[0]
-          return [bestScore, []]
-        }
-      },
-      ...player.constructionArea.filter(construction => canBuild(player, construction.card))
-        .filter(construction => game.productionStep === Resource.Exploration || this.wouldIncreaseNextProduction(game, player, construction.card))
-        .map(construction => ({
-          moves: getMovesToBuild(player, construction.card),
-          next: (game: Game) => this.placeResourcesScore(game, [])
-        }))
+          const bestScore = roundOver ? this.score(game) : this.placeResourcesScore(game, doNotBuild).note
+          return {note: bestScore, moves: []}
+        },
+        rate: 0
+      }
     ])
   }
 
