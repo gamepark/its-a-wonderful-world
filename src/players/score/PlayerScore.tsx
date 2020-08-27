@@ -9,7 +9,7 @@ import {getScore} from '../../Rules'
 import Theme, {LightTheme} from '../../Theme'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {fadeIn} from '../../util/Styles'
+import {fadeIn, gameOverDelay} from '../../util/Styles'
 import ScorePart from './ScorePart'
 
 type Props = {
@@ -17,55 +17,63 @@ type Props = {
   position: number
   displayScore: boolean
   setDisplayScore: (displayScore: boolean) => void
+  animation: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, setDisplayScore}) => {
+const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, setDisplayScore, animation}) => {
   const {t} = useTranslation()
   const score = getScore(player)
   const theme = useTheme<Theme>()
   return (
-    <div css={[style(position, theme), displayScore ? displayPlayerScore : hidePlayerScore]}>
-      <button css={[arrowStyle(theme), displayScore ? arrowStandardStyle : arrowReverseStyle]} onClick={() => setDisplayScore(!displayScore)}
+    <div css={[style, topPosition(position), backgroundStyle(theme), animation && growAnimation, displayScore ? displayPlayerScore : hidePlayerScore]}>
+      <button css={[arrowStyle(theme), animation && fadeInAnimation, displayScore ? arrowStandardStyle : arrowReverseStyle]} onClick={() => setDisplayScore(!displayScore)}
               title={displayScore ? t('Réduire les Scores') : t('Afficher les Scores')}/>
       <div css={scorePartStyle}>
         {Object.values(DevelopmentType).map(developmentType => <ScorePart key={developmentType} player={player} item={developmentType}/>)}
         {Object.values(Character).map(character => <ScorePart key={character} player={player} item={character}/>)}
         <ScorePart player={player}/>
       </div>
-      <div css={[scoreStyle, displayScore ? displayScoreStyle : hideScoreStyle, score !== 0 && displayScore && equalSign]}>{score}</div>
+      <div css={[scoreStyle, animation && fadeInAnimation, displayScore ? displayScoreStyle : hideScoreStyle, score !== 0 && displayScore && equalSign]}>{score}</div>
     </div>
   )
 }
 
-const style = (index: number, theme: Theme) => css`
+const style = css`
   position: absolute;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  background-color: ${theme.color === LightTheme ? 'rgba(0, 0, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
   border-radius: 2em 0 0 2em;
   width: auto;
   height: 17%;
   overflow: hidden;
-  top: ${(1 + index * 20.2)}%;
   transition: max-width 0.5s linear, background-color 1s ease-in;
-  animation: ${revealScore} 10s linear;
 `
-const displayPlayerScore = css`
-  max-width: 100%;
+
+const topPosition = (index: number) => css`
+  top: ${(1 + index * 20.2)}%;
 `
-const hidePlayerScore = css`
-  max-width: 17em;
+
+const backgroundStyle = (theme: Theme) => css`
+  background-color: ${theme.color === LightTheme ? 'rgba(0, 0, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
 `
 
 const revealScore = keyframes`
-  from {
-    max-width: 17em;
-  }
-  to {
-    max-width: 100%;
-  }
+  from { max-width: 17em; }
+  to { max-width: 100%; }
+`
+
+const growAnimation = css`
+  animation: ${revealScore} ${gameOverDelay}s linear;
+`
+
+const displayPlayerScore = css`
+  max-width: 100%;
+`
+
+const hidePlayerScore = css`
+  max-width: 17em;
 `
 
 const arrowStyle = (theme: Theme) => css`
@@ -85,8 +93,11 @@ const arrowStyle = (theme: Theme) => css`
     cursor: pointer;
   }
   transition: all 0.5s linear;
+`
+
+const fadeInAnimation = css`
   opacity: 0;
-  animation: ${fadeIn} 5s 6s ease-in forwards;
+  animation: ${fadeIn} ${gameOverDelay/3}s ${gameOverDelay*2/3}s ease-in forwards;
 `
 
 const arrowStandardStyle = css`
@@ -115,9 +126,8 @@ const scoreStyle = css`
   height: 1.67em;
   text-align: center;
   transition: margin 0.5s linear;
-  opacity: 0;
-  animation: ${fadeIn} 4s 6s ease-in forwards;
 `
+
 const displayScoreStyle = css`
   margin: 0 0.2em 0 0.8em;
 `

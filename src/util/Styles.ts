@@ -39,6 +39,7 @@ export const playerPanelRightMargin = 1
 export const charactersPilesY = 91.7
 export const financiersPileX = empireCardLeftMargin
 export const generalsPileX = 6
+export const gameOverDelay = 10
 
 export const cardStyle = css`
   width: ${cardWidth}%;
