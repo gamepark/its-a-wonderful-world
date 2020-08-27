@@ -4,7 +4,7 @@ import Animation from '@interlude-games/workshop/dist/Types/Animation'
 import PlayerInfo from '@interlude-games/workshop/dist/Types/Player'
 import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import MainMenu from './MainMenu'
 import Character from './material/characters/Character'
@@ -24,7 +24,7 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 import Button from './util/Button'
-import {headerHeight, textColor} from './util/Styles'
+import {gameOverDelay, headerHeight, textColor} from './util/Styles'
 
 
 const headerStyle = (theme: Theme) => css`
@@ -68,10 +68,20 @@ const Header: FunctionComponent<Props> = ({game, loading}) => {
   const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
   const {t} = useTranslation()
   const theme = useTheme<Theme>()
+  const readyPlayers = game !== undefined && game.players.filter(player => player.ready).length === game.players.length
+  const gameOver = game !== undefined && game.productionStep === Resource.Exploration && game.round === numberOfRounds && readyPlayers
+  const [scoreSuspense, setScoreSuspense] = useState(false)
+  useEffect(() => {
+    if (gameOver) {
+      setScoreSuspense(true)
+      setTimeout(() => setScoreSuspense(false), (gameOverDelay * 1000))
+    }
+  }, [gameOver, setScoreSuspense])
   return (
     <header css={headerStyle(theme)}>
       <div css={bufferArea}/>
-      <h1 css={[textStyle, textColor(theme)]}>{loading ? t('Chargement de la partie...') : getText(t, play, players, game!, empire, animation)}</h1>
+      { scoreSuspense && <h1 css={[textStyle, textColor(theme)]}>{t('La partie est terminée, qui sera le Suprême Leader ?...')}</h1> }
+      { !scoreSuspense && <h1 css={[textStyle, textColor(theme)]}>{loading ? t('Chargement de la partie...') : getText(t, play, players, game!, empire, animation)}</h1> }
       <MainMenu/>
     </header>
   )

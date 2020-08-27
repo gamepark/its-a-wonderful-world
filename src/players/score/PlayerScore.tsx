@@ -9,7 +9,7 @@ import {getScore} from '../../Rules'
 import Theme, {LightTheme} from '../../Theme'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {fadeIn} from '../../util/Styles'
+import {fadeIn, gameOverDelay} from '../../util/Styles'
 import ScorePart from './ScorePart'
 
 type Props = {
@@ -50,7 +50,7 @@ const style = (index: number, theme: Theme) => css`
   overflow: hidden;
   top: ${(1 + index * 20.2)}%;
   transition: max-width 0.5s linear, background-color 1s ease-in;
-  animation: ${revealScore} 10s linear;
+  animation: ${revealScore} ${gameOverDelay}s linear;
 `
 const displayPlayerScore = css`
   max-width: 100%;
