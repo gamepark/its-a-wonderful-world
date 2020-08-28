@@ -169,20 +169,18 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
           return <Trans defaults="Cliquez sur <0>Valider</0> pour passer au calcul des scores"
                         components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
         }
+      } else if (isOver(game)) {
+        return getEndOfGameText(t, playersInfo, game, player)
       } else {
         const players = game.players.filter(player => !player.ready)
-        if (players.length) {
-          if (players.length === 0) {
-            return t('Envoi du coup au Suprême Dirigeant...')
-          } else if (players.length === 1) {
-            return t('{player} doit utiliser les ressources produites', {player: getPlayerName(players[0].empire)})
-          } else if (player) {
-            return t('Les autres joueurs doivent utiliser les ressources produites')
-          } else {
-            return t('Les joueurs doivent utiliser les ressources produites')
-          }
-        } else if (game.productionStep === Resource.Exploration && game.round === numberOfRounds) {
-          return getEndOfGameText(t, playersInfo, game, player)
+        if (players.length === 0) {
+          return t('Envoi du coup au Suprême Dirigeant...')
+        } else if (players.length === 1) {
+          return t('{player} doit utiliser les ressources produites', {player: getPlayerName(players[0].empire)})
+        } else if (player) {
+          return t('Les autres joueurs doivent utiliser les ressources produites')
+        } else {
+          return t('Les joueurs doivent utiliser les ressources produites')
         }
       }
   }
