@@ -52,58 +52,64 @@ const TutorialPopup: FunctionComponent = () => {
   const displayPopup = tutorialDisplay && currentMessage
   return (
     <>
-      {
-        displayPopup &&
-        <div css={boxStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth)} onClick={() => setTutorialDisplay(0)}>
-          <div css={[theme.color === LightTheme ? boxLightStyle : boxDarkStyle]}>
-            <div css={closeStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
-            <h2>{currentMessage.title(t)}</h2>
-            <p>{currentMessage.text(t)}</p>
-            {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
-            <Button onClick={() => moveTutorial(1)}>OK</Button>
-          </div>
+      <div css={[popupStyle,displayPopup?showPopupStyle:hidePopupStyle]} onClick={() => setTutorialDisplay(0)}>
+      <div css={[boxStyle,displayPopup?showBoxStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth):hideBoxStyle,theme.color === LightTheme ? boxLightStyle : boxDarkStyle]}>
+          <div css={closeStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
+          { currentMessage && <h2>{currentMessage.title(t)}</h2> }
+          { currentMessage && <p>{currentMessage.text(t)}</p> }
+          {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
+          <Button onClick={() => moveTutorial(1)}>OK</Button>
         </div>
-      }
+      </div>
       {
         !displayPopup &&
         <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>Afficher le Tutoriel</Button>
       }
       {
-        displayPopup && currentMessage.arrow &&
+        currentMessage && currentMessage.arrow &&
         <img alt={t('Tutorial Indicator')} src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
-             css={arrowStyle(currentMessage.arrowAngle, currentMessage.arrowTop, currentMessage.arrowLeft)}/>
+             css={[arrowStyle(currentMessage.arrowAngle),displayPopup?showArrowStyle(currentMessage.arrowTop, currentMessage.arrowLeft):hideArrowStyle]}/>
       }
     </>
   )
 }
 
-const boxStyle = (boxTop: number, boxLeft: number, boxWidth: number) => css`
+const popupStyle = css`
   position: absolute;
-  left: 0;
   right: 0;
-  top: 0;
   bottom: 0;
   background: transparent;
   z-index: 99;
-  & > div {
+  transition:all .5s ease;
+`
+const showPopupStyle = css`
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;
+`
+const hidePopupStyle = css`
+  left: 90%;
+  top: 85%;
+  width:0;
+  height:0;
+  overflow:hidden;
+`
+const boxStyle = css`
     position: absolute;
     text-align: center;
-    width: ${boxWidth}%;
     max-height: 70%;
-    left: ${boxLeft}%;
-    top: ${boxTop}%;
     z-index : 102;
-    transform: translate(-50%, -50%);
     border-radius: 1em;
     box-sizing:border-box;
     align-self:center;
     padding:2%;
     margin:0 2%;
-    transition:all .5s ease;
     outline:none;
     box-shadow: 20px 38px 34px -26px hsla(0,0%,0%,.2);
     border-radius: 400px 30px 400px 30px/30px 400px 30px 400px;
-
+    transition:all .5s ease;
+    
     &:hover{
         box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
       }
@@ -118,8 +124,26 @@ const boxStyle = (boxTop: number, boxLeft: number, boxWidth: number) => css`
     & > button {
       font-size: 4em;
     }
-  }
 `
+
+const showBoxStyle = (boxTop: number, boxLeft: number, boxWidth: number) => css`
+    width: ${boxWidth}%;
+    left: ${boxLeft}%;
+    top: ${boxTop}%;
+    transform: translate(-50%, -50%);
+`
+
+const hideBoxStyle = css`
+    top : 85%;
+    left : 90%;
+    width: 0;
+    height:0;
+    margin:0;
+    padding:0;
+    border: solid 0 #FFF;
+    font-size: 0;
+`
+
 
 const boxLightStyle = css`
     background-color: #f8f8f8;
@@ -158,14 +182,23 @@ const buttonStyle = css`
     margin-right:1em;
 `
 
-const arrowStyle = (arrowAngle: number, arrowTop: number, arrowLeft: number) => css`
+const arrowStyle = (arrowAngle: number) => css`
     position: absolute;
-    top : ${arrowTop}%;
-    left: ${arrowLeft}%;
     transform: rotate(${arrowAngle}deg);
-    width:20%;
     z-index : 102;
     transition:all .5s ease;
+`
+
+const showArrowStyle = (arrowTop: number, arrowLeft: number) => css`
+    top : ${arrowTop}%;
+    left: ${arrowLeft}%;
+    width:20%;
+`
+
+const hideArrowStyle = css`
+    top : 85%;
+    left: 90%;
+    width:0;
 `
 
 
