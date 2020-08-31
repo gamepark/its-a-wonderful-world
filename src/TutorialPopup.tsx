@@ -49,25 +49,27 @@ const TutorialPopup: FunctionComponent = () => {
     previousActionNumber.current = actionsNumber
   }, [actionsNumber, setTutorialIndex])
   const currentMessage = tutorialMessage(tutorialIndex)
+  const displayPopup = tutorialDisplay && currentMessage
   return (
     <>
       {
-        tutorialDisplay && currentMessage &&
-        <div
-          css={[boxStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth), theme.color === LightTheme ? boxLightStyle : boxDarkStyle]}>
-          <div css={closeStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
-          <h2>{currentMessage.title(t)}</h2>
-          <p>{currentMessage.text(t)}</p>
-          {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
-          <Button onClick={() => moveTutorial(1)}>OK</Button>
+        displayPopup &&
+        <div css={boxStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth)} onClick={() => setTutorialDisplay(0)}>
+          <div css={[theme.color === LightTheme ? boxLightStyle : boxDarkStyle]}>
+            <div css={closeStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
+            <h2>{currentMessage.title(t)}</h2>
+            <p>{currentMessage.text(t)}</p>
+            {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
+            <Button onClick={() => moveTutorial(1)}>OK</Button>
+          </div>
         </div>
       }
       {
-        (!tutorialDisplay || !currentMessage) &&
+        !displayPopup &&
         <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>Afficher le Tutoriel</Button>
       }
       {
-        tutorialDisplay && currentMessage && currentMessage.arrow &&
+        displayPopup && currentMessage.arrow &&
         <img alt={t('Tutorial Indicator')} src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
              css={arrowStyle(currentMessage.arrowAngle, currentMessage.arrowTop, currentMessage.arrowLeft)}/>
       }
@@ -76,6 +78,14 @@ const TutorialPopup: FunctionComponent = () => {
 }
 
 const boxStyle = (boxTop: number, boxLeft: number, boxWidth: number) => css`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 99;
+  & > div {
     position: absolute;
     text-align: center;
     width: ${boxWidth}%;
@@ -108,6 +118,7 @@ const boxStyle = (boxTop: number, boxLeft: number, boxWidth: number) => css`
     & > button {
       font-size: 4em;
     }
+  }
 `
 
 const boxLightStyle = css`
@@ -144,7 +155,7 @@ const closeStyle = css`
 `
 
 const buttonStyle = css`
-    margin-right:20px;
+    margin-right:1em;
 `
 
 const arrowStyle = (arrowAngle: number, arrowTop: number, arrowLeft: number) => css`
