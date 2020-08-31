@@ -106,12 +106,12 @@ const boxStyle = css`
     padding:2%;
     margin:0 2%;
     outline:none;
-    box-shadow: 20px 38px 34px -26px hsla(0,0%,0%,.2);
-    border-radius: 400px 30px 400px 30px/30px 400px 30px 400px;
+    box-shadow: 1em 2em 2.5em -1.5em hsla(0,0%,0%,.2);
+    border-radius: 40em 3em 40em 3em/3em 40em 3em 40em;
     transition:all .5s ease;
     
     &:hover{
-        box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
+        box-shadow:2em 4em 5em -3em hsla(0,0%,0%,.5);
       }
     & > h2 {
       font-size: 5em;
@@ -148,13 +148,13 @@ const hideBoxStyle = css`
 const boxLightStyle = css`
     background-color: #f8f8f8;
     color:#0b3d3d;
-    border: solid 10px #0b3d3d;
+    border: solid 1em #0b3d3d;
 `
 
 const boxDarkStyle = css`
     background-color: #082b2b;
     color:#d4f7f7;
-    border: solid 10px #d4f7f7;
+    border: solid 1em #d4f7f7;
 `
 
 const resetStyle = css`
@@ -196,7 +196,7 @@ const showArrowStyle = (arrowTop: number, arrowLeft: number) => css`
 `
 
 const hideArrowStyle = css`
-    top : 85%;
+    top : 90%;
     left: 90%;
     width:0;
 `
