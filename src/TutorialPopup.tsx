@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import {TFunction} from 'i18next'
-import React, {FunctionComponent, useEffect, useState} from 'react'
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {useActions, usePlayerId} from '@interlude-games/workshop'
 import Move from './moves/Move'
@@ -19,6 +19,7 @@ const TutorialPopup: FunctionComponent = () => {
   const playerId = usePlayerId<EmpireName>()
   const actions = useActions<Move, EmpireName>()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
+  const maxActionNumber = useRef(actionsNumber)
   const [tutorialIndex, setTutorialIndex] = useState(0)
   const [tutorialDisplay, setTutorialDisplay] = useState(1)
   const moveTutorial = (deltaMessage: number) => {
@@ -37,9 +38,12 @@ const TutorialPopup: FunctionComponent = () => {
     return tutorialDescription[currentStep][index]
   }
   useEffect(() => {
-    if (tutorialDescription[actionsNumber]) {
-      setTutorialIndex(0)
-      setTutorialDisplay(1)
+    if (maxActionNumber.current < actionsNumber) {
+      maxActionNumber.current = actionsNumber
+      if (tutorialDescription[actionsNumber]) {
+        setTutorialIndex(0)
+        setTutorialDisplay(1)
+      }
     }
   }, [actionsNumber, setTutorialIndex])
   const currentMessage = tutorialMessage(tutorialIndex)
