@@ -22,35 +22,31 @@ const TutorialPopup: FunctionComponent = () => {
   const [tutorialIndex, setTutorialIndex] = useState(0)
   const [tutorialDisplay, setTutorialDisplay] = useState(1)
   const moveTutorial = (deltaMessage: number) => {
-    if ((tutorialIndex + deltaMessage) < 0) {
-      setTutorialIndex(0)
-      setTutorialDisplay(0)
-    } else {
-      setTutorialIndex(tutorialIndex + deltaMessage)
-      setTutorialDisplay(1)
-    }
+    setTutorialIndex(tutorialIndex + deltaMessage)
+    setTutorialDisplay(1)
   }
   const resetTutorialDisplay = () => {
     setTutorialIndex(0)
     setTutorialDisplay(1)
   }
   const tutorialMessage = (index: number) => {
-    if (tutorialDescription[actionsNumber] !== undefined) {
-      if (tutorialDescription[actionsNumber][index] !== undefined) {
-        return tutorialDescription[actionsNumber][index]
-      }
+    let currentStep = actionsNumber
+    while (!tutorialDescription[currentStep]) {
+      currentStep--
     }
-    return undefined
+    return tutorialDescription[currentStep][index]
   }
   useEffect(() => {
-    setTutorialIndex(0)
-    setTutorialDisplay(1)
+    if (tutorialDescription[actionsNumber]) {
+      setTutorialIndex(0)
+      setTutorialDisplay(1)
+    }
   }, [actionsNumber, setTutorialIndex])
   const currentMessage = tutorialMessage(tutorialIndex)
   return (
     <>
       {
-        tutorialDisplay && currentMessage !== undefined &&
+        tutorialDisplay && currentMessage &&
         <div
           css={[boxStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth), theme.color === LightTheme ? boxLightStyle : boxDarkStyle]}>
           <div css={closeStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
@@ -61,11 +57,11 @@ const TutorialPopup: FunctionComponent = () => {
         </div>
       }
       {
-        !tutorialDisplay && tutorialMessage(0) !== undefined &&
+        (!tutorialDisplay || !currentMessage) &&
         <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>Afficher le Tutoriel</Button>
       }
       {
-        tutorialDisplay && currentMessage !== undefined && currentMessage.arrow &&
+        tutorialDisplay && currentMessage && currentMessage.arrow &&
         <img alt={t('Tutorial Indicator')} src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
              css={arrowStyle(currentMessage.arrowAngle, currentMessage.arrowTop, currentMessage.arrowLeft)}/>
       }
@@ -125,7 +121,6 @@ const resetStyle = css`
     text-align: center;
     bottom : 10%;
     right : 2%;
-    border-radius: 1em;
     font-size: 4em;
 `
 
