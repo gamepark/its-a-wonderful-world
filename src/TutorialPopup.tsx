@@ -19,7 +19,7 @@ const TutorialPopup: FunctionComponent = () => {
   const playerId = usePlayerId<EmpireName>()
   const actions = useActions<Move, EmpireName>()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
-  const maxActionNumber = useRef(actionsNumber)
+  const previousActionNumber = useRef(actionsNumber)
   const [tutorialIndex, setTutorialIndex] = useState(0)
   const [tutorialDisplay, setTutorialDisplay] = useState(1)
   const moveTutorial = (deltaMessage: number) => {
@@ -38,13 +38,15 @@ const TutorialPopup: FunctionComponent = () => {
     return tutorialDescription[currentStep][index]
   }
   useEffect(() => {
-    if (maxActionNumber.current < actionsNumber) {
-      maxActionNumber.current = actionsNumber
+    if (previousActionNumber.current < actionsNumber) {
       if (tutorialDescription[actionsNumber]) {
         setTutorialIndex(0)
         setTutorialDisplay(1)
       }
+    } else {
+      setTutorialDisplay(0)
     }
+    previousActionNumber.current = actionsNumber
   }, [actionsNumber, setTutorialIndex])
   const currentMessage = tutorialMessage(tutorialIndex)
   return (
