@@ -1,6 +1,6 @@
 import {css, keyframes} from '@emotion/core'
 import {
-  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faHome, faMoon, faSun, faUndoAlt, faUserSlash, faVolumeMute, faVolumeUp
+  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faFastBackward, faHome, faMoon, faSun, faUndoAlt, faUserSlash, faVolumeMute, faVolumeUp
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {GameSpeed, useActions, useGame, useNow, useOptions, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@interlude-games/workshop'
@@ -86,6 +86,10 @@ const MainMenu = () => {
     }
   }, [])
   const platformUri = process.env.REACT_APP_PLATFORM_URI || 'http://localhost:3000'
+  function resetTutorial() {
+    localStorage.removeItem('its-a-wonderful-world')
+    window.location.reload()
+  }
   return (
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
@@ -181,6 +185,12 @@ const MainMenu = () => {
         <IconButton css={[menuButtonStyle, ejectButtonStyle]} onClick={() => toggle.play() && setEjectPopupOpen(true)}>
           <span css={subMenuTitle}>{t('Expulser un joueur')}</span>
           <FontAwesomeIcon icon={faUserSlash}/>
+        </IconButton>
+        }
+        {game && game.tutorial &&
+        <IconButton css={[menuButtonStyle, tutorialButtonStyle]} onClick={() => resetTutorial()}>
+            <span css={subMenuTitle}>{t('Recommencer le Tutoriel')}</span>
+            <FontAwesomeIcon icon={faFastBackward}/>
         </IconButton>
         }
       </div>
@@ -295,6 +305,12 @@ const ejectButtonStyle = css`
   background-image: url(${Images.buttonRed});
   padding-left: 0.35em;
   padding-right: 0.35em;
+`
+
+const tutorialButtonStyle = css`
+  background-image: url(${Images.buttonRed});
+  padding-left: 0.35em;
+  padding-right: 0.5em;
 `
 
 const displayForAMoment = keyframes`

@@ -126,3 +126,97 @@ export const backgroundColor = (theme: Theme) => css`
     transition: background-color 1s ease-in;
   }
 `
+
+export const popupOverlayStyle = css`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  transition:all .5s ease;
+`
+export const showPopupOverlayStyle = css`
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;
+`
+export const hidePopupOverlayStyle = (boxTop: number, boxLeft: number) => css`
+  top : ${boxTop}%;
+  left : ${boxLeft}%;
+  width:0;
+  height:0;
+  overflow:hidden;
+`
+
+export const popupStyle = css`
+    position: absolute;
+    text-align: center;
+    max-height: 70%;
+    z-index : 102;
+    border-radius: 1em;
+    box-sizing:border-box;
+    align-self:center;
+    padding:2%;
+    margin:0 2%;
+    outline:none;
+    box-shadow: 1em 2em 2.5em -1.5em hsla(0,0%,0%,.2);
+    border-radius: 40em 3em 40em 3em/3em 40em 3em 40em;
+    transition:all .5s ease;
+    
+    &:hover{
+        box-shadow:2em 4em 5em -3em hsla(0,0%,0%,.5);
+      }
+    & > h2 {
+      font-size: 5em;
+      margin:0;
+    }
+    & > p {
+      font-size: 4em;
+      margin: 2% 0;
+    }
+    & > button {
+      font-size: 4em;
+    }
+`
+
+export const showPopupStyle = (boxTop: number, boxLeft: number, boxWidth: number) => css`
+    width: ${boxWidth}%;
+    left: ${boxLeft}%;
+    top: ${boxTop}%;
+    transform: translate(-50%, -50%);
+`
+
+export const hidePopupStyle = (boxTop: number, boxLeft: number) => css`
+    top : ${boxTop}%;
+    left : ${boxLeft}%;
+    width: 0;
+    height:0;
+    margin:0;
+    padding:0;
+    border: solid 0 #FFF;
+    font-size: 0;
+`
+export const popupLightStyle = css`
+    background-color: #e9e9e9;
+    color:#082b2b;
+    border: solid 1em #082b2b;
+`
+
+export const popupDarkStyle = css`
+    background-color: #082b2b;
+    color:#d4f7f7;
+    border: solid 1em #d4f7f7;
+`
+export const closePopupStyle = css`
+    position: relative;
+    float:right;
+    text-align: center;
+    margin-top : -3%;
+    margin-right : -1%;
+    font-size: 4em;
+     &:hover{
+      cursor:pointer;
+      color:#26d9d9;
+     }
+`

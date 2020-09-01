@@ -5,6 +5,9 @@ import {useTranslation} from 'react-i18next'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import {humanize} from './util/TimeUtil'
+import {useTheme} from 'emotion-theming'
+import Theme, {LightTheme} from './Theme'
+import {popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle, showPopupStyle} from './util/Styles'
 
 type Props = {
   onClose: () => void
@@ -12,10 +15,11 @@ type Props = {
 
 const TimePopup: FunctionComponent<Props> = ({onClose}) => {
   const {t} = useTranslation()
+  const theme = useTheme<Theme>()
   const players = usePlayers<EmpireName>({withTimeUpdate: true})
   return (
-    <div css={[style]} onClick={onClose}>
-      <div css={content}>
+    <div css={[popupOverlayStyle,showPopupOverlayStyle,style]} onClick={onClose}>
+      <div css={[popupStyle,showPopupStyle(50,50,80),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
         <table css={tableStyle}>
           <thead>
             <tr>
@@ -57,31 +61,16 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
 
 const style = css`
   position: fixed;
-  top: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
 `
 
-const content = css`
-  position: absolute;
-  background-color: white;
-  text-align: center;
-  max-width: 80%;
-  max-height: 70%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 1em;
-`
-
-const tableStyle = css`
+const tableStyle = (theme: Theme) => css`
   margin: 1em;
   border-collapse: collapse;
   font-size: 3em;
   tbody tr {
-    border-top: 1px solid black;
+    border-top: 1px solid ${theme.color === LightTheme ? '#082b2b' : '#d4f7f7'};
   }
   td {
     min-width: 2.5em;
@@ -91,7 +80,7 @@ const tableStyle = css`
     padding: 0.35em;
     text-align: left;
     &:not(:first-of-type) {
-      border-left: 0.1em solid black;
+      border-left: 0.1em solid ${theme.color === LightTheme ? '#082b2b' : '#d4f7f7'};
     }
   }
 `
