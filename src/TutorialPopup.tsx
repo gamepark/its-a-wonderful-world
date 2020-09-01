@@ -57,7 +57,7 @@ const TutorialPopup: FunctionComponent = () => {
   return (
     <>
       <div css={[popupOverlayStyle,displayPopup?showPopupOverlayStyle:hidePopupOverlayStyle(85,90),style]} >
-      <div css={[popupStyle,displayPopup?showPopupStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth):hidePopupStyle(85,90),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+      <div css={[popupStyle,displayPopup?showPopupStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth):hidePopupStyle(85,90),theme.color === LightTheme ? popupLightStyle : popupDarkStyle,(currentMessage && currentMessage.boxTop<0)?popupBottomStyle(currentMessage.boxTop):popupTopStyle]}>
           <div css={closePopupStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
           { currentMessage && <h2>{currentMessage.title(t)}</h2> }
           { currentMessage && <p>{currentMessage.text(t)}</p> }
@@ -80,6 +80,14 @@ const TutorialPopup: FunctionComponent = () => {
 
 const style = css`
     background-color:transparent;
+`
+const popupTopStyle = css`
+    
+`
+const popupBottomStyle = (boxTop:number) => css`
+    bottom : ${-boxTop}%;
+    top:unset;
+    transform: translate(-50%,0);
 `
 
 const resetStyle = css`
@@ -160,7 +168,7 @@ const tutorialDescription = {
     4: {
       title: (t: TFunction) => t('Choisissez le Monument National'),
       text: (t: TFunction) => t('Vous pouvez faire glisser la carte de gauche vers la zone de Draft ou cliquer sur cette carte pour zoomer dessus et sélectionner l’action Choisir.'),
-      boxTop: 43,
+      boxTop: -39,
       boxLeft: 43,
       boxWidth: 70,
       arrow: true,
@@ -181,7 +189,7 @@ const tutorialDescription = {
     1: {
       title: (t: TFunction) => t('Choisissez le Centre de Propagande'),
       text: (t: TFunction) => t('Le Centre de Propagande permet de produire un Or par bâtiment jaune construit. Ces cartes permettent d’amorcer la production et deviennent très fortes en fin de partie.'),
-      boxTop: 41,
+      boxTop: -40,
       boxLeft: 46,
       boxWidth: 70,
       arrow: true,
@@ -194,7 +202,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Choisissez le Complexe Industriel'),
       text: (t: TFunction) => t('Il est important de lancer son moteur de production dès le premier tour. Le Complexe Industriel s’inscrit très bien dans la stratégie de notre Empire de départ.'),
-      boxTop: 41,
+      boxTop: -40,
       boxLeft: 50,
       boxWidth: 60,
       arrow: true,
@@ -207,7 +215,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Choisissez la Société Secrète'),
       text: (t: TFunction) => t('Cette carte est intéressante pour notre stratégie car elle marque des points sur les jetons Financiers comme notre Empire.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 50,
       boxWidth: 60,
       arrow: true,
@@ -218,7 +226,7 @@ const tutorialDescription = {
     1: {
       title: (t: TFunction) => t('Choisissez la Société Secrète'),
       text: (t: TFunction) => t('Elle ne coûte pas très cher, et j’aurai le temps pour la construire car elle ne m’apporte rien en début de partie.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 50,
       boxWidth: 60,
       arrow: true,
@@ -231,7 +239,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Choisissez les Éoliennes'),
       text: (t: TFunction) => t('Il n’y a plus grand chose d’intéressant pour ma stratégie. Je choisis les Éoliennes pour les recycler.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 45,
       boxWidth: 60,
       arrow: true,
@@ -242,7 +250,7 @@ const tutorialDescription = {
     1: {
       title: (t: TFunction) => t('Choisissez les Éoliennes'),
       text: (t: TFunction) => t('Le recyclage de son Énergie (cube noir) me permettra de construire le Complexe Industriel, car mon Empire n’en produit pas.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 45,
       boxWidth: 60,
       arrow: true,
@@ -255,7 +263,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Choisissez le Trésor des Templiers'),
       text: (t: TFunction) => t('De la même façon, comme il n’y a plus grand chose d’intéressant pour ma stratégie, je choisis le Trésor des Templiers pour le recycler.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 45,
       boxWidth: 70,
       arrow: true,
@@ -266,7 +274,7 @@ const tutorialDescription = {
     1: {
       title: (t: TFunction) => t('Choisissez le Trésor des Templiers'),
       text: (t: TFunction) => t('Le recyclage de son Or (cube jaune) m’aidera à construire le Centre de Propagande.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 45,
       boxWidth: 70,
       arrow: true,
@@ -298,7 +306,7 @@ const tutorialDescription = {
     2: {
       title: (t: TFunction) => t('Mettre en Construction le Monument National'),
       text: (t: TFunction) => t('Je peux commencer par mettre le Monument National dans la zone de construction.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 34,
       boxWidth: 60,
       arrow: true,
@@ -309,7 +317,7 @@ const tutorialDescription = {
     3: {
       title: (t: TFunction) => t('Mettre en Construction le Monument National'),
       text: (t: TFunction) => t('Comme lors de la phase de Draft, je peux sois faire glisser la carte vers la zone orange, soit cliquer dessus et sélectionner l’action Construire.'),
-      boxTop: 41,
+      boxTop: -40,
       boxLeft: 34,
       boxWidth: 60,
       arrow: true,
@@ -322,7 +330,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Mettre en Construction le Centre de Propagande'),
       text: (t: TFunction) => t('Je glisse également le Centre de Propagande en zone de construction.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 34,
       boxWidth: 60,
       arrow: true,
@@ -335,7 +343,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Mettre en Construction le Complexe industriel'),
       text: (t: TFunction) => t('Je glisse également le Complexe industriel en zone de construction.'),
-      boxTop: 45,
+      boxTop: -40,
       boxLeft: 34,
       boxWidth: 60,
       arrow: true,
@@ -348,7 +356,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Mettre en Construction la Société Secrète'),
       text: (t: TFunction) => t('Je glisse également la Société Secrète en zone de construction.'),
-      boxTop: 45,
+      boxTop: -40,
       boxLeft: 34,
       boxWidth: 60,
       arrow: true,
@@ -361,7 +369,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Mettre les Éoliennes au recyclage'),
       text: (t: TFunction) => t('Je glisse maintenant les Éoliennes dans la zone de recyclage, au niveau des cercles de Ressources. Je pourrais aussi cliquer sur la carte et sélectionner l’action Recycler.'),
-      boxTop: 41,
+      boxTop: -40,
       boxLeft: 34,
       boxWidth: 60,
       arrow: true,
@@ -387,7 +395,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Mettre le Trésor des Templiers au recyclage'),
       text: (t: TFunction) => t('Je glisse maintenant le Trésor des Templiers dans la Zone de Recyclage.'),
-      boxTop: 41,
+      boxTop: -40,
       boxLeft: 24,
       boxWidth: 40,
       arrow: true,
@@ -413,7 +421,7 @@ const tutorialDescription = {
     0: {
       title: (t: TFunction) => t('Mettre le Zeppelin au recyclage'),
       text: (t: TFunction) => t('Il ne reste plus que le Zeppelin à faire glisser dans la Zone de Recyclage.'),
-      boxTop: 43,
+      boxTop: -40,
       boxLeft: 27,
       boxWidth: 50,
       arrow: true,

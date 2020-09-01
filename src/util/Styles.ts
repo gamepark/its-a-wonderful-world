@@ -182,8 +182,8 @@ export const popupStyle = css`
 
 export const showPopupStyle = (boxTop: number, boxLeft: number, boxWidth: number) => css`
     width: ${boxWidth}%;
-    left: ${boxLeft}%;
     top: ${boxTop}%;
+    left: ${boxLeft}%;
     transform: translate(-50%, -50%);
 `
 
