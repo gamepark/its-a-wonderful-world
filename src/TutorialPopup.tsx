@@ -200,19 +200,6 @@ const tutorialDescription = {
   },
   2: {
     0: {
-      title: (t: TFunction) => t('Choisissez le Complexe Industriel'),
-      text: (t: TFunction) => t('Il est important de lancer son moteur de production dès le premier tour. Le Complexe Industriel s’inscrit très bien dans la stratégie de notre Empire de départ.'),
-      boxTop: -40,
-      boxLeft: 50,
-      boxWidth: 60,
-      arrow: true,
-      arrowAngle: 180,
-      arrowTop: 60,
-      arrowLeft: 27
-    }
-  },
-  3: {
-    0: {
       title: (t: TFunction) => t('Choisissez la Société Secrète'),
       text: (t: TFunction) => t('Cette carte est intéressante pour notre stratégie car elle marque des points sur les jetons Financiers comme notre Empire.'),
       boxTop: -40,
@@ -221,7 +208,7 @@ const tutorialDescription = {
       arrow: true,
       arrowAngle: 180,
       arrowTop: 60,
-      arrowLeft: 39
+      arrowLeft: 27
     },
     1: {
       title: (t: TFunction) => t('Choisissez la Société Secrète'),
@@ -232,7 +219,21 @@ const tutorialDescription = {
       arrow: true,
       arrowAngle: 180,
       arrowTop: 60,
-      arrowLeft: 39
+      arrowLeft: 27
+    }
+
+  },
+  3: {
+    0: {
+      title: (t: TFunction) => t('Choisissez le Complexe Industriel'),
+      text: (t: TFunction) => t('Il est important de lancer son moteur de production dès le premier tour. Le Complexe Industriel s’inscrit très bien dans la stratégie de notre Empire de départ.'),
+      boxTop: -40,
+      boxLeft: 50,
+      boxWidth: 60,
+      arrow: true,
+      arrowAngle: 180,
+      arrowTop: 60,
+      arrowLeft: 40
     }
   },
   4: {
@@ -341,8 +342,8 @@ const tutorialDescription = {
   },
   8: {
     0: {
-      title: (t: TFunction) => t('Mettre en Construction le Complexe industriel'),
-      text: (t: TFunction) => t('Je glisse également le Complexe industriel en zone de construction.'),
+      title: (t: TFunction) => t('Mettre en Construction la Société Secrète'),
+      text: (t: TFunction) => t('Je glisse également la Société Secrète en zone de construction.'),
       boxTop: -40,
       boxLeft: 34,
       boxWidth: 60,
@@ -354,8 +355,8 @@ const tutorialDescription = {
   },
   9: {
     0: {
-      title: (t: TFunction) => t('Mettre en Construction la Société Secrète'),
-      text: (t: TFunction) => t('Je glisse également la Société Secrète en zone de construction.'),
+      title: (t: TFunction) => t('Mettre en Construction le Complexe industriel'),
+      text: (t: TFunction) => t('Je glisse également le Complexe industriel en zone de construction.'),
       boxTop: -40,
       boxLeft: 34,
       boxWidth: 60,
@@ -479,12 +480,12 @@ const tutorialDescription = {
       title: (t: TFunction) => t('Coût en Krystallium'),
       text: (t: TFunction) => t('Certaines cartes comme la Société Secrète, nécessitent du Krystallium pour être construites.'),
       boxTop: 54,
-      boxLeft: 66,
+      boxLeft: 57,
       boxWidth: 37,
       arrow: true,
       arrowAngle: 270,
       arrowTop: 48,
-      arrowLeft: 36
+      arrowLeft: 27
     },
     5: {
       title: (t: TFunction) => t('Fin de la Phase de Planification'),
@@ -547,23 +548,23 @@ const tutorialDescription = {
       title: (t: TFunction) => t('Utilisation des ressources'),
       text: (t: TFunction) => t('Je pourrais mettre mes 3 Matériaux sur le Monument National mais je choisis plutôt de construire le Complexe Inudtriel.'),
       boxTop: 51,
-      boxLeft: 63,
+      boxLeft: 68,
       boxWidth: 41,
       arrow: true,
       arrowAngle: 270,
       arrowTop: 45,
-      arrowLeft: 31
+      arrowLeft: 36
     },
     5: {
       title: (t: TFunction) => t('Déplacer les ressources'),
       text: (t: TFunction) => t('Je peux déplacer mes ressources une par une, ou cliquer sur la carte pour sélectionner les actions du mode zoom, ou encore faire un clic long sur la carte pour y placer toutes les ressources possibles.'),
       boxTop: 51,
-      boxLeft: 63,
+      boxLeft: 68,
       boxWidth: 41,
       arrow: true,
       arrowAngle: 270,
       arrowTop: 45,
-      arrowLeft: 31
+      arrowLeft: 36
     }
   },
   19: {
