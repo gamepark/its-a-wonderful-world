@@ -12,6 +12,10 @@ import tutorialArrowLight from './util/tutorial-arrow-light.png'
 import tutorialArrowDark from './util/tutorial-arrow-dark.png'
 import {useTheme} from 'emotion-theming'
 import Theme, {LightTheme} from './Theme'
+import {
+  closePopupStyle,
+  hidePopupOverlayStyle, hidePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle, showPopupStyle
+} from './util/Styles'
 
 const TutorialPopup: FunctionComponent = () => {
   const {t} = useTranslation()
@@ -52,9 +56,9 @@ const TutorialPopup: FunctionComponent = () => {
   const displayPopup = tutorialDisplay && currentMessage
   return (
     <>
-      <div css={[popupStyle,displayPopup?showPopupStyle:hidePopupStyle]} onClick={() => setTutorialDisplay(0)}>
-      <div css={[boxStyle,displayPopup?showBoxStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth):hideBoxStyle,theme.color === LightTheme ? boxLightStyle : boxDarkStyle]}>
-          <div css={closeStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
+      <div css={[popupOverlayStyle,displayPopup?showPopupOverlayStyle:hidePopupOverlayStyle(85,90),style]} >
+      <div css={[popupStyle,displayPopup?showPopupStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth):hidePopupStyle(85,90),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+          <div css={closePopupStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
           { currentMessage && <h2>{currentMessage.title(t)}</h2> }
           { currentMessage && <p>{currentMessage.text(t)}</p> }
           {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
@@ -74,87 +78,8 @@ const TutorialPopup: FunctionComponent = () => {
   )
 }
 
-const popupStyle = css`
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  background: transparent;
-  z-index: 99;
-  transition:all .5s ease;
-`
-const showPopupStyle = css`
-  left: 0;
-  top: 0;
-  width:100%;
-  height:100%;
-`
-const hidePopupStyle = css`
-  left: 90%;
-  top: 85%;
-  width:0;
-  height:0;
-  overflow:hidden;
-`
-const boxStyle = css`
-    position: absolute;
-    text-align: center;
-    max-height: 70%;
-    z-index : 102;
-    border-radius: 1em;
-    box-sizing:border-box;
-    align-self:center;
-    padding:2%;
-    margin:0 2%;
-    outline:none;
-    box-shadow: 1em 2em 2.5em -1.5em hsla(0,0%,0%,.2);
-    border-radius: 40em 3em 40em 3em/3em 40em 3em 40em;
-    transition:all .5s ease;
-    
-    &:hover{
-        box-shadow:2em 4em 5em -3em hsla(0,0%,0%,.5);
-      }
-    & > h2 {
-      font-size: 5em;
-      margin:0;
-    }
-    & > p {
-      font-size: 4em;
-      margin: 2% 0;
-    }
-    & > button {
-      font-size: 4em;
-    }
-`
-
-const showBoxStyle = (boxTop: number, boxLeft: number, boxWidth: number) => css`
-    width: ${boxWidth}%;
-    left: ${boxLeft}%;
-    top: ${boxTop}%;
-    transform: translate(-50%, -50%);
-`
-
-const hideBoxStyle = css`
-    top : 85%;
-    left : 90%;
-    width: 0;
-    height:0;
-    margin:0;
-    padding:0;
-    border: solid 0 #FFF;
-    font-size: 0;
-`
-
-
-const boxLightStyle = css`
-    background-color: #f8f8f8;
-    color:#0b3d3d;
-    border: solid 1em #0b3d3d;
-`
-
-const boxDarkStyle = css`
-    background-color: #082b2b;
-    color:#d4f7f7;
-    border: solid 1em #d4f7f7;
+const style = css`
+    background-color:transparent;
 `
 
 const resetStyle = css`
@@ -163,19 +88,6 @@ const resetStyle = css`
     bottom : 10%;
     right : 2%;
     font-size: 4em;
-`
-
-const closeStyle = css`
-    position: relative;
-    float:right;
-    text-align: center;
-    margin-top : -3%;
-    margin-right : -1%;
-    font-size: 4em;
-     &:hover{
-      cursor:pointer;
-      color:#26d9d9;
-     }
 `
 
 const buttonStyle = css`
