@@ -13,11 +13,16 @@ import tutorialArrowDark from './util/tutorial-arrow-dark.png'
 import {useTheme} from 'emotion-theming'
 import Theme, {LightTheme} from './Theme'
 import {
-  closePopupStyle,
-  hidePopupOverlayStyle, hidePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle, showPopupStyle
+  closePopupStyle, discordUri, hidePopupOverlayStyle, hidePopupStyle, platformUri, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle,
+  showPopupOverlayStyle,
+  showPopupStyle
 } from './util/Styles'
+import GameView from './types/GameView'
+import Phase from './types/Phase'
+import {isOver} from './Rules'
+import {resetTutorial} from './Tutorial'
 
-const TutorialPopup: FunctionComponent = () => {
+const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const {t} = useTranslation()
   const theme = useTheme<Theme>()
   const playerId = usePlayerId<EmpireName>()
@@ -54,6 +59,7 @@ const TutorialPopup: FunctionComponent = () => {
   }, [actionsNumber, setTutorialIndex])
   const currentMessage = tutorialMessage(tutorialIndex)
   const displayPopup = tutorialDisplay && currentMessage
+  const tutorialRound = game.round === 1 || (game.round === 2 && game.phase === Phase.Draft )
   return (
     <>
       <div css={[popupOverlayStyle,displayPopup?showPopupOverlayStyle:hidePopupOverlayStyle(85,90),style]} >
@@ -66,13 +72,23 @@ const TutorialPopup: FunctionComponent = () => {
         </div>
       </div>
       {
-        !displayPopup &&
+        !displayPopup && tutorialRound &&
         <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>Afficher le Tutoriel</Button>
       }
       {
         currentMessage && currentMessage.arrow &&
         <img alt={t('Tutorial Indicator')} src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
              css={[arrowStyle(currentMessage.arrowAngle),displayPopup?showArrowStyle(currentMessage.arrowTop, currentMessage.arrowLeft):hideArrowStyle]}/>
+      }
+      {
+        isOver(game) &&
+        <div css={[popupStyle,showPopupStyle(81, 53, 87),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+          <h2>{tutorialEndGame.title(t)}</h2>
+          <p>{tutorialEndGame.text(t)}</p>
+          <Button css={buttonStyle} onClick={() => resetTutorial()}>Rejouer le tutoriel</Button>
+          <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>Lancer une partie avec des amis</Button>
+          <Button onClick={() => window.location.href = discordUri}>Rejoindre le Discord</Button>
+        </div>
       }
     </>
   )
@@ -754,6 +770,11 @@ const tutorialDescription = {
       arrow: false
     }
   }
+}
+
+const tutorialEndGame = {
+    title: (t: TFunction) => t('Bravo, vous venez de terminer cette partie de It’s a Wonderful World'),
+    text: (t: TFunction) => t('Si vous voulez vous entraîner encore un peu, vous pouvez recommencer le tutoriel. Sinon, vous pouvez jouer avec des amis ou trouver des joueurs sur le Discord de la communauté.')
 }
 
 

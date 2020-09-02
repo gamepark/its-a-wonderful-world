@@ -7,7 +7,7 @@ import EmpireName from './material/empires/EmpireName'
 import {humanize} from './util/TimeUtil'
 import {useTheme} from 'emotion-theming'
 import Theme, {LightTheme} from './Theme'
-import {popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle, showPopupStyle} from './util/Styles'
+import {popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupStyle, showPopupStyle} from './util/Styles'
 
 type Props = {
   onClose: () => void
@@ -18,7 +18,7 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
   const theme = useTheme<Theme>()
   const players = usePlayers<EmpireName>({withTimeUpdate: true})
   return (
-    <div css={[popupOverlayStyle,showPopupOverlayStyle,style]} onClick={onClose}>
+    <div css={popupFixedBackgroundStyle} onClick={onClose}>
       <div css={[popupStyle,showPopupStyle(50,50,80),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
         <table css={tableStyle}>
           <thead>
@@ -58,12 +58,6 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
     </div>
   )
 }
-
-const style = css`
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-`
 
 const tableStyle = (theme: Theme) => css`
   margin: 1em;

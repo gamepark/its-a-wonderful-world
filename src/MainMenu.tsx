@@ -21,6 +21,8 @@ import TimePopup from './TimePopup'
 import GameView from './types/GameView'
 import IconButton from './util/IconButton'
 import LoadingSpinner from './util/LoadingSpinner'
+import {resetTutorial} from './Tutorial'
+import {platformUri} from './util/Styles'
 
 const noSleep = new NoSleep()
 
@@ -85,11 +87,6 @@ const MainMenu = () => {
       fscreen.removeEventListener('fullscreenchange', onFullScreenChange)
     }
   }, [])
-  const platformUri = process.env.REACT_APP_PLATFORM_URI || 'http://localhost:3000'
-  function resetTutorial() {
-    localStorage.removeItem('its-a-wonderful-world')
-    window.location.reload()
-  }
   return (
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
@@ -143,18 +140,18 @@ const MainMenu = () => {
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
-        {game && !!playerId && (isOver(game) ?
+        {game && !!playerId && isOver(game) && !game.tutorial &&
             <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
-              <span css={subMenuTitle}>{t('Proposer une revanche')}</span>
-              <FontAwesomeIcon icon={faChess}/>
+                <span css={subMenuTitle}>{t('Proposer une revanche')}</span>
+                <FontAwesomeIcon icon={faChess}/>
             </IconButton>
-            :
+        }
+        {game && !!playerId && !isOver(game) &&
             <IconButton css={[menuButtonStyle, undoButtonStyle]}
                         onClick={() => toggle.play() && undo()} disabled={!canUndo()}>
               <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
               {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
             </IconButton>
-        )
         }
         <IconButton css={[menuButtonStyle, homeButtonStyle]} onClick={() => toggle.play().then(() => window.location.href = platformUri)}>
           <span css={subMenuTitle}>{t('Retour à l’accueil')}</span>

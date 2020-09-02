@@ -40,6 +40,9 @@ export const charactersPilesY = 91.7
 export const financiersPileX = empireCardLeftMargin
 export const generalsPileX = 6
 
+export const platformUri = process.env.REACT_APP_PLATFORM_URI || 'http://localhost:3000'
+export const discordUri = 'https://discord.gg/nMSDRag'
+
 export const cardStyle = css`
   width: ${cardWidth}%;
   height: ${cardHeight}%;
@@ -97,16 +100,6 @@ export const fadeIn = keyframes`
   to { opacity: 1; }
 `
 
-export const popupBackgroundStyle = css`
-  position: fixed;
-  top: -100%;
-  bottom: -100%;
-  left: -100%;
-  right: -100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 99;
-`
-
 export const empireBackground: Record<EmpireName, string> = {
   [EmpireName.AztecEmpire]: Images.aztecEmpireArtwork,
   [EmpireName.FederationOfAsia]: Images.federationOfAsiaArtwork,
@@ -125,6 +118,25 @@ export const backgroundColor = (theme: Theme) => css`
     background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 30, 0.7)'};
     transition: background-color 1s ease-in;
   }
+`
+
+export const popupBackgroundStyle = css`
+  position: fixed;
+  top: -100%;
+  bottom: -100%;
+  left: -100%;
+  right: -100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+`
+
+export const popupFixedBackgroundStyle = css`
+   position: fixed;
+   top: 0;
+   width: 100vw;
+   height: 100vh;
+   background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
 `
 
 export const popupOverlayStyle = css`

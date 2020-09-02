@@ -101,7 +101,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
       {supremacyBonus && <CharacterToken character={supremacyBonus.character}
                                          css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
       {isPlayer(displayedPlayer) && <GlobalActions game={game} player={displayedPlayer}/>}
-      {game.tutorial && <TutorialPopup/>}
+      {game.tutorial && <TutorialPopup game={game}/>}
     </Letterbox>
   )
 }

@@ -58,6 +58,11 @@ export const setupTutorial = (setupPlayers: (players?: (number | { empire?: Empi
   tutorial: true
 })
 
+export function resetTutorial() {
+  localStorage.removeItem('its-a-wonderful-world')
+  window.location.reload()
+}
+
 export const tutorialMoves = [
   // Automatic Tutorial Draft Phase
   chooseDevelopmentCard(EmpireName.NoramStates, nationalMonument),
