@@ -35,7 +35,8 @@ const EjectPopup: FunctionComponent<Props> = ({playerId, players, now, onClose})
   const awaitedPlayerName = awaitedPlayer.name || getEmpireName(t, awaitedPlayer.id)
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
-      <div css={[popupStyle,showPopupStyle(50,50,70),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+      <div css={[popupStyle,showPopupStyle(50,50,70),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
+           onClick={event => event.stopPropagation()}>
         <h2>{t('{player} a dépassé son temps de réflexion', {player: awaitedPlayerName})}</h2>
         {time > -maxDuration ?
           <p>{t('Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.', {duration: moment.duration(maxDuration).humanize()})}</p>

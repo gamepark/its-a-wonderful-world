@@ -150,8 +150,8 @@ export const popupOverlayStyle = css`
 export const showPopupOverlayStyle = css`
   left: 0;
   top: 0;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 `
 export const hidePopupOverlayStyle = (boxTop: number, boxLeft: number) => css`
   top : ${boxTop}%;

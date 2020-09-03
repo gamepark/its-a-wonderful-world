@@ -19,7 +19,8 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
   const players = usePlayers<EmpireName>({withTimeUpdate: true})
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
-      <div css={[popupStyle,showPopupStyle(50,50,80),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+      <div css={[popupStyle,showPopupStyle(50,50,80),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
+           onClick={event => event.stopPropagation()}>
         <table css={tableStyle}>
           <thead>
             <tr>

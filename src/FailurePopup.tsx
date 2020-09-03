@@ -15,7 +15,8 @@ const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () =>
   const description = failuresDescription[failures[0]] || fallbackDescription(failures[0])
   return (
     <div css={[popupOverlayStyle,showPopupOverlayStyle,style]} onClick={clearFailures}>
-      <div css={[popupStyle,showPopupStyle(50,50,70),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+      <div css={[popupStyle,showPopupStyle(50,50,70),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
+           onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle}><FontAwesomeIcon icon={faTimes}/></div>
         <h2>{description.title(t)}</h2>
         <p>{description.text(t)}</p>

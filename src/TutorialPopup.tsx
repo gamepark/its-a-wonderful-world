@@ -1,26 +1,25 @@
 import {css} from '@emotion/core'
+import {faTimes} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {useActions, usePlayerId} from '@interlude-games/workshop'
+import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import {useActions, usePlayerId} from '@interlude-games/workshop'
-import Move from './moves/Move'
 import EmpireName from './material/empires/EmpireName'
-import Button from './util/Button'
-import {faTimes} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import tutorialArrowLight from './util/tutorial-arrow-light.png'
-import tutorialArrowDark from './util/tutorial-arrow-dark.png'
-import {useTheme} from 'emotion-theming'
+import Move from './moves/Move'
+import {isOver} from './Rules'
 import Theme, {LightTheme} from './Theme'
-import {
-  closePopupStyle, discordUri, hidePopupOverlayStyle, hidePopupStyle, platformUri, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle,
-  showPopupOverlayStyle,
-  showPopupStyle
-} from './util/Styles'
+import {resetTutorial} from './Tutorial'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
-import {isOver} from './Rules'
-import {resetTutorial} from './Tutorial'
+import Button from './util/Button'
+import {
+  closePopupStyle, discordUri, hidePopupOverlayStyle, hidePopupStyle, platformUri, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle,
+  showPopupOverlayStyle, showPopupStyle
+} from './util/Styles'
+import tutorialArrowDark from './util/tutorial-arrow-dark.png'
+import tutorialArrowLight from './util/tutorial-arrow-light.png'
 
 const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const {t} = useTranslation()
@@ -59,14 +58,16 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   }, [actionsNumber, setTutorialIndex])
   const currentMessage = tutorialMessage(tutorialIndex)
   const displayPopup = tutorialDisplay && currentMessage
-  const tutorialRound = game.round === 1 || (game.round === 2 && game.phase === Phase.Draft )
+  const tutorialRound = game.round === 1 || (game.round === 2 && game.phase === Phase.Draft)
   return (
     <>
-      <div css={[popupOverlayStyle,displayPopup?showPopupOverlayStyle:hidePopupOverlayStyle(85,90),style]} >
-      <div css={[popupStyle,displayPopup?showPopupStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth):hidePopupStyle(85,90),theme.color === LightTheme ? popupLightStyle : popupDarkStyle,(currentMessage && currentMessage.boxTop<0)?popupBottomStyle(currentMessage.boxTop):popupTopStyle]}>
+      <div css={[popupOverlayStyle, displayPopup ? showPopupOverlayStyle : hidePopupOverlayStyle(85, 90), style]} onClick={() => setTutorialDisplay(0)}>
+        <div onClick={event => event.stopPropagation()} css={[popupStyle,
+          displayPopup ? showPopupStyle(currentMessage.boxTop, currentMessage.boxLeft, currentMessage.boxWidth) : hidePopupStyle(85, 90), theme.color === LightTheme ? popupLightStyle : popupDarkStyle,
+          (currentMessage && currentMessage.boxTop < 0) ? popupBottomStyle(currentMessage.boxTop) : popupTopStyle]}>
           <div css={closePopupStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
-          { currentMessage && <h2>{currentMessage.title(t)}</h2> }
-          { currentMessage && <p>{currentMessage.text(t)}</p> }
+          {currentMessage && <h2>{currentMessage.title(t)}</h2>}
+          {currentMessage && <p>{currentMessage.text(t)}</p>}
           {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
           <Button onClick={() => moveTutorial(1)}>OK</Button>
         </div>
@@ -78,11 +79,11 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
       {
         currentMessage && currentMessage.arrow &&
         <img alt={t('Tutorial Indicator')} src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
-             css={[arrowStyle(currentMessage.arrowAngle),displayPopup?showArrowStyle(currentMessage.arrowTop, currentMessage.arrowLeft):hideArrowStyle]}/>
+             css={[arrowStyle(currentMessage.arrowAngle), displayPopup ? showArrowStyle(currentMessage.arrowTop, currentMessage.arrowLeft) : hideArrowStyle]}/>
       }
       {
         isOver(game) &&
-        <div css={[popupStyle,showPopupStyle(81, 53, 87),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+        <div css={[popupStyle, showPopupStyle(81, 53, 87), theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
           <h2>{tutorialEndGame.title(t)}</h2>
           <p>{tutorialEndGame.text(t)}</p>
           <Button css={buttonStyle} onClick={() => resetTutorial()}>Rejouer le tutoriel</Button>
@@ -100,7 +101,7 @@ const style = css`
 const popupTopStyle = css`
     
 `
-const popupBottomStyle = (boxTop:number) => css`
+const popupBottomStyle = (boxTop: number) => css`
     bottom : ${-boxTop}%;
     top:unset;
     transform: translate(-50%,0);
@@ -773,8 +774,8 @@ const tutorialDescription = {
 }
 
 const tutorialEndGame = {
-    title: (t: TFunction) => t('Bravo, vous venez de terminer cette partie de It’s a Wonderful World'),
-    text: (t: TFunction) => t('Si vous voulez vous entraîner encore un peu, vous pouvez recommencer le tutoriel. Sinon, vous pouvez jouer avec des amis ou trouver des joueurs sur le Discord de la communauté.')
+  title: (t: TFunction) => t('Bravo, vous venez de terminer cette partie de It’s a Wonderful World'),
+  text: (t: TFunction) => t('Si vous voulez vous entraîner encore un peu, vous pouvez recommencer le tutoriel. Sinon, vous pouvez jouer avec des amis ou trouver des joueurs sur le Discord de la communauté.')
 }
 
 
