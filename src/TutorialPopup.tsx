@@ -46,13 +46,13 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
     return tutorialDescription[currentStep][index]
   }
   useEffect(() => {
-    if (previousActionNumber.current < actionsNumber) {
+    if (previousActionNumber.current > actionsNumber) {
+      setTutorialDisplay(0)
+    } else {
       if (tutorialDescription[actionsNumber]) {
         setTutorialIndex(0)
         setTutorialDisplay(1)
       }
-    } else {
-      setTutorialDisplay(0)
     }
     previousActionNumber.current = actionsNumber
   }, [actionsNumber, setTutorialIndex])
