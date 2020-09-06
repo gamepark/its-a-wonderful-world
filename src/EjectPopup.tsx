@@ -1,13 +1,14 @@
+import {css} from '@emotion/core'
 import {useEjection} from '@interlude-games/workshop'
 import Player from '@interlude-games/workshop/dist/Types/Player'
+import {useTheme} from 'emotion-theming'
 import moment from 'moment'
 import React, {FunctionComponent, useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
-import {popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupStyle, showPopupStyle} from './util/Styles'
 import Theme, {LightTheme} from './Theme'
-import {useTheme} from 'emotion-theming'
+import {popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 
 type Props = {
   playerId: EmpireName
@@ -35,7 +36,7 @@ const EjectPopup: FunctionComponent<Props> = ({playerId, players, now, onClose})
   const awaitedPlayerName = awaitedPlayer.name || getEmpireName(t, awaitedPlayer.id)
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
-      <div css={[popupStyle,showPopupStyle(50,50,70),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
+      <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <h2>{t('{player} a dépassé son temps de réflexion', {player: awaitedPlayerName})}</h2>
         {time > -maxDuration ?

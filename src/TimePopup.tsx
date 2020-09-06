@@ -1,13 +1,13 @@
 import {css} from '@emotion/core'
 import {usePlayers} from '@interlude-games/workshop'
+import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
-import {humanize} from './util/TimeUtil'
-import {useTheme} from 'emotion-theming'
 import Theme, {LightTheme} from './Theme'
-import {popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupStyle, showPopupStyle} from './util/Styles'
+import {popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
+import {humanize} from './util/TimeUtil'
 
 type Props = {
   onClose: () => void
@@ -19,7 +19,7 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
   const players = usePlayers<EmpireName>({withTimeUpdate: true})
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
-      <div css={[popupStyle,showPopupStyle(50,50,80),theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
+      <div css={[popupStyle, popupPosition, css`width: 80%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <table css={tableStyle}>
           <thead>
