@@ -18,10 +18,10 @@ import ItsAWonderfulWorldRules, {isOver} from './Rules'
 import toggleSound from './sounds/toggle.ogg'
 import Theme, {LightTheme} from './Theme'
 import TimePopup from './TimePopup'
+import {resetTutorial} from './Tutorial'
 import GameView from './types/GameView'
 import IconButton from './util/IconButton'
 import LoadingSpinner from './util/LoadingSpinner'
-import {resetTutorial} from './Tutorial'
 import {platformUri} from './util/Styles'
 
 const noSleep = new NoSleep()
@@ -141,17 +141,17 @@ const MainMenu = () => {
             </IconButton>
         )}
         {game && !!playerId && isOver(game) && !game.tutorial &&
-            <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
-                <span css={subMenuTitle}>{t('Proposer une revanche')}</span>
-                <FontAwesomeIcon icon={faChess}/>
-            </IconButton>
+        <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
+          <span css={subMenuTitle}>{t('Proposer une revanche')}</span>
+          <FontAwesomeIcon icon={faChess}/>
+        </IconButton>
         }
         {game && !!playerId && !isOver(game) &&
-            <IconButton css={[menuButtonStyle, undoButtonStyle]}
-                        onClick={() => toggle.play() && undo()} disabled={!canUndo()}>
-              <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
-              {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
-            </IconButton>
+        <IconButton css={[menuButtonStyle, undoButtonStyle]}
+                    onClick={() => toggle.play() && undo()} disabled={!canUndo()}>
+          <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
+          {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
+        </IconButton>
         }
         <IconButton css={[menuButtonStyle, homeButtonStyle]} onClick={() => toggle.play().then(() => window.location.href = platformUri)}>
           <span css={subMenuTitle}>{t('Retour à l’accueil')}</span>
@@ -174,10 +174,12 @@ const MainMenu = () => {
             </>
           }
         </IconButton>
+        {game && !game.tutorial &&
         <IconButton css={[menuButtonStyle, clockButtonStyle]} onClick={() => toggle.play() && setTimePopupOpen(true)}>
           <span css={subMenuTitle}>{t('Temps de réflexion')}</span>
           <FontAwesomeIcon icon={faClock}/>
         </IconButton>
+        }
         {playerTimeout && !!playerId && !isPlaying &&
         <IconButton css={[menuButtonStyle, ejectButtonStyle]} onClick={() => toggle.play() && setEjectPopupOpen(true)}>
           <span css={subMenuTitle}>{t('Expulser un joueur')}</span>
@@ -186,8 +188,8 @@ const MainMenu = () => {
         }
         {game && game.tutorial &&
         <IconButton css={[menuButtonStyle, tutorialButtonStyle]} onClick={() => resetTutorial()}>
-            <span css={subMenuTitle}>{t('Recommencer le Tutoriel')}</span>
-            <FontAwesomeIcon icon={faFastBackward}/>
+          <span css={subMenuTitle}>{t('Recommencer le Tutoriel')}</span>
+          <FontAwesomeIcon icon={faFastBackward}/>
         </IconButton>
         }
       </div>
