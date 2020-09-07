@@ -128,9 +128,11 @@ export const tutorialMoves = [
   tellYourAreReady(EmpireName.RepublicOfEurope),
   placeResource(EmpireName.FederationOfAsia, Resource.Materials, offshoreOilRig, 2),
   tellYourAreReady(EmpireName.FederationOfAsia),
-  placeResource(EmpireName.NoramStates, Resource.Materials, industrialComplex, 0),
-  placeResource(EmpireName.NoramStates, Resource.Materials, industrialComplex, 1),
-  placeResource(EmpireName.NoramStates, Resource.Materials, industrialComplex, 2),
+  ...Array(3).fill([
+    placeResource(EmpireName.NoramStates, Resource.Materials, industrialComplex, 0),
+    placeResource(EmpireName.NoramStates, Resource.Materials, industrialComplex, 1),
+    placeResource(EmpireName.NoramStates, Resource.Materials, industrialComplex, 2)
+  ]),
   tellYourAreReady(EmpireName.NoramStates),
 
   // Energy production
@@ -154,8 +156,10 @@ export const tutorialMoves = [
   placeResource(EmpireName.FederationOfAsia, Resource.Gold, lunarBase, 5),
   placeResource(EmpireName.FederationOfAsia, Resource.Gold, worldCongress, 0),
   tellYourAreReady(EmpireName.FederationOfAsia),
-  placeResource(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 1),
-  placeResource(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 2),
+  ...Array(2).fill([
+    placeResource(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 1),
+    placeResource(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 2)
+  ]),
   tellYourAreReady(EmpireName.NoramStates),
 
   // Exploration production
