@@ -86,8 +86,8 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
           <h2>{tutorialEndGame.title(t)}</h2>
           <p>{tutorialEndGame.text(t)}</p>
           <Button css={buttonStyle} onClick={() => resetTutorial()}>Rejouer le tutoriel</Button>
-          <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>Lancer une partie avec des amis</Button>
-          <Button onClick={() => window.location.href = discordUri}>Rejoindre le Discord</Button>
+          <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>Jouer avec des amis</Button>
+          <Button onClick={() => window.location.href = discordUri}>Trouver des joueurs</Button>
         </div>
       }
     </>
@@ -843,8 +843,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
 ]
 
 const tutorialEndGame = {
-  title: (t: TFunction) => t('Bravo, vous venez de terminer cette partie de It’s a Wonderful World'),
-  text: (t: TFunction) => t('Si vous voulez vous entraîner encore un peu, vous pouvez recommencer le tutoriel. Sinon, vous pouvez jouer avec des amis ou trouver des joueurs sur le Discord de la communauté.'),
+  title: (t: TFunction) => t('Félicitation !'),
+  text: (t: TFunction) => t('Vous avez terminé votre première partie ! Vous pouvez maintenant jouer avec vos amis, ou rencontrer d’autres joueurs via notre salon de rencontres sur Discord.'),
   boxTop: 81,
   boxLeft: 53,
   boxWidth: 87
