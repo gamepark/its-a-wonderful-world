@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useActions, usePlayerId} from '@interlude-games/workshop'
+import {useActions, useAnimation, usePlayerId} from '@interlude-games/workshop'
 import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
@@ -24,6 +24,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const theme = useTheme<Theme>()
   const playerId = usePlayerId<EmpireName>()
   const actions = useActions<Move, EmpireName>()
+  const animation = useAnimation()
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const previousActionNumber = useRef(actionsNumber)
   const [tutorialIndex, setTutorialIndex] = useState(0)
@@ -53,7 +54,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
     previousActionNumber.current = actionsNumber
   }, [actionsNumber, setTutorialIndex])
   const currentMessage = tutorialMessage(tutorialIndex)
-  const displayPopup = tutorialDisplay && currentMessage
+  const displayPopup = tutorialDisplay && !animation && currentMessage
   return (
     <>
       <div css={[popupOverlayStyle, displayPopup ? showPopupOverlayStyle : hidePopupOverlayStyle(85, 90), style]}

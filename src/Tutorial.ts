@@ -65,9 +65,9 @@ export function resetTutorial() {
 
 export const tutorialMoves = [
   // Automatic Tutorial Draft Phase
-  chooseDevelopmentCard(EmpireName.NoramStates, nationalMonument),
   chooseDevelopmentCard(EmpireName.RepublicOfEurope, centerOfEarth),
   chooseDevelopmentCard(EmpireName.FederationOfAsia, worldCongress),
+  chooseDevelopmentCard(EmpireName.NoramStates, nationalMonument),
   chooseDevelopmentCard(EmpireName.RepublicOfEurope, militaryBase),
   chooseDevelopmentCard(EmpireName.FederationOfAsia, lunarBase),
   chooseDevelopmentCard(EmpireName.NoramStates, propagandaCenter),
