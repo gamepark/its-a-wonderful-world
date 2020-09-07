@@ -49,6 +49,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
         <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier}
                                  css={victoryPointsMultiplierStyle(index)}/>
       )}
+      <PlayerConstructions player={player}/>
     </div>
   )
 }

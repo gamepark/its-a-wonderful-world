@@ -9,8 +9,8 @@ import {getProduction} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 
-// Display player's production the best way we can: each resource individually up to 11, then using multipliers for resources with the highest production
-const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
+// Display player's tokens and constructions
+const PlayerConstructions: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
   const production = resources.reduce((map, resource) => {
     map.set(resource, getProduction(player, resource))
@@ -23,29 +23,10 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView 
     productionDisplay.set(entry[0], {size})
     productionDisplaySize += size
   }
-  const displayMultiplierForHighProduction = (resource: Resource, production: number) => {
-    if (productionDisplay.get(resource)?.size === production) {
-      productionDisplay.set(resource, {size: 1, multiplier: production})
-      productionDisplaySize -= production - 1
-    }
-  }
-  const reduceProductionDisplay = (maxSize: number) => {
-    while (productionDisplaySize > maxSize) {
-      const maxProduction = Math.max.apply(Math, Array.from<ProductionDisplay>(productionDisplay.values()).map(elements => elements.size))
-      resources.forEach(resource => displayMultiplierForHighProduction(resource, maxProduction))
-    }
-  }
-  reduceProductionDisplay(6)
-  // Now, we set the start index for each display
-  let resourceIndex = 0
-  for (const resource of resources) {
-    const display = productionDisplay.get(resource)!
-    display.index = resourceIndex
-    resourceIndex += display.size
-  }
+
 
   return (
-    <Fragment>
+    <>
       {Array.from(productionDisplay.entries()).flatMap(([resource, productionDisplay]) => {
         if (productionDisplay.multiplier) {
           return [
@@ -60,7 +41,7 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView 
                  alt={getDescription(t, getEmpireName(t, player.empire), resource, production.get(resource)!)}/>)
         }
       })}
-    </Fragment>
+    </>
   )
 }
 
@@ -147,4 +128,4 @@ const getDescription = (t: TFunction, player: string, resource: Resource, quanti
   }
 }
 
-export default PlayerResourceProduction
+export default PlayerConstructions
