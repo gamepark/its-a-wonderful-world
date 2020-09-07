@@ -436,7 +436,7 @@
       "Éditeurs : La Boite de Jeu, Origames": "Éditeurs : La Boite de Jeu, Origames",
       "Expulser un joueur": "Expulser un joueur",
       "{player} a dépassé son temps de réflexion": "{player} a dépassé son temps de réflexion",
-      "Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.": "Beyond {duration} you will be allowed to eject them and continue the game.",
+      "Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.": "Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.",
       "Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.": "Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.",
       "Expulser {player}": "Expulser {player}"
     }

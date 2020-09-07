@@ -1,5 +1,5 @@
 import {css, keyframes} from '@emotion/core'
-import {faHourglassEnd} from '@fortawesome/free-solid-svg-icons'
+import {faHourglassEnd, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {usePlayerId, usePlayers} from '@interlude-games/workshop'
 import RematchOffer from '@interlude-games/workshop/dist/Types/RematchOffer'
@@ -9,7 +9,8 @@ import {useTranslation} from 'react-i18next'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Theme, {LightTheme} from './Theme'
-import {popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
+import Button from './util/Button'
+import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 
 type Props = {
   rematchOffer?: RematchOffer<EmpireName>
@@ -26,13 +27,14 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
     <div css={[popupFixedBackgroundStyle, !rematchOffer && css`display: none`]} onClick={onClose}>
       <div css={[popupStyle, popupPosition, css`width: 60%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
+        <div css={closePopupStyle} onClick={onClose}><FontAwesomeIcon icon={faTimes}/></div>
         {rematchOffer && (
           playerId === rematchOffer.playerId ? (
             rematchOffer.link ?
               <>
                 <h2>{t('Vous avez proposé une revanche')}</h2>
                 <p>{t('Votre proposition a été transmise aux autres joueurs')}</p>
-                <p><a href={rematchOffer.link}>{t('Voir la nouvelle partie')}</a></p>
+                <Button onClick={() => window.location.href = rematchOffer.link!}>{t('Voir la nouvelle partie')}</Button>
               </>
               :
               <>
@@ -45,7 +47,7 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
             <>
               <h2>{t('{player} vous propose une revanche !', {player: getPlayerName(rematchOffer.playerId)})}</h2>
               <p>{t('Cliquez sur le lien ci-dessous pour accéder à la nouvelle partie :')}</p>
-              <p><a href={rematchOffer.link}>{t('Voir la nouvelle partie')}</a></p>
+              <Button onClick={() => window.location.href = rematchOffer.link!}>{t('Voir la nouvelle partie')}</Button>
             </>
           )
         )}

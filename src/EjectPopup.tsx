@@ -1,4 +1,6 @@
 import {css} from '@emotion/core'
+import {faTimes} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useEjection} from '@interlude-games/workshop'
 import Player from '@interlude-games/workshop/dist/Types/Player'
 import {useTheme} from 'emotion-theming'
@@ -8,7 +10,8 @@ import {useTranslation} from 'react-i18next'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Theme, {LightTheme} from './Theme'
-import {popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
+import Button from './util/Button'
+import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 
 type Props = {
   playerId: EmpireName
@@ -38,12 +41,13 @@ const EjectPopup: FunctionComponent<Props> = ({playerId, players, now, onClose})
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
       <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
+        <div css={closePopupStyle} onClick={onClose}><FontAwesomeIcon icon={faTimes}/></div>
         <h2>{t('{player} a dépassé son temps de réflexion', {player: awaitedPlayerName})}</h2>
         {time > -maxDuration ?
           <p>{t('Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.', {duration: moment.duration(maxDuration).humanize()})}</p>
           : <>
             <p>{t('Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.', {duration: moment.duration(maxDuration).humanize()})}</p>
-            <button onClick={() => eject(awaitedPlayer.id)}>{t('Expulser {player}', {player: awaitedPlayerName})}</button>
+            <Button onClick={() => eject(awaitedPlayer.id)}>{t('Expulser {player}', {player: awaitedPlayerName})}</Button>
           </>
         }
       </div>

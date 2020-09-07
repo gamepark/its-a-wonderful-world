@@ -1,4 +1,6 @@
 import {css} from '@emotion/core'
+import {faTimes} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {usePlayers} from '@interlude-games/workshop'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
@@ -6,7 +8,7 @@ import {useTranslation} from 'react-i18next'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Theme, {LightTheme} from './Theme'
-import {popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
+import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 import {humanize} from './util/TimeUtil'
 
 type Props = {
@@ -21,6 +23,7 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
       <div css={[popupStyle, popupPosition, css`width: 80%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
+        <div css={closePopupStyle} onClick={onClose}><FontAwesomeIcon icon={faTimes}/></div>
         <table css={tableStyle}>
           <thead>
             <tr>
