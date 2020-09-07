@@ -12,7 +12,6 @@ import {isOver} from './Rules'
 import Theme, {LightTheme} from './Theme'
 import {resetTutorial} from './Tutorial'
 import GameView from './types/GameView'
-import Phase from './types/Phase'
 import Button from './util/Button'
 import {
   closePopupStyle, discordUri, hidePopupOverlayStyle, platformUri, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle
@@ -28,14 +27,14 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const previousActionNumber = useRef(actionsNumber)
   const [tutorialIndex, setTutorialIndex] = useState(0)
-  const [tutorialDisplay, setTutorialDisplay] = useState(1)
+  const [tutorialDisplay, setTutorialDisplay] = useState(tutorialDescription.length > actionsNumber)
   const moveTutorial = (deltaMessage: number) => {
     setTutorialIndex(tutorialIndex + deltaMessage)
-    setTutorialDisplay(1)
+    setTutorialDisplay(true)
   }
   const resetTutorialDisplay = () => {
     setTutorialIndex(0)
-    setTutorialDisplay(1)
+    setTutorialDisplay(true)
   }
   const tutorialMessage = (index: number) => {
     let currentStep = actionsNumber
@@ -46,25 +45,22 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   }
   useEffect(() => {
     if (previousActionNumber.current > actionsNumber) {
-      setTutorialDisplay(0)
-    } else {
-      if (tutorialDescription[actionsNumber]) {
-        setTutorialIndex(0)
-        setTutorialDisplay(1)
-      }
+      setTutorialDisplay(false)
+    } else if (tutorialDescription[actionsNumber]) {
+      setTutorialIndex(0)
+      setTutorialDisplay(true)
     }
     previousActionNumber.current = actionsNumber
   }, [actionsNumber, setTutorialIndex])
   const currentMessage = tutorialMessage(tutorialIndex)
   const displayPopup = tutorialDisplay && currentMessage
-  const tutorialRound = game.round === 1 || (game.round === 2 && game.phase === Phase.Draft)
   return (
     <>
       <div css={[popupOverlayStyle, displayPopup ? showPopupOverlayStyle : hidePopupOverlayStyle(85, 90), style]}
-           onClick={() => setTutorialDisplay(0)}>
-        <div css={[popupStyle, theme.color === LightTheme ? popupLightStyle : popupDarkStyle, displayPopup ? popupPosition(currentMessage) : hidePopupStyle]}
+           onClick={() => setTutorialDisplay(false)}>
+        <div css={[popupStyle, theme.color === LightTheme ? popupLightStyle : popupDarkStyle, displayPopup ? popupPosition(currentMessage!) : hidePopupStyle]}
              onClick={event => event.stopPropagation()}>
-          <div css={closePopupStyle} onClick={() => setTutorialDisplay(0)}><FontAwesomeIcon icon={faTimes}/></div>
+          <div css={closePopupStyle} onClick={() => setTutorialDisplay(false)}><FontAwesomeIcon icon={faTimes}/></div>
           {currentMessage && <h2>{currentMessage.title(t)}</h2>}
           {currentMessage && <p>{currentMessage.text(t)}</p>}
           {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
@@ -72,7 +68,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
         </div>
       </div>
       {
-        !displayPopup && tutorialRound &&
+        !displayPopup && tutorialDescription.length > actionsNumber &&
         <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>Afficher le Tutoriel</Button>
       }
       {
