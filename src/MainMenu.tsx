@@ -96,7 +96,7 @@ const MainMenu = () => {
           <FontAwesomeIcon icon={faUserSlash}/>
         </IconButton>
         }
-        {game && !!playerId && (isOver(game) ?
+        {game && !!playerId && (isOver(game) && !game.tutorial ?
             <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
               {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche')}</span>}
