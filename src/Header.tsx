@@ -234,7 +234,7 @@ function getTutorialText(t: TFunction, game: GameView, player: Player): string |
       break
     case Phase.Production:
       if(player.availableResources.filter(r => r === Resource.Materials).length > 0 )
-        return t('Tutoriel: placez vos Matériaux (cubes blancs) sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+        return t('Tutoriel: placez vos Matériaux (cubes gris) sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
       else if(player.availableResources.filter(r => r === Resource.Gold).length > 0 )
         return t('Tutoriel: placez vos Ors (cubes jaunes) sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
       break
