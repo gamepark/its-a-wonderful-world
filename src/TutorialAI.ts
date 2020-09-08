@@ -63,7 +63,7 @@ export default class TutorialAI {
   private draft(game: Game, player: Player): Move[] {
     const cardRates = player.hand.reduce<Map<number, number>>((map, card) => {
       const rate = this.rateDevelopment(developmentCards[card], player, game)
-      map.set(card, rate * rate)
+      map.set(card, rate)
       return map
     }, new Map<number, number>())
     return this.evaluateOptions(game, player.hand.map(card => ({
@@ -80,7 +80,7 @@ export default class TutorialAI {
   }
 
   private rateDevelopment(development: Development, player: Player, game: Game) {
-    return this.buildRate(development, player, game.round) + this.discardRate(development, player, game.round) + this.counterRate(development, player, game)
+    return this.buildRate(development, player, game.round) + this.recycleRate(development, player, game.round) + this.counterRate(development, player, game)
   }
 
   private buildRate(development: Development, player: Player | PlayerView, round: number) {
@@ -88,14 +88,14 @@ export default class TutorialAI {
   }
 
   private expectedProductionRate(development: Development, player: Player | PlayerView, round: number) {
-    const roundsLeft = numberOfRounds - round
-    const productionMultiplier = roundsLeft * (roundsLeft + 1) / 2
     if (!development.production) {
       return 0
     } else if (isResource(development.production)) {
+      const productionMultiplier = TutorialAI.getProductionMultiplier(development.constructionCost, player, round, development.production)
       return empiresProductionRate[player.empire][development.production] * productionMultiplier
     } else {
       return resources.reduce((sum, resource) => {
+        const productionMultiplier = TutorialAI.getProductionMultiplier(development.constructionCost, player, round, resource)
         const production = development.production![resource] as number | DevelopmentType | undefined
         if (isDevelopmentType(production)) {
           sum += (player.constructedDevelopments.filter(card => developmentCards[card].type === production).length + productionMultiplier) * productionMultiplier
@@ -105,6 +105,23 @@ export default class TutorialAI {
         return sum
       }, 0)
     }
+  }
+
+  private static getProductionMultiplier(constructionCost: { [key in Resource | Character]?: number }, player: Player | PlayerView, round: number, resource: Resource) {
+    let missingResources = 0
+    for (const resourceCost of resources) {
+      const cost = constructionCost[resourceCost]
+      if (cost) {
+        if (resources.indexOf(resourceCost) >= resources.indexOf(resource)) {
+          missingResources += cost
+        } else {
+          missingResources += Math.max(0, cost - getProduction(player, resource))
+        }
+      }
+    }
+    const hopeToBenefitsImmediatelyFromProduction = missingResources === 0 ? 1 : missingResources === 1 ? 0.9 : missingResources === 2 ? 0.7 : missingResources === 3 ? 0.4 : 0
+    const roundsLeft = Math.max(0, numberOfRounds - round - (1 - hopeToBenefitsImmediatelyFromProduction))
+    return roundsLeft * (roundsLeft + 1) / 2
   }
 
   private expectedScore(development: Development, player: Player | PlayerView) {
@@ -131,14 +148,18 @@ export default class TutorialAI {
     return Math.max(0, expectedScore - (development.constructionCost.Financier || 0) * expectedScores.Financier - (development.constructionCost.General || 0) * expectedScores.General)
   }
 
-  private discardRate(development: Development, player: Player | PlayerView, round: number) {
+  private recycleRate(development: Development, player: Player | PlayerView, round: number) {
     const resource = development.recyclingBonus
     const need = player.constructionArea.reduce((sum, construction) => {
       sum += getRemainingCost(construction).filter(cost => cost.item === resource).length
       return sum
     }, 0)
+    const mightNeed = player.draftArea.reduce((sum, card) => {
+      sum += developmentCards[card].constructionCost[resource] || 0
+      return sum
+    }, 0)
     const produce = getProduction(player, resource)
-    return 1 + Math.max(0, need - produce * (numberOfRounds + 1 - round))
+    return 0.2 + Math.max(0, need + mightNeed / 2 - produce * (numberOfRounds + 1 - round))
   }
 
   private counterRate(development: Development, player: Player, game: Game) {
@@ -183,11 +204,25 @@ export default class TutorialAI {
     if (!player.draftArea.length) {
       return this.placeResourcesScore(game, [])
     }
-    // TODO: not always slate for construction before recycle, evaluate build vs discard benefits first
-    return this.evaluateOptions(game, [
-      {moves: [slateForConstruction(this.playerId, player.draftArea[0])], next: (game: Game) => this.planScore(game), rate: 0},
-      {moves: [recycle(this.playerId, player.draftArea[0])], next: (game: Game) => this.planScore(game), rate: 0}
-    ])
+    let confidence = 1, highestConfidenceOptions: AIOptions[] = []
+    for (const card of player.draftArea) {
+      const buildOption = {moves: [slateForConstruction(this.playerId, card)], next: (game: Game) => this.planScore(game), rate: 0}
+      const recycleOption = {moves: [recycle(this.playerId, card)], next: (game: Game) => this.planScore(game), rate: 0}
+      const buildRate = this.buildRate(developmentCards[card], player, game.round)
+      const recycleRate = this.recycleRate(developmentCards[card], player, game.round)
+      if (buildRate === 0) {
+        confidence = Infinity
+        highestConfidenceOptions = [recycleOption, buildOption]
+        break
+      } else if (buildRate < recycleRate && recycleRate / buildRate > confidence) {
+        confidence = recycleRate / buildRate
+        highestConfidenceOptions = [recycleOption, buildOption]
+      } else if (recycleRate < buildRate && buildRate / recycleRate > confidence) {
+        confidence = buildRate / recycleRate
+        highestConfidenceOptions = [buildOption, recycleOption]
+      }
+    }
+    return this.evaluateOptions(game, highestConfidenceOptions)
   }
 
   private placeResourcesScore(game: Game, doNotBuild: Construction[]): OptionsEvaluation {
@@ -271,8 +306,8 @@ export default class TutorialAI {
     const constructionAreaPotential = player.constructionArea.reduce((sum, construction) => {
       const rate = this.buildRate(developmentCards[construction.card], player, round + 1)
       const totalCost = construction.costSpaces.length
-      const costLeft = construction.costSpaces.filter(costSpace => !!costSpace).length
-      return sum + rate * (costLeft + 1) / (totalCost + 1)
+      const costPaid = construction.costSpaces.filter(costSpace => !!costSpace).length
+      return sum + rate * (totalCost + costPaid) / (totalCost * 2)
     }, 0)
     const resourcesPotential = player.empireCardResources.reduce((sum, resource) => resource === Resource.Krystallium ? sum + 2 : sum + 0.4, 0)
     return constructionAreaPotential + resourcesPotential
