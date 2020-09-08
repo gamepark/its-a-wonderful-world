@@ -180,7 +180,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Comment jouer'),
-      text: (t: TFunction) => t('Un tour est composé de 3 phases que les joueurs jouent simultanément. Vous commencez par une phase de draft lors de laquelle vous allez récupérer 7 cartes Développement.'),
+      text: (t: TFunction) => t('Un tour est composé de 3 phases que les joueurs jouent simultanément : le Draft, la Planification et la Production.'),
       boxTop: 30,
       boxLeft: 45,
       boxWidth: 70,
@@ -192,7 +192,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Phase de Draft'),
-      text: (t: TFunction) => t('Vous recevez une main de 7 cartes. Vous devez choisir 1 carte que vous posez devant vous et passer les autres au joueur à votre gauche. Vous récupérerez ensuite les cartes du joueur à votre droite, et ainsi de suite jusqu’à ce que vous ayez 7 cartes devant vous.'),
+      text: (t: TFunction) => t('Chaque joueur reçoit 7 cartes. Vous devez choisir 1 carte et passer les autres à la République d’Europa.'),
       boxTop: 61,
       boxLeft: 50,
       boxWidth: 80,
@@ -203,20 +203,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Déterminez une stratégie'),
-      text: (t: TFunction) => t('Pour cet exemple, votre Empire est tourné vers la Finance (bâtiments jaunes) et produit de base 3 Matériaux (cubes gris) et 1 Or (cube jaune).'),
-      boxTop: 81,
-      boxLeft: 51,
-      boxWidth: 70,
-      arrow: {
-        angle: -90,
-        top: 76,
-        left: 4
-      }
-    },
-    {
       title: (t: TFunction) => t('Choisissez votre première carte'),
-      text: (t: TFunction) => t('Le Monument National s’intègre bien à votre stratégie. Faites glisser cette carte vers votre zone de Draft ou cliquez sur la carte pour zoomer dessus et sélectionner l’action Choisir.'),
+      text: (t: TFunction) => t('Déplacez la Société Secrète dans votre zone de draft. Nous verrons plus tard pourquoi cette carte est stratégique pour vous.'),
       boxTop: 61,
       boxLeft: 43,
       boxWidth: 70,
@@ -229,17 +217,34 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Choisissez votre deuxième carte'),
-      text: (t: TFunction) => t('Dès que tous les joueurs ont choisi et validé leur carte, vous recevez automatiquement les cartes de votre voisin, parmi lesquelles vous devez choisir une nouvelle carte. '),
-      boxTop: 50,
-      boxLeft: 50,
-      boxWidth: 70
+      title: (t: TFunction) => t('Choix simultané'),
+      text: (t: TFunction) => t('Comme vous avez pu le constater, la Fédération d’Asie vous a passé 6 cartes. Les joueurs choisissent simultanément 1 carte et passent le reste au joueur suivant.'),
+      boxTop: 61,
+      boxLeft: 45,
+      boxWidth: 80,
+      arrow: {
+        angle: 180,
+        top: 61,
+        left: 36
+      }
     },
     {
-      title: (t: TFunction) => t('Choisissez le Centre de Propagande'),
-      text: (t: TFunction) => t('Le Centre de Propagande permet de produire un Or par bâtiment jaune construit. Ces cartes permettent d’amorcer la production et deviennent très fortes en fin de partie.'),
+      title: (t: TFunction) => t('Sens du draft'),
+      text: (t: TFunction) => t('Ces flèches indiquent le sens de passage des cartes pour ce tour.'),
+      boxTop: 26,
+      boxLeft: 44.5,
+      boxWidth: 70,
+      arrow: {
+        angle: 90,
+        top: 19,
+        left: 75
+      }
+    },
+    {
+      title: (t: TFunction) => t('Choisissez le Complexe Industriel'),
+      text: (t: TFunction) => t('Cette carte va vous permettre de bien démarrer la partie.'),
       boxTop: 60,
-      boxLeft: 46,
+      boxLeft: 40,
       boxWidth: 70,
       arrow: {
         angle: 180,
@@ -250,25 +255,49 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Choisissez la Société Secrète'),
-      text: (t: TFunction) => t('Cette carte est intéressante pour votre stratégie car elle marque des points sur les jetons Financiers comme votre Empire.'),
-      boxTop: 60,
-      boxLeft: 50,
+      title: (t: TFunction) => t('Production des cartes'),
+      text: (t: TFunction) => t('Certaines cartes produisent des ressources une fois construites. Par exemple, le Complexe Industriel produira une ressource grise (« les Matériaux ») et une jaune (« l’Or »)'),
+      boxTop: 67,
+      boxLeft: 62,
       boxWidth: 60,
       arrow: {
-        angle: 180,
-        top: 60,
-        left: 27
+        angle: -90,
+        top: 61.9,
+        left: 20.7
       }
     },
     {
-      title: (t: TFunction) => t('Choisissez la Société Secrète'),
-      text: (t: TFunction) => t('La Société secrète ne coûte pas très cher, et vous aurez le temps pour la construire car elle rapporte des points de victoire mais ne produit pas de Ressources.'),
-      boxTop: 60,
-      boxLeft: 50,
+      title: (t: TFunction) => t('Coût de construction'),
+      text: (t: TFunction) => t('Les ressources vous permettront de construire d’autres cartes. Par exemple, le Complexe Industriel coûte 3 Matériaux (en gris) et une « Énergie » (en noir)'),
+      boxTop: 52,
+      boxLeft: 58.5,
       boxWidth: 60,
       arrow: {
-        angle: 180,
+        angle: -90,
+        top: 45,
+        left: 17
+      }
+    },
+    {
+      title: (t: TFunction) => t('Production de l’Empire'),
+      text: (t: TFunction) => t('Heureusement, vous ne commencez pas sans production ! Votre Empire produira chaque tour 3 Matériaux et 1 Or.'),
+      boxTop: 78,
+      boxLeft: 43,
+      boxWidth: 60,
+      arrow: {
+        angle: -90,
+        top: 72.2,
+        left: 1.3
+      }
+    },
+    {
+      title: (t: TFunction) => t('Choisissez à présent le Centre de Propagande'),
+      text: (t: TFunction) => t('Grâce à cette carte, vous pourrez produire de plus en plus d’Or !'),
+      boxTop: 60,
+      boxLeft: 40,
+      boxWidth: 60,
+      arrow: {
+        angle: -180,
         top: 60,
         left: 27
       }
@@ -276,13 +305,37 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Choisissez le Complexe Industriel'),
-      text: (t: TFunction) => t('Il est important de lancer votre moteur de production dès le premier tour. Le Complexe Industriel s’inscrit très bien dans la stratégie de votre Empire de départ.'),
+      title: (t: TFunction) => t('Production proportionnelle'),
+      text: (t: TFunction) => t('Le Centre de Propagande produira une fois construit autant d’Or que vous avez de cartes jaunes construites (les « Projets »).'),
+      boxTop: 56,
+      boxLeft: 34,
+      boxWidth: 60,
+      arrow: {
+        angle: -180,
+        top: 55.5,
+        left: 26
+      }
+    },
+    {
+      title: (t: TFunction) => t('Les Projets'),
+      text: (t: TFunction) => t('La Société Secrête et le Centre de Propagande sous tous les 2 des « Projets », comme l’indique leur couleur et ce symbole.'),
+      boxTop: 56,
+      boxLeft: 37.3,
+      boxWidth: 60,
+      arrow: {
+        angle: -180,
+        top: 55.5,
+        left: 29.3
+      }
+    },
+    {
+      title: (t: TFunction) => t('Choisissez maintenant la Zone Portuaire'),
+      text: (t: TFunction) => t('Elle coûte cher à construire (5 Ors), mais elle produira ensuite beaucoup à chaque tour (2 Matériaux et 2 Ors).'),
       boxTop: 60,
       boxLeft: 50,
       boxWidth: 60,
       arrow: {
-        angle: 180,
+        angle: -180,
         top: 60,
         left: 40
       }
@@ -291,33 +344,45 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Choisissez les Éoliennes'),
-      text: (t: TFunction) => t('Il n’y a plus grand chose d’intéressant pour votre stratégie. Pendant votre phase de Planification, vous pourrez placez les cartes draftées en construction ou les recycler pour récupérer la Ressource de son Bonus de recyclage.'),
+      text: (t: TFunction) => t('Cette carte n’est pas forcément intéressante à construire, mais nous allons pouvoir en faire bon usage quand même !'),
       boxTop: 60,
-      boxLeft: 45,
+      boxLeft: 35,
       boxWidth: 60,
       arrow: {
         angle: 180,
         top: 60,
         left: 27
       }
-    },
-    {
-      title: (t: TFunction) => t('Choisissez les Éoliennes'),
-      text: (t: TFunction) => t('Le recyclage de son Énergie (cube noir) vous permettra de construire le Complexe Industriel, car votre Empire de départ n’en produit pas.'),
-      boxTop: 78,
-      boxLeft: 45,
-      boxWidth: 60,
-      arrow: {
-        angle: 180,
-        top: 78,
-        left: 30.3
-      }
     }
   ],
   [
     {
-      title: (t: TFunction) => t('Choisissez le Trésor des Templiers'),
-      text: (t: TFunction) => t('De la même façon, comme il n’y a plus grand chose d’intéressant pour votre stratégie, choisissez le Trésor des Templiers pour le recycler.'),
+      title: (t: TFunction) => t('Bonus de recyclage'),
+      text: (t: TFunction) => t('Plus tard, chaque carte pourra vous offrir une ressource si vous la défaussez. Pour l’Éolienne, c’est une Énergie, c’est indiqué ici.'),
+      boxTop: 52,
+      boxLeft: 56,
+      boxWidth: 60,
+      arrow: {
+        angle: 180,
+        top: 51.8,
+        left: 47.9
+      }
+    },
+    {
+      title: (t: TFunction) => t('Bonus de recyclage'),
+      text: (t: TFunction) => t('Ça tombe bien, il nous manquait justement une Énergie pour construire le Complexe Industriel !'),
+      boxTop: 54,
+      boxLeft: 58,
+      boxWidth: 60,
+      arrow: {
+        angle: 270,
+        top: 48,
+        left: 16.7
+      }
+    },
+    {
+      title: (t: TFunction) => t('Choisissez l’Exposition universelle'),
+      text: (t: TFunction) => t('Comme pour l’Éolienne, nous pourrons recycler cette carte, mais cette fois-ci pour gagner un Or.'),
       boxTop: 60,
       boxLeft: 45,
       boxWidth: 70,
@@ -326,33 +391,26 @@ const tutorialDescription: TutorialStepDescription[][] = [
         top: 60,
         left: 31
       }
-    },
-    {
-      title: (t: TFunction) => t('Choisissez le Trésor des Templiers'),
-      text: (t: TFunction) => t('Le recyclage de son Or (cube jaune) vous aidera à construire le Centre de Propagande.'),
-      boxTop: 78,
-      boxLeft: 45,
-      boxWidth: 70,
-      arrow: {
-        angle: 180,
-        top: 78,
-        left: 34.3
-      }
     }
   ],
   [
     {
       title: (t: TFunction) => t('Fin du Draft'),
-      text: (t: TFunction) => t('Vous récupérez automatiquement la dernière carte de votre voisin, ici un Zeppelin.'),
-      boxTop: 50,
-      boxLeft: 50,
-      boxWidth: 50
+      text: (t: TFunction) => t('Vous avez automatiquement récupéré la dernière carte passée par la Fédération d’Asie, ici un Zeppelin.'),
+      boxTop: 63,
+      boxLeft: 65,
+      boxWidth: 60,
+      arrow: {
+        angle: 180,
+        top: 62,
+        left: 63.5
+      }
     },
     {
       title: (t: TFunction) => t('Phase de Planification'),
-      text: (t: TFunction) => t('Vous devez maintenant choisir les cartes à mettre en construction et celles à recycler. Pendant cette phase vous pouvez commencer à construire des cartes en plaçant dessus les Ressources récupérées des cartes que vous recyclez.'),
+      text: (t: TFunction) => t('Nous passons maintenant à la seconde phase du tour, la Planification : chaque carte choisie lors de la phase précédente doit être conservée ou recyclée.'),
       boxTop: 30,
-      boxLeft: 50,
+      boxLeft: 30,
       boxWidth: 60,
       arrow: {
         angle: 0,
@@ -361,27 +419,15 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Mettez en Construction le Monument National'),
-      text: (t: TFunction) => t('Commencez par mettre le Monument National dans la zone de construction.'),
-      boxTop: 60,
-      boxLeft: 34,
+      title: (t: TFunction) => t('Commençons par le Complexe Industriel'),
+      text: (t: TFunction) => t('Nous voulons construire cette carte. Déplacez-la donc vers la Zone de Construction.'),
+      boxTop: 62,
+      boxLeft: 31,
       boxWidth: 60,
       arrow: {
         angle: 180,
-        top: 60,
-        left: 7
-      }
-    },
-    {
-      title: (t: TFunction) => t('Mettez en Construction le Monument National'),
-      text: (t: TFunction) => t('Comme lors de la phase de Draft, vous pouvez la faire glisser la carte vers la zone orange, ou cliquer dessus et sélectionner l’action Construire.'),
-      boxTop: 60,
-      boxLeft: 34,
-      boxWidth: 60,
-      arrow: {
-        angle: 180,
-        top: 60,
-        left: 7
+        top: 62,
+        left: 16.5
       }
     }
   ],
@@ -389,76 +435,70 @@ const tutorialDescription: TutorialStepDescription[][] = [
     {
       title: (t: TFunction) => t('Mettez en Construction le Centre de Propagande'),
       text: (t: TFunction) => t('Glissez également le Centre de Propagande en zone de construction.'),
-      boxTop: 60,
-      boxLeft: 34,
+      boxTop: 62,
+      boxLeft: 31,
       boxWidth: 60,
       arrow: {
         angle: 180,
-        top: 60,
-        left: 7
+        top: 62,
+        left: 16.5
       }
     }
   ],
   [
     {
-      title: (t: TFunction) => t('Mettez en Construction la Société Secrète'),
-      text: (t: TFunction) => t('Glissez également la Société Secrète en zone de construction.'),
-      boxTop: 60,
-      boxLeft: 34,
+      title: (t: TFunction) => t('Points de victoire'),
+      text: (t: TFunction) => t('A cet emplacement, vous pouvez voir que le Centre de Propagande rapporte 1 point de victoire à la fin de la partie, s’il est construit.'),
+      boxTop: 67,
+      boxLeft: 58,
       boxWidth: 60,
-      arrow: {
-        angle: 180,
-        top: 60,
-        left: 7
-      }
-    }
-  ],
-  [
-    {
-      title: (t: TFunction) => t('Mettez en Construction le Complexe industriel'),
-      text: (t: TFunction) => t('Glissez également le Complexe industriel en zone de construction.'),
-      boxTop: 60,
-      boxLeft: 34,
-      boxWidth: 60,
-      arrow: {
-        angle: 180,
-        top: 60,
-        left: 7
-      }
-    }
-  ],
-  [
-    {
-      title: (t: TFunction) => t('Recyclez  les Éoliennes'),
-      text: (t: TFunction) => t('Glissez maintenant les Éoliennes dans la zone de recyclage, au niveau des cercles de Ressources. Vous pouvez aussi cliquer sur la carte et sélectionner l’action Recycler.'),
-      boxTop: 60,
-      boxLeft: 34,
-      boxWidth: 60,
-      arrow: {
-        angle: 180,
-        top: 60,
-        left: 7
-      }
-    }
-  ],
-  [
-    {
-      title: (t: TFunction) => t('Placez l’Énergie générée sur le Complexe Industriel'),
-      text: (t: TFunction) => t('Ce recyclage a généré un cube noir qui se place automatiquement dans la zone de Ressource correspondante, Glissez ce cube noir sur le Complexe industriel.'),
-      boxTop: 30,
-      boxLeft: 68,
-      boxWidth: 55,
       arrow: {
         angle: 270,
-        top: 24,
-        left: 29
+        top: 61.7,
+        left: 16.5
+      }
+    },
+    {
+      title: (t: TFunction) => t('Mettez en Construction la Zone Portuaire'),
+      text: (t: TFunction) => t('Une fois construite, cette carte produira 2 Matériaux et 2 Ors chaque tour, mais rapportera aussi 2 points de victoire en fin de partie.'),
+      boxTop: 62,
+      boxLeft: 31,
+      boxWidth: 60,
+      arrow: {
+        angle: 180,
+        top: 62,
+        left: 16.5
       }
     }
   ],
   [
     {
-      title: (t: TFunction) => t('Recyclez  le Trésor des Templiers'),
-      text: (t: TFunction) => t('Glissez maintenant le Trésor des Templiers dans la Zone de Recyclage.'),
+      title: (t: TFunction) => t('Jetons personnages'),
+      text: (t: TFunction) => t('Une autre façon de marquer des points de victoire consiste à accumuler des Financiers et des Générales. Chacun rapporte 1 point.'),
+      boxTop: 81,
+      boxLeft: 24,
+      boxWidth: 50,
+      arrow: {
+        angle: 180,
+        top: 80,
+        left: -1.7
+      }
+    },
+    {
+      title: (t: TFunction) => t('Votre stratégie'),
+      text: (t: TFunction) => t('Votre Empire vous donne un bonus stratégique : chaque jeton Financier vous rapporte un point supplémentaire !'),
+      boxTop: 78,
+      boxLeft: 33,
+      boxWidth: 50,
+      arrow: {
+        angle: 270,
+        top: 72,
+        left: -3.3
+      }
+    },
+    {
+      title: (t: TFunction) => t('Mettez en Construction la Société Secrète'),
+      text: (t: TFunction) => t('La Société Secrète s’inscrit parfaitement dans votre stratégie, puisqu’une fois construite elle vous rapportera également 1 point par jeton Financier : mettez-la en construction.'),
       boxTop: 60,
       boxLeft: 34,
       boxWidth: 60,
@@ -471,22 +511,112 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Placez l’Or générée sur le Centre de Propagande'),
-      text: (t: TFunction) => t('Ce recyclage a généré un cube jaune que vous pouvez glisser sur le Centre de Propagande.'),
-      boxTop: 54,
-      boxLeft: 60,
+      title: (t: TFunction) => t('D’autres stratégies...'),
+      text: (t: TFunction) => t('Cette carte rapporte 3 points de victoire par bâtiment vert construit.'),
+      boxTop: 83,
+      boxLeft: 31,
+      boxWidth: 60,
+      arrow: {
+        angle: 180,
+        top: 82.3,
+        left: 13.7
+      }
+    },
+    {
+      title: (t: TFunction) => t('D’autres stratégies...'),
+      text: (t: TFunction) => t('Cependant, pour la construire il nous faudrait dépenser 2 précieux financiers !'),
+      boxTop: 69,
+      boxLeft: 32,
+      boxWidth: 60,
+      arrow: {
+        angle: 180,
+        top: 68.5,
+        left: 13
+      }
+    },
+    {
+      title: (t: TFunction) => t('Recyclez l’Exposition Universelle'),
+      text: (t: TFunction) => t('Glissez cette carte vers la zone de recyclage, au dessus de la Zone de Construction : elle nous sera plus utile ainsi.'),
+      boxTop: 62,
+      boxLeft: 31,
+      boxWidth: 60,
+      arrow: {
+        angle: 180,
+        top: 62,
+        left: 16.5
+      }
+    }
+  ],
+  [
+    {
+      title: (t: TFunction) => t('Bonus de recyclage !'),
+      text: (t: TFunction) => t('En recyclant l’Exposition Universelle pendant la phase de Planification, nous avons obtenu un Or utilisable immédiatement.'),
+      boxTop: 44,
+      boxLeft: 55,
       boxWidth: 60,
       arrow: {
         angle: 0,
-        top: 40,
-        left: 46.5
+        top: 31.1,
+        left: 46.4
+      }
+    },
+    {
+      title: (t: TFunction) => t('Placez l’Or sur le Centre de Propagande'),
+      text: (t: TFunction) => t('Glissez ce cube jaune vers votre Centre de Propagande pour commencer à le construire.'),
+      boxTop: 44,
+      boxLeft: 55,
+      boxWidth: 60,
+      arrow: {
+        angle: 0,
+        top: 31.1,
+        left: 46.4
+      }
+    }
+  ],
+  [
+    {
+      title: (t: TFunction) => t('Le cube jaune est là'),
+      text: (t: TFunction) => t('Il ne vous manque plus que 2 Ors pour terminer la construction du Centre de Propagande.'),
+      boxTop: 48,
+      boxLeft: 58,
+      boxWidth: 60,
+      arrow: {
+        angle: 270,
+        top: 41.5,
+        left: 16.5
+      }
+    },
+    {
+      title: (t: TFunction) => t('Recyclez l’Éolienne'),
+      text: (t: TFunction) => t('Glissez maintenant l’Éolienne vers la zone de recyclage, pour obtenir un cube noir cette fois-ci.'),
+      boxTop: 60,
+      boxLeft: 34,
+      boxWidth: 60,
+      arrow: {
+        angle: 180,
+        top: 60,
+        left: 7
+      }
+    }
+  ],
+  [
+    {
+      title: (t: TFunction) => t('Placez l’Énergie sur le Complexe Industriel'),
+      text: (t: TFunction) => t('A présent, glissez le cube noir, obtenu en recyclant l’Éolienne, vers le Complexe Industriel.'),
+      boxTop: 29,
+      boxLeft: 63,
+      boxWidth: 55,
+      arrow: {
+        angle: 270,
+        top: 23,
+        left: 24
       }
     }
   ],
   [
     {
       title: (t: TFunction) => t('Recyclez  le Zeppelin'),
-      text: (t: TFunction) => t('Il ne reste plus que le Zeppelin à recycler. Le construire nécessite de l’énergie que vous ne produisez pas et le Zeppelin produit de l’exploration dont vous n’avez pas besoin pour cette stratégie.'),
+      text: (t: TFunction) => t('Cette carte coûte 2 d’Énergie (que vous ne produisez pas) et produit 1 cube bleu (« l’Exploration »), peu utile pour notre stratégie.'),
       boxTop: 60,
       boxLeft: 27,
       boxWidth: 50,
@@ -499,71 +629,83 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Le cube bleu généré est placé sur la carte Empire'),
-      text: (t: TFunction) => t('Le cube bleu ne peut pas être placé sur une carte en Construction. Il est donc automatiquement transféré sur votre carte Empire.'),
-      boxTop: 80,
-      boxLeft: 51,
+      title: (t: TFunction) => t('Le cube bleu est là'),
+      text: (t: TFunction) => t('En recyclant le zeppelin, vous obtenez un cube bleu. Cependant, aucune de vos cartes en construction n’a besoin de cette ressource.'),
+      boxTop: 81,
+      boxLeft: 49,
       boxWidth: 70,
       arrow: {
         angle: -90,
-        top: 76,
-        left: 4
+        top: 77,
+        left: 2.5
       }
     },
     {
-      title: (t: TFunction) => t('Cubes de la carte Empire'),
-      text: (t: TFunction) => t('Les Ressources de votre carte Empire ne sont plus utilisables pour construire des cartes Développement.'),
-      boxTop: 80,
-      boxLeft: 51,
+      title: (t: TFunction) => t('Resources inutiles ?'),
+      text: (t: TFunction) => t('Une resource qui ne peut pas être utilisée immédiatement doit être placée ici, sur votre carte Empire.'),
+      boxTop: 81,
+      boxLeft: 49,
       boxWidth: 70,
       arrow: {
         angle: -90,
-        top: 76,
-        left: 4
+        top: 77,
+        left: 2.5
+      }
+    },
+    {
+      title: (t: TFunction) => t('Resources inutiles ?'),
+      text: (t: TFunction) => t('Les Ressources de votre carte Empire ne sont plus utilisables pour construire des cartes Développement.'),
+      boxTop: 81,
+      boxLeft: 49,
+      boxWidth: 70,
+      arrow: {
+        angle: -90,
+        top: 77,
+        left: 2.5
       }
     },
     {
       title: (t: TFunction) => t('Génération de Krystallium'),
-      text: (t: TFunction) => t('Cependant, au bout de 5 Ressources sur votre carte Empire (quelle que soit leur couleur), elles sont converties automatiquement en 1 Krystallium (cube rouge).'),
-      boxTop: 80,
-      boxLeft: 51,
+      text: (t: TFunction) => t('Cependant, si 5 cubes se trouvent sur votre carte Empire (quelle que soit leur couleur), ils sont convertis en 1 cube rouge, le « Krystallium ».'),
+      boxTop: 81,
+      boxLeft: 49,
       boxWidth: 70,
       arrow: {
         angle: -90,
-        top: 76,
-        left: 4
+        top: 77,
+        left: 2.5
       }
     },
     {
       title: (t: TFunction) => t('Utilisation du Krystallium'),
-      text: (t: TFunction) => t('Le Krystallium est la seule Ressource qui peut être stockée pour être utilisée plus tard à la place de n’importe quelle Ressource.'),
-      boxTop: 80,
-      boxLeft: 51,
+      text: (t: TFunction) => t('Le Krystallium peut remplacer n’importe quel cube pour construire une carte, et peut-être utilisé à tout moment.'),
+      boxTop: 81,
+      boxLeft: 49,
       boxWidth: 70,
       arrow: {
         angle: -90,
-        top: 76,
-        left: 4
+        top: 77,
+        left: 2.5
       }
     },
     {
       title: (t: TFunction) => t('Coût en Krystallium'),
-      text: (t: TFunction) => t('Certaines cartes comme la Société Secrète, nécessitent du Krystallium pour être construites.'),
-      boxTop: 54,
-      boxLeft: 57,
-      boxWidth: 37,
+      text: (t: TFunction) => t('Certaines cartes, comme la Société Secrète, nécessitent du Krystallium pour être construites.'),
+      boxTop: 42,
+      boxLeft: 41,
+      boxWidth: 70,
       arrow: {
-        angle: -90,
-        top: 48,
-        left: 27
+        angle: -180,
+        top: 41.7,
+        left: 31.8
       }
     },
     {
-      title: (t: TFunction) => t('Fin de la Phase de Planification'),
-      text: (t: TFunction) => t('Validez pour passer à la Phase de Production.'),
+      title: (t: TFunction) => t('N’oubliez pas de valider !'),
+      text: (t: TFunction) => t('Vous devez cliquer sur Valider pour indiquer aux autres joueurs que vous avez terminé votre planification.'),
       boxTop: 31,
       boxLeft: 53,
-      boxWidth: 37,
+      boxWidth: 80,
       arrow: {
         angle: 0,
         top: 17,
@@ -574,7 +716,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Phase de Production'),
-      text: (t: TFunction) => t('Lors de la Phase de Production, tous les Empires produisent leurs Ressources simultanément dans l’ordre de la chaîne de Production.'),
+      text: (t: TFunction) => t('La phase de production se déroule en 5 étapes : une par ressource, dans l’ordre de la chaîne de Production : gris, noir, vert, jaune et enfin bleu.'),
       boxTop: 30,
       boxLeft: 50,
       boxWidth: 60,
@@ -586,10 +728,10 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Production des Matériaux'),
-      text: (t: TFunction) => t('Tous les joueurs commencent par produire des Matériaux (cubes gris). Vous en produisez 3, qui sont placés directement sur la zone de Ressource correspondante.'),
-      boxTop: 54,
-      boxLeft: 22,
-      boxWidth: 43,
+      text: (t: TFunction) => t('Tous les joueurs commencent par produire des Matériaux. Vous en produisez 3, qui sont disponibles ici.'),
+      boxTop: 53,
+      boxLeft: 36,
+      boxWidth: 60,
       arrow: {
         angle: 0,
         top: 40,
@@ -597,11 +739,11 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Bonus de Suprématie industrielle'),
-      text: (t: TFunction) => t('Pour chaque Production, l’Empire qui en produit le plus gagne un Général ou un Financier en Bonus de Suprématie. C’est vous qui produisez le plus de Matériaux, vous gagnez donc un jeton Financier.'),
+      title: (t: TFunction) => t('Bonus de Suprématie'),
+      text: (t: TFunction) => t('A chaque étape de Production, l’Empire qui produit le plus gagne un Général ou un Financier. Vous produisez le plus de Matériaux, vous gagnez donc un jeton Financier !'),
       boxTop: 38,
-      boxLeft: 22,
-      boxWidth: 43,
+      boxLeft: 30,
+      boxWidth: 60,
       arrow: {
         angle: 0,
         top: 25,
@@ -610,38 +752,38 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Jetons Financiers'),
-      text: (t: TFunction) => t('Chaque Financier rapporte 1 point de victoire. Votre Empire vous donne un Bonus de 1 point de Victoire par Financier. Si vous parvenez à construire la Société Secrète, vous gagnerez 1 point de plus par Financier. Chaque Financier vous rapportera donc 3 points de Victoire.'),
-      boxTop: 77,
-      boxLeft: 56,
+      text: (t: TFunction) => t('Voiçi votre jeton. Pour rappel, il rapporte 1 point de victoire de base, + 1 grâce à votre Empire. Une fois la Société Secrète construite, ce sera à nouveau 1 point de plus par Financier.'),
+      boxTop: 76,
+      boxLeft: 49,
       boxWidth: 80,
       arrow: {
         angle: -90,
-        top: 76,
-        left: 4
+        top: 88,
+        left: -2
       }
     },
     {
-      title: (t: TFunction) => t('Utilisation des Ressources'),
-      text: (t: TFunction) => t('Vous pourriez mettre vos 3 Matériaux sur le Monument National mais il ne produit pas de Ressource et il vaut mieux d’abord favoriser votre carte de production. Choisissez de construire le Complexe Industriel.'),
-      boxTop: 51,
-      boxLeft: 68,
-      boxWidth: 41,
+      title: (t: TFunction) => t('Construisez le Centre de Propagande'),
+      text: (t: TFunction) => t('Vos 3 Matériaux vont permettre de terminer la construction du Centre de Progagande.'),
+      boxTop: 49,
+      boxLeft: 49,
+      boxWidth: 60,
       arrow: {
         angle: -90,
-        top: 45,
-        left: 36
+        top: 44,
+        left: 7.5
       }
     },
     {
-      title: (t: TFunction) => t('Déplacez les Ressources'),
-      text: (t: TFunction) => t('Vous pouvez dépenser toutes vos Ressources, en les déplaçant une par une, ou en cliquant sur la carte pour sélectionner les actions du mode zoom, ou encore en faisant un clic long sur la carte pour y placer toutes les Ressources possibles qu’elle peut recevoir.'),
-      boxTop: 51,
-      boxLeft: 68,
-      boxWidth: 41,
+      title: (t: TFunction) => t('Construisez le Centre de Propagande'),
+      text: (t: TFunction) => t('Plusieurs options s’offrent à vous : glisser la carte vers la gauche, cliquer longtemps sur la carte, ou déplacer les cubes un par un...'),
+      boxTop: 49,
+      boxLeft: 49,
+      boxWidth: 60,
       arrow: {
         angle: -90,
-        top: 45,
-        left: 36
+        top: 44,
+        left: 7.5
       }
     }
   ],
@@ -650,8 +792,32 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Cartes construites'),
-      text: (t: TFunction) => t('Le Complexe Industriel s’ajoute à votre Empire et augmente votre capacité de production. Cette carte augmente votre production de 1 Matériaux et 1 Or. La production de Matériaux arrive trop tard, elle sera valable pour les prochains tours, mais vous allez profiter de sa production d’Or dès ce tour-ci.'),
-      boxTop: 73,
+      text: (t: TFunction) => t('Le Complexe Industriel fait à présent partie de votre Empire, et augmente votre production de 1 Matériaux et 1 Or.'),
+      boxTop: 74,
+      boxLeft: 47,
+      boxWidth: 70,
+      arrow: {
+        angle: -90,
+        top: 69.3,
+        left: 0
+      }
+    },
+    {
+      title: (t: TFunction) => t('Ordre des production'),
+      text: (t: TFunction) => t('L’Étape de production des Matériaux a déjà commencé : il est donc trop tard pour produire un Matériaux supplémentaire ce tour-ci, mais vous en bénéficierez lors des 3 tours restants.'),
+      boxTop: 74,
+      boxLeft: 47,
+      boxWidth: 70,
+      arrow: {
+        angle: -90,
+        top: 69.3,
+        left: 0
+      }
+    },
+    {
+      title: (t: TFunction) => t('Ordre des production'),
+      text: (t: TFunction) => t('Par contre, l’Étape de production de l’Or n’a pas encore commencée : vous aurez donc un Or supplémentaire dès ce tour !'),
+      boxTop: 74,
       boxLeft: 47,
       boxWidth: 70,
       arrow: {
@@ -662,19 +828,19 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Bonus de Construction'),
-      text: (t: TFunction) => t('Certaines cartes accordent un Bonus de Construction. Vous gagnez immédiatement un jeton Financier.'),
+      text: (t: TFunction) => t('De plus, en terminant la construction de certaines cartes, vous pouvez gagner un bonus indiqué ici : vous avez gagné un second jeton Financier !'),
       boxTop: 72,
-      boxLeft: 37,
-      boxWidth: 50,
+      boxLeft: 46,
+      boxWidth: 70,
       arrow: {
         angle: -90,
-        top: 66.3,
-        left: 0
+        top: 66.4,
+        left: -0.7
       }
     },
     {
-      title: (t: TFunction) => t('Validez pour passer à la production d’Énergie'),
-      text: (t: TFunction) => t('Une fois que vous avez placé toutes les Ressources, vous devez valider pour passer à la production suivante. Quand tous les joueurs auront validé, la production de l’Énergie sera activée. Les Ressources que vous ne souhaitez ou ne pouvez pas placer sont recyclées automatiquement sur votre Empire.'),
+      title: (t: TFunction) => t('N’oubliez pas de valider !'),
+      text: (t: TFunction) => t('Une fois que vous avez placé toutes vos ressources, vous devez valider pour indiquer aux autres joueurs que vous êtes prêts.'),
       boxTop: 30,
       boxLeft: 54,
       boxWidth: 77,
@@ -687,8 +853,20 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Production de l’Énergie'),
-      text: (t: TFunction) => t('Vous ne produisez pas d’Énergie, validez directement pour passer à la production suivante.'),
+      title: (t: TFunction) => t('Étape de production d’Énergie'),
+      text: (t: TFunction) => t('Le joueur produisant le plus d’Énergie gagne un jeton Générale. Cependant, vos 2 adversaires sont à égalité : dans ce cas, personne ne gagne de jeton.'),
+      boxTop: 38,
+      boxLeft: 28,
+      boxWidth: 53,
+      arrow: {
+        angle: 0,
+        top: 25,
+        left: 20
+      }
+    },
+    {
+      title: (t: TFunction) => t('N’oubliez pas de valider !'),
+      text: (t: TFunction) => t('Attention ! Bien que vous ne produisiez pas d’Énergie, vous devez quand même cliquer sur valider à nouveau.'),
       boxTop: 30,
       boxLeft: 53,
       boxWidth: 50,
@@ -696,51 +874,51 @@ const tutorialDescription: TutorialStepDescription[][] = [
         angle: 0,
         top: 17,
         left: 45
-      }
-    },
-    {
-      title: (t: TFunction) => t('Bonus de Suprématie Militaire'),
-      text: (t: TFunction) => t('La République d’Europa et la Fédération d’Asie produisent 1 Énergie chacune. À égalité de production, personne de gagne le Bonus de Suprématie (jeton Général).'),
-      boxTop: 44,
-      boxLeft: 44,
-      boxWidth: 53,
-      arrow: {
-        angle: 90,
-        top: 37,
-        left: 66
       }
     }
   ],
   [
     {
       title: (t: TFunction) => t('Production de la Science'),
-      text: (t: TFunction) => t('Vous ne produisez pas de Science, validez directement pour passer à la production suivante.'),
-      boxTop: 30,
-      boxLeft: 53,
-      boxWidth: 50,
-      arrow: {
-        angle: 0,
-        top: 17,
-        left: 45
-      }
-    },
-    {
-      title: (t: TFunction) => t('Bonus de Suprématie Scientifique'),
-      text: (t: TFunction) => t('La République d’Europa est la seule à produire de la Science, elle gagne donc soit un jeton Financier, soit un jeton Général, au choix.'),
+      text: (t: TFunction) => t('Le joueur produisant le plus de Science peut choisir un jeton Financier ou un jeton Générale. Ici, la République d’Europa a pris une Générale.'),
       boxTop: 39,
-      boxLeft: 50,
-      boxWidth: 50,
+      boxLeft: 42,
+      boxWidth: 60,
       arrow: {
         angle: 0,
         top: 25,
         left: 33.3
+      }
+    },
+    {
+      title: (t: TFunction) => t('Recyclage'),
+      text: (t: TFunction) => t('A tout moment vous pouvez recycler une carte depuis votre Zone de Construction. Cependant, les cubes placés dessus seront perdus et son bonus de recyclage ira obligatoirement sur votre carte Empire.'),
+      boxTop: 64,
+      boxLeft: 51,
+      boxWidth: 50,
+      arrow: {
+        angle: -90,
+        top: 58.4,
+        left: 14
+      }
+    },
+    {
+      title: (t: TFunction) => t('N’oubliez pas de valider !'),
+      text: (t: TFunction) => t('Les actions comme recycler une carte ou placer un Krytallium pour terminer une construction sont possibles à tout moment. Vous devez donc valider votre tour à chaque étape de production, même si vous ne produisez rien !'),
+      boxTop: 30,
+      boxLeft: 53,
+      boxWidth: 70,
+      arrow: {
+        angle: 0,
+        top: 17,
+        left: 45
       }
     }
   ],
   [
     {
       title: (t: TFunction) => t('Production de l’Or'),
-      text: (t: TFunction) => t('Vous produisez 2 Or (un grâce à votre Empire et un grâce au Complexe Industriel) : placez-les sur le Centre de Propagande pour finir de construire la carte.'),
+      text: (t: TFunction) => t('Vous produisez 2 Or (un grâce à votre Empire et un grâce au Complexe Industriel) : placez-les sur le Centre de Propagande pour terminer sa construction.'),
       boxTop: 54,
       boxLeft: 53,
       boxWidth: 51,
@@ -751,11 +929,11 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Bonus de Suprématie Financière'),
-      text: (t: TFunction) => t('La Fédération d’Asie produit 1 Or de plus que vous et récupère donc le jeton Financier. Essayez de produire plus lors des prochains tours pour gagner cette Suprématie !'),
+      title: (t: TFunction) => t('Bonus de Suprématie'),
+      text: (t: TFunction) => t('La Fédération d’Asie produit 1 Or de plus que vous et récupère donc le jeton Financier. Essayez de produire plus lors des prochains tours pour gagner cette Suprématie !'),
       boxTop: 53,
-      boxLeft: 48,
-      boxWidth: 45,
+      boxLeft: 40,
+      boxWidth: 60,
       arrow: {
         angle: 90,
         top: 46,
@@ -767,19 +945,31 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Production de l’Or'),
-      text: (t: TFunction) => t('Votre nouvelle production d’Or arrive trop tard pour ce tour, mais vous servira pour les tours suivants. Ce genre de carte est très puissante en fin de partie.'),
+      text: (t: TFunction) => t('Votre nouvelle production d’Or arrive trop tard pour ce tour, mais vous servira pour les tours suivants.'),
       boxTop: 73,
       boxLeft: 37,
-      boxWidth: 49,
+      boxWidth: 50,
       arrow: {
         angle: -90,
         top: 66.8,
-        left: 1
+        left: 0.5
       }
     },
     {
-      title: (t: TFunction) => t('Validez pour passer à la Production d’Exploration'),
-      text: (t: TFunction) => t('Validez pour passer à l’étape suivante.'),
+      title: (t: TFunction) => t('Bonus de construction'),
+      text: (t: TFunction) => t('En terminant la construction du Centre de Propagande, vous avez gagné une Générale, qui vous rapportera 1 point de victoire en fin de partie.'),
+      boxTop: 70,
+      boxLeft: 36,
+      boxWidth: 50,
+      arrow: {
+        angle: -90,
+        top: 63.8,
+        left: -0.6
+      }
+    },
+    {
+      title: (t: TFunction) => t('N’oubliez pas de valider !'),
+      text: (t: TFunction) => t('Comme d’habitude, validez pour passer à l’étape suivante.'),
       boxTop: 30,
       boxLeft: 53,
       boxWidth: 65,
@@ -791,6 +981,18 @@ const tutorialDescription: TutorialStepDescription[][] = [
     }
   ],
   [
+    {
+      title: (t: TFunction) => t('Production totale'),
+      text: (t: TFunction) => t('La production totale de chaque joueur est affichée ici. Vous produirez au prochain tour au moins 4 Matériaux et 3 Ors !'),
+      boxTop: 26,
+      boxLeft: 40.5,
+      boxWidth: 60,
+      arrow: {
+        angle: 90,
+        top: 17,
+        left: 66
+      }
+    },
     {
       title: (t: TFunction) => t('Production de l’Exploration'),
       text: (t: TFunction) => t('Vous ne produisez pas d’Exploration, validez directement pour passer au tour suivant.'),
@@ -807,31 +1009,19 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Fin du premier tour'),
-      text: (t: TFunction) => t('Le marqueur de tour avance de 1 et se retourne pour traduire le fait que vous changez de sens pour le nouveau Draft.'),
-      boxTop: 30,
-      boxLeft: 30,
-      boxWidth: 50,
+      text: (t: TFunction) => t('Nous sommes maintenant au tour 2, et une nouvelle phase de Draft débute. Le sens de passage des cartes est inversé à chaque tour.'),
+      boxTop: 29,
+      boxLeft: 36,
+      boxWidth: 70,
       arrow: {
         angle: 0,
-        top: 17,
-        left: 15
-      }
-    },
-    {
-      title: (t: TFunction) => t('Moteur de Production'),
-      text: (t: TFunction) => t('Idéalement, il faut réussir à construire au moins une carte développement au terme du premier tour pour lancer votre moteur de production.'),
-      boxTop: 73,
-      boxLeft: 40,
-      boxWidth: 49,
-      arrow: {
-        angle: -90,
-        top: 66.8,
-        left: 4
+        top: 16,
+        left: 14.5
       }
     },
     {
       title: (t: TFunction) => t('Chaque tour se déroule ainsi'),
-      text: (t: TFunction) => t('Vous avez jusqu’à la fin de la partie pour construire vos cartes encore en Construction. Il vaut mieux construire en priorité les cartes qui produisent des Ressources, et garder les cartes qui rapportent des points de victoire pour la fin.'),
+      text: (t: TFunction) => t('Vous avez jusqu’à la fin de la partie pour terminer la construction de vos carte. Essayez de construire la Zone Portuaire rapidement, pour bénéficier de sa production ! La Société Secrète ne produit rien, vous pouvez sans risque attendre le tour 4 pour la terminer.'),
       boxTop: 34,
       boxLeft: 63,
       boxWidth: 55,
@@ -842,20 +1032,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Abandonner un Projet en Construction'),
-      text: (t: TFunction) => t('Si vous souhaitez abandonner une carte en Construction, vous pouvez la recycler à tout moment mais son bonus de recyclage va sur votre carte Empire, pour produire du Krystallium, et les cubes posés dessus sont perdus.'),
-      boxTop: 79,
-      boxLeft: 53,
-      boxWidth: 75,
-      arrow: {
-        angle: -90,
-        top: 76,
-        left: 4
-      }
-    },
-    {
-      title: (t: TFunction) => t('Prenez les commandes'),
-      text: (t: TFunction) => t('Vous pouvez maintenant aller au bout de votre partie en faisant vos propres choix. Rendez-vous lors du comptage des points pour faire le debrief. Bonne partie !'),
+      title: (t: TFunction) => t('A vous de jouer !'),
+      text: (t: TFunction) => t('Vous pouvez maintenant finir la partie en faisant vos propres choix. Bonne chance !'),
       boxTop: 50,
       boxLeft: 50,
       boxWidth: 60
@@ -864,8 +1042,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
 ]
 
 const tutorialEndGame = {
-  title: (t: TFunction) => t('Félicitations !'),
-  text: (t: TFunction) => t('Vous avez terminé votre première partie ! Vous pouvez maintenant jouer avec vos amis, ou rencontrer d’autres joueurs via notre salon de rencontre sur Discord.'),
+  title: (t: TFunction) => t('Félicitations !'),
+  text: (t: TFunction) => t('Vous avez terminé votre première partie ! Vous pouvez maintenant jouer avec vos amis, ou rencontrer d’autres joueurs via notre salon de rencontre sur Discord.'),
   boxTop: 81,
   boxLeft: 53,
   boxWidth: 87

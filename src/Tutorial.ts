@@ -1,8 +1,8 @@
 import Character from './material/characters/Character'
 import {
-  AirborneLaboratory, ArkOfTheCovenant, CenterOfTheEarth, CityOfAgartha, developmentCards, FinancialCenter, GeneticUpgrades, HumanCloning, IndustrialComplex,
-  Juggernaut, LunarBase, MilitaryBase, NationalMonument, OffshoreOilRig, PropagandaCenter, RecyclingPlant, SecretSociety, TransportationNetwork,
-  TreasureOfTheTemplars, WindTurbines, WorldCongress, Zeppelin
+  AirborneLaboratory, ArkOfTheCovenant, CenterOfTheEarth, CityOfAgartha, developmentCards, FinancialCenter, HarborZone, HumanCloning, IndustrialComplex,
+  Juggernaut, LunarBase, MilitaryBase, OffshoreOilRig, PropagandaCenter, RecyclingPlant, ResearchCenter, SecretSociety, TransportationNetwork,
+  UniversalExposition, WindTurbines, WorldCongress, Zeppelin
 } from './material/developments/Developments'
 import EmpireName from './material/empires/EmpireName'
 import EmpireSide from './material/empires/EmpireSide'
@@ -17,7 +17,7 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import shuffle from './util/shuffle'
 
-const nationalMonument = developmentCards.findIndex(development => development === NationalMonument)
+const harborZone = developmentCards.findIndex(development => development === HarborZone)
 const centerOfEarth = developmentCards.findIndex(development => development === CenterOfTheEarth)
 const militaryBase = developmentCards.findIndex(development => development === MilitaryBase)
 const humanCloning = developmentCards.findIndex(development => development === HumanCloning)
@@ -30,9 +30,9 @@ const lunarBase = developmentCards.findIndex(development => development === Luna
 const secretSociety = developmentCards.findIndex(development => development === SecretSociety)
 const transportationNetwork = developmentCards.findIndex(development => development === TransportationNetwork)
 const windTurbine = developmentCards.findIndex(development => development === WindTurbines)
-const geneticUpgrades = developmentCards.findIndex(development => development === GeneticUpgrades)
+const researchCenter = developmentCards.findIndex(development => development === ResearchCenter)
 const offshoreOilRig = developmentCards.findIndex(development => development === OffshoreOilRig)
-const treasureOfTheTemplars = developmentCards.findIndex(development => development === TreasureOfTheTemplars)
+const universalExposition = developmentCards.findIndex(development => development === UniversalExposition)
 const zeppelin = developmentCards.findIndex(development => development === Zeppelin)
 const airborneLaboratory = developmentCards.findIndex(development => development === AirborneLaboratory)
 const juggernaut = developmentCards.findIndex(development => development === Juggernaut)
@@ -42,11 +42,11 @@ const financialCenter = developmentCards.findIndex(development => development ==
 
 const initialCards = [
   // Tutorial Active Player cards
-  nationalMonument, zeppelin, financialCenter, industrialComplex, offshoreOilRig, militaryBase, arkOfTheCovenant,
+  secretSociety, zeppelin, financialCenter, harborZone, offshoreOilRig, militaryBase, arkOfTheCovenant,
   // Tutorial Second Player cards
-  centerOfEarth, transportationNetwork, secretSociety, treasureOfTheTemplars, lunarBase, recyclingPlant, airborneLaboratory,
+  centerOfEarth, transportationNetwork, propagandaCenter, worldCongress, universalExposition, recyclingPlant, airborneLaboratory,
   // Tutorial Third Player cards
-  windTurbine, humanCloning, propagandaCenter, worldCongress, geneticUpgrades, juggernaut, cityOfAgartha
+  windTurbine, humanCloning, industrialComplex, lunarBase, researchCenter, juggernaut, cityOfAgartha
 ]
 
 export const setupTutorial = (setupPlayers: (players?: (number | { empire?: EmpireName }[]), empireSide?: EmpireSide) => (Player[])) => ({
@@ -66,23 +66,23 @@ export function resetTutorial() {
 export const tutorialMoves = [
   // Automatic Tutorial Draft Phase
   chooseDevelopmentCard(EmpireName.RepublicOfEurope, centerOfEarth),
-  chooseDevelopmentCard(EmpireName.FederationOfAsia, worldCongress),
-  chooseDevelopmentCard(EmpireName.NoramStates, nationalMonument),
-  chooseDevelopmentCard(EmpireName.RepublicOfEurope, militaryBase),
   chooseDevelopmentCard(EmpireName.FederationOfAsia, lunarBase),
-  chooseDevelopmentCard(EmpireName.NoramStates, propagandaCenter),
+  chooseDevelopmentCard(EmpireName.NoramStates, secretSociety),
+  chooseDevelopmentCard(EmpireName.RepublicOfEurope, militaryBase),
+  chooseDevelopmentCard(EmpireName.FederationOfAsia, worldCongress),
+  chooseDevelopmentCard(EmpireName.NoramStates, industrialComplex),
   chooseDevelopmentCard(EmpireName.RepublicOfEurope, cityOfAgartha),
   chooseDevelopmentCard(EmpireName.FederationOfAsia, arkOfTheCovenant),
-  chooseDevelopmentCard(EmpireName.NoramStates, secretSociety),
+  chooseDevelopmentCard(EmpireName.NoramStates, propagandaCenter),
   chooseDevelopmentCard(EmpireName.RepublicOfEurope, transportationNetwork),
   chooseDevelopmentCard(EmpireName.FederationOfAsia, juggernaut),
-  chooseDevelopmentCard(EmpireName.NoramStates, industrialComplex),
+  chooseDevelopmentCard(EmpireName.NoramStates, harborZone),
   chooseDevelopmentCard(EmpireName.RepublicOfEurope, financialCenter),
   chooseDevelopmentCard(EmpireName.FederationOfAsia, recyclingPlant),
   chooseDevelopmentCard(EmpireName.NoramStates, windTurbine),
   chooseDevelopmentCard(EmpireName.RepublicOfEurope, humanCloning),
   chooseDevelopmentCard(EmpireName.FederationOfAsia, offshoreOilRig),
-  chooseDevelopmentCard(EmpireName.NoramStates, treasureOfTheTemplars),
+  chooseDevelopmentCard(EmpireName.NoramStates, universalExposition),
 
   // Second Player Planning Phase
   slateForConstruction(EmpireName.RepublicOfEurope, militaryBase),
@@ -103,7 +103,7 @@ export const tutorialMoves = [
   recycle(EmpireName.FederationOfAsia, arkOfTheCovenant),
   recycle(EmpireName.FederationOfAsia, juggernaut),
   recycle(EmpireName.FederationOfAsia, recyclingPlant),
-  recycle(EmpireName.FederationOfAsia, geneticUpgrades),
+  recycle(EmpireName.FederationOfAsia, researchCenter),
   placeResource(EmpireName.FederationOfAsia, Resource.Materials, offshoreOilRig, 0),
   placeResource(EmpireName.FederationOfAsia, Resource.Materials, offshoreOilRig, 1),
   placeResource(EmpireName.FederationOfAsia, Resource.Exploration, offshoreOilRig, 3),
@@ -111,14 +111,14 @@ export const tutorialMoves = [
   tellYourAreReady(EmpireName.FederationOfAsia),
 
   // Active Player Planning Phase
-  slateForConstruction(EmpireName.NoramStates, nationalMonument),
-  slateForConstruction(EmpireName.NoramStates, propagandaCenter),
-  slateForConstruction(EmpireName.NoramStates, secretSociety),
   slateForConstruction(EmpireName.NoramStates, industrialComplex),
+  slateForConstruction(EmpireName.NoramStates, propagandaCenter),
+  slateForConstruction(EmpireName.NoramStates, harborZone),
+  slateForConstruction(EmpireName.NoramStates, secretSociety),
+  recycle(EmpireName.NoramStates, universalExposition),
+  placeResource(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 0),
   recycle(EmpireName.NoramStates, windTurbine),
   placeResource(EmpireName.NoramStates, Resource.Energy, industrialComplex, 3),
-  recycle(EmpireName.NoramStates, treasureOfTheTemplars),
-  placeResource(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 0),
   recycle(EmpireName.NoramStates, zeppelin),
   tellYourAreReady(EmpireName.NoramStates),
 
