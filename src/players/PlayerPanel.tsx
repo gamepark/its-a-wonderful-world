@@ -2,8 +2,8 @@ import {css} from '@emotion/core'
 import {GameSpeed, useOptions, usePlayer} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import Character from '../material/characters/Character'
-import DevelopmentType from '../material/developments/DevelopmentType'
+import Character, {characterTypes} from '../material/characters/Character'
+import DevelopmentType, {developmentTypes} from '../material/developments/DevelopmentType'
 import {empireAvatar, getEmpireName} from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
 import {getVictoryPointsBonusMultiplier} from '../Rules'
@@ -13,6 +13,7 @@ import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanel
 import PlayerResourceProduction from './PlayerResourceProduction'
 import Timer from './Timer'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
+import PlayerConstructions from './PlayerConstructions'
 
 type Props = {
   player: Player | PlayerView
@@ -32,8 +33,8 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
       victoryPointsMultipliers.push({item, multiplier})
     }
   }
-  Object.values(Character).forEach(completeVictoryPointsMultiplier)
-  Object.values(DevelopmentType).forEach(completeVictoryPointsMultiplier)
+  characterTypes.forEach(completeVictoryPointsMultiplier)
+  developmentTypes.forEach(completeVictoryPointsMultiplier)
   victoryPointsMultipliers.sort((item1, item2) => item2.multiplier - item1.multiplier)
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
