@@ -332,7 +332,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Types de cartes'),
-      text: (t: TFunction) => t('La Société Secrête et le Centre de Propagande sous tous les 2 des cartes jaunes. Le symbole en bas à gauche des cartes est un rappel de leur type.'),
+      text: (t: TFunction) => t('La Société Secrête et le Centre de Propagande sous tous les 2 des cartes jaunes. Le symbole en bas à droite des cartes est un rappel de leur type.'),
       boxTop: 56,
       boxLeft: 37.3,
       boxWidth: 60,
