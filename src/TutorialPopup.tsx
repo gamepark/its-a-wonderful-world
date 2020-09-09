@@ -268,7 +268,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Coût de construction'),
-      text: (t: TFunction) => t('Les ressources vous permettront de construire d’autres cartes. Par exemple, le Complexe Industriel coûte 3 Matériaux (en gris) et une « Énergie » (en noir)'),
+      text: (t: TFunction) => t('Les ressources vous permettront de construire les cartes. Par exemple, le Complexe Industriel coûte 3 Matériaux (en gris) et une « Énergie » (en noir)'),
       boxTop: 52,
       boxLeft: 58.5,
       boxWidth: 60,
@@ -306,7 +306,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Production proportionnelle'),
-      text: (t: TFunction) => t('Le Centre de Propagande produira une fois construit autant d’Or que vous avez de cartes jaunes construites (les « Projets »).'),
+      text: (t: TFunction) => t('Le Centre de Propagande produira une fois construit autant d’Or que vous avez de cartes jaunes construites.'),
       boxTop: 56,
       boxLeft: 34,
       boxWidth: 60,
@@ -317,8 +317,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Les Projets'),
-      text: (t: TFunction) => t('La Société Secrête et le Centre de Propagande sous tous les 2 des « Projets », comme l’indique leur couleur et ce symbole.'),
+      title: (t: TFunction) => t('Types de cartes'),
+      text: (t: TFunction) => t('La Société Secrête et le Centre de Propagande sous tous les 2 des cartes jaunes. Le symbole en bas à gauche des cartes est un rappel de leur type.'),
       boxTop: 56,
       boxLeft: 37.3,
       boxWidth: 60,
@@ -616,7 +616,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Recyclez  le Zeppelin'),
-      text: (t: TFunction) => t('Cette carte coûte 2 d’Énergie (que vous ne produisez pas) et produit 1 cube bleu (« l’Exploration »), peu utile pour notre stratégie.'),
+      text: (t: TFunction) => t('Cette carte coûte 2 d’Énergie (que vous ne produisez pas) et produit 1 cube bleu (« l’Exploration »), peu utile pour notre stratégie : recyclez-là.'),
       boxTop: 60,
       boxLeft: 27,
       boxWidth: 50,
@@ -740,7 +740,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Bonus de Suprématie'),
-      text: (t: TFunction) => t('A chaque étape de Production, l’Empire qui produit le plus gagne un Général ou un Financier. Vous produisez le plus de Matériaux, vous gagnez donc un jeton Financier !'),
+      text: (t: TFunction) => t('A chaque étape de Production, l’Empire qui produit le plus gagne une Générale ou un Financier. Vous produisez le plus de Matériaux, vous gagnez donc un jeton Financier !'),
       boxTop: 38,
       boxLeft: 30,
       boxWidth: 60,
@@ -763,8 +763,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Construisez le Centre de Propagande'),
-      text: (t: TFunction) => t('Vos 3 Matériaux vont permettre de terminer la construction du Centre de Progagande.'),
+      title: (t: TFunction) => t('Construisez le Complexe Industriel'),
+      text: (t: TFunction) => t('Vos 3 Matériaux vont permettre de terminer la construction du Complexe Industriel.'),
       boxTop: 49,
       boxLeft: 49,
       boxWidth: 60,
@@ -775,7 +775,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Construisez le Centre de Propagande'),
+      title: (t: TFunction) => t('Construisez le Complexe Industriel'),
       text: (t: TFunction) => t('Plusieurs options s’offrent à vous : glisser la carte vers la gauche, cliquer longtemps sur la carte, ou déplacer les cubes un par un...'),
       boxTop: 49,
       boxLeft: 49,
@@ -803,8 +803,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Ordre des production'),
-      text: (t: TFunction) => t('L’Étape de production des Matériaux a déjà commencé : il est donc trop tard pour produire un Matériaux supplémentaire ce tour-ci, mais vous en bénéficierez lors des 3 tours restants.'),
+      title: (t: TFunction) => t('Ordre des productions'),
+      text: (t: TFunction) => t('L’étape de production des Matériaux a déjà commencé : il est donc trop tard pour produire un Matériaux supplémentaire ce tour-ci, mais vous en bénéficierez lors des 3 tours restants.'),
       boxTop: 74,
       boxLeft: 47,
       boxWidth: 70,
@@ -815,8 +815,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Ordre des production'),
-      text: (t: TFunction) => t('Par contre, l’Étape de production de l’Or n’a pas encore commencée : vous aurez donc un Or supplémentaire dès ce tour !'),
+      title: (t: TFunction) => t('Ordre des productions'),
+      text: (t: TFunction) => t('Par contre, l’étape de production de l’Or n’a pas encore commencé : vous aurez donc un Or supplémentaire dès ce tour !'),
       boxTop: 74,
       boxLeft: 47,
       boxWidth: 70,
@@ -1021,7 +1021,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Chaque tour se déroule ainsi'),
-      text: (t: TFunction) => t('Vous avez jusqu’à la fin de la partie pour terminer la construction de vos carte. Essayez de construire la Zone Portuaire rapidement, pour bénéficier de sa production ! La Société Secrète ne produit rien, vous pouvez sans risque attendre le tour 4 pour la terminer.'),
+      text: (t: TFunction) => t('Vous avez jusqu’à la fin de la partie pour terminer la construction de vos cartes. Essayez de construire la Zone Portuaire rapidement, pour bénéficier de sa production ! La Société Secrète ne produit rien, vous pouvez sans risque attendre le tour 4 pour la terminer.'),
       boxTop: 34,
       boxLeft: 63,
       boxWidth: 55,
