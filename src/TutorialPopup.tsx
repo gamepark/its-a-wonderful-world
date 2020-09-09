@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {faTimes} from '@fortawesome/free-solid-svg-icons'
+import {faMinusSquare, faPlusSquare, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions, useAnimation, usePlayerId} from '@interlude-games/workshop'
 import {useTheme} from 'emotion-theming'
@@ -28,7 +28,11 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const previousActionNumber = useRef(actionsNumber)
   const [tutorialIndex, setTutorialIndex] = useState(0)
+  const [tutorialEnd, setTutorialEnd] = useState(false)
   const [tutorialDisplay, setTutorialDisplay] = useState(tutorialDescription.length > actionsNumber)
+  const toggleTutorialEnd = () => {
+    setTutorialEnd(!tutorialEnd)
+  }
   const moveTutorial = (deltaMessage: number) => {
     setTutorialIndex(tutorialIndex + deltaMessage)
     setTutorialDisplay(true)
@@ -79,9 +83,14 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
       }
       {
         isOver(game) &&
-        <div css={[popupStyle, popupPosition(tutorialEndGame), theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
-          <h2>{tutorialEndGame.title(t)}</h2>
-          <p>{tutorialEndGame.text(t)}</p>
+        <div css={[popupStyle, popupPosition(tutorialEndGame), tutorialEnd && buttonsPosition, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+          <div css={closePopupStyle} onClick={() => toggleTutorialEnd()}><FontAwesomeIcon icon={tutorialEnd?faPlusSquare:faMinusSquare}/></div>
+          { !tutorialEnd &&
+            <>
+            <h2>{tutorialEndGame.title(t)}</h2>
+            <p>{tutorialEndGame.text(t)}</p>
+            </>
+          }
           <Button css={buttonStyle} onClick={() => resetTutorial()}>Rejouer le tutoriel</Button>
           <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>Jouer avec des amis</Button>
           <Button onClick={() => window.location.href = discordUri}>Trouver des joueurs</Button>
@@ -100,6 +109,11 @@ export const popupPosition = ({boxWidth, boxTop, boxLeft, arrow}: TutorialStepDe
   top: ${boxTop}%;
   left: ${boxLeft}%;
   transform: translate(-50%, ${!arrow || arrow.angle % 180 !== 0 ? '-50%' : arrow.angle % 360 === 0 ? '0%' : '-100%'});
+`
+
+export const buttonsPosition = css`
+  top: 86%;
+  width: 80%;
 `
 
 const resetStyle = css`
@@ -256,7 +270,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Production des cartes'),
-      text: (t: TFunction) => t('Certaines cartes produisent des ressources une fois construites. Par exemple, le Complexe Industriel produira une ressource grise (« les Matériaux ») et une jaune (« l’Or »)'),
+      text: (t: TFunction) => t('Certaines cartes produisent des ressources une fois construites. Par exemple, le Complexe Industriel produira une ressource grise (les Matériaux) et une jaune (l’Or)'),
       boxTop: 67,
       boxLeft: 62,
       boxWidth: 60,
@@ -268,7 +282,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Coût de construction'),
-      text: (t: TFunction) => t('Les ressources vous permettront de construire les cartes. Par exemple, le Complexe Industriel coûte 3 Matériaux (en gris) et une « Énergie » (en noir)'),
+      text: (t: TFunction) => t('Les ressources vous permettront de construire les cartes. Par exemple, le Complexe Industriel coûte 3 Matériaux (en gris) et une Énergie (en noir)'),
       boxTop: 52,
       boxLeft: 58.5,
       boxWidth: 60,
@@ -358,7 +372,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Bonus de recyclage'),
-      text: (t: TFunction) => t('Plus tard, chaque carte pourra vous offrir une ressource si vous la défaussez. Pour l’Éolienne, c’est une Énergie, c’est indiqué ici.'),
+      text: (t: TFunction) => t('Pendant la Plannification, chaque carte pourra vous offrir une ressource si vous la défaussez. Pour l’Éolienne, c’est une Énergie, c’est indiqué ici.'),
       boxTop: 52,
       boxLeft: 56,
       boxWidth: 60,
@@ -408,7 +422,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Phase de Planification'),
-      text: (t: TFunction) => t('Nous passons maintenant à la seconde phase du tour, la Planification : chaque carte choisie lors de la phase précédente doit être conservée ou recyclée.'),
+      text: (t: TFunction) => t('Nous passons maintenant à la seconde phase du tour, la Planification : chaque carte choisie lors de la phase précédente doit être mise en construction ou recyclée.'),
       boxTop: 30,
       boxLeft: 30,
       boxWidth: 60,
@@ -448,7 +462,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Points de victoire'),
-      text: (t: TFunction) => t('A cet emplacement, vous pouvez voir que le Centre de Propagande rapporte 1 point de victoire à la fin de la partie, s’il est construit.'),
+      text: (t: TFunction) => t('À cet emplacement, vous pouvez voir que le Centre de Propagande rapporte 1 point de victoire à la fin de la partie, s’il est construit.'),
       boxTop: 67,
       boxLeft: 58,
       boxWidth: 60,
@@ -602,7 +616,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Placez l’Énergie sur le Complexe Industriel'),
-      text: (t: TFunction) => t('A présent, glissez le cube noir, obtenu en recyclant l’Éolienne, vers le Complexe Industriel.'),
+      text: (t: TFunction) => t('À présent, glissez le cube noir, obtenu en recyclant l’Éolienne, vers le Complexe Industriel.'),
       boxTop: 29,
       boxLeft: 63,
       boxWidth: 55,
@@ -616,7 +630,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Recyclez  le Zeppelin'),
-      text: (t: TFunction) => t('Cette carte coûte 2 d’Énergie (que vous ne produisez pas) et produit 1 cube bleu (« l’Exploration »), peu utile pour notre stratégie : recyclez-là.'),
+      text: (t: TFunction) => t('Cette carte coûte 2 Énergies (que vous ne produisez pas) et produit 1 cube bleu (l’Exploration), peu utile pour notre stratégie : recyclez-là.'),
       boxTop: 60,
       boxLeft: 27,
       boxWidth: 50,
@@ -666,7 +680,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Génération de Krystallium'),
-      text: (t: TFunction) => t('Cependant, si 5 cubes se trouvent sur votre carte Empire (quelle que soit leur couleur), ils sont convertis en 1 cube rouge, le « Krystallium ».'),
+      text: (t: TFunction) => t('Cependant, si 5 cubes se trouvent sur votre carte Empire (quelle que soit leur couleur), ils sont convertis en 1 cube rouge, le Krystallium.'),
       boxTop: 81,
       boxLeft: 49,
       boxWidth: 70,
@@ -740,7 +754,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Bonus de Suprématie'),
-      text: (t: TFunction) => t('A chaque étape de Production, l’Empire qui produit le plus gagne une Générale ou un Financier. Vous produisez le plus de Matériaux, vous gagnez donc un jeton Financier !'),
+      text: (t: TFunction) => t('À chaque étape de Production, l’Empire qui produit le plus gagne une Générale ou un Financier. Vous produisez le plus de Matériaux, vous gagnez donc un jeton Financier !'),
       boxTop: 38,
       boxLeft: 30,
       boxWidth: 60,
@@ -752,7 +766,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Jetons Financiers'),
-      text: (t: TFunction) => t('Voiçi votre jeton. Pour rappel, il rapporte 1 point de victoire de base, + 1 grâce à votre Empire. Une fois la Société Secrète construite, ce sera à nouveau 1 point de plus par Financier.'),
+      text: (t: TFunction) => t('Voici votre jeton. Pour rappel, il rapporte 1 point de victoire de base, + 1 grâce à votre Empire. Une fois la Société Secrète construite, ce sera à nouveau 1 point de plus par Financier.'),
       boxTop: 76,
       boxLeft: 49,
       boxWidth: 80,
@@ -776,7 +790,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Construisez le Complexe Industriel'),
-      text: (t: TFunction) => t('Plusieurs options s’offrent à vous : glisser la carte vers la gauche, cliquer longtemps sur la carte, ou déplacer les cubes un par un...'),
+      text: (t: TFunction) => t('Plusieurs options s’offrent à vous : glisser la carte vers la gauche, cliquer longtemps sur la carte, déplacer les cubes un par un, ou cliquer sur la carte pour zoomer dessus et avoir accès aux actions possibles.'),
       boxTop: 49,
       boxLeft: 49,
       boxWidth: 60,
@@ -792,7 +806,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Cartes construites'),
-      text: (t: TFunction) => t('Le Complexe Industriel fait à présent partie de votre Empire, et augmente votre production de 1 Matériaux et 1 Or.'),
+      text: (t: TFunction) => t('Le Complexe Industriel fait à présent partie de votre Empire, et augmente votre production de 1 Matériau et 1 Or.'),
       boxTop: 74,
       boxLeft: 47,
       boxWidth: 70,
@@ -865,11 +879,23 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
+      title: (t: TFunction) => t('Recyclage'),
+      text: (t: TFunction) => t('À tout moment vous pouvez recycler une carte depuis votre Zone de Construction. Cependant, les cubes placés dessus seront perdus et son bonus de recyclage ira obligatoirement sur votre carte Empire.'),
+      boxTop: 64,
+      boxLeft: 51,
+      boxWidth: 50,
+      arrow: {
+        angle: -90,
+        top: 58.4,
+        left: 14
+      }
+    },
+    {
       title: (t: TFunction) => t('N’oubliez pas de valider !'),
-      text: (t: TFunction) => t('Attention ! Bien que vous ne produisiez pas d’Énergie, vous devez quand même cliquer sur valider à nouveau.'),
+      text: (t: TFunction) => t('Les actions comme recycler une carte ou placer un Krytallium pour terminer une construction sont possibles à tout moment. Vous devez donc valider votre tour à chaque étape de production, même si vous ne produisez rien !'),
       boxTop: 30,
       boxLeft: 53,
-      boxWidth: 50,
+      boxWidth: 70,
       arrow: {
         angle: 0,
         top: 17,
@@ -891,23 +917,11 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Recyclage'),
-      text: (t: TFunction) => t('A tout moment vous pouvez recycler une carte depuis votre Zone de Construction. Cependant, les cubes placés dessus seront perdus et son bonus de recyclage ira obligatoirement sur votre carte Empire.'),
-      boxTop: 64,
-      boxLeft: 51,
-      boxWidth: 50,
-      arrow: {
-        angle: -90,
-        top: 58.4,
-        left: 14
-      }
-    },
-    {
       title: (t: TFunction) => t('N’oubliez pas de valider !'),
-      text: (t: TFunction) => t('Les actions comme recycler une carte ou placer un Krytallium pour terminer une construction sont possibles à tout moment. Vous devez donc valider votre tour à chaque étape de production, même si vous ne produisez rien !'),
+      text: (t: TFunction) => t('Bien que vous ne produisiez pas de Science, vous devez quand même cliquer sur valider à nouveau.'),
       boxTop: 30,
       boxLeft: 53,
-      boxWidth: 70,
+      boxWidth: 50,
       arrow: {
         angle: 0,
         top: 17,
@@ -1032,7 +1046,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('A vous de jouer !'),
+      title: (t: TFunction) => t('À vous de jouer !'),
       text: (t: TFunction) => t('Vous pouvez maintenant finir la partie en faisant vos propres choix. Bonne chance !'),
       boxTop: 50,
       boxLeft: 50,

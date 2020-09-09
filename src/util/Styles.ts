@@ -213,8 +213,8 @@ export const closePopupStyle = css`
   position: relative;
   float: right;
   text-align: center;
-  margin-top: -3%;
-  margin-right: -1%;
+  margin-top: -2%;
+  margin-right: -0%;
   font-size: 4em;
   &:hover{
     cursor: pointer;
