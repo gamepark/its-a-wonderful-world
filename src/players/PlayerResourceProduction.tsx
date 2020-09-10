@@ -35,7 +35,7 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView 
       resources.forEach(resource => displayMultiplierForHighProduction(resource, maxProduction))
     }
   }
-  reduceProductionDisplay(6)
+  reduceProductionDisplay(11)
   // Now, we set the start index for each display
   let resourceIndex = 0
   for (const resource of resources) {

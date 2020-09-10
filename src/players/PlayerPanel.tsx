@@ -46,7 +46,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
         }
       </h3>
       <PlayerResourceProduction player={player}/>
-      {victoryPointsMultipliers.slice(0, 3).map((victoryPointsMultiplier, index) =>
+      {victoryPointsMultipliers.slice(0, 1).map((victoryPointsMultiplier, index) =>
         <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier}
                                  css={victoryPointsMultiplierStyle(index)}/>
       )}
@@ -128,7 +128,7 @@ const eliminatedStyle = css`
 
 const victoryPointsMultiplierStyle = (index: number) => css`
   position: absolute;
-  top: ${index * 22 + 33}%;
+  top: ${index * 22 + 38}%;
   left: 3%;
   width: 15%;
   height: 20%;
