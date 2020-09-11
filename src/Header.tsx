@@ -232,7 +232,7 @@ function getTutorialText(t: TFunction, game: GameView, player: Player): string |
       if (player.availableResources.filter(r => r === Resource.Materials).length > 0)
         return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
       else if (player.availableResources.filter(r => r === Resource.Gold).length > 0)
-        return t('Tutoriel : placez vos ressources² sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+        return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
       break
   }
   return

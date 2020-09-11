@@ -8,6 +8,7 @@ import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import EmpireName from './material/empires/EmpireName'
 import Move from './moves/Move'
+import {isReceiveCharacter} from './moves/ReceiveCharacter'
 import {isOver} from './Rules'
 import Theme, {LightTheme} from './Theme'
 import {resetTutorial} from './Tutorial'
@@ -24,7 +25,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const theme = useTheme<Theme>()
   const playerId = usePlayerId<EmpireName>()
   const actions = useActions<Move, EmpireName>()
-  const animation = useAnimation()
+  const animation = useAnimation<Move>(animation => !isReceiveCharacter(animation.move))
   const actionsNumber = actions !== undefined ? actions.filter(action => action.playerId === playerId).length : 0
   const previousActionNumber = useRef(actionsNumber)
   const [tutorialIndex, setTutorialIndex] = useState(0)
@@ -84,12 +85,12 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
       {
         isOver(game) &&
         <div css={[popupStyle, popupPosition(tutorialEndGame), tutorialEnd && buttonsPosition, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
-          <div css={closePopupStyle} onClick={() => toggleTutorialEnd()}><FontAwesomeIcon icon={tutorialEnd?faPlusSquare:faMinusSquare}/></div>
-          { !tutorialEnd &&
-            <>
+          <div css={closePopupStyle} onClick={() => toggleTutorialEnd()}><FontAwesomeIcon icon={tutorialEnd ? faPlusSquare : faMinusSquare}/></div>
+          {!tutorialEnd &&
+          <>
             <h2>{tutorialEndGame.title(t)}</h2>
             <p>{tutorialEndGame.text(t)}</p>
-            </>
+          </>
           }
           <Button css={buttonStyle} onClick={() => resetTutorial()}>Rejouer le tutoriel</Button>
           <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>Jouer avec des amis</Button>
@@ -332,7 +333,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Types de cartes'),
-      text: (t: TFunction) => t('La Société Secrête et le Centre de Propagande sous tous les 2 des cartes jaunes. Le symbole en bas à droite des cartes est un rappel de leur type.'),
+      text: (t: TFunction) => t('La Société Secrète et le Centre de Propagande sont toutes les 2 des cartes jaunes. Le symbole en bas à droite des cartes est un rappel de leur type.'),
       boxTop: 56,
       boxLeft: 37.3,
       boxWidth: 60,
@@ -372,7 +373,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Bonus de recyclage'),
-      text: (t: TFunction) => t('Pendant la Plannification, chaque carte pourra vous offrir une ressource si vous la défaussez. Pour l’Éolienne, c’est une Énergie, c’est indiqué ici.'),
+      text: (t: TFunction) => t('Pendant la Planification, chaque carte pourra vous offrir une ressource si vous la défaussez. Pour l’Éolienne, c’est une Énergie, c’est indiqué ici.'),
       boxTop: 52,
       boxLeft: 56,
       boxWidth: 60,
@@ -655,8 +656,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Resources inutiles ?'),
-      text: (t: TFunction) => t('Une resource qui ne peut pas être utilisée immédiatement doit être placée ici, sur votre carte Empire.'),
+      title: (t: TFunction) => t('Ressources inutiles ?'),
+      text: (t: TFunction) => t('Une ressource qui ne peut pas être utilisée immédiatement doit être placée ici, sur votre carte Empire.'),
       boxTop: 81,
       boxLeft: 49,
       boxWidth: 70,
@@ -667,7 +668,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Resources inutiles ?'),
+      title: (t: TFunction) => t('Ressources inutiles ?'),
       text: (t: TFunction) => t('Les Ressources de votre carte Empire ne sont plus utilisables pour construire des cartes Développement.'),
       boxTop: 81,
       boxLeft: 49,
@@ -818,7 +819,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Ordre des productions'),
-      text: (t: TFunction) => t('L’étape de production des Matériaux a déjà commencé : il est donc trop tard pour produire un Matériaux supplémentaire ce tour-ci, mais vous en bénéficierez lors des 3 tours restants.'),
+      text: (t: TFunction) => t('L’étape de production des Matériaux a déjà commencé : il est donc trop tard pour produire un Matériau supplémentaire ce tour-ci, mais vous en bénéficierez lors des 3 tours restants.'),
       boxTop: 74,
       boxLeft: 47,
       boxWidth: 70,
@@ -1043,6 +1044,18 @@ const tutorialDescription: TutorialStepDescription[][] = [
         angle: -90,
         top: 25,
         left: 24
+      }
+    },
+    {
+      title: (t: TFunction) => t('Surveillez vos adversaires'),
+      text: (t: TFunction) => t('En cliquant sur vos adversaires, vous pouvez voir leur Empire. « Qui connaît son ennemi comme il se connaît, en cent combats ne sera point défait. » - Sun Tzu'),
+      boxTop: 35,
+      boxLeft: 44,
+      boxWidth: 55,
+      arrow: {
+        angle: 90,
+        top: 27,
+        left: 67
       }
     },
     {
