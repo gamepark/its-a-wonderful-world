@@ -1,10 +1,10 @@
+import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
+import Character, {characterTypes} from '../material/characters/Character'
+import CharacterTokenNumber from '../material/characters/CharacterTokenNumber'
+import {getItemQuantity} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
-import Character, {characterTypes} from '../material/characters/Character'
-import {css} from '@emotion/core'
-import {getItemQuantity} from '../Rules'
-import CharacterTokenNumber from '../material/characters/CharacterTokenNumber'
 
 // Display player's tokens and constructions
 const PlayerConstructions: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
@@ -13,10 +13,11 @@ const PlayerConstructions: FunctionComponent<{ player: Player | PlayerView }> = 
   const reverseTypes = characterTypes.slice().reverse()
   return (
     <div css={extraInfoPosition}>
-      { financierQuantity >= generalQuantity ?
-        characterTypes.map( characterType =>  <CharacterTokenNumber key={characterType} character={characterType} quantity={getItemQuantity(player, characterType)} css={itemPosition} />)
-        :
-        reverseTypes.map( characterType =>  <CharacterTokenNumber key={characterType} character={characterType} quantity={getItemQuantity(player, characterType)} css={itemPosition} />)
+      {financierQuantity >= generalQuantity ?
+        characterTypes.map(characterType => <CharacterTokenNumber key={characterType} character={characterType}
+                                                                  quantity={getItemQuantity(player, characterType)} css={itemPosition}/>) :
+        reverseTypes.map(characterType => <CharacterTokenNumber key={characterType} character={characterType} quantity={getItemQuantity(player, characterType)}
+                                                                css={itemPosition}/>)
       }
     </div>
   )
@@ -36,10 +37,10 @@ const extraInfoPosition = css`
 `
 
 const itemPosition = css`
-  position:relative;
+  position: relative;
   width: 48%;
-  height:auto;
-  margin-right:4%;
+  height: auto;
+  margin-right: 4%;
 `
 
 export default PlayerConstructions

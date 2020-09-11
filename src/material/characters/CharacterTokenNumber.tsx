@@ -9,22 +9,21 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const CharacterTokenNumber: FunctionComponent<Props> = ({character, quantity, ...props}) => {
+  if (quantity === 0) {
+    return null
+  }
   return (
-    <>
-    { quantity > 0 &&
-      <div {...props}>
-        <CharacterToken css={tokenStyle} character={character}/>
-        <div css={tokenQuantityStyle}>{quantity}</div>
-      </div>
-    }
-    </>
+    <div {...props}>
+      <CharacterToken css={tokenStyle} character={character}/>
+      <div css={tokenQuantityStyle}>{quantity}</div>
+    </div>
   )
 }
 
 const tokenStyle = css`
   position: relative;
-  width:100%;
-  height:auto;
+  width: 100%;
+  height: auto;
 `
 
 const tokenQuantityStyle = css`
