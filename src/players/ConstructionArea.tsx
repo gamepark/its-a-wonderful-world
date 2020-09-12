@@ -20,7 +20,7 @@ import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
-import {canBuild, getMovesToBuild, getRemainingCost} from '../Rules'
+import {canBuild, getMovesToBuild, getRemainingCost, placeAvailableCubesMoves} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
@@ -52,14 +52,6 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
     constructions.current = player.constructionArea
   }
   const removeIndex = player.constructionArea.findIndex(construction => construction.card === completingConstruction?.card)
-  const placeResources = (construction: Construction, resources: Resource[]) => {
-    getRemainingCost(construction).forEach(cost => {
-      if (isResource(cost.item) && resources.some(resource => resource === cost.item)) {
-        play(placeResource(player.empire, cost.item, construction.card, cost.space))
-        resources.splice(resources.findIndex(resource => resource === cost.item), 1)
-      }
-    })
-  }
   const build = (construction: Construction) => {
     getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
   }
@@ -109,7 +101,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
         </button>
       )}
       {maxSpendableResources.length > 1 && <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card) + 0.5)}
-                                                   onClick={() => placeResources(construction, maxSpendableResources)}>
+                                                   onClick={() => placeAvailableCubesMoves(player, construction).forEach(move => play(move))}>
         <span css={getPlaceTextStyle}>{t('Placer')} </span>
         {maxSpendableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={buttonItemStyle}/>)}
       </button>}
