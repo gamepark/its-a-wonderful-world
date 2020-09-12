@@ -70,16 +70,16 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
           {currentMessage && <h2>{currentMessage.title(t)}</h2>}
           {currentMessage && <p>{currentMessage.text(t)}</p>}
           {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
-          <Button onClick={() => moveTutorial(1)}>OK</Button>
+          <Button onClick={() => moveTutorial(1)}>{t('OK')}</Button>
         </div>
       </div>
       {
         !displayPopup && tutorialDescription.length > actionsNumber &&
-        <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>Afficher le Tutoriel</Button>
+        <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>{t('Afficher le Tutoriel')}</Button>
       }
       {
         currentMessage && currentMessage.arrow &&
-        <img alt={t('Tutorial Indicator')} src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
+        <img alt='Arrow pointing toward current tutorial interest' src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
              css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
       }
       {
@@ -92,9 +92,9 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
             <p>{tutorialEndGame.text(t)}</p>
           </>
           }
-          <Button css={buttonStyle} onClick={() => resetTutorial()}>Rejouer le tutoriel</Button>
-          <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>Jouer avec des amis</Button>
-          <Button onClick={() => window.location.href = discordUri}>Trouver des joueurs</Button>
+          <Button css={buttonStyle} onClick={() => resetTutorial()}>{t('Recommencer le tutoriel')}</Button>
+          <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>{t('Jouer avec des amis')}</Button>
+          <Button onClick={() => window.location.href = discordUri}>{t('Trouver des joueurs')}</Button>
         </div>
       }
     </>
@@ -452,7 +452,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Mettez en Construction le Centre de Propagande'),
+      title: (t: TFunction) => t('Mettez en construction le Centre de Propagande'),
       text: (t: TFunction) => t('Glissez également le Centre de Propagande en zone de construction.'),
       boxTop: 62,
       boxLeft: 31,
