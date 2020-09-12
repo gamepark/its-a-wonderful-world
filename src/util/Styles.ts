@@ -39,6 +39,7 @@ export const playerPanelRightMargin = 1
 export const charactersPilesY = 91.7
 export const financiersPileX = empireCardLeftMargin
 export const generalsPileX = 6
+export const gameOverDelay = 10
 
 export const platformUri = process.env.REACT_APP_PLATFORM_URI || 'http://localhost:3000'
 export const discordUri = 'https://discord.gg/nMSDRag'

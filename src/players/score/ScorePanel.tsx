@@ -6,16 +6,16 @@ import EmpireName from '../../material/empires/EmpireName'
 import GameView from '../../types/GameView'
 import PlayerScore from './PlayerScore'
 
-type Props = { game: GameView } & React.HTMLAttributes<HTMLDivElement>
+type Props = { game: GameView, animation: boolean } & React.HTMLAttributes<HTMLDivElement>
 
-const ScorePanel: FunctionComponent<Props> = ({game}) => {
+const ScorePanel: FunctionComponent<Props> = ({game, animation}) => {
   const playerId = usePlayerId<EmpireName>()
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
   const [displayScore, setDisplayScore] = useState(true)
   return (
     <div css={scorePanelStyle}>
       {players.map((player, index) =>
-        <PlayerScore key={player.empire} position={index} player={player} displayScore={displayScore} setDisplayScore={setDisplayScore}/>
+        <PlayerScore key={player.empire} position={index} player={player} displayScore={displayScore} setDisplayScore={setDisplayScore} animation={animation}/>
       )}
     </div>
   )
@@ -27,7 +27,7 @@ const scorePanelStyle = css`
   justify-content: flex-end;
   top: 8.5%;
   right: 20.6%;
-  min-width: 65%;
+  min-width: 69%;
   height: 90%;
   z-index: 5;   
   overflow: hidden;

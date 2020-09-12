@@ -46,6 +46,8 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
     entries.sort((a, b) => players.findIndex(p => p.empire === a[0]) - players.findIndex(p => p.empire === b[0]))
     return entries
   }
+  const gameOver = isOver(game)
+  const gameWasLive = useRef(!gameOver)
   useEffect(() => {
     const onkeydown = (event: KeyboardEvent) => {
       if (event.code === 'ArrowDown') {
@@ -90,9 +92,9 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
       <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players}/>}
       {players.map((player, index) =>
         <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
-                     highlight={player.empire === displayedEmpire} showScore={isOver(game)}/>
+                     highlight={player.empire === displayedEmpire} showScore={gameOver}/>
       )}
-      {isOver(game) && <ScorePanel game={game}/>}
+      {isOver(game) && <ScorePanel game={game} animation={gameWasLive.current}/>}
       {revealedCards && revealedCards.map((card, index) =>
         <DevelopmentCard key={card} development={developmentCards[card]}
                          css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index),
