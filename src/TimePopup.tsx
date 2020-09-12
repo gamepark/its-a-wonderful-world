@@ -1,9 +1,14 @@
 import {css} from '@emotion/core'
+import {faTimes} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {usePlayers} from '@interlude-games/workshop'
+import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
+import Theme, {LightTheme} from './Theme'
+import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 import {humanize} from './util/TimeUtil'
 
 type Props = {
@@ -12,10 +17,13 @@ type Props = {
 
 const TimePopup: FunctionComponent<Props> = ({onClose}) => {
   const {t} = useTranslation()
+  const theme = useTheme<Theme>()
   const players = usePlayers<EmpireName>({withTimeUpdate: true})
   return (
-    <div css={[style]} onClick={onClose}>
-      <div css={content}>
+    <div css={popupFixedBackgroundStyle} onClick={onClose}>
+      <div css={[popupStyle, popupPosition, css`width: 80%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
+           onClick={event => event.stopPropagation()}>
+        <div css={closePopupStyle} onClick={onClose}><FontAwesomeIcon icon={faTimes}/></div>
         <table css={tableStyle}>
           <thead>
             <tr>
@@ -55,33 +63,12 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
   )
 }
 
-const style = css`
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
-`
-
-const content = css`
-  position: absolute;
-  background-color: white;
-  text-align: center;
-  max-width: 80%;
-  max-height: 70%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 1em;
-`
-
-const tableStyle = css`
+const tableStyle = (theme: Theme) => css`
   margin: 1em;
   border-collapse: collapse;
   font-size: 3em;
   tbody tr {
-    border-top: 1px solid black;
+    border-top: 1px solid ${theme.color === LightTheme ? '#082b2b' : '#d4f7f7'};
   }
   td {
     min-width: 2.5em;
@@ -91,7 +78,7 @@ const tableStyle = css`
     padding: 0.35em;
     text-align: left;
     &:not(:first-of-type) {
-      border-left: 0.1em solid black;
+      border-left: 0.1em solid ${theme.color === LightTheme ? '#082b2b' : '#d4f7f7'};
     }
   }
 `

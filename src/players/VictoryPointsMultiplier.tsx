@@ -100,7 +100,7 @@ const quantityStyle = css`
 const getDevelopmentTypeDescription = (t: TFunction, developmentType: DevelopmentType, quantity: number) => {
   switch (developmentType) {
     case DevelopmentType.Structure:
-      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement blanc (les Structures)', {quantity})
+      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement gris (les Structures)', {quantity})
     case DevelopmentType.Vehicle:
       return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)', {quantity})
     case DevelopmentType.Research:

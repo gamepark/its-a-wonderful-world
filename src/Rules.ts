@@ -5,6 +5,7 @@ import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGam
 import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
 import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
 import WithTimeLimit from '@interlude-games/workshop/dist/Types/WithTimeLimit'
+import WithTutorial from '@interlude-games/workshop/dist/Types/WithTutorial'
 import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
@@ -32,6 +33,7 @@ import {isSlateForConstruction, slateForConstruction} from './moves/SlateForCons
 import {startPhase} from './moves/StartPhase'
 import {isTellYouAreReady, tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
+import {setupTutorial, tutorialMoves} from './Tutorial'
 import Game from './types/Game'
 import GameOptions from './types/GameOptions'
 import GameView from './types/GameView'
@@ -45,7 +47,7 @@ const numberOfCardsDeal2Players = 10
 export const numberOfRounds = 4
 const playersMin = 2
 const playersMax = 5
-const defaultNumberOfPlayers = 2
+export const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
 type GameType = SimultaneousGame<Game, Move, EmpireName>
@@ -57,6 +59,7 @@ type GameType = SimultaneousGame<Game, Move, EmpireName>
   & WithAnimations<GameView, MoveView, EmpireName, EmpireName>
   & WithEliminations<Game, Move, EmpireName>
   & WithTimeLimit<Game, EmpireName>
+  & WithTutorial<Game, Move>
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: GameType = {
@@ -532,10 +535,18 @@ const ItsAWonderfulWorldRules: GameType = {
       default:
         return 0
     }
+  },
+
+  setupTutorial(): Game {
+    return setupTutorial(setupPlayers)
+  },
+
+  expectedMoves(): Move[] {
+    return tutorialMoves
   }
 }
 
-function setupPlayers(players?: number | [{ empire?: EmpireName }], empireSide?: EmpireSide) {
+function setupPlayers(players?: number | { empire?: EmpireName }[], empireSide?: EmpireSide) {
   if (Array.isArray(players) && players.length >= playersMin && players.length <= playersMax) {
     const empiresLeft = shuffle(Object.values(EmpireName).filter(empire => players.some(player => player.empire === empire)))
     return players.map<Player>(player => setupPlayer(player.empire || empiresLeft.pop()!, empireSide))

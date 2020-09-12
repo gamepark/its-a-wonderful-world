@@ -28,6 +28,7 @@ import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from './util/Styles'
+import TutorialPopup from './TutorialPopup'
 
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
@@ -102,6 +103,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
       {supremacyBonus && <CharacterToken character={supremacyBonus.character}
                                          css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
       {isPlayer(displayedPlayer) && <GlobalActions game={game} player={displayedPlayer}/>}
+      {game.tutorial && <TutorialPopup game={game}/>}
     </Letterbox>
   )
 }
