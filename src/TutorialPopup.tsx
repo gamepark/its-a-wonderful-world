@@ -106,6 +106,9 @@ const style = css`
 `
 
 export const popupPosition = ({boxWidth, boxTop, boxLeft, arrow}: TutorialStepDescription) => css`
+  transition-property: width, top, left, transform;
+  transition-duration: 0.5s;
+  transition-timing-function: ease;
   width: ${boxWidth}%;
   top: ${boxTop}%;
   left: ${boxLeft}%;
@@ -118,45 +121,46 @@ export const buttonsPosition = css`
 `
 
 const resetStyle = css`
-    position: absolute;
-    text-align: center;
-    bottom: 10%;
-    right: 1%;
-    font-size: 3.5em;
+  position: absolute;
+  text-align: center;
+  bottom: 10%;
+  right: 1%;
+  font-size: 3.5em;
 `
 
 const buttonStyle = css`
-    margin-right:1em;
+  margin-right: 1em;
 `
 
 const arrowStyle = (angle: number) => css`
-    position: absolute;
-    transform: rotate(${angle}deg);
-    z-index : 102;
-    transition:all .5s ease;
+  position: absolute;
+  transform: rotate(${angle}deg);
+  will-change: transform;
+  z-index: 102;
+  transition: transform .5s ease;
 `
 
 const showArrowStyle = (top: number, left: number) => css`
-    top : ${top}%;
-    left: ${left}%;
-    width:20%;
+  top: ${top}%;
+  left: ${left}%;
+  width: 20%;
 `
 
 const hideArrowStyle = css`
-    top : 90%;
-    left: 90%;
-    width:0;
+  top: 90%;
+  left: 90%;
+  width: 0;
 `
 
 export const hidePopupStyle = css`
-    top : 85%;
-    left : 90%;
-    width: 0;
-    height: 0;
-    margin: 0;
-    padding:0;
-    border: solid 0 #FFF;
-    font-size: 0;
+  top: 85%;
+  left: 90%;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: solid 0 #FFF;
+  font-size: 0;
 `
 
 type TutorialStepDescription = {

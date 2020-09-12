@@ -174,7 +174,6 @@ export const popupStyle = css`
   outline: none;
   box-shadow: 1em 2em 2.5em -1.5em hsla(0, 0%, 0%, 0.2);
   border-radius: 40em 3em 40em 3em/3em 40em 3em 40em;
-  transition: all .5s ease;
   
   &:hover{
       box-shadow: 2em 4em 5em -3em hsla(0,0%,0%,.5);
