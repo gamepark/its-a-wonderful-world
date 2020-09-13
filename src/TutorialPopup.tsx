@@ -137,7 +137,9 @@ const arrowStyle = (angle: number) => css`
   transform: rotate(${angle}deg);
   will-change: transform;
   z-index: 102;
-  transition: transform .5s ease;
+  transition-property: top, left, transform;
+  transition-duration: 0.5s;
+  transition-timing-function: ease;
 `
 
 const showArrowStyle = (top: number, left: number) => css`
@@ -453,7 +455,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Mettez en construction le Centre de Propagande'),
-      text: (t: TFunction) => t('Glissez également le Centre de Propagande en zone de construction.'),
+      text: (t: TFunction) => t('Glissez également le Centre de Propagande en Zone de Construction.'),
       boxTop: 62,
       boxLeft: 31,
       boxWidth: 60,
@@ -543,7 +545,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('D’autres stratégies...'),
-      text: (t: TFunction) => t('Cependant, pour la construire il nous faudrait dépenser 2 précieux financiers !'),
+      text: (t: TFunction) => t('Cependant, pour la construire il nous faudrait dépenser 2 précieux Financiers !'),
       boxTop: 69,
       boxLeft: 32,
       boxWidth: 60,
@@ -568,7 +570,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Bonus de recyclage !'),
+      title: (t: TFunction) => t('Bonus de recyclage'),
       text: (t: TFunction) => t('En recyclant l’Exposition Universelle pendant la phase de Planification, nous avons obtenu un Or utilisable immédiatement.'),
       boxTop: 44,
       boxLeft: 55,
@@ -634,7 +636,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Recyclez  le Zeppelin'),
+      title: (t: TFunction) => t('Recyclez le Zeppelin'),
       text: (t: TFunction) => t('Cette carte coûte 2 Énergies (que vous ne produisez pas) et produit 1 cube bleu (l’Exploration), peu utile pour notre stratégie : recyclez-là.'),
       boxTop: 60,
       boxLeft: 27,
@@ -649,7 +651,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Le cube bleu est là'),
-      text: (t: TFunction) => t('En recyclant le zeppelin, vous obtenez un cube bleu. Cependant, aucune de vos cartes en construction n’a besoin de cette ressource.'),
+      text: (t: TFunction) => t('En recyclant le Zeppelin, vous obtenez un cube bleu. Cependant, aucune de vos cartes en construction n’a besoin de cette ressource.'),
       boxTop: 81,
       boxLeft: 49,
       boxWidth: 70,
@@ -872,7 +874,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Étape de production d’Énergie'),
+      title: (t: TFunction) => t('Production d’Énergie'),
       text: (t: TFunction) => t('Le joueur produisant le plus d’Énergie gagne un jeton Générale. Cependant, vos 2 adversaires sont à égalité : dans ce cas, personne ne gagne de jeton.'),
       boxTop: 38,
       boxLeft: 28,
@@ -897,7 +899,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('N’oubliez pas de valider !'),
-      text: (t: TFunction) => t('Les actions comme recycler une carte ou placer un Krytallium pour terminer une construction sont possibles à tout moment. Vous devez donc valider votre tour à chaque étape de production, même si vous ne produisez rien !'),
+      text: (t: TFunction) => t('Les actions comme recycler une carte ou placer un Krystallium pour terminer une construction sont possibles à tout moment. Vous devez donc valider votre tour à chaque étape de production, même si vous ne produisez rien !'),
       boxTop: 30,
       boxLeft: 53,
       boxWidth: 70,
