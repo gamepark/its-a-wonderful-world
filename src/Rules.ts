@@ -1,6 +1,4 @@
-import {
-  Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo
-} from '@interlude-games/workshop'
+import {Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo} from '@interlude-games/workshop'
 import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
 import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
 import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
@@ -415,13 +413,23 @@ const ItsAWonderfulWorldRules: GameType = {
         return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move, move.card)))
       case MoveType.PlaceResource:
         if (isPlaceResourceOnConstruction(move)) {
-          return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || (isPlaceItemOnCard(action.move, move.card))))
+          if (actionCompletedCardConstruction(action, move.card)) {
+            return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move)))
+          } else if (move.resource === Resource.Krystallium) {
+            return !consecutiveActions.some(action => actionCompletedCardConstruction(action, move.card))
+          } else {
+            return !consecutiveActions.some(action => action.playerId === playerId && (actionCompletedCardConstruction(action, move.card) || isTellYouAreReady(action.move)))
+          }
         } else {
           return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move)
             || (isPlaceResourceOnConstruction(action.move) && action.move.resource === Resource.Krystallium)))
         }
       case MoveType.PlaceCharacter:
-        return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || (isPlaceItemOnCard(action.move, move.card))))
+        if (actionCompletedCardConstruction(action, move.card)) {
+          return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move)))
+        } else {
+          return !consecutiveActions.some(action => actionCompletedCardConstruction(action, move.card))
+        }
       case MoveType.TellYouAreReady:
         return !action.consequences.some(consequence => consequence.type === MoveType.StartPhase || consequence.type === MoveType.Produce)
           && !consecutiveActions.some(action => action.consequences.some(consequence => consequence.type === MoveType.StartPhase || consequence.type === MoveType.Produce))
@@ -809,6 +817,10 @@ export function placeAvailableCubesMoves(player: Player | PlayerView, constructi
     }
   })
   return moves
+}
+
+function actionCompletedCardConstruction(action: Action<Move, EmpireName>, card: number) {
+  return action.consequences.some(consequence => isCompleteConstruction(consequence) && consequence.card === card)
 }
 
 function shuffle<T>(array: T[]): T[] {
