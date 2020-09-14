@@ -21,6 +21,7 @@ import PlayerPanel from './players/PlayerPanel'
 import ScorePanel from './players/score/ScorePanel'
 import {isActive, isOver} from './Rules'
 import bellSound from './sounds/bell.wav'
+import TutorialPopup from './TutorialPopup'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import {isPlayer} from './types/typeguards'
@@ -28,7 +29,6 @@ import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from './util/Styles'
-import TutorialPopup from './TutorialPopup'
 
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
@@ -91,8 +91,8 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
       {game.players.length > 2 && game.phase === Phase.Draft &&
       <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players}/>}
       {players.map((player, index) =>
-        <PlayerPanel key={player.empire} player={player} position={index} onClick={() => setDisplayedEmpire(player.empire)}
-                     highlight={player.empire === displayedEmpire} showScore={gameOver}/>
+        <PlayerPanel key={player.empire} player={player} position={index} highlight={player.empire === displayedEmpire} showScore={gameOver}
+                     onClick={() => (!game.tutorial || game.round > 1) && setDisplayedEmpire(player.empire)}/>
       )}
       {isOver(game) && <ScorePanel game={game} animation={gameWasLive.current}/>}
       {revealedCards && revealedCards.map((card, index) =>
