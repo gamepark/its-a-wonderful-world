@@ -23,7 +23,7 @@ import PlaceCharacter, {isPlaceCharacter, placeCharacter} from '../moves/PlaceCh
 import {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import Recycle, {isRecycle} from '../moves/Recycle'
 import SlateForConstruction, {slateForConstruction} from '../moves/SlateForConstruction'
-import ItsAWonderfulWorldRules, {canUndoSlateForConstruction, getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard} from '../Rules'
+import ItsAWonderfulWorldRules, {getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard, placeAvailableCubesMoves} from '../Rules'
 import GameView from '../types/GameView'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
@@ -45,22 +45,14 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
   const legalMoves = isPlayer(player) ? getLegalMoves(player, game.phase) : []
-  const [undo] = useUndo(ItsAWonderfulWorldRules)
+  const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const longPress = useLongPress({
     onClick: () => setFocus(),
     onLongPress: () => {
       if (player.empire !== playerId) {
         return
       }
-      const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
-      getRemainingCost(construction).forEach(cost => {
-        if (isResource(cost.item)) {
-          if (availableResource.some(resource => resource === cost.item)) {
-            play(placeResource(player.empire, cost.item, construction.card, cost.space))
-            availableResource.splice(availableResource.findIndex(resource => resource === cost.item), 1)
-          }
-        }
-      })
+      placeAvailableCubesMoves(player, construction).forEach(move => play(move))
       window.navigator.vibrate(200)
     }
   })
@@ -114,10 +106,16 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
 
   const onDrop = (move: Recycle | CompleteConstruction | SlateForConstruction) => {
     if (isRecycle(move)) {
-      if (actions && canUndoSlateForConstruction(actions, player.empire, construction.card)) {
-        const placeItemsOnCard = actions!.filter(action => action.playerId === player.empire && isPlaceItemOnCard(action.move, construction.card))
-        placeItemsOnCard.map(action => action.move).reverse().forEach(undo)
-        undo(slateForConstruction(player.empire, construction.card))
+      construction.costSpaces.forEach((item, index) => {
+        if (!item) return
+        const move = isResource(item) ? placeResource(player.empire, item, construction.card, index) : placeCharacter(player.empire, item, construction.card, index)
+        if (canUndo(move)) {
+          undo(move)
+        }
+      })
+      const slateForConstructionMove = slateForConstruction(player.empire, construction.card)
+      if (canUndo(slateForConstructionMove)) {
+        undo(slateForConstructionMove)
       }
       play(move)
     } else if (isCompleteConstruction(move)) {
@@ -131,7 +129,8 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
   }
 
   return (
-    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={gameOver || !canRecycle || canDrop || focused} css={[cardStyle, areaCardStyle]}
+    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={gameOver || !canRecycle || canDrop || focused}
+               css={[cardStyle, areaCardStyle]}
                onDrop={onDrop} {...longPress} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>

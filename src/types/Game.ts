@@ -9,6 +9,7 @@ type Game = {
   round: number
   phase: Phase
   productionStep?: Resource
+  tutorial?: boolean
 }
 
 export default Game

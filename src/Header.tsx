@@ -9,6 +9,8 @@ import {Trans, useTranslation} from 'react-i18next'
 import MainMenu from './MainMenu'
 import Character from './material/characters/Character'
 import CharacterToken from './material/characters/CharacterToken'
+import DevelopmentCardsTitles from './material/developments/DevelopmentCardsTitles'
+import {HarborZone, IndustrialComplex, PropagandaCenter, SecretSociety, UniversalExposition, WindTurbines, Zeppelin} from './material/developments/Developments'
 import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
@@ -23,6 +25,7 @@ import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
+import {isPlayer} from './types/typeguards'
 import Button from './util/Button'
 import {gameOverDelay, headerHeight, textColor} from './util/Styles'
 
@@ -92,6 +95,12 @@ const Header: FunctionComponent<Props> = ({game, loading}) => {
 function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   const player = game.players.find(player => player.empire === empire)
   const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getEmpireName(t, empire)
+  if (game.tutorial && game.round === 1 && !animation && player && isPlayer(player)) {
+    const tutorialText = getTutorialText(t, game, player)
+    if (tutorialText) {
+      return tutorialText
+    }
+  }
   switch (game.phase) {
     case Phase.Draft:
       if (animation && animation.move.type === MoveType.RevealChosenCards) {
@@ -185,6 +194,58 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
       }
   }
   return ''
+}
+
+function getTutorialText(t: TFunction, game: GameView, player: Player): string | undefined {
+  switch (game.phase) {
+    case Phase.Draft:
+      switch (player.hand.length) {
+        case 7 :
+          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
+        case 6 :
+          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+        case 5 :
+          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+        case 4 :
+          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(HarborZone)!(t)})
+        case 3 :
+          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
+        case 2 :
+          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(UniversalExposition)!(t)})
+      }
+      break
+    case Phase.Planning:
+      switch (player.draftArea.length) {
+        case 7 :
+          return t('Tutoriel : sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+        case 6 :
+          return t('Tutoriel : sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+        case 5 :
+          return t('Tutoriel : sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(HarborZone)!(t)})
+        case 4 :
+          return t('Tutoriel : sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
+        case 3 :
+          return t('Tutoriel : sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(UniversalExposition)!(t)})
+        case 2 :
+          if (player.availableResources.length > 0)
+            return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+          else
+            return t('Tutoriel : sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
+        case 1 :
+          if (player.availableResources.length > 0)
+            return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+          else
+            return t('Tutoriel : sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(Zeppelin)!(t)})
+      }
+      break
+    case Phase.Production:
+      if (player.availableResources.filter(r => r === Resource.Materials).length > 0)
+        return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+      else if (player.availableResources.filter(r => r === Resource.Gold).length > 0)
+        return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+      break
+  }
+  return
 }
 
 function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], game: GameView, player?: Player | PlayerView) {

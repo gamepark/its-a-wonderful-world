@@ -1,10 +1,8 @@
-import {
-  Action, GameWithIncompleteInformation, shuffle, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo
-} from '@interlude-games/workshop'
+import {Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo} from '@interlude-games/workshop'
 import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
-import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
 import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
 import WithTimeLimit from '@interlude-games/workshop/dist/Types/WithTimeLimit'
+import WithTutorial from '@interlude-games/workshop/dist/Types/WithTutorial'
 import Character, {characters, ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
@@ -23,15 +21,16 @@ import Move, {MoveView} from './moves/Move'
 import MoveType from './moves/MoveType'
 import {isPassCardsView, passCards} from './moves/PassCards'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter} from './moves/PlaceCharacter'
-import {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from './moves/PlaceResource'
+import PlaceResource, {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from './moves/PlaceResource'
 import {produce} from './moves/Produce'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {recycle} from './moves/Recycle'
 import {isRevealChosenCardsView, revealChosenCards} from './moves/RevealChosenCards'
-import {isSlateForConstruction, slateForConstruction} from './moves/SlateForConstruction'
+import {slateForConstruction} from './moves/SlateForConstruction'
 import {startPhase} from './moves/StartPhase'
 import {isTellYouAreReady, tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
+import {setupTutorial, tutorialMoves} from './Tutorial'
 import Game from './types/Game'
 import GameOptions from './types/GameOptions'
 import GameView from './types/GameView'
@@ -39,13 +38,14 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 import {isGameView, isPlayerView} from './types/typeguards'
+import shuffle from './util/shuffle'
 
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
 export const numberOfRounds = 4
 const playersMin = 2
 const playersMax = 5
-const defaultNumberOfPlayers = 2
+export const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
 type GameType = SimultaneousGame<Game, Move, EmpireName>
@@ -57,6 +57,7 @@ type GameType = SimultaneousGame<Game, Move, EmpireName>
   & WithAnimations<GameView, MoveView, EmpireName, EmpireName>
   & WithEliminations<Game, Move, EmpireName>
   & WithTimeLimit<Game, EmpireName>
+  & WithTutorial<Game, Move>
 
 // noinspection JSUnusedGlobalSymbols
 const ItsAWonderfulWorldRules: GameType = {
@@ -412,13 +413,23 @@ const ItsAWonderfulWorldRules: GameType = {
         return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move, move.card)))
       case MoveType.PlaceResource:
         if (isPlaceResourceOnConstruction(move)) {
-          return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || (isPlaceItemOnCard(action.move, move.card))))
+          if (actionCompletedCardConstruction(action, move.card)) {
+            return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move)))
+          } else if (move.resource === Resource.Krystallium) {
+            return !consecutiveActions.some(action => actionCompletedCardConstruction(action, move.card))
+          } else {
+            return !consecutiveActions.some(action => action.playerId === playerId && (actionCompletedCardConstruction(action, move.card) || isTellYouAreReady(action.move)))
+          }
         } else {
           return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move)
             || (isPlaceResourceOnConstruction(action.move) && action.move.resource === Resource.Krystallium)))
         }
       case MoveType.PlaceCharacter:
-        return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || (isPlaceItemOnCard(action.move, move.card))))
+        if (actionCompletedCardConstruction(action, move.card)) {
+          return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move)))
+        } else {
+          return !consecutiveActions.some(action => actionCompletedCardConstruction(action, move.card))
+        }
       case MoveType.TellYouAreReady:
         return !action.consequences.some(consequence => consequence.type === MoveType.StartPhase || consequence.type === MoveType.Produce)
           && !consecutiveActions.some(action => action.consequences.some(consequence => consequence.type === MoveType.StartPhase || consequence.type === MoveType.Produce))
@@ -532,10 +543,18 @@ const ItsAWonderfulWorldRules: GameType = {
       default:
         return 0
     }
+  },
+
+  setupTutorial(): Game {
+    return setupTutorial(setupPlayers)
+  },
+
+  expectedMoves(): Move[] {
+    return tutorialMoves
   }
 }
 
-function setupPlayers(players?: number | [{ empire?: EmpireName }], empireSide?: EmpireSide) {
+function setupPlayers(players?: number | { empire?: EmpireName }[], empireSide?: EmpireSide) {
   if (Array.isArray(players) && players.length >= playersMin && players.length <= playersMax) {
     const empiresLeft = shuffle(Object.values(EmpireName).filter(empire => players.some(player => player.empire === empire)))
     return players.map<Player>(player => setupPlayer(player.empire || empiresLeft.pop()!, empireSide))
@@ -754,15 +773,6 @@ export function isPlaceItemOnCard(move: Move, card?: Number): move is (PlaceReso
   }
 }
 
-export function canUndoSlateForConstruction(actions: DisplayedAction<Move, EmpireName>[], playerId: EmpireName, card: number) {
-  const index = actions.findIndex(action => action.playerId === playerId && isSlateForConstruction(action.move) && action.move.card === card)
-  if (index === -1) {
-    return false
-  }
-  const consecutiveActions = actions.slice(index + 1)
-  return !consecutiveActions.some(action => action.playerId === playerId && isTellYouAreReady(action.move))
-}
-
 export function isActive(game: Game | GameView, playerId: EmpireName) {
   const player = game.players.find(player => player.empire === playerId)!
   switch (game.phase) {
@@ -780,6 +790,28 @@ export function countCharacters(player: Player | PlayerView) {
 
 export function isOver(game: Game | GameView): boolean {
   return game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)
+}
+
+export function constructionsThatMayReceiveCubes(player: Player | PlayerView): Construction[] {
+  return player.constructionArea.filter(construction => getRemainingCost(construction).some(cost => isResource(cost.item) && player.availableResources.includes(cost.item)))
+}
+
+export function placeAvailableCubesMoves(player: Player | PlayerView, construction: Construction): PlaceResource[] {
+  const moves: PlaceResource[] = []
+  const availableResource = JSON.parse(JSON.stringify(player.availableResources)) as Resource[]
+  getRemainingCost(construction).forEach(cost => {
+    if (isResource(cost.item)) {
+      if (availableResource.some(resource => resource === cost.item)) {
+        moves.push(placeResource(player.empire, cost.item, construction.card, cost.space))
+        availableResource.splice(availableResource.findIndex(resource => resource === cost.item), 1)
+      }
+    }
+  })
+  return moves
+}
+
+function actionCompletedCardConstruction(action: Action<Move, EmpireName>, card: number) {
+  return action.consequences.some(consequence => isCompleteConstruction(consequence) && consequence.card === card)
 }
 
 // noinspection JSUnusedGlobalSymbols
