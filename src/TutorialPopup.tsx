@@ -13,6 +13,7 @@ import {isOver} from './Rules'
 import Theme, {LightTheme} from './Theme'
 import {resetTutorial} from './Tutorial'
 import GameView from './types/GameView'
+import Phase from './types/Phase'
 import Button from './util/Button'
 import {
   closePopupStyle, discordUri, hidePopupOverlayStyle, platformUri, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle
@@ -31,6 +32,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const [tutorialIndex, setTutorialIndex] = useState(0)
   const [tutorialEnd, setTutorialEnd] = useState(false)
   const [tutorialDisplay, setTutorialDisplay] = useState(tutorialDescription.length > actionsNumber)
+  const [hideLastTurnInfo, setHideLastTurnInfo] = useState(false)
   const toggleTutorialEnd = () => {
     setTutorialEnd(!tutorialEnd)
   }
@@ -81,6 +83,15 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
         currentMessage && currentMessage.arrow &&
         <img alt='Arrow pointing toward current tutorial interest' src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
              css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
+      }
+      {
+        game.round === 4 && game.phase === Phase.Draft && !hideLastTurnInfo &&
+        <div css={[popupStyle, popupPosition(lastTurnInfo), theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+          <div css={closePopupStyle} onClick={() => setHideLastTurnInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
+          <h2>{lastTurnInfo.title(t)}</h2>
+          <p>{lastTurnInfo.text(t)}</p>
+          <Button onClick={() => setHideLastTurnInfo(true)}>{t('OK')}</Button>
+        </div>
       }
       {
         isOver(game) &&
@@ -939,7 +950,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Production de l’Or'),
-      text: (t: TFunction) => t('Vous produisez 2 Or (un grâce à votre Empire et un grâce au Complexe Industriel) : placez-les sur le Centre de Propagande pour terminer sa construction.'),
+      text: (t: TFunction) => t('Vous produisez 2 Or (un grâce à votre Empire et un grâce au Complexe Industriel).'),
       boxTop: 54,
       boxLeft: 53,
       boxWidth: 51,
@@ -959,6 +970,30 @@ const tutorialDescription: TutorialStepDescription[][] = [
         angle: 90,
         top: 46,
         left: 66
+      }
+    },
+    {
+      title: (t: TFunction) => t('Placement des ressources'),
+      text: (t: TFunction) => t('Vous pouvez toujours choisir de placer vos ressources sur votre carte Empire, cependant le Krystallium ne rapporte pas de points en fin de partie.'),
+      boxTop: 81,
+      boxLeft: 44,
+      boxWidth: 60,
+      arrow: {
+        angle: -90,
+        top: 77,
+        left: 2.5
+      }
+    },
+    {
+      title: (t: TFunction) => t('Placement des ressources'),
+      text: (t: TFunction) => t('Il est préférable de construire vos cartes : placez vos Ors sur votre Centre de Propagande.'),
+      boxTop: 49,
+      boxLeft: 49,
+      boxWidth: 60,
+      arrow: {
+        angle: -90,
+        top: 44,
+        left: 7.5
       }
     }
   ],
@@ -1053,6 +1088,13 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
+      title: (t: TFunction) => t('Vous pouvez changer d’avis !'),
+      text: (t: TFunction) => t('Dans le menu, le bouton [↺] vous permet d’annuler votre dernier coup : il s’affiche en rouge lorsque c’est autorisé.'),
+      boxTop: 50,
+      boxLeft: 50,
+      boxWidth: 55
+    },
+    {
       title: (t: TFunction) => t('Surveillez vos adversaires'),
       text: (t: TFunction) => t('En cliquant sur vos adversaires, vous pouvez voir leur Empire. « Qui connaît son ennemi comme il se connaît, en cent combats ne sera point défait. » - Sun Tzu'),
       boxTop: 35,
@@ -1074,6 +1116,14 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ]
 ]
 
+const lastTurnInfo = {
+  title: (t: TFunction) => t('Dernier tour !'),
+  text: (t: TFunction) => t('C’est le dernier tour ! C’est le moment de faire un maximum de points de victoire. Pour rappel, le Krystallium ne rapporte pas de points à la fin.'),
+  boxTop: 50,
+  boxLeft: 50,
+  boxWidth: 70
+}
+
 const tutorialEndGame = {
   title: (t: TFunction) => t('Félicitations !'),
   text: (t: TFunction) => t('Vous avez terminé votre première partie ! Vous pouvez maintenant jouer avec vos amis, ou rencontrer d’autres joueurs via notre salon de rencontre sur Discord.'),
@@ -1081,6 +1131,5 @@ const tutorialEndGame = {
   boxLeft: 53,
   boxWidth: 87
 }
-
 
 export default TutorialPopup
