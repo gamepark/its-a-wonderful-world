@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {Draggable, useActions, useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
+import {Draggable, useAnimation, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
 import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
@@ -16,10 +16,9 @@ import Resource from '../material/resources/Resource'
 import ChooseDevelopmentCard, {
   chooseDevelopmentCard, ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
 } from '../moves/ChooseDevelopmentCard'
-import Move from '../moves/Move'
 import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
-import {canUndoSlateForConstruction} from '../Rules'
+import ItsAWonderfulWorldRules from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
@@ -36,7 +35,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   const row = game.phase === Phase.Draft ? 1 : 0
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
-  const actions = useActions<Move, EmpireName>()
+  const [, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const [focusedCard, setFocusedCard] = useState<number>()
   const animation = useAnimation<ChooseDevelopmentCard | ChooseDevelopmentCardView | SlateForConstruction | Recycle>(animation =>
     (isChooseDevelopmentCard(animation.move) || isSlateForConstruction(animation.move) || isRecycle(animation.move))
@@ -49,7 +48,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
   const chosenCard = choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : player.chosenCard
   const canDrop = (item: DevelopmentFromHand | DevelopmentFromConstructionArea) => item.type === DragObjectType.DEVELOPMENT_FROM_HAND
-    || (!!playerId && !!actions && canUndoSlateForConstruction(actions, playerId, item.card))
+    || (canUndo(slateForConstruction(playerId!, item.card)))
   const [{dragItemType, isValidTarget, isOver}, ref] = useDrop({
     accept: [DragObjectType.DEVELOPMENT_FROM_HAND, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA], canDrop,
     collect: (monitor) => ({

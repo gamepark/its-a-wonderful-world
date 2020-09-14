@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {useAnimation, usePlay, usePlayerId} from '@interlude-games/workshop'
+import {useAnimation, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
@@ -20,7 +20,7 @@ import PlaceCharacter, {placeCharacter} from '../moves/PlaceCharacter'
 import {isPlaceResource, placeResource, PlaceResourceOnConstruction} from '../moves/PlaceResource'
 import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
-import {canBuild, getMovesToBuild, getRemainingCost, placeAvailableCubesMoves} from '../Rules'
+import ItsAWonderfulWorldRules, {canBuild, getMovesToBuild, getRemainingCost, placeAvailableCubesMoves} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
@@ -41,6 +41,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
   const row = game.phase === Phase.Draft ? 2 : 1
   const fullWidth = game.players.length === 2 && game.phase !== Phase.Draft
   const play = usePlay()
+  const [undo, canUndo] = useUndo(ItsAWonderfulWorldRules)
   const animation = useAnimation<CompleteConstruction | Recycle | SlateForConstruction>(animation =>
     (isCompleteConstruction(animation.move) || isRecycle(animation.move) || isSlateForConstruction(animation.move)) && animation.move.playerId === player.empire
   )
@@ -93,15 +94,27 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
     {construction && <>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
       {isPlayer(player) && !gameOver && getSmartPlaceItemMoves(player, construction).map(move =>
-        <button key={move.space} css={getPlaceItemButtonStyle(move.space)} onClick={() => play(move)}>
+        <button key={move.space} css={[itemButtonStyle, placeItemButton, itemButtonPosition(move.space)]} onClick={() => play(move)}>
           {isPlaceResource(move) ?
             <ResourceCube resource={move.resource} css={buttonItemStyle}/> :
             <CharacterToken character={move.character} css={buttonItemStyle}/>
           }
         </button>
       )}
-      {maxSpendableResources.length > 1 && <button css={getPlaceItemButtonStyle(getTotalConstructionCost(construction.card) + 0.5)}
-                                                   onClick={() => placeAvailableCubesMoves(player, construction).forEach(move => play(move))}>
+      {isPlayer(player) && !gameOver && construction.costSpaces.map((item, index) => {
+        if (!item) return null
+        const move = isResource(item) ? placeResource(player.empire, item, construction.card, index) : placeCharacter(player.empire, item, construction.card, index)
+        if (!canUndo(move)) return null
+        return (
+          <button key={index} css={[itemButtonStyle, undoPlaceItemButton, itemButtonPosition(index)]}
+                  onClick={() => undo(move)}>
+            {isResource(item) ? <ResourceCube resource={item} css={buttonItemStyle}/> : <CharacterToken character={item} css={buttonItemStyle}/>}
+          </button>
+        )
+      })}
+      {maxSpendableResources.length > 1 &&
+      <button css={[itemButtonStyle, placeItemButton, itemButtonPosition(getTotalConstructionCost(construction.card) + 0.5)]}
+              onClick={() => placeAvailableCubesMoves(player, construction).forEach(move => play(move))}>
         <span css={getPlaceTextStyle}>{t('Placer')} </span>
         {maxSpendableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={buttonItemStyle}/>)}
       </button>}
@@ -232,10 +245,9 @@ const getPlaceTextStyle = css`
   margin:0 0.3em;
 `
 
-const getPlaceItemButtonStyle = (index: number) => css`
+const itemButtonStyle = css`
   position: absolute;
   z-index: 100;
-  top: ${index * 6.4 + 16.5}%;
   right: ${51 + cardWidth * 1.5}%;
   display: inline-flex;
   background-color:transparent;
@@ -254,6 +266,9 @@ const getPlaceItemButtonStyle = (index: number) => css`
   &:active {
     transform: translateY(1px);
   }
+`
+
+const placeItemButton = css`
   &:after{
     background-image: url(${Images.buttonArrow});
     width: 1em;
@@ -264,6 +279,24 @@ const getPlaceItemButtonStyle = (index: number) => css`
     background-size: cover;
     background-repeat: no-repeat;
   }
+`
+
+const undoPlaceItemButton = css`
+  &:before{
+    background-image: url(${Images.buttonArrow});
+    width: 1em;
+    height: 1em;
+    content: '';
+    left: -1em;
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transform: scaleX(-1);
+  }
+`
+
+const itemButtonPosition = (index: number) => css`
+  top: ${index * 6.4 + 16.5}%;
 `
 
 export default ConstructionArea

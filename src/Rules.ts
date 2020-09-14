@@ -1,6 +1,5 @@
 import {Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo} from '@interlude-games/workshop'
 import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
-import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
 import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
 import WithTimeLimit from '@interlude-games/workshop/dist/Types/WithTimeLimit'
 import WithTutorial from '@interlude-games/workshop/dist/Types/WithTutorial'
@@ -27,7 +26,7 @@ import {produce} from './moves/Produce'
 import {receiveCharacter} from './moves/ReceiveCharacter'
 import {recycle} from './moves/Recycle'
 import {isRevealChosenCardsView, revealChosenCards} from './moves/RevealChosenCards'
-import {isSlateForConstruction, slateForConstruction} from './moves/SlateForConstruction'
+import {slateForConstruction} from './moves/SlateForConstruction'
 import {startPhase} from './moves/StartPhase'
 import {isTellYouAreReady, tellYourAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
@@ -771,15 +770,6 @@ export function isPlaceItemOnCard(move: Move, card?: Number): move is (PlaceReso
   } else {
     return isPlaceResourceOnConstruction(move) || isPlaceCharacter(move)
   }
-}
-
-export function canUndoSlateForConstruction(actions: DisplayedAction<Move, EmpireName>[], playerId: EmpireName, card: number) {
-  const index = actions.findIndex(action => action.playerId === playerId && isSlateForConstruction(action.move) && action.move.card === card)
-  if (index === -1) {
-    return false
-  }
-  const consecutiveActions = actions.slice(index + 1)
-  return !consecutiveActions.some(action => action.playerId === playerId && isTellYouAreReady(action.move))
 }
 
 export function isActive(game: Game | GameView, playerId: EmpireName) {
