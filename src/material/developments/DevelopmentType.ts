@@ -4,6 +4,8 @@ enum DevelopmentType {
 
 export default DevelopmentType
 
+export const developmentTypes = Object.values(DevelopmentType) as DevelopmentType[]
+
 export function isDevelopmentType(item: any): item is DevelopmentType {
-  return Object.values(DevelopmentType).indexOf(item) !== -1
+  return developmentTypes.indexOf(item) !== -1
 }

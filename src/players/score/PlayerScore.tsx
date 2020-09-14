@@ -2,8 +2,7 @@ import {css, keyframes} from '@emotion/core'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import Character from '../../material/characters/Character'
-import DevelopmentType from '../../material/developments/DevelopmentType'
+import {developmentTypes} from '../../material/developments/DevelopmentType'
 import Images from '../../material/Images'
 import {getScore} from '../../Rules'
 import Theme, {LightTheme} from '../../Theme'
@@ -11,6 +10,7 @@ import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {fadeIn, gameOverDelay} from '../../util/Styles'
 import ScorePart from './ScorePart'
+import {characters} from '../../material/characters/Character'
 
 type Props = {
   player: Player | PlayerView
@@ -29,8 +29,8 @@ const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, 
       <button css={[arrowStyle(theme), animation && fadeInAnimation, displayScore ? arrowStandardStyle : arrowReverseStyle]} onClick={() => setDisplayScore(!displayScore)}
               title={displayScore ? t('Réduire les Scores') : t('Afficher les Scores')}/>
       <div css={scorePartStyle}>
-        {Object.values(DevelopmentType).map(developmentType => <ScorePart key={developmentType} player={player} item={developmentType}/>)}
-        {Object.values(Character).map(character => <ScorePart key={character} player={player} item={character}/>)}
+        {developmentTypes.map(developmentType => <ScorePart key={developmentType} player={player} item={developmentType}/>)}
+        {characters.map(character => <ScorePart key={character} player={player} item={character}/>)}
         <ScorePart player={player}/>
       </div>
       <div css={[scoreStyle, animation && fadeInAnimation, displayScore ? displayScoreStyle : hideScoreStyle, score !== 0 && displayScore && equalSign]}>{score}</div>

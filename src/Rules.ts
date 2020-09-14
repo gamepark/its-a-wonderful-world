@@ -3,11 +3,11 @@ import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGam
 import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
 import WithTimeLimit from '@interlude-games/workshop/dist/Types/WithTimeLimit'
 import WithTutorial from '@interlude-games/workshop/dist/Types/WithTutorial'
-import Character, {ChooseCharacter, isCharacter} from './material/characters/Character'
+import Character, {characters, ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
 import {developmentCards} from './material/developments/Developments'
-import DevelopmentType, {isDevelopmentType} from './material/developments/DevelopmentType'
+import DevelopmentType, {developmentTypes, isDevelopmentType} from './material/developments/DevelopmentType'
 import EmpireName from './material/empires/EmpireName'
 import Empires from './material/empires/Empires'
 import EmpireSide from './material/empires/EmpireSide'
@@ -38,6 +38,7 @@ import Phase from './types/Phase'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
 import {isGameView, isPlayerView} from './types/typeguards'
+import shuffle from './util/shuffle'
 
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
@@ -605,7 +606,7 @@ export function getLegalMoves(player: Player, phase: Phase) {
     moves.push(placeResource(player.empire, resource))
   })
   if (player.bonuses.some(bonus => bonus === ChooseCharacter)) {
-    Object.values(Character).forEach(character => moves.push(receiveCharacter(player.empire, character)))
+    characters.forEach(character => moves.push(receiveCharacter(player.empire, character)))
   }
   player.constructionArea.forEach(construction => {
     moves.push(recycle(player.empire, construction.card))
@@ -616,7 +617,7 @@ export function getLegalMoves(player: Player, phase: Phase) {
         .forEach(space => moves.push(placeResource(player.empire, Resource.Krystallium, construction.card, space)))
     })
   }
-  Object.values(Character).forEach(character => {
+  characters.forEach(character => {
     if (player.characters[character]) {
       player.constructionArea.forEach(construction => {
         getSpacesMissingItem(construction, item => item === character)
@@ -633,7 +634,7 @@ function costSpaces(development: Development) {
 
 export function getRemainingCost(construction: Construction): { item: Resource | Character, space: number }[] {
   const development = developmentCards[construction.card]
-  return Array.of<Resource | Character>(...resources, ...Object.values(Character))
+  return Array.of<Resource | Character>(...resources, ...characters)
     .flatMap(item => Array(development.constructionCost[item] || 0).fill(item))
     .map((item, index) => ({item, space: index}))
     .filter(item => !construction.costSpaces[item.space])
@@ -697,8 +698,8 @@ export function getVictoryPointsMultiplier(player: Player | PlayerView, item: De
 
 export function getScore(player: Player | PlayerView): number {
   return getFlatVictoryPoints(player)
-    + Object.values(DevelopmentType).reduce((sum, developmentType) => sum + getComboVictoryPoints(player, developmentType), 0)
-    + Object.values(Character).reduce((sum, characterType) => sum + getComboVictoryPoints(player, characterType), 0)
+    + developmentTypes.reduce((sum, developmentType) => sum + getComboVictoryPoints(player, developmentType), 0)
+    + characters.reduce((sum, characterType) => sum + getComboVictoryPoints(player, characterType), 0)
 
 }
 
@@ -721,7 +722,7 @@ export function canBuild(player: Player, card: number): boolean {
     return false
   }
   const remainingCost = getRemainingCost(construction)
-  for (const character of Object.values(Character)) {
+  for (const character of characters) {
     if (player.characters[character] < remainingCost.filter(cost => cost.item === character).length) {
       return false
     }
@@ -811,14 +812,6 @@ export function placeAvailableCubesMoves(player: Player | PlayerView, constructi
 
 function actionCompletedCardConstruction(action: Action<Move, EmpireName>, card: number) {
   return action.consequences.some(consequence => isCompleteConstruction(consequence) && consequence.card === card)
-}
-
-function shuffle<T>(array: T[]): T[] {
-  for (let index = array.length - 1; index > 0; index--) {
-    const newIndex = Math.floor(Math.random() * (index + 1));
-    [array[index], array[newIndex]] = [array[newIndex], array[index]]
-  }
-  return array
 }
 
 // noinspection JSUnusedGlobalSymbols
