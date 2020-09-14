@@ -1,27 +1,16 @@
 import {css} from '@emotion/core'
 import React, {FunctionComponent} from 'react'
-import Character, {characterTypes} from '../material/characters/Character'
+import Character from '../material/characters/Character'
 import CharacterTokenNumber from '../material/characters/CharacterTokenNumber'
-import {getItemQuantity} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 
-// Display player's tokens and constructions
-const PlayerConstructions: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
-  const financierQuantity = getItemQuantity(player, Character.Financier)
-  const generalQuantity = getItemQuantity(player, Character.General)
-  const reverseTypes = characterTypes.slice().reverse()
-  return (
-    <div css={extraInfoPosition}>
-      {financierQuantity >= generalQuantity ?
-        characterTypes.map(characterType => <CharacterTokenNumber key={characterType} character={characterType}
-                                                                  quantity={getItemQuantity(player, characterType)} css={itemPosition}/>) :
-        reverseTypes.map(characterType => <CharacterTokenNumber key={characterType} character={characterType} quantity={getItemQuantity(player, characterType)}
-                                                                css={itemPosition}/>)
-      }
-    </div>
-  )
-}
+const PlayerConstructions: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => (
+  <div css={[extraInfoPosition, player.characters[Character.General] > player.characters[Character.Financier] && reverseOrder]}>
+    <CharacterTokenNumber character={Character.Financier} quantity={player.characters[Character.Financier]} css={itemPosition}/>
+    <CharacterTokenNumber character={Character.General} quantity={player.characters[Character.General]} css={itemPosition}/>
+  </div>
+)
 
 const extraInfoPosition = css`
   position: absolute;
@@ -34,6 +23,10 @@ const extraInfoPosition = css`
   width: 24%;
   height: 30%;
   transition: width 0.5s ease-out, height 0.5s ease-in;
+`
+
+const reverseOrder = css`
+  flex-direction: row-reverse;
 `
 
 const itemPosition = css`

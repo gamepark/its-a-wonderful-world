@@ -5,7 +5,7 @@ import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGam
 import DisplayedAction from '@interlude-games/workshop/dist/Types/DisplayedAction'
 import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
 import WithTimeLimit from '@interlude-games/workshop/dist/Types/WithTimeLimit'
-import Character, {characterTypes, ChooseCharacter, isCharacter} from './material/characters/Character'
+import Character, {characters, ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
 import {developmentCards} from './material/developments/Developments'
@@ -587,7 +587,7 @@ export function getLegalMoves(player: Player, phase: Phase) {
     moves.push(placeResource(player.empire, resource))
   })
   if (player.bonuses.some(bonus => bonus === ChooseCharacter)) {
-    characterTypes.forEach(character => moves.push(receiveCharacter(player.empire, character)))
+    characters.forEach(character => moves.push(receiveCharacter(player.empire, character)))
   }
   player.constructionArea.forEach(construction => {
     moves.push(recycle(player.empire, construction.card))
@@ -598,7 +598,7 @@ export function getLegalMoves(player: Player, phase: Phase) {
         .forEach(space => moves.push(placeResource(player.empire, Resource.Krystallium, construction.card, space)))
     })
   }
-  characterTypes.forEach(character => {
+  characters.forEach(character => {
     if (player.characters[character]) {
       player.constructionArea.forEach(construction => {
         getSpacesMissingItem(construction, item => item === character)
@@ -615,7 +615,7 @@ function costSpaces(development: Development) {
 
 export function getRemainingCost(construction: Construction): { item: Resource | Character, space: number }[] {
   const development = developmentCards[construction.card]
-  return Array.of<Resource | Character>(...resources, ...characterTypes)
+  return Array.of<Resource | Character>(...resources, ...characters)
     .flatMap(item => Array(development.constructionCost[item] || 0).fill(item))
     .map((item, index) => ({item, space: index}))
     .filter(item => !construction.costSpaces[item.space])
@@ -680,7 +680,7 @@ export function getVictoryPointsMultiplier(player: Player | PlayerView, item: De
 export function getScore(player: Player | PlayerView): number {
   return getFlatVictoryPoints(player)
     + developmentTypes.reduce((sum, developmentType) => sum + getComboVictoryPoints(player, developmentType), 0)
-    + characterTypes.reduce((sum, characterType) => sum + getComboVictoryPoints(player, characterType), 0)
+    + characters.reduce((sum, characterType) => sum + getComboVictoryPoints(player, characterType), 0)
 
 }
 
@@ -703,7 +703,7 @@ export function canBuild(player: Player, card: number): boolean {
     return false
   }
   const remainingCost = getRemainingCost(construction)
-  for (const character of characterTypes) {
+  for (const character of characters) {
     if (player.characters[character] < remainingCost.filter(cost => cost.item === character).length) {
       return false
     }

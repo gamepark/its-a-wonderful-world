@@ -2,18 +2,18 @@ import {css} from '@emotion/core'
 import {GameSpeed, useOptions, usePlayer} from '@interlude-games/workshop'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import Character, {characterTypes} from '../material/characters/Character'
+import Character, {characters} from '../material/characters/Character'
 import DevelopmentType, {developmentTypes} from '../material/developments/DevelopmentType'
 import {empireAvatar, getEmpireName} from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
-import {getVictoryPointsBonusMultiplier} from '../Rules'
+import {getComboVictoryPoints, getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
+import PlayerConstructions from './PlayerConstructions'
 import PlayerResourceProduction from './PlayerResourceProduction'
 import Timer from './Timer'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
-import PlayerConstructions from './PlayerConstructions'
 
 type Props = {
   player: Player | PlayerView
@@ -26,30 +26,16 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
   const {t} = useTranslation()
   const options = useOptions()
   const playerInfo = usePlayer<EmpireName>(player.empire)
-  const victoryPointsMultipliers: { item: Character | DevelopmentType, multiplier: number }[] = []
-  const completeVictoryPointsMultiplier = (item: Character | DevelopmentType) => {
-    const multiplier = getVictoryPointsBonusMultiplier(player, item)
-    if (multiplier > 0) {
-      victoryPointsMultipliers.push({item, multiplier})
-    }
-  }
-  characterTypes.forEach(completeVictoryPointsMultiplier)
-  developmentTypes.forEach(completeVictoryPointsMultiplier)
-  victoryPointsMultipliers.sort((item1, item2) => item2.multiplier - item1.multiplier)
+  const bestMultiplier = getBestVictoryPointsMultiplier(player)
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
       <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       <h3 css={[titleStyle, player.eliminated && eliminatedStyle]}>
         <span css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
-        {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing &&
-        <Timer time={playerInfo.time}/>
-        }
+        {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && <Timer time={playerInfo.time}/>}
       </h3>
       <PlayerResourceProduction player={player}/>
-      {victoryPointsMultipliers.slice(0, 1).map((victoryPointsMultiplier, index) =>
-        <VictoryPointsMultiplier key={victoryPointsMultiplier.item} item={victoryPointsMultiplier.item} multiplier={victoryPointsMultiplier.multiplier}
-                                 css={victoryPointsMultiplierStyle(index)}/>
-      )}
+      {bestMultiplier && <VictoryPointsMultiplier item={bestMultiplier.item} multiplier={bestMultiplier.multiplier} css={victoryPointsMultiplierStyle}/>}
       <PlayerConstructions player={player}/>
     </div>
   )
@@ -126,12 +112,28 @@ const eliminatedStyle = css`
   text-decoration: line-through;
 `
 
-const victoryPointsMultiplierStyle = (index: number) => css`
+const victoryPointsMultiplierStyle = css`
   position: absolute;
-  top: ${index * 22 + 38}%;
+  top: 38%;
   left: 3%;
   width: 15%;
   height: 20%;
 `
+
+type Multiplier = { item: DevelopmentType | Character, multiplier: number, score: number }
+
+const getBestVictoryPointsMultiplier = (player: Player | PlayerView) => {
+  let bestMultiplier: Multiplier | undefined = undefined
+  for (const item of [...developmentTypes, ...characters]) {
+    const multiplier = getVictoryPointsBonusMultiplier(player, item)
+    if (multiplier) {
+      const score = getComboVictoryPoints(player, item)
+      if (!bestMultiplier || bestMultiplier.score < score || (bestMultiplier.score === score && bestMultiplier.multiplier < multiplier)) {
+        bestMultiplier = {item, multiplier, score}
+      }
+    }
+  }
+  return bestMultiplier
+}
 
 export default PlayerPanel

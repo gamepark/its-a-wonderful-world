@@ -10,7 +10,7 @@ import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {fadeIn, gameOverDelay} from '../../util/Styles'
 import ScorePart from './ScorePart'
-import {characterTypes} from '../../material/characters/Character'
+import {characters} from '../../material/characters/Character'
 
 type Props = {
   player: Player | PlayerView
@@ -30,7 +30,7 @@ const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, 
               title={displayScore ? t('Réduire les Scores') : t('Afficher les Scores')}/>
       <div css={scorePartStyle}>
         {developmentTypes.map(developmentType => <ScorePart key={developmentType} player={player} item={developmentType}/>)}
-        {characterTypes.map(character => <ScorePart key={character} player={player} item={character}/>)}
+        {characters.map(character => <ScorePart key={character} player={player} item={character}/>)}
         <ScorePart player={player}/>
       </div>
       <div css={[scoreStyle, animation && fadeInAnimation, displayScore ? displayScoreStyle : hideScoreStyle, score !== 0 && displayScore && equalSign]}>{score}</div>

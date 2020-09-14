@@ -148,13 +148,13 @@ const revealedCardAnimation = (order: number, duration: number) => {
 }
 
 const supremacyBonusAnimation = (resource: Resource, panelIndex: number, duration: number) => {
-  const xFrom = (areasX + getCircleCharacterLeftPosition(resource) * boardWidth / 100) * 100 / tokenWidth
-  const yFrom = (boardTop + circleCharacterTopPosition * boardHeight / 100) * 100 / tokenHeight
-  const xTo = (100 - playerPanelRightMargin - playerPanelWidth / 2) * 100 / tokenWidth
-  const yTo = (playerPanelY(panelIndex) + playerPanelHeight / 2) * 100 / tokenHeight
+  const xFrom = (areasX + (getCircleCharacterLeftPosition(resource) + 1) * boardWidth / 100) * 100 / tokenWidth
+  const yFrom = (boardTop + (circleCharacterTopPosition + 2) * boardHeight / 100) * 100 / tokenHeight
+  const xTo = (100 - playerPanelRightMargin - playerPanelWidth) * 100 / tokenWidth
+  const yTo = (playerPanelY(panelIndex) + playerPanelHeight) * 100 / tokenHeight
   const keyframe = keyframes`
-    from { transform: translate(${xFrom - 50}%, ${yFrom - 50}%) scale(0.4) translate(50%, 50%); }
-    to { transform: translate(${xTo - 50}%, ${yTo - 50}%); }
+    from { transform: translate(${xFrom - 50}%, ${yFrom - 50}%) scale(0.5) translate(50%, 50%); }
+    to { transform: translate(${xTo}%, ${yTo - 100}%) scale(0.55); }
   `
   return css`
     position: absolute;
