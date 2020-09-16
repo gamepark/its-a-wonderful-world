@@ -6,7 +6,7 @@ import Character, {characters} from '../material/characters/Character'
 import DevelopmentType, {developmentTypes} from '../material/developments/DevelopmentType'
 import {empireAvatar, getEmpireName} from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
-import {getComboVictoryPoints, getVictoryPointsBonusMultiplier} from '../Rules'
+import {getItemQuantity, getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
@@ -127,7 +127,7 @@ const getBestVictoryPointsMultiplier = (player: Player | PlayerView) => {
   for (const item of [...developmentTypes, ...characters]) {
     const multiplier = getVictoryPointsBonusMultiplier(player, item)
     if (multiplier) {
-      const score = getComboVictoryPoints(player, item)
+      const score = multiplier * getItemQuantity(player, item)
       if (!bestMultiplier || bestMultiplier.score < score || (bestMultiplier.score === score && bestMultiplier.multiplier < multiplier)) {
         bestMultiplier = {item, multiplier, score}
       }
