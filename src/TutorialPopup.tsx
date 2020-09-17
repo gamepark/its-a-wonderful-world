@@ -34,6 +34,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const [tutorialEnd, setTutorialEnd] = useState(false)
   const [tutorialDisplay, setTutorialDisplay] = useState(tutorialDescription.length > actionsNumber)
   const [hideLastTurnInfo, setHideLastTurnInfo] = useState(false)
+  const [hideThirdTurnInfo, setHideThirdTurnInfo] = useState(false)
   const toggleTutorialEnd = () => {
     setTutorialEnd(!tutorialEnd)
   }
@@ -89,6 +90,15 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
         currentMessage && currentMessage.arrow &&
         <img alt='Arrow pointing toward current tutorial interest' src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
              css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
+      }
+      {
+        game.round === 3 && game.phase === Phase.Draft && !hideThirdTurnInfo &&
+        <div css={[popupStyle, popupPosition(thirdTurnInfo), theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+          <div css={closePopupStyle} onClick={() => setHideThirdTurnInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
+          <h2>{thirdTurnInfo.title(t)}</h2>
+          <p>{thirdTurnInfo.text(t)}</p>
+          <Button onClick={() => setHideThirdTurnInfo(true)}>{t('OK')}</Button>
+        </div>
       }
       {
         game.round === 4 && game.phase === Phase.Draft && !hideLastTurnInfo &&
@@ -1121,6 +1131,14 @@ const tutorialDescription: TutorialStepDescription[][] = [
     }
   ]
 ]
+
+const thirdTurnInfo = {
+  title: (t: TFunction) => t('Mode 2 joueurs'),
+  text: (t: TFunction) => t('Pour information, à 2 joueurs, chaque joueur reçoit 10 cartes pour le draft. Cependant les 3 dernières cartes non choisies sont défaussées.'),
+  boxTop: 50,
+  boxLeft: 50,
+  boxWidth: 70
+}
 
 const lastTurnInfo = {
   title: (t: TFunction) => t('Dernier tour !'),
