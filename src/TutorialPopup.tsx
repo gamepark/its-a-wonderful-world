@@ -859,7 +859,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Bonus de Construction'),
+      title: (t: TFunction) => t('Bonus de construction'),
       text: (t: TFunction) => t('De plus, en terminant la construction de certaines cartes, vous pouvez gagner un bonus indiqué ici : vous avez gagné un second jeton Financier !'),
       boxTop: 72,
       boxLeft: 46,
@@ -962,7 +962,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Bonus de Suprématie'),
-      text: (t: TFunction) => t('La Fédération d’Asie produit 1 Or de plus que vous et récupère donc le jeton Financier. Essayez de produire plus lors des prochains tours pour gagner cette Suprématie !'),
+      text: (t: TFunction) => t('La Fédération d’Asie produit 1 Or de plus que vous et récupère donc le jeton Financier. Essayez de produire plus lors des prochains tours pour gagner ce bonus de Suprématie !'),
       boxTop: 53,
       boxLeft: 40,
       boxWidth: 60,

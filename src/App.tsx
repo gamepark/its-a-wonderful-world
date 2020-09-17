@@ -33,6 +33,7 @@ const userTheme = 'userTheme'
 
 i18next.init({
   lng: locale,
+  debug: process.env.NODE_ENV === 'development',
   fallbackLng: 'en',
   keySeparator: false,
   nsSeparator: false,
