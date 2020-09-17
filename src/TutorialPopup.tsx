@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {faMinusSquare, faPlusSquare, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useActions, useAnimation, usePlayerId} from '@interlude-games/workshop'
+import {useActions, useAnimation, useFailures, usePlayerId} from '@interlude-games/workshop'
 import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
@@ -24,6 +24,7 @@ import tutorialArrowLight from './util/tutorial-arrow-light.png'
 const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const {t} = useTranslation()
   const theme = useTheme<Theme>()
+  const [failures] = useFailures()
   const playerId = usePlayerId<EmpireName>()
   const actions = useActions<Move, EmpireName>()
   const animation = useAnimation<Move>(animation => !isReceiveCharacter(animation.move))
@@ -55,13 +56,18 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
     if (previousActionNumber.current > actionsNumber) {
       setTutorialDisplay(false)
     } else if (tutorialDescription[actionsNumber]) {
-      setTutorialIndex(0)
-      setTutorialDisplay(true)
+      resetTutorialDisplay()
     }
     previousActionNumber.current = actionsNumber
-  }, [actionsNumber, setTutorialIndex])
+  }, [actionsNumber])
+  useEffect(() => {
+    if (failures.length) {
+      setTutorialIndex(tutorialDescription[actionsNumber].length - 1)
+      setTutorialDisplay(true)
+    }
+  }, [actionsNumber, failures])
   const currentMessage = tutorialMessage(tutorialIndex)
-  const displayPopup = tutorialDisplay && !animation && currentMessage
+  const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length
   return (
     <>
       <div css={[popupOverlayStyle, displayPopup ? showPopupOverlayStyle : hidePopupOverlayStyle(85, 90), style]}

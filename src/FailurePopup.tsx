@@ -44,7 +44,7 @@ const failuresDescription = {
   },
   [Failure.TUTORIAL_MOVE_EXPECTED]: {
     title: (t: TFunction) => t('Coup non prévu dans le tutoriel'),
-    text: (t: TFunction) => t('Le tutoriel vous guide dans les actions à jouer durant la première manche. Suivez les indications en haut de l’écran ou affichez le tutoriel pour connaître le coup suivant.')
+    text: (t: TFunction) => t('Promis, vous serez bientôt libres de vos choix ! Nous allons vous réafficher la dernière information...')
   }
 }
 
