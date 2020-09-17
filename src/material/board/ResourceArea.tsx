@@ -195,6 +195,7 @@ const numberStyle = css`
   font-size: 2.5em;
   font-weight: bold;
   text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
+  pointer-events: none;
 `
 
 const resourceNumberStyle = {
