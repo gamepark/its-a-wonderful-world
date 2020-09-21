@@ -188,7 +188,7 @@ const MainMenu = () => {
         }
         {game && game.tutorial &&
         <IconButton css={[menuButtonStyle, tutorialButtonStyle]} onClick={() => resetTutorial()}>
-          <span css={subMenuTitle}>{t('Recommencer le Tutoriel')}</span>
+          <span css={subMenuTitle}>{t('Recommencer le tutoriel')}</span>
           <FontAwesomeIcon icon={faFastBackward}/>
         </IconButton>
         }
