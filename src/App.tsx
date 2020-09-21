@@ -1,5 +1,5 @@
 import {css, Global} from '@emotion/core'
-import {useDisplayState, useFailures, useGame} from '@interlude-games/workshop'
+import {useDisplayState, useFailures, useGame} from '@gamepark/workshop'
 import normalize from 'emotion-normalize'
 import {ThemeProvider} from 'emotion-theming'
 import fscreen from 'fscreen'

@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {usePlay, usePlayerId} from '@interlude-games/workshop'
+import {usePlay, usePlayerId} from '@gamepark/workshop'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'

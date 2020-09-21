@@ -1,6 +1,6 @@
 import {css, keyframes} from '@emotion/core'
-import {Hand, useAnimation, usePlay} from '@interlude-games/workshop'
-import Animation from '@interlude-games/workshop/dist/Types/Animation'
+import {Hand, useAnimation, usePlay} from '@gamepark/workshop'
+import Animation from '@gamepark/workshop/dist/Types/Animation'
 import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'

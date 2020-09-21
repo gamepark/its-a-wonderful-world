@@ -1,6 +1,6 @@
 import {css, keyframes} from '@emotion/core'
-import {Hand, useAnimation} from '@interlude-games/workshop'
-import Animation from '@interlude-games/workshop/dist/Types/Animation'
+import {Hand, useAnimation} from '@gamepark/workshop'
+import Animation from '@gamepark/workshop/dist/Types/Animation'
 import React, {FunctionComponent} from 'react'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import ChooseDevelopmentCard, {isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'

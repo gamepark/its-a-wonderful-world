@@ -1,8 +1,8 @@
-import {Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo} from '@interlude-games/workshop'
-import CompetitiveGame from '@interlude-games/workshop/dist/Types/CompetitiveGame'
-import WithEliminations from '@interlude-games/workshop/dist/Types/WithEliminations'
-import WithTimeLimit from '@interlude-games/workshop/dist/Types/WithTimeLimit'
-import WithTutorial from '@interlude-games/workshop/dist/Types/WithTutorial'
+import {Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo} from '@gamepark/workshop'
+import CompetitiveGame from '@gamepark/workshop/dist/Types/CompetitiveGame'
+import WithEliminations from '@gamepark/workshop/dist/Types/WithEliminations'
+import WithTimeLimit from '@gamepark/workshop/dist/Types/WithTimeLimit'
+import WithTutorial from '@gamepark/workshop/dist/Types/WithTutorial'
 import Character, {characters, ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
@@ -461,9 +461,10 @@ const ItsAWonderfulWorldRules: GameType = {
         return playerId ? {...move, playerCards: game.players.find(player => player.empire === playerId)!.hand} : move
       case MoveType.ChooseDevelopmentCard:
         if (playerId !== move.playerId) {
-          delete move.card
+          const {card, ...moveView} = move
+          return moveView
         }
-        return move
+        break
       case MoveType.RevealChosenCards:
         return {
           ...move, revealedCards: game.players.reduce<{ [key in EmpireName]?: number }>((revealedCards, player) => {

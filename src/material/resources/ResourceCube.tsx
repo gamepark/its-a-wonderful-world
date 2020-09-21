@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {Draggable} from '@interlude-games/workshop'
+import {Draggable} from '@gamepark/workshop'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'

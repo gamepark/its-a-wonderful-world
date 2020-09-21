@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {useAnimation, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
+import {useAnimation, usePlay, usePlayerId, useUndo} from '@gamepark/workshop'
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'

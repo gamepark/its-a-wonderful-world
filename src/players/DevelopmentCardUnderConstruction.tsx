@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
-import {Draggable, useActions, useAnimations, usePlay, usePlayerId, useUndo} from '@interlude-games/workshop'
-import {DragAroundProps} from '@interlude-games/workshop/dist/Draggable/DragAround'
+import {Draggable, useActions, useAnimations, usePlay, usePlayerId, useUndo} from '@gamepark/workshop'
+import {DragAroundProps} from '@gamepark/workshop/dist/Draggable/DragAround'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import CharacterTokenFromEmpire from '../drag-objects/CharacterTokenFromEmpire'

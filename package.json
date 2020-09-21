@@ -1,24 +1,24 @@
 {
-  "name": "@interlude-games/its-a-wonderful-world",
+  "name": "@gamepark/its-a-wonderful-world",
   "version": "0.4.2",
-  "description": "It's a Wonderful World adaptation for interlude.games",
+  "description": "It's a Wonderful World adaptation for Game Park",
   "main": "dist/Rules.js",
   "files": [
     "dist"
   ],
   "keywords": [
-    "Interlude",
+    "Game Park",
     "Board game",
     "It’s a Wonderful World"
   ],
-  "author": "Romain Fromi <romain.fromi@interlude.games> (https://interlude.games/)",
+  "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
   "license": "ISC",
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
-    "@interlude-games/workshop": "~1.5.1",
+    "@gamepark/workshop": "~2.0.0",
     "comlink-loader": "^2.0.0",
     "emotion-normalize": "^10.1.0",
     "emotion-theming": "^10.0.27",

@@ -1,4 +1,4 @@
-import {createGameStore} from '@interlude-games/workshop'
+import {createGameStore} from '@gamepark/workshop'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'

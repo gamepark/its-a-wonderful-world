@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
-import {useNow} from '@interlude-games/workshop'
-import PlayerTime from '@interlude-games/workshop/dist/Types/PlayerTime'
+import {useNow} from '@gamepark/workshop'
+import PlayerTime from '@gamepark/workshop/dist/Types/PlayerTime'
 import React, {FunctionComponent} from 'react'
 import {humanize} from '../util/TimeUtil'
 

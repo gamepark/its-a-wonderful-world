@@ -1,5 +1,5 @@
 import {css, keyframes} from '@emotion/core'
-import {useAnimation} from '@interlude-games/workshop'
+import {useAnimation} from '@gamepark/workshop'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'

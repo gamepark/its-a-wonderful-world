@@ -9,5 +9,5 @@ export default {
     format: 'cjs'
   },
   plugins: [typescript({useTsconfigDeclarationDir: true}), excludeDependenciesFromBundle()],
-  external: ['@interlude-games/workshop']
+  external: ['@gamepark/workshop']
 }

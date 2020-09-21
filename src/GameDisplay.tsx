@@ -1,5 +1,5 @@
 import {css, keyframes} from '@emotion/core'
-import {Letterbox, useAnimation, useDisplayState, usePlayerId, useSound} from '@interlude-games/workshop'
+import {Letterbox, useAnimation, useDisplayState, usePlayerId, useSound} from '@gamepark/workshop'
 import React, {FunctionComponent, useEffect, useMemo, useRef} from 'react'
 import GlobalActions from './GlobalActions'
 import Board from './material/board/Board'

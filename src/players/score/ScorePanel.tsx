@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {usePlayerId} from '@interlude-games/workshop'
+import {usePlayerId} from '@gamepark/workshop'
 import React, {FunctionComponent, useMemo, useState} from 'react'
 import {getPlayersStartingWith} from '../../GameDisplay'
 import EmpireName from '../../material/empires/EmpireName'

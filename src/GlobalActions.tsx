@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {usePlay} from '@interlude-games/workshop'
+import {usePlay} from '@gamepark/workshop'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Character from './material/characters/Character'

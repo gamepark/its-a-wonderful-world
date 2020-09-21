@@ -3,7 +3,7 @@ import {
   faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faFastBackward, faHome, faMoon, faSun, faUndoAlt, faUserSlash, faVolumeMute, faVolumeUp
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {GameSpeed, useActions, useGame, useNow, useOptions, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@interlude-games/workshop'
+import {GameSpeed, useActions, useGame, useNow, useOptions, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/workshop'
 import {useTheme} from 'emotion-theming'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
