@@ -12,7 +12,7 @@ const ConfirmPopup: FunctionComponent<{ cancel: () => void, confirm: () => void 
   const {t} = useTranslation()
   const theme = useTheme<Theme>()
   return (
-    <div css={[popupOverlayStyle, showPopupOverlayStyle, style]}>
+    <div css={[popupOverlayStyle, showPopupOverlayStyle]}>
       <div css={[popupStyle, popupPosition, css`width: 50%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={cancel}><FontAwesomeIcon icon={faTimes}/></div>
@@ -23,10 +23,6 @@ const ConfirmPopup: FunctionComponent<{ cancel: () => void, confirm: () => void 
     </div>
   )
 }
-
-const style = css`
-  background: rgba(0, 0, 0, 0.5);
-`
 
 const buttonStyle = css`
   margin-right: 1em;

@@ -9,7 +9,7 @@ import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {placeResource} from '../../moves/PlaceResource'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
-import {empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, glow} from '../../util/Styles'
+import {empireCardHeight, empireCardWidth, glow} from '../../util/Styles'
 import Images from '../Images'
 import Resource from '../resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth} from '../resources/ResourceCube'
@@ -49,11 +49,11 @@ export const empireAvatar = {
 
 type Props = {
   player: Player | PlayerView
-  gameOver: boolean
+  gameOver?: boolean
   withResourceDrop?: boolean
 } & React.HTMLAttributes<HTMLDivElement>
 
-const EmpireCard: FunctionComponent<Props> = ({player, gameOver, withResourceDrop = false, ...props}) => {
+const EmpireCard: FunctionComponent<Props> = ({player, gameOver = false, withResourceDrop = false, ...props}) => {
   const {t} = useTranslation()
   const play = usePlay()
   const playerId = usePlayerId<EmpireName>()
@@ -78,15 +78,10 @@ const EmpireCard: FunctionComponent<Props> = ({player, gameOver, withResourceDro
 }
 
 const style = css`
-  position: absolute;
-  left: ${empireCardLeftMargin}%;
-  bottom: ${empireCardBottomMargin}%;
-  height: ${empireCardHeight}%;
-  width: ${empireCardWidth}%;
   transform-origin: bottom left;
   border-radius: 5%;
   transition: transform 0.2s ease-in-out;
-  box-shadow: 0 0 5px black;
+  box-shadow: 0 0 0.5em black;
   background-size: cover;
 `
 

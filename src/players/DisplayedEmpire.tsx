@@ -12,7 +12,9 @@ import Phase from '../types/Phase'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
-import {charactersPilesY, financiersPileX, generalsPileX, tokenHeight, tokenWidth} from '../util/Styles'
+import {
+  charactersPilesY, empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, financiersPileX, generalsPileX, tokenHeight, tokenWidth
+} from '../util/Styles'
 import ConstructedCardsArea from './ConstructedCardsArea'
 import ConstructionArea from './ConstructionArea'
 import DraftArea from './DraftArea'
@@ -33,7 +35,7 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) =
   const gameOver = isOver(game)
   return (
     <>
-      <EmpireCard player={player} gameOver={gameOver} withResourceDrop={isPlayer(player)}/>
+      <EmpireCard css={empirePosition} player={player} gameOver={gameOver} withResourceDrop={isPlayer(player)}/>
       <DraftArea game={game} player={player}/>
       {(game.round > 1 || game.phase !== Phase.Draft) && <ConstructionArea game={game} gameOver={gameOver} player={player}/>}
       {!gameOver && <RecyclingDropArea empire={player.empire}/>}
@@ -59,6 +61,14 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) =
     </>
   )
 }
+
+const empirePosition = css`
+  position: absolute;
+  left: ${empireCardLeftMargin}%;
+  bottom: ${empireCardBottomMargin}%;
+  height: ${empireCardHeight}%;
+  width: ${empireCardWidth}%;
+`
 
 const financiersPilePosition = css`
   position: absolute;

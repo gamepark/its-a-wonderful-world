@@ -1,6 +1,6 @@
 import {css, keyframes} from '@emotion/core'
 import {Letterbox, useAnimation, useDisplayState, usePlayerId, useSound} from '@gamepark/workshop'
-import React, {FunctionComponent, useEffect, useMemo, useRef} from 'react'
+import React, {FunctionComponent, useEffect, useMemo, useRef, useState} from 'react'
 import GlobalActions from './GlobalActions'
 import Board from './material/board/Board'
 import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
@@ -19,7 +19,7 @@ import {isRevealChosenCards, RevealChosenCardsView} from './moves/RevealChosenCa
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
 import ScorePanel from './players/score/ScorePanel'
-import {isActive, isOver} from './Rules'
+import {getPlayer, isActive, isOver} from './Rules'
 import bellSound from './sounds/bell.wav'
 import TutorialPopup from './TutorialPopup'
 import GameView from './types/GameView'
@@ -29,6 +29,7 @@ import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from './util/Styles'
+import WelcomePopup from './WelcomePopup'
 
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
@@ -70,6 +71,8 @@ const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
   }, [players, displayedEmpire, setDisplayedEmpire])
   const playerInactiveUntil = useRef<number | undefined>(Date.now())
   const [bellAlert] = useSound(bellSound)
+  const [welcomePopupClosed, setWelcomePopupClosed] = useState(false)
+  const showWelcomePopup = game.round === 1 && game.phase === Phase.Draft && !welcomePopupClosed
   useEffect(() => {
     const isPlayerActive = playerId ? isActive(game, playerId) : false
     if (isPlayerActive) {
@@ -109,6 +112,7 @@ const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
                                          css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
       {isPlayer(displayedPlayer) && <GlobalActions game={game} player={displayedPlayer} validate={validate}/>}
       {game.tutorial && <TutorialPopup game={game}/>}
+      {showWelcomePopup && playerId && <WelcomePopup player={getPlayer(game, playerId)} close={() => setWelcomePopupClosed(true)}/>}
     </Letterbox>
   )
 }

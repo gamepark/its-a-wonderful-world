@@ -15,7 +15,7 @@ const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () =>
   const theme = useTheme<Theme>()
   const description = failuresDescription[failures[0]] || fallbackDescription(failures[0])
   return (
-    <div css={[popupOverlayStyle, showPopupOverlayStyle, style]} onClick={clearFailures}>
+    <div css={[popupOverlayStyle, showPopupOverlayStyle]} onClick={clearFailures}>
       <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={clearFailures}><FontAwesomeIcon icon={faTimes}/></div>
@@ -53,9 +53,5 @@ const fallbackDescription = (failure: string) => ({
   title: (t: TFunction) => t('Erreur inconnue :'),
   text: () => failure
 })
-
-const style = css`
-  background: rgba(0, 0, 0, 0.5);
-`
 
 export default FailurePopup
