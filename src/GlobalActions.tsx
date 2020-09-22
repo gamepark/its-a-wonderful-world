@@ -6,21 +6,27 @@ import Character from './material/characters/Character'
 import CharacterToken from './material/characters/CharacterToken'
 import Move from './moves/Move'
 import {isReceiveCharacter, receiveCharacter} from './moves/ReceiveCharacter'
-import {isTellYouAreReady, tellYourAreReady} from './moves/TellYouAreReady'
+import {isTellYouAreReady} from './moves/TellYouAreReady'
 import {getLegalMoves} from './Rules'
 import GameView from './types/GameView'
 import Player from './types/Player'
 import Button from './util/Button'
 import {glow, screenRatio} from './util/Styles'
 
-const GlobalActions: FunctionComponent<{ game: GameView, player: Player }> = ({game, player}) => {
+type Props = {
+  game: GameView
+  player: Player
+  validate: () => void
+}
+
+const GlobalActions: FunctionComponent<Props> = ({game, player, validate}) => {
   const {t} = useTranslation()
   const play = usePlay<Move>()
   const legalMoves = getLegalMoves(player, game.phase)
   const canValidate = legalMoves.some(isTellYouAreReady)
   const chooseCharacter = legalMoves.some(isReceiveCharacter)
   return (<>
-    {canValidate && <Button onClick={() => play(tellYourAreReady(player.empire))} css={validateButtonStyle}>{t('Valider')}</Button>}
+    {canValidate && <Button onClick={validate} css={validateButtonStyle}>{t('Valider')}</Button>}
     {chooseCharacter && <>
       <CharacterToken character={Character.Financier} onClick={() => play(receiveCharacter(player.empire, Character.Financier))}
                       css={[characterTokenStyle, financierTokenPosition]}/>,

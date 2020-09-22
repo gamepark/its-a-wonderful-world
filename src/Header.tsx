@@ -18,7 +18,6 @@ import {isCompleteConstruction} from './moves/CompleteConstruction'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import {isReceiveCharacter, receiveCharacter} from './moves/ReceiveCharacter'
-import {tellYourAreReady} from './moves/TellYouAreReady'
 import {countCharacters, getNextProductionStep, getScore, isOver, numberOfRounds} from './Rules'
 import Theme, {LightTheme} from './Theme'
 import GameView from './types/GameView'
@@ -62,9 +61,10 @@ const textStyle = css`
 type Props = {
   game?: GameView
   loading: boolean
+  validate: () => void
 }
 
-const Header: FunctionComponent<Props> = ({game, loading}) => {
+const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const players = usePlayers<EmpireName>()
@@ -82,7 +82,7 @@ const Header: FunctionComponent<Props> = ({game, loading}) => {
   }, [game, gameOver, setScoreSuspense])
   const text = loading ? t('Chargement de la partie...') :
     gameOver && scoreSuspense ? t('Calcul du score... Qui sera le Suprême Leader ?') :
-      getText(t, play, players, game!, empire, animation)
+      getText(t, validate, play, players, game!, empire, animation)
   return (
     <header css={headerStyle(theme)}>
       <div css={bufferArea}/>
@@ -92,7 +92,7 @@ const Header: FunctionComponent<Props> = ({game, loading}) => {
   )
 }
 
-function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
+function getText(t: TFunction, validate: () => void, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   const player = game.players.find(player => player.empire === empire)
   const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getEmpireName(t, empire)
   if (game.tutorial && game.round === 1 && !animation && player && isPlayer(player)) {
@@ -133,7 +133,7 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
       } else if (player && !player.ready) {
         return <Trans values={{resource: Resource.Materials}}
                       defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                      components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
+                      components={[<Button onClick={validate}>Valider</Button>]}/>
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 0) {
@@ -170,13 +170,13 @@ function getText(t: TFunction, play: (move: Move) => void, playersInfo: PlayerIn
         } else if (game.productionStep !== Resource.Exploration) {
           return <Trans values={{resource: getNextProductionStep(game)}}
                         defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                        components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
+                        components={[<Button onClick={validate}>Valider</Button>]}/>
         } else if (game.round < numberOfRounds) {
           return <Trans defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer au tour suivant"
-                        components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
+                        components={[<Button onClick={validate}>Valider</Button>]}/>
         } else {
           return <Trans defaults="Cliquez sur <0>Valider</0> pour passer au calcul des scores"
-                        components={[<Button onClick={() => play(tellYourAreReady(player.empire))}>Valider</Button>]}/>
+                        components={[<Button onClick={validate}>Valider</Button>]}/>
         }
       } else if (isOver(game)) {
         return getEndOfGameText(t, playersInfo, game, player)

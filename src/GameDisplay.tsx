@@ -32,7 +32,12 @@ import {
 
 const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
-const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
+type Props = {
+  game: GameView
+  validate: () => void
+}
+
+const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
   const playerId = usePlayerId<EmpireName>()
   const [displayedEmpire, setDisplayedEmpire] = useDisplayState(playerId || game.players[0].empire)
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
@@ -82,7 +87,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
     <Letterbox css={letterBoxStyle} top={0}>
-      <Board game={game} player={displayedPlayer}/>
+      <Board game={game} player={displayedPlayer} validate={validate}/>
       <RoundTracker round={game.round}/>
       <PhaseIndicator phase={game.phase}/>
       <DrawPile game={game}/>
@@ -102,7 +107,7 @@ const GameDisplay: FunctionComponent<{ game: GameView }> = ({game}) => {
 
       {supremacyBonus && <CharacterToken character={supremacyBonus.character}
                                          css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
-      {isPlayer(displayedPlayer) && <GlobalActions game={game} player={displayedPlayer}/>}
+      {isPlayer(displayedPlayer) && <GlobalActions game={game} player={displayedPlayer} validate={validate}/>}
       {game.tutorial && <TutorialPopup game={game}/>}
     </Letterbox>
   )

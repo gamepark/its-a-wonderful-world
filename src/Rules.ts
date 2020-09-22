@@ -573,9 +573,9 @@ function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
   }
 }
 
-function getPlayer(game: Game, empire: EmpireName): Player
-function getPlayer(game: Game | GameView, empire: EmpireName): Player | PlayerView
-function getPlayer(game: Game | GameView, empire: EmpireName): Player | PlayerView {
+export function getPlayer(game: Game, empire: EmpireName): Player
+export function getPlayer(game: Game | GameView, empire: EmpireName): Player | PlayerView
+export function getPlayer(game: Game | GameView, empire: EmpireName): Player | PlayerView {
   return game.players.find(player => player.empire === empire)!
 }
 

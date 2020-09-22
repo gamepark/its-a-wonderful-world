@@ -8,14 +8,20 @@ import {areasX, boardHeight, boardTop, boardWidth} from '../../util/Styles'
 import {isResource, productionSteps} from '../resources/Resource'
 import ResourceArea from './ResourceArea'
 
-const Board: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
+type Props = {
+  game: GameView
+  player: Player | PlayerView
+  validate: () => void
+}
+
+const Board: FunctionComponent<Props> = ({game, player, validate}) => {
   const reducedSize = game.phase === Phase.Draft && game.round > 1
   const playerResources = [...player.availableResources, ...player.bonuses.filter(isResource)]
   return (
     <div css={[style, reducedSize && reducedSizeStyle]}>
       {productionSteps.map(resource =>
-        <ResourceArea key={resource} game={game} player={player} resource={resource}
-                      quantity={playerResources.filter(r => r === resource).length}/>)}
+        <ResourceArea key={resource} game={game} player={player} resource={resource} quantity={playerResources.filter(r => r === resource).length}
+        validate={validate}/>)}
     </div>
   )
 }

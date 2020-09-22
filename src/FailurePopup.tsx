@@ -7,6 +7,7 @@ import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import Theme, {LightTheme} from './Theme'
+import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
 const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () => {} }> = ({failures, clearFailures}) => {
@@ -22,7 +23,7 @@ const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () =>
         <p>{description.text(t)}</p>
         {failures[0] === Failure.MOVE_FORBIDDEN && <p>
           <Trans defaults="Si le problème persiste, vous pouvez <0>rafraîchir la partie</0>"
-                 components={[<button onClick={() => window.location.reload()}>rafraîchir la partie</button>]}/>
+                 components={[<Button onClick={() => window.location.reload()}>rafraîchir la partie</Button>]}/>
         </p>}
       </div>
     </div>

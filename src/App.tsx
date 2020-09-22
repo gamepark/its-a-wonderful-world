@@ -1,5 +1,5 @@
 import {css, Global} from '@emotion/core'
-import {useDisplayState, useFailures, useGame} from '@gamepark/workshop'
+import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/workshop'
 import normalize from 'emotion-normalize'
 import {ThemeProvider} from 'emotion-theming'
 import fscreen from 'fscreen'
@@ -11,15 +11,21 @@ import React, {FunctionComponent, useEffect, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {initReactI18next, useTranslation} from 'react-i18next'
+import ConfirmPopup from './ConfirmPopup'
 import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
 import Header from './Header'
 import EmpireName from './material/empires/EmpireName'
 import Images from './material/Images'
+import Resource from './material/resources/Resource'
 import Move from './moves/Move'
+import {tellYourAreReady} from './moves/TellYouAreReady'
+import {canBuild, getPlayer, numberOfRounds} from './Rules'
 import Theme, {DarkTheme, LightTheme} from './Theme'
 import translations from './translations.json'
 import GameView from './types/GameView'
+import Phase from './types/Phase'
+import Player from './types/Player'
 import Button from './util/Button'
 import ImagesLoader from './util/ImageLoader'
 import LoadingScreen from './util/LoadingScreen'
@@ -49,6 +55,8 @@ const App: FunctionComponent = () => {
   const [failures, clearFailures] = useFailures<Move>()
   const [displayedEmpire] = useDisplayState<EmpireName>()
   const [imagesLoading, setImagesLoading] = useState(true)
+  const play = usePlay<Move>()
+  const playerId = usePlayerId<EmpireName>()
   const theme = {
     color: themeColor,
     switchThemeColor: () => {
@@ -62,19 +70,36 @@ const App: FunctionComponent = () => {
     setTimeout(() => setJustDisplayed(false), 2000)
   }, [])
   const loading = !game || imagesLoading || isJustDisplayed
+  const [confirmPopup, setConfirmPopup] = useState(false)
+  const validate = () => {
+    if (game && playerId) {
+      const willEndGame = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration
+      const player = getPlayer(game!, playerId) as Player
+      if (willEndGame && player.constructionArea.some(construction => canBuild(player, construction.card))) {
+        setConfirmPopup(true)
+      } else {
+        play(tellYourAreReady(playerId))
+      }
+    }
+  }
+  const confirm = () => {
+    setConfirmPopup(false)
+    play(tellYourAreReady(playerId!))
+  }
   return (
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
         <LoadingScreen display={loading}/>
-        {!loading && <GameDisplay game={game!}/>}
+        {!loading && <GameDisplay game={game!} validate={validate}/>}
         <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
           {t('La résolution idéale pour jouer est en mode paysage, en 16/9.')}
           <br/>
           <Button onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>{t('Passer en plein écran')}</Button>
         </p>
-        <Header game={game} loading={loading}/>
+        <Header game={game} loading={loading} validate={validate}/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
+        {confirmPopup && <ConfirmPopup cancel={() => setConfirmPopup(false)} confirm={confirm}/>}
       </ThemeProvider>
       <ImagesLoader images={Object.values(Images)} onImagesLoad={() => setImagesLoading(false)}/>
     </DndProvider>

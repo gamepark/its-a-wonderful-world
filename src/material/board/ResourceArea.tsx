@@ -1,14 +1,12 @@
 import {css, keyframes} from '@emotion/core'
-import {useAnimations, usePlay} from '@gamepark/workshop'
+import {useAnimations} from '@gamepark/workshop'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
-import Move from '../../moves/Move'
 import MoveType from '../../moves/MoveType'
 import PlaceResource, {isPlaceResourceOnConstruction} from '../../moves/PlaceResource'
-import {tellYourAreReady} from '../../moves/TellYouAreReady'
 import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
 import {getProduction} from '../../Rules'
 import Theme, {LightTheme} from '../../Theme'
@@ -28,9 +26,15 @@ import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from 
 
 const {Materials, Energy, Science, Gold, Exploration, Krystallium} = Resource
 
-type Props = { game: GameView, player: Player | PlayerView, resource: Resource, quantity: number }
+type Props = {
+  game: GameView
+  player: Player | PlayerView
+  resource: Resource
+  quantity: number
+  validate: () => void
+}
 
-const ResourceArea: FunctionComponent<Props> = ({game, player, resource, quantity}) => {
+const ResourceArea: FunctionComponent<Props> = ({game, player, resource, quantity, validate}) => {
   const {t} = useTranslation()
   const [{dragging}, ref, preview] = useDrag({
     item: resourceFromBoard(resource),
@@ -71,15 +75,13 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, quantit
   }
   const playerProduction = getProduction(player, resource)
   const hasMostProduction = !game.players.some(p => p.empire !== player.empire && getProduction(p, resource) >= playerProduction)
-  const play = usePlay<Move>()
   const canPlayerValidate = isPlayer(player) && game.phase === Phase.Production && player.availableResources.length === 0 && !player.ready && game.productionStep === resource && player.bonuses.length === 0
   return (
     <>
       <div ref={ref}
            css={[circleStyle, circleStylePosition(resource), game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle, isPlayer(player) && quantity > 0 && canDragStyle]}/>
       <button disabled={!canPlayerValidate} css={(theme: Theme) => [arrowStyle, arrowTheme(theme), arrowPosition(resource)]}
-              onClick={() => play(tellYourAreReady(player.empire))}
-              title={t('Valider')}/>
+              onClick={validate} title={t('Valider')}/>
       <img src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]} alt={resourceCharacterText[resource](t)}
            title={resourceCharacterText[resource](t)} draggable="false"
            css={[characterStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
