@@ -209,17 +209,53 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Bienvenue dans le tutoriel de It’s a Wonderful World'),
-      text: (t: TFunction) => t('Vous incarnez un Empire en expansion face à deux Empires concurrents.'),
+      text: (t: TFunction) => t('Dans It’s a Wonderful World, vous incarnez un Empire en expansion. À vous de vous développer plus vite et mieux que vos concurrents !'),
       boxTop: 50,
       boxLeft: 50,
-      boxWidth: 65
+      boxWidth: 60
+    },
+    {
+      title: (t: TFunction) => t('Votre Empire'),
+      text: (t: TFunction) => t('Voici votre Empire : les États du Noram.'),
+      boxTop: 26,
+      boxLeft: 40.5,
+      boxWidth: 60,
+      arrow: {
+        angle: 90,
+        top: 17,
+        left: 66
+      }
+    },
+    {
+      title: (t: TFunction) => t('Vos adversaires'),
+      text: (t: TFunction) => t('Dans ce tutoriel, vous jouez contre 2 adversaires contrôlés par la machine : la République d’Europa et la Fédération d’Asie.'),
+      boxTop: 35,
+      boxLeft: 40.5,
+      boxWidth: 60,
+      arrow: {
+        angle: 90,
+        top: 27,
+        left: 66
+      }
     },
     {
       title: (t: TFunction) => t('But du jeu'),
-      text: (t: TFunction) => t('It’s a Wonderful World est un jeu de construction et de draft qui se joue en 4 tours. À la fin de la partie, le joueur ayant le plus de points de victoire est déclaré vainqueur.'),
+      text: (t: TFunction) => t('Le jeu consiste à choisir et à construire des cartes Développement. Certaines de ces cartes rapportent des points de victoire. Le joueur ayant le plus de points de victoire à la fin de la partie l’emporte !'),
+      boxTop: 61,
+      boxLeft: 44,
+      boxWidth: 60,
+      arrow: {
+        angle: 180,
+        top: 61,
+        left: 36
+      }
+    },
+    {
+      title: (t: TFunction) => t('Déroulement de la partie'),
+      text: (t: TFunction) => t('Une partie se joue en 4 tours. Nous allons vous guider tout au long du premier tour pour vous apprendre à jouer, puis vous serez libre de vos choix !'),
       boxTop: 30,
-      boxLeft: 45,
-      boxWidth: 80,
+      boxLeft: 35,
+      boxWidth: 60,
       arrow: {
         angle: 0,
         top: 17,
@@ -227,11 +263,11 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Comment jouer'),
+      title: (t: TFunction) => t('Déroulement d’un tour'),
       text: (t: TFunction) => t('Un tour est composé de 3 phases que les joueurs jouent simultanément : le Draft, la Planification et la Production.'),
       boxTop: 30,
-      boxLeft: 45,
-      boxWidth: 70,
+      boxLeft: 43,
+      boxWidth: 60,
       arrow: {
         angle: 0,
         top: 17,
@@ -242,8 +278,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       title: (t: TFunction) => t('Phase de Draft'),
       text: (t: TFunction) => t('Chaque joueur reçoit 7 cartes. Vous devez choisir 1 carte et passer les autres à la République d’Europa.'),
       boxTop: 61,
-      boxLeft: 50,
-      boxWidth: 80,
+      boxLeft: 44,
+      boxWidth: 60,
       arrow: {
         angle: -180,
         top: 61,
