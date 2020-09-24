@@ -17,7 +17,7 @@ const WelcomePopup: FunctionComponent<{ player: Player | PlayerView, close: () =
   const theme = useTheme<Theme>()
   const playerInfo = usePlayer(player.empire)
   return (
-    <div css={[popupOverlayStyle, showPopupOverlayStyle]} onClick={close}>
+    <div css={[popupOverlayStyle, showPopupOverlayStyle, style]} onClick={close}>
       <div css={[popupStyle, popupPosition, css`width: 60%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={close}><FontAwesomeIcon icon={faTimes}/></div>
@@ -29,6 +29,10 @@ const WelcomePopup: FunctionComponent<{ player: Player | PlayerView, close: () =
     </div>
   )
 }
+
+const style = css`
+  background-color: transparent;
+`
 
 const empireCardStyle = css`
   display: inline-block;
