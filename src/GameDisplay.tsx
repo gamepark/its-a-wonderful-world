@@ -72,7 +72,7 @@ const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
   const playerInactiveUntil = useRef<number | undefined>(Date.now())
   const [bellAlert] = useSound(bellSound)
   const [welcomePopupClosed, setWelcomePopupClosed] = useState(false)
-  const showWelcomePopup = game.round === 1 && game.phase === Phase.Draft && !welcomePopupClosed
+  const showWelcomePopup = game.round === 1 && game.phase === Phase.Draft && !game.tutorial && !welcomePopupClosed
   useEffect(() => {
     const isPlayerActive = playerId ? isActive(game, playerId) : false
     if (isPlayerActive) {
