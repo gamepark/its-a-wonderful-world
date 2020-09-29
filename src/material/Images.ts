@@ -1,3 +1,4 @@
+import {isSafari} from 'react-device-detect'
 import boardCircleBlack from './board/board-circle-black.png'
 import boardCircleBlue from './board/board-circle-blue.png'
 import boardCircleGreen from './board/board-circle-green.png'
@@ -5,16 +6,16 @@ import boardCircleGrey from './board/board-circle-grey.png'
 import boardCircleYellow from './board/board-circle-yellow.png'
 import roundTrackerRecto from './board/round-tracker-recto.png'
 import roundTrackerVerso from './board/round-tracker-verso.png'
+import financierGeneralOff from './characters/financier-general-off.png'
+import financierGeneralOn from './characters/financier-general-on.png'
+import financierOff from './characters/financier-off.png'
+import financierOn from './characters/financier-on.png'
 import financierShadowed from './characters/financier-shadowed.png'
 import financier from './characters/financier.png'
+import generalOff from './characters/general-off.png'
+import generalOn from './characters/general-on.png'
 import generalShadowed from './characters/general-shadowed.png'
 import general from './characters/general.png'
-import financierOn from './characters/financier-on.png'
-import financierOff from './characters/financier-off.png'
-import generalOn from './characters/general-on.png'
-import generalOff from './characters/general-off.png'
-import financierGeneralOn from './characters/financier-general-on.png'
-import financierGeneralOff from './characters/financier-general-off.png'
 import developmentBack from './developments/development-back.jpg'
 import discoveryIcon from './developments/discovery-icon.jpg'
 import alexandersTomb from './developments/discovery/alexanders-tomb.jpg'
@@ -157,7 +158,7 @@ import scoreIcon from './score-icon.png'
 const Images = {
   boardCircleGrey, boardCircleBlack, boardCircleGreen, boardCircleYellow, boardCircleBlue, roundTrackerRecto, roundTrackerVerso,
   financier, financierShadowed, general, generalShadowed,
-  financierOn,financierOff,generalOn,generalOff,financierGeneralOn,financierGeneralOff,
+  financierOn, financierOff, generalOn, generalOff, financierGeneralOn, financierGeneralOff,
   developmentBack, discoveryIcon, projectIcon, researchIcon, structureIcon, vehicleIcon,
   alexandersTomb, ancientAstronauts, arkOfTheCovenant, atlantis, bermudaTriangle, blackBeardsTreasure, centerOfTheEarth, citiesOfGold, cityOfAgartha,
   fountainOfYouth, gardensOfTheHesperides, islandOfAvalon, kingSolomonsMines, lostContinentOfMu, parallelDimension, roswell, treasureOfTheTemplars,
@@ -178,6 +179,15 @@ const Images = {
   circleMetal, titleBlack, titleBlue, titleGreen, titleGrey, titleOrange, titleWhite, titleYellow,
   energy, energyCube, exploration, explorationCube, gold, goldCube, krystallium, krystalliumCube, materials, materialsCube, science, scienceCube,
   coverArtwork, scoreBackground, scoreIcon
+}
+
+if (!isSafari) {
+  for (const image in Images) {
+    const match = Images[image].match(/(.*)\.(jpg|png)$/)
+    if (match) {
+      Images[image] = match[1] + '.webp'
+    }
+  }
 }
 
 export default Images

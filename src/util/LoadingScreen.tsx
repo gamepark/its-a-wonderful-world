@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'
 import IWWBox from '../material/IWW_BOX_3D.png'
 import Theme from '../Theme'
+import Picture from './Picture'
 import {backgroundColor, textColor} from './Styles'
 
 const LoadingScreen: FunctionComponent<{ display: boolean }> = ({display}) => {
@@ -14,7 +15,7 @@ const LoadingScreen: FunctionComponent<{ display: boolean }> = ({display}) => {
   const theme = useTheme<Theme>()
   return (
     <div css={[loadingScreenStyle, textColor(theme), backgroundColor(theme), !display && css`opacity: 0`]}>
-      <img css={gameBox} src={IWWBox} alt={t('It’s a Wonderful World')}/>
+      <Picture css={gameBox} src={IWWBox} alt={t('It’s a Wonderful World')}/>
       <h2 css={gameTitle}>{t('It’s a Wonderful World')}</h2>
       <p css={gamePeople}>
         <FontAwesomeIcon css={iconStyle} icon={faLightbulb}/>{t('Auteur : Frédéric Guérard')}

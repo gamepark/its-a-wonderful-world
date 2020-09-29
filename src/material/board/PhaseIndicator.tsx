@@ -4,8 +4,6 @@ import {useTranslation} from 'react-i18next'
 import Phase from '../../types/Phase'
 import {headerHeight} from '../../util/Styles'
 import Images from '../Images'
-import BlueBackgroundImage from '../menus/title-blue.png'
-import GreyBackgroundImage from '../menus/title-grey.png'
 import {roundTrackerX} from './RoundTracker'
 
 const PhaseIndicator: FunctionComponent<{ phase: Phase }> = ({phase}) => {
@@ -21,7 +19,7 @@ const PhaseIndicator: FunctionComponent<{ phase: Phase }> = ({phase}) => {
 
 const phaseStyle = css`
   position: absolute;
-  background-image: url(${GreyBackgroundImage});
+  background-image: url(${Images.titleGrey});
   background-size: cover;
   padding: 0.4% 0 0.6% 0.5%;
   width: 8.2%;
@@ -78,7 +76,7 @@ const productionStyle = css`
 
 const currentPhase = css`
   z-index: 0;
-  background-image: url(${BlueBackgroundImage});
+  background-image: url(${Images.titleBlue});
   &:after {
     color: rgb(0, 107, 165);
   }

@@ -20,7 +20,6 @@ import {
 } from '../../util/Styles'
 import {resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
 import Images from '../Images'
-import boardArrowWhite from '../menus/arrow-white.png'
 import Resource, {resources} from '../resources/Resource'
 import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
 
@@ -258,7 +257,7 @@ const arrowStyle = css`
   vertical-align: middle;
   filter: drop-shadow(0.1em 0.1em 0.5em black);
   transition: opacity 0.5s ease-in-out;
-  background-image: url(${boardArrowWhite});
+  background-image: url(${Images.arrowWhite});
   background-size: cover;
   background-repeat: no-repeat;
   background-color: transparent;
