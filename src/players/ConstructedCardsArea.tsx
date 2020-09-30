@@ -3,12 +3,13 @@ import React, {FunctionComponent, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
+import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
 import DragObjectType from '../drag-objects/DragObjectType'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import DevelopmentCardsCatalogs from '../material/developments/DevelopmentCardsCatalog'
 import {developmentCards} from '../material/developments/Developments'
 import {completeConstruction} from '../moves/CompleteConstruction'
-import {canBuild} from '../Rules'
+import {canBuild, canPay, getCost} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import {isPlayer} from '../types/typeguards'
@@ -20,16 +21,20 @@ import {
 const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
   const [focusedCardIndex, setFocusedCardIndex] = useState<number>()
+  const canDrop = (item: DevelopmentFromConstructionArea | DevelopmentFromDraftArea) =>
+    isPlayer(player) && (item.type === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA ? canBuild(player, item.card) : canPay(player, getCost(item.card)))
   const [{dragging, isValidTarget, isOver}, ref] = useDrop({
-    accept: DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
-    canDrop: (item: DevelopmentFromConstructionArea) => isPlayer(player) && canBuild(player, item.card),
+    accept: [DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA, DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA],
+    canDrop,
     collect: (monitor) => ({
-      dragging: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
-      isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA && isPlayer(player) && canBuild(player, monitor.getItem().card),
+      dragging: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA || monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
+      isValidTarget: (monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA || monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA)
+        && canDrop(monitor.getItem()),
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromConstructionArea) => completeConstruction(player.empire, item.card)
+    drop: (item: DevelopmentFromConstructionArea | DevelopmentFromDraftArea) => completeConstruction(player.empire, item.card)
   })
+
   return (
     <>
       {typeof focusedCardIndex === 'number' &&
@@ -42,7 +47,7 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
       )}
       {dragging &&
       <div ref={ref} css={[buildDropArea, isValidTarget ? validDropAreaColor(isOver) : invalidDropAreaColor]}>
-        <span css={[dropAreaText, isValidTarget ? validDropTextColor : invalidDropTextColor]}>
+        <span css={dropAreaText}>
           {isValidTarget ? t('Construire') : t('Construction impossible')}
         </span>
       </div>
@@ -86,14 +91,7 @@ const dropAreaText = css`
   padding: 4em 0.4em;
   text-align: center;
   font-size: 2.5em;
-`
-
-const validDropTextColor = css`
-  color: darkgreen;
-`
-
-const invalidDropTextColor = css`
-  color: red;
+  color: white;
 `
 
 export default ConstructedCardsArea

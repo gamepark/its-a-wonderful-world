@@ -633,6 +633,12 @@ function costSpaces(development: Development) {
   return Object.values(development.constructionCost).reduce((sum, cost) => sum! + cost!)
 }
 
+export function getCost(card: number): (Resource | Character)[] {
+  const development = developmentCards[card]
+  return Array.of<Resource | Character>(...resources, ...characters)
+    .flatMap(item => Array(development.constructionCost[item] || 0).fill(item))
+}
+
 export function getRemainingCost(construction: Construction): { item: Resource | Character, space: number }[] {
   const development = developmentCards[construction.card]
   return Array.of<Resource | Character>(...resources, ...characters)
@@ -722,15 +728,19 @@ export function canBuild(player: Player, card: number): boolean {
   if (!construction) {
     return false
   }
-  const remainingCost = getRemainingCost(construction)
+  return canPay(player, getRemainingCost(construction).map(cost => cost.item))
+
+}
+
+export function canPay(player: Player, cost: (Resource | Character)[]) {
   for (const character of characters) {
-    if (player.characters[character] < remainingCost.filter(cost => cost.item === character).length) {
+    if (player.characters[character] < cost.filter(item => item === character).length) {
       return false
     }
   }
   let krystalliumLeft = player.empireCardResources.filter(resource => resource === Resource.Krystallium).length
   for (const resource of resources) {
-    const resourceCost = remainingCost.filter(cost => cost.item === resource).length
+    const resourceCost = cost.filter(item => item === resource).length
     const resources = player.availableResources.filter(r => r === resource).length
     if (resources < resourceCost) {
       if (krystalliumLeft + resources < resourceCost) {
@@ -744,7 +754,8 @@ export function canBuild(player: Player, card: number): boolean {
 
 export function getMovesToBuild(player: Player, card: number): (PlaceResourceOnConstruction | PlaceCharacter)[] {
   const moves: (PlaceResourceOnConstruction | PlaceCharacter)[] = []
-  const construction = player.constructionArea.find(construction => construction.card === card)!
+  const construction = player.constructionArea.find(construction => construction.card === card)
+    || {card, costSpaces: Array(costSpaces(developmentCards[card])).fill(null)}
   const remainingCost = getRemainingCost(construction)
   for (const resource of resources) {
     const resourceCosts = remainingCost.filter(cost => cost.item === resource)

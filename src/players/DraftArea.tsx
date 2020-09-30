@@ -16,9 +16,10 @@ import Resource from '../material/resources/Resource'
 import ChooseDevelopmentCard, {
   chooseDevelopmentCard, ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
 } from '../moves/ChooseDevelopmentCard'
+import CompleteConstruction, {isCompleteConstruction} from '../moves/CompleteConstruction'
 import Recycle, {isRecycle, recycle} from '../moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstruction} from '../moves/SlateForConstruction'
-import ItsAWonderfulWorldRules from '../Rules'
+import ItsAWonderfulWorldRules, {getMovesToBuild} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
@@ -104,6 +105,14 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     setBuildingOrRecyclingAll(true)
     player.draftArea.forEach(card => play(recycle(player.empire, card), true))
   }
+  const onDrop = (move: SlateForConstruction | Recycle | CompleteConstruction) => {
+    if (isCompleteConstruction(move)) {
+      play(slateForConstruction(move.playerId, move.card))
+      getMovesToBuild(player as Player, move.card).forEach(move => play(move))
+    } else {
+      play(move)
+    }
+  }
 
   return (
     <>
@@ -130,7 +139,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         }</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={card} item={developmentFromDraftArea(card)} onDrop={play} postTransform={getTransform(card, index)}
+        <Draggable key={card} item={developmentFromDraftArea(card)} onDrop={onDrop} postTransform={getTransform(card, index)}
                    css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card),
                      undoingSlateForConstruction?.card === card && css`display: none`]}
                    disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning}
