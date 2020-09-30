@@ -90,6 +90,11 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
     }
   }
 
+  function placeAvailableCubes(construction: Construction) {
+    placeAvailableCubesMoves(player, construction).forEach(move => play(move))
+    setFocusedCard(undefined)
+  }
+
   return <>
     {construction && <>
       <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
@@ -114,7 +119,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
       })}
       {maxSpendableResources.length > 1 &&
       <button css={[itemButtonStyle, placeItemButton, itemButtonPosition(getTotalConstructionCost(construction.card) + 0.5)]}
-              onClick={() => placeAvailableCubesMoves(player, construction).forEach(move => play(move))}>
+              onClick={() => placeAvailableCubes(construction)}>
         <span css={getPlaceTextStyle}>{t('Placer')} </span>
         {maxSpendableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={buttonItemStyle}/>)}
       </button>}
