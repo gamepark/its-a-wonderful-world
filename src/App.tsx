@@ -27,7 +27,7 @@ import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
 import Button from './util/Button'
-import ImagesLoader from './util/ImageLoader'
+import ImagesLoader from './util/ImagesLoader'
 import LoadingScreen from './util/LoadingScreen'
 import {backgroundColor, empireBackground, textColor} from './util/Styles'
 
@@ -74,7 +74,7 @@ const App: FunctionComponent = () => {
   const validate = () => {
     if (game && playerId) {
       const willEndGame = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration
-      const player = getPlayer(game!, playerId) as Player
+      const player = getPlayer(game, playerId) as Player
       if (willEndGame && player.constructionArea.some(construction => canBuild(player, construction.card))) {
         setConfirmPopup(true)
       } else {

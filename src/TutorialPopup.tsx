@@ -73,7 +73,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
     <>
       <div css={[popupOverlayStyle, displayPopup ? showPopupOverlayStyle : hidePopupOverlayStyle(85, 90), style]}
            onClick={() => setTutorialDisplay(false)}>
-        <div css={[popupStyle, theme.color === LightTheme ? popupLightStyle : popupDarkStyle, displayPopup ? popupPosition(currentMessage!) : hidePopupStyle]}
+        <div css={[popupStyle, theme.color === LightTheme ? popupLightStyle : popupDarkStyle, displayPopup ? popupPosition(currentMessage) : hidePopupStyle]}
              onClick={event => event.stopPropagation()}>
           <div css={closePopupStyle} onClick={() => setTutorialDisplay(false)}><FontAwesomeIcon icon={faTimes}/></div>
           {currentMessage && <h2>{currentMessage.title(t)}</h2>}

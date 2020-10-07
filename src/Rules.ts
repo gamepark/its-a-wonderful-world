@@ -97,7 +97,7 @@ const ItsAWonderfulWorldRules: GameType = {
           } else if (anyPlayer && anyPlayer.cardsToPass) {
             return passCards()
           } else if (anyPlayer && anyPlayer.draftArea.length === numberOfCardsToDraft) {
-            if (anyPlayer && anyPlayer.hand.length) {
+            if (anyPlayer.hand.length) {
               return discardLeftoverCards()
             } else {
               return startPhase(Phase.Planning)
@@ -208,7 +208,7 @@ const ItsAWonderfulWorldRules: GameType = {
         } else if (!isGameView(game)) {
           game.players.forEach(player => {
             if (player.chosenCard !== undefined) {
-              player.draftArea.push(player.chosenCard!)
+              player.draftArea.push(player.chosenCard)
               delete player.chosenCard
               if (player.draftArea.length < numberOfCardsToDraft) {
                 player.cardsToPass = player.hand
@@ -226,8 +226,8 @@ const ItsAWonderfulWorldRules: GameType = {
           const players = game.players.filter(player => player.cardsToPass)
           const draftDirection = game.round % 2 ? -1 : 1
           for (let i = 0; i < players.length; i++) {
-            let previousPlayer = players![(i + players.length + draftDirection) % players.length]
-            players![i].hand = previousPlayer.cardsToPass!
+            let previousPlayer = players[(i + players.length + draftDirection) % players.length]
+            players[i].hand = previousPlayer.cardsToPass!
           }
           players.forEach(player => delete player.cardsToPass)
         }
@@ -777,7 +777,7 @@ export function getMovesToBuild(player: Player, card: number): (PlaceResourceOnC
   return moves
 }
 
-export function isPlaceItemOnCard(move: Move, card?: Number): move is (PlaceResourceOnConstruction | PlaceCharacter) {
+export function isPlaceItemOnCard(move: Move, card?: number): move is (PlaceResourceOnConstruction | PlaceCharacter) {
   if (card !== undefined) {
     return isPlaceItemOnCard(move) && move.card === card
   } else {

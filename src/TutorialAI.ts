@@ -211,7 +211,6 @@ export default class TutorialAI {
       const buildRate = this.buildRate(developmentCards[card], player, game.round)
       const recycleRate = this.recycleRate(developmentCards[card], player, game.round)
       if (buildRate === 0) {
-        confidence = Infinity
         highestConfidenceOptions = [recycleOption, buildOption]
         break
       } else if (buildRate < recycleRate && recycleRate / buildRate > confidence) {

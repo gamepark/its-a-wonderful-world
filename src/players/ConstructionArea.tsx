@@ -126,7 +126,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
       {isPlayer(player) && !gameOver && <>
         {canBuild(player, construction.card) &&
         <button
-          css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources.length > 1 ? 2 : 2))]}
+          css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources.length > 1 ? 2 : 1))]}
           onClick={() => build(construction)}>{t('Construire')}</button>
         }
         <button css={[textButton, textButtonRight, recyclingButton(developmentCards[construction.card].recyclingBonus)]}
