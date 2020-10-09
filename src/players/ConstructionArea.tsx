@@ -11,6 +11,7 @@ import Construction from '../material/developments/Construction'
 import constructionCost from '../material/developments/ConstructionCost'
 import {developmentCards} from '../material/developments/Developments'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
+import FocusedDevelopmentOptions from '../material/developments/FocusedDevelopmentOptions'
 import EmpireName from '../material/empires/EmpireName'
 import Images from '../material/Images'
 import Resource, {isResource} from '../material/resources/Resource'
@@ -134,6 +135,7 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
           {t('Recycler')}
         </button>
       </>}
+      <FocusedDevelopmentOptions development={developmentCards[construction.card]} onClose={() => setFocusedCard(undefined)}/>
     </>}
     <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
       {!player.constructionArea.length && <span css={constructionAreaText}>{t('Zone de construction')}</span>}

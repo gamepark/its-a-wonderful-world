@@ -10,6 +10,7 @@ import DragObjectType from '../drag-objects/DragObjectType'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
+import FocusedDevelopmentOptions from '../material/developments/FocusedDevelopmentOptions'
 import EmpireName from '../material/empires/EmpireName'
 import Images from '../material/Images'
 import Resource from '../material/resources/Resource'
@@ -128,6 +129,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
                   onClick={() => play(recycle(player.empire, focusedCard))}>
             {t('Recycler')}
           </button>
+          <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>
         </>
         }
       </>
@@ -142,7 +144,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         <Draggable key={card} item={developmentFromDraftArea(card)} onDrop={onDrop} postTransform={getTransform(card, index)}
                    css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card),
                      undoingSlateForConstruction?.card === card && css`display: none`]}
-                   disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning}
+                   disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning || focusedCard !== undefined}
                    animation={{properties: ['transform', 'z-index'], seconds: animation?.duration ?? 0.2}}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>

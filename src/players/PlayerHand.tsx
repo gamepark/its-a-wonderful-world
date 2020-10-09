@@ -6,6 +6,7 @@ import {useTranslation} from 'react-i18next'
 import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {developmentCards} from '../material/developments/Developments'
+import FocusedDevelopmentOptions from '../material/developments/FocusedDevelopmentOptions'
 import Images from '../material/Images'
 import ChooseDevelopmentCard, {chooseDevelopmentCard, isChooseDevelopmentCard} from '../moves/ChooseDevelopmentCard'
 import MoveType from '../moves/MoveType'
@@ -104,6 +105,7 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
         <button css={[textButton, textButtonLeft, chooseCardButton]} onClick={() => play(chooseDevelopmentCard(player.empire, focusedCard))}>
           {t('Choisir')}
         </button>}
+        <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>
       </>
       }
       <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players > 2 ? 5 : 10} sizeRatio={cardRatio} getItemProps={getItemProps}>
