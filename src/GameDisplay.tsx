@@ -1,5 +1,5 @@
 import {css, keyframes} from '@emotion/core'
-import {Letterbox, useAnimation, useDisplayState, usePlayerId, useSound} from '@gamepark/workshop'
+import {Letterbox, useAnimation, useDisplayState, usePlayerId} from '@gamepark/workshop'
 import React, {FunctionComponent, useEffect, useMemo, useRef, useState} from 'react'
 import GlobalActions from './GlobalActions'
 import Board from './material/board/Board'
@@ -19,8 +19,7 @@ import {isRevealChosenCards, RevealChosenCardsView} from './moves/RevealChosenCa
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
 import ScorePanel from './players/score/ScorePanel'
-import {getPlayer, isActive, isOver} from './Rules'
-import bellSound from './sounds/bell.wav'
+import {getPlayer, isOver} from './Rules'
 import TutorialPopup from './TutorialPopup'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
@@ -29,9 +28,8 @@ import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from './util/Styles'
+import {useBellAlert} from './util/useBellAlert'
 import WelcomePopup from './WelcomePopup'
-
-const SOUND_ALERT_INACTIVITY_THRESHOLD = 20000 // ms
 
 type Props = {
   game: GameView
@@ -69,23 +67,9 @@ const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
     window.document.addEventListener('keydown', onkeydown)
     return () => window.document.removeEventListener('keydown', onkeydown)
   }, [players, displayedEmpire, setDisplayedEmpire])
-  const playerInactiveUntil = useRef<number | undefined>(Date.now())
-  const [bellAlert] = useSound(bellSound)
+  useBellAlert(game)
   const [welcomePopupClosed, setWelcomePopupClosed] = useState(false)
   const showWelcomePopup = game.round === 1 && game.phase === Phase.Draft && !game.tutorial && !welcomePopupClosed
-  useEffect(() => {
-    const isPlayerActive = playerId ? isActive(game, playerId) : false
-    if (isPlayerActive) {
-      if (playerInactiveUntil.current) {
-        if (Date.now() - playerInactiveUntil.current > SOUND_ALERT_INACTIVITY_THRESHOLD) {
-          bellAlert.play()
-        }
-        playerInactiveUntil.current = undefined
-      }
-    } else if (!playerInactiveUntil.current) {
-      playerInactiveUntil.current = Date.now()
-    }
-  }, [game, playerId, bellAlert])
   const revealedCards = revealingCards && sortByPanel(Object.entries(revealingCards.revealedCards) as [EmpireName, number][])
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
