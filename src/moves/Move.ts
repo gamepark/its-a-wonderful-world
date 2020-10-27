@@ -20,6 +20,4 @@ type Move = DealDevelopmentCards | ChooseDevelopmentCard | RevealChosenCards | P
 
 export default Move
 
-export type MoveView = DealDevelopmentCards | DealDevelopmentCardsView | ChooseDevelopmentCardView | RevealChosenCardsView | PassCards | PassCardsView
-  | DiscardLeftoverCardsView | StartPhase | SlateForConstruction | Recycle | PlaceResource | CompleteConstruction | TransformIntoKrystallium | TellYouAreReady
-  | Produce | ReceiveCharacter | PlaceCharacter | Concede
+export type MoveView = Move | DealDevelopmentCardsView | ChooseDevelopmentCardView | RevealChosenCardsView | PassCardsView | DiscardLeftoverCardsView
