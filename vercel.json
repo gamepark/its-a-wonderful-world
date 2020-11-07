@@ -9,5 +9,13 @@
         }
       ]
     }
-  ]
+  ],
+  "build": {
+    "env": {
+      "REACT_APP_GRAPHQL_ENDPOINT": "@graphql-endpoint",
+      "REACT_APP_PUSHER_ENDPOINT": "@pusher-endpoint",
+      "REACT_APP_PUSHER_KEY": "@pusher-key",
+      "REACT_APP_PUSHER_CLUSTER": "@pusher-cluster"
+    }
+  }
 }
