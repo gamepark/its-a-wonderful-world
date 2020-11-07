@@ -2,7 +2,7 @@ import {useOptions, usePlayerId, usePlayers, useSound} from '@gamepark/workshop'
 import {useEffect, useState} from 'react'
 import EmpireName from '../material/empires/EmpireName'
 import {isActive} from '../Rules'
-import bellSound from '../sounds/bell.wav'
+import bellSound from '../sounds/bell.mp3'
 import GameView from '../types/GameView'
 
 //const REMINDER_FREQUENCY = 30000
