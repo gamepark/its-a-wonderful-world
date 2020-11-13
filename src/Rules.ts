@@ -24,7 +24,7 @@ import PlaceCharacter, {isPlaceCharacter, placeCharacter} from './moves/PlaceCha
 import PlaceResource, {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from './moves/PlaceResource'
 import {produce} from './moves/Produce'
 import {receiveCharacter} from './moves/ReceiveCharacter'
-import {recycle} from './moves/Recycle'
+import {isRecycle, recycle} from './moves/Recycle'
 import {isRevealChosenCardsView, revealChosenCards} from './moves/RevealChosenCards'
 import {slateForConstruction} from './moves/SlateForConstruction'
 import {startPhase} from './moves/StartPhase'
@@ -415,10 +415,11 @@ const ItsAWonderfulWorldRules: GameType = {
         if (isPlaceResourceOnConstruction(move)) {
           if (actionCompletedCardConstruction(action, move.card)) {
             return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move)))
-          } else if (move.resource === Resource.Krystallium) {
-            return !consecutiveActions.some(action => actionCompletedCardConstruction(action, move.card))
           } else {
-            return !consecutiveActions.some(action => action.playerId === playerId && (actionCompletedCardConstruction(action, move.card) || isTellYouAreReady(action.move)))
+            return !consecutiveActions.some(action => action.playerId === playerId && (
+              actionCompletedCardConstruction(action, move.card) || (isRecycle(action.move) && action.move.card === move.card)
+              || isTellYouAreReady(action.move) && move.resource !== Resource.Krystallium
+            ))
           }
         } else {
           return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move)
