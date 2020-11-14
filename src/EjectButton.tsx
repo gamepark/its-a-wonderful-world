@@ -1,23 +1,24 @@
 import {css} from '@emotion/core'
 import {faUserSlash} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {GameSpeed, useNow, useOptions, usePlayerId, usePlayers, useSound} from '@gamepark/workshop'
-import React, {FC, useState} from 'react'
+import {GameSpeed, useNow, useOptions, usePlayers, useSound} from '@gamepark/workshop'
+import React, {FC} from 'react'
 import {useTranslation} from 'react-i18next'
-import EjectPopup from './EjectPopup'
 import EmpireName from './material/empires/EmpireName'
 import Images from './material/Images'
 import toggleSound from './sounds/toggle.ogg'
 import IconButton from './util/IconButton'
 
-type Props = React.HTMLAttributes<HTMLButtonElement> & { subMenu?: boolean, disabled?: boolean }
+type Props = React.HTMLAttributes<HTMLButtonElement> & {
+  openEjectPopup: () => void
+  subMenu?: boolean
+  disabled?: boolean
+}
 
-const EjectButton: FC<Props> = ({subMenu, ...props}) => {
+const EjectButton: FC<Props> = ({subMenu, openEjectPopup, ...props}) => {
   const {t} = useTranslation()
-  const playerId = usePlayerId<EmpireName>()
   const players = usePlayers<EmpireName>()
   const [toggle] = useSound(toggleSound)
-  const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
   const now = useNow()
   const options = useOptions()
   const playerTimeout = options?.speed === GameSpeed.RealTime && players.some(player => player.time?.playing && player.time.availableTime < now - Date.parse(player.time.lastChange))
@@ -28,11 +29,10 @@ const EjectButton: FC<Props> = ({subMenu, ...props}) => {
   return (
     <>
       <IconButton css={ejectButtonStyle} title={t('Expulser un joueur')} aria-label={t('Expulser un joueur')}
-                  onClick={() => toggle.play() && setEjectPopupOpen(true)} {...props}>
+                  onClick={() => toggle.play() && openEjectPopup()} {...props}>
         {subMenu && <span css={subMenuTitle}>{t('Expulser un joueur')}</span>}
         <FontAwesomeIcon icon={faUserSlash}/>
       </IconButton>
-      {ejectPopupOpen && <EjectPopup playerId={playerId!} players={players} now={now} onClose={() => setEjectPopupOpen(false)}/>}
     </>
   )
 }

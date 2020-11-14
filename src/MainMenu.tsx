@@ -10,6 +10,7 @@ import NoSleep from 'nosleep.js'
 import React, {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import EjectButton from './EjectButton'
+import EjectPopup from './EjectPopup'
 import EmpireName from './material/empires/EmpireName'
 import Images from './material/Images'
 import Move from './moves/Move'
@@ -43,6 +44,7 @@ const MainMenu = () => {
   const [timePopupOpen, setTimePopupOpen] = useState(false)
   const {rematch, rematchOffer, ignoreRematch} = useRematch<EmpireName>()
   const [toggle, {mute, unmute, muted}] = useSound(toggleSound)
+  const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
 
   function toggleSounds() {
     if (muted) {
@@ -86,7 +88,7 @@ const MainMenu = () => {
   return (
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
-        {game && !!playerId && !isPlaying && !isOver(game) && <EjectButton css={menuButtonStyle}/>}
+        {game && !!playerId && !isPlaying && !isOver(game) && <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} css={menuButtonStyle}/>}
         {game && !!playerId && (isOver(game) && !game.tutorial ?
             <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
@@ -171,7 +173,8 @@ const MainMenu = () => {
           <FontAwesomeIcon icon={faClock}/>
         </IconButton>
         }
-        {game && !!playerId && !isPlaying && !isOver(game) && <EjectButton subMenu={true} css={menuButtonStyle}/>}
+        {game && !!playerId && !isPlaying && !isOver(game) &&
+        <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} subMenu={true} css={menuButtonStyle}/>}
         {game && game.tutorial &&
         <IconButton css={[menuButtonStyle, tutorialButtonStyle]} onClick={() => resetTutorial()}>
           <span css={subMenuTitle}>{t('Recommencer le tutoriel')}</span>
@@ -181,6 +184,7 @@ const MainMenu = () => {
       </div>
       <RematchPopup rematchOffer={rematchOffer} onClose={ignoreRematch}/>
       {timePopupOpen && <TimePopup onClose={() => setTimePopupOpen(false)}/>}
+      {ejectPopupOpen && <EjectPopup playerId={playerId!} players={players} onClose={() => setEjectPopupOpen(false)}/>}
     </>
   )
 }

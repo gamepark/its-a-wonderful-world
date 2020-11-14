@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useEjection} from '@gamepark/workshop'
+import {useEjection, useNow} from '@gamepark/workshop'
 import Player from '@gamepark/workshop/dist/Types/Player'
 import {useTheme} from 'emotion-theming'
 import moment from 'moment'
@@ -16,14 +16,14 @@ import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightSt
 type Props = {
   playerId: EmpireName
   players: Player<EmpireName>[]
-  now: number
   onClose: () => void
 }
 
 const maxDuration = 3 * 60 * 1000
 
-const EjectPopup: FunctionComponent<Props> = ({playerId, players, now, onClose}) => {
+const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
   const {t} = useTranslation()
+  const now = useNow()
   const theme = useTheme<Theme>()
   const [awaitedPlayer, time] = players.filter(player => player.time?.playing)
     .map<[Player<EmpireName>, number]>(player => [player, player.time!.availableTime - now + Date.parse(player.time!.lastChange)])
