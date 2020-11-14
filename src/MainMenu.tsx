@@ -1,15 +1,15 @@
 import {css, keyframes} from '@emotion/core'
 import {
-  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faFastBackward, faHome, faMoon, faSun, faUndoAlt, faUserSlash, faVolumeMute, faVolumeUp
+  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faFastBackward, faHome, faMoon, faSun, faUndoAlt, faVolumeMute, faVolumeUp
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {GameSpeed, useActions, useGame, useNow, useOptions, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/workshop'
+import {useActions, useGame, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/workshop'
 import {useTheme} from 'emotion-theming'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 import React, {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import EjectPopup from './EjectPopup'
+import EjectButton from './EjectButton'
 import EmpireName from './material/empires/EmpireName'
 import Images from './material/Images'
 import Move from './moves/Move'
@@ -36,11 +36,7 @@ const MainMenu = () => {
   const theme = useTheme<Theme>()
   const players = usePlayers<EmpireName>()
   const isPlaying = players.find(player => player.id === playerId)?.time?.playing
-  const now = useNow()
-  const options = useOptions()
-  const playerTimeout = options?.speed === GameSpeed.RealTime && players.some(player => player.time?.playing && player.time.availableTime < now - Date.parse(player.time.lastChange))
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
-  const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
   const [displayMenu, setDisplayMenu] = useState(false)
   const gameOverRef = useRef<boolean | undefined>()
   const [displayRematchTooltip, setDisplayRematchTooltip] = useState(false)
@@ -90,12 +86,7 @@ const MainMenu = () => {
   return (
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
-        {playerTimeout && !!playerId && !isPlaying &&
-        <IconButton css={[menuButtonStyle, ejectButtonStyle]} title={t('Expulser un joueur')} aria-label={t('Expulser un joueur')}
-                    onClick={() => toggle.play() && setEjectPopupOpen(true)}>
-          <FontAwesomeIcon icon={faUserSlash}/>
-        </IconButton>
-        }
+        {game && !!playerId && !isPlaying && !isOver(game) && <EjectButton css={menuButtonStyle}/>}
         {game && !!playerId && (isOver(game) && !game.tutorial ?
             <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
@@ -180,12 +171,7 @@ const MainMenu = () => {
           <FontAwesomeIcon icon={faClock}/>
         </IconButton>
         }
-        {playerTimeout && !!playerId && !isPlaying &&
-        <IconButton css={[menuButtonStyle, ejectButtonStyle]} onClick={() => toggle.play() && setEjectPopupOpen(true)}>
-          <span css={subMenuTitle}>{t('Expulser un joueur')}</span>
-          <FontAwesomeIcon icon={faUserSlash}/>
-        </IconButton>
-        }
+        {game && !!playerId && !isPlaying && !isOver(game) && <EjectButton subMenu={true} css={menuButtonStyle}/>}
         {game && game.tutorial &&
         <IconButton css={[menuButtonStyle, tutorialButtonStyle]} onClick={() => resetTutorial()}>
           <span css={subMenuTitle}>{t('Recommencer le tutoriel')}</span>
@@ -195,7 +181,6 @@ const MainMenu = () => {
       </div>
       <RematchPopup rematchOffer={rematchOffer} onClose={ignoreRematch}/>
       {timePopupOpen && <TimePopup onClose={() => setTimePopupOpen(false)}/>}
-      {ejectPopupOpen && <EjectPopup playerId={playerId!} players={players} now={now} onClose={() => setEjectPopupOpen(false)}/>}
     </>
   )
 }
@@ -299,11 +284,6 @@ const loadingSpinnerStyle = css`
 `
 const rematchButtonStyle = css`
   background-image: url(${Images.buttonRed});
-`
-const ejectButtonStyle = css`
-  background-image: url(${Images.buttonRed});
-  padding-left: 0.35em;
-  padding-right: 0.35em;
 `
 
 const tutorialButtonStyle = css`

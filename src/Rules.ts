@@ -398,6 +398,7 @@ const ItsAWonderfulWorldRules: GameType = {
   },
 
   canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: Game | GameView) {
+    console.log("canUndo", new Date())
     const {playerId, move} = action
     if (game.round === numberOfRounds && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)) {
       return false
@@ -418,7 +419,7 @@ const ItsAWonderfulWorldRules: GameType = {
           } else {
             return !consecutiveActions.some(action => action.playerId === playerId && (
               actionCompletedCardConstruction(action, move.card) || (isRecycle(action.move) && action.move.card === move.card)
-              || isTellYouAreReady(action.move) && move.resource !== Resource.Krystallium
+              || (isTellYouAreReady(action.move) && move.resource !== Resource.Krystallium)
             ))
           }
         } else {
