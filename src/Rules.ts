@@ -1,6 +1,6 @@
 import {Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo} from '@gamepark/workshop'
-import CompetitiveGame from '@gamepark/workshop/dist/Types/CompetitiveGame'
 import WithEliminations from '@gamepark/workshop/dist/Types/WithEliminations'
+import WithScore from '@gamepark/workshop/dist/Types/WithScore'
 import WithTimeLimit from '@gamepark/workshop/dist/Types/WithTimeLimit'
 import WithTutorial from '@gamepark/workshop/dist/Types/WithTutorial'
 import Character, {characters, ChooseCharacter, isCharacter} from './material/characters/Character'
@@ -49,7 +49,7 @@ export const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
 type GameType = SimultaneousGame<Game, Move, EmpireName>
-  & CompetitiveGame<Game, Move, EmpireName>
+  & WithScore<Game, Move, EmpireName>
   & GameWithIncompleteInformation<Game, Move, EmpireName, GameView, MoveView>
   & WithOptions<Game, GameOptions>
   & WithAutomaticMoves<Game, Move>
@@ -381,6 +381,10 @@ const ItsAWonderfulWorldRules: GameType = {
     }
   },
 
+  getScore(game: Game, empire: EmpireName): number {
+    return getScore(getPlayer(game, empire))
+  },
+
   rankPlayers(game: Game, empireA: EmpireName, empireB: EmpireName): number {
     const playerA = getPlayer(game, empireA), playerB = getPlayer(game, empireB)
     if (playerA.eliminated || playerB.eliminated) {
@@ -398,7 +402,7 @@ const ItsAWonderfulWorldRules: GameType = {
   },
 
   canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: Game | GameView) {
-    console.log("canUndo", new Date())
+    console.log('canUndo', new Date())
     const {playerId, move} = action
     if (game.round === numberOfRounds && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)) {
       return false
