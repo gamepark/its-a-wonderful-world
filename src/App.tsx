@@ -53,10 +53,10 @@ const App: FunctionComponent = () => {
   const [themeColor, setThemeColor] = useState(() => localStorage.getItem(userTheme) || DarkTheme)
   const game = useGame<GameView>()
   const [failures, clearFailures] = useFailures<Move>()
-  const [displayedEmpire] = useDisplayState<EmpireName>()
   const [imagesLoading, setImagesLoading] = useState(true)
   const play = usePlay<Move>()
   const playerId = usePlayerId<EmpireName>()
+  const [displayedEmpire] = useDisplayState<EmpireName | undefined>(undefined)
   const theme = {
     color: themeColor,
     switchThemeColor: () => {
