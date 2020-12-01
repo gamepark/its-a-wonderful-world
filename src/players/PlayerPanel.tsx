@@ -32,7 +32,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
       <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       <h3 css={[titleStyle, player.eliminated && eliminatedStyle]}>
         <span css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
-        {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && <Timer time={playerInfo.time}/>}
+        {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
       </h3>
       <PlayerResourceProduction player={player}/>
       {bestMultiplier && <VictoryPointsMultiplier item={bestMultiplier.item} multiplier={bestMultiplier.multiplier} css={victoryPointsMultiplierStyle}/>}

@@ -1,6 +1,6 @@
 import {css, keyframes} from '@emotion/core'
 import {
-  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faFastBackward, faHome, faMoon, faSun, faUndoAlt, faVolumeMute, faVolumeUp
+  faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faFastBackward, faHome, faMoon, faSignOutAlt, faSun, faUndoAlt, faVolumeMute, faVolumeUp
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions, useGame, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/workshop'
@@ -14,6 +14,7 @@ import EjectPopup from './EjectPopup'
 import EmpireName from './material/empires/EmpireName'
 import Images from './material/Images'
 import Move from './moves/Move'
+import QuitPopup from './QuitPopup'
 import RematchPopup from './RematchPopup'
 import ItsAWonderfulWorldRules, {isOver} from './Rules'
 import toggleSound from './sounds/toggle.ogg'
@@ -36,7 +37,9 @@ const MainMenu = () => {
   const {t} = useTranslation()
   const theme = useTheme<Theme>()
   const players = usePlayers<EmpireName>()
-  const isPlaying = players.find(player => player.id === playerId)?.time?.playing
+  const player = players.find(player => player.id === playerId)
+  const quit = game?.players.find(player => player.empire === playerId)?.eliminated
+  const isPlaying = player?.time?.playing
   const [fullScreen, setFullScreen] = useState(!fscreen.fullscreenEnabled)
   const [displayMenu, setDisplayMenu] = useState(false)
   const gameOverRef = useRef<boolean | undefined>()
@@ -45,6 +48,7 @@ const MainMenu = () => {
   const {rematch, rematchOffer, ignoreRematch} = useRematch<EmpireName>()
   const [toggle, {mute, unmute, muted}] = useSound(toggleSound)
   const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
+  const [quitPopupOpen, setQuitPopupOpen] = useState(false)
 
   function toggleSounds() {
     if (muted) {
@@ -90,7 +94,7 @@ const MainMenu = () => {
       <div css={[menuStyle, displayMenu && hidden]}>
         {game && !!playerId && !isPlaying && !isOver(game) && <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} css={menuButtonStyle}/>}
         {game && !!playerId && (isOver(game) && !game.tutorial ?
-            <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
+            <IconButton css={[menuButtonStyle, redButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
               {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche')}</span>}
             </IconButton> :
@@ -133,13 +137,13 @@ const MainMenu = () => {
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
-        {game && !!playerId && isOver(game) && !game.tutorial &&
-        <IconButton css={[menuButtonStyle, rematchButtonStyle]} title={t('Proposer une revanche')}>
+        {game && player && isOver(game) && !game.tutorial &&
+        <IconButton css={[menuButtonStyle, redButtonStyle]} title={t('Proposer une revanche')}>
           <span css={subMenuTitle}>{t('Proposer une revanche')}</span>
           <FontAwesomeIcon icon={faChess}/>
         </IconButton>
         }
-        {game && !!playerId && !isOver(game) &&
+        {game && player && !quit && !isOver(game) &&
         <IconButton css={[menuButtonStyle, undoButtonStyle]}
                     onClick={() => toggle.play() && undo()} disabled={!canUndo()}>
           <span css={subMenuTitle}>{t('Annuler mon dernier coup')}</span>
@@ -173,8 +177,15 @@ const MainMenu = () => {
           <FontAwesomeIcon icon={faClock}/>
         </IconButton>
         }
+        {game && player && !quit && !isOver(game) &&
+        <IconButton css={[menuButtonStyle, redButtonStyle]} onClick={() => setQuitPopupOpen(true)}>
+          <span css={subMenuTitle}>{t('Quitter la partie')}</span>
+          <FontAwesomeIcon icon={faSignOutAlt}/>
+        </IconButton>
+        }
         {game && !!playerId && !isPlaying && !isOver(game) &&
-        <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} subMenu={true} css={menuButtonStyle}/>}
+        <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} subMenu={true} css={menuButtonStyle}/>
+        }
         {game && game.tutorial &&
         <IconButton css={[menuButtonStyle, tutorialButtonStyle]} onClick={() => resetTutorial()}>
           <span css={subMenuTitle}>{t('Recommencer le tutoriel')}</span>
@@ -185,6 +196,7 @@ const MainMenu = () => {
       <RematchPopup rematchOffer={rematchOffer} onClose={ignoreRematch}/>
       {timePopupOpen && <TimePopup onClose={() => setTimePopupOpen(false)}/>}
       {ejectPopupOpen && <EjectPopup playerId={playerId!} players={players} onClose={() => setEjectPopupOpen(false)}/>}
+      {quitPopupOpen && <QuitPopup onClose={() => setQuitPopupOpen(false)}/>}
     </>
   )
 }
@@ -242,10 +254,12 @@ const menuButtonStyle = css`
   opacity: 0.8;
   white-space: nowrap;
   justify-content: right;
+
   &:hover, &:active, &:focus, &:visited, &:before {
     opacity: 1;
     background-color: transparent;
   }
+
   &:active {
     transform: translateY(1px);
   }
@@ -270,11 +284,13 @@ const mainMenuButtonStyle = css`
 const undoButtonStyle = css`
   padding-right: 0.5em;
   background-image: url(${Images.buttonRed});
+
   &:disabled {
     background-image: url(${Images.buttonGrey});
     pointer-events: none;
   }
-  @media all and (orientation:portrait) {
+
+  @media all and (orientation: portrait) {
     display: none;
   }
 `
@@ -286,7 +302,7 @@ const loadingSpinnerStyle = css`
   margin: 0.125em;
   transform: scale(1.25);
 `
-const rematchButtonStyle = css`
+const redButtonStyle = css`
   background-image: url(${Images.buttonRed});
 `
 
@@ -297,8 +313,12 @@ const tutorialButtonStyle = css`
 `
 
 const displayForAMoment = keyframes`
-  from, to, 50% {opacity: 0}
-  60%, 90% {opacity: 1}
+  from, to, 50% {
+    opacity: 0
+  }
+  60%, 90% {
+    opacity: 1
+  }
 `
 
 const tooltipStyle = css`
@@ -312,6 +332,7 @@ const tooltipStyle = css`
   background: black;
   animation: ${displayForAMoment} 20s forwards;
   pointer-events: none;
+
   &:before {
     content: '';
     width: 0;
