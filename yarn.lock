@@ -1329,10 +1329,10 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@gamepark/workshop@~2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/workshop/-/workshop-2.1.0.tgz#8a056e8004c11050a4414d9abf9431e33820edf7"
-  integrity sha512-hCFkrtIicY8zit6YRs1TumV5bZu7Q1YkQ93tSLG7xFOUvDlbgnv33oRvV2fEEC8EKRbF5GNOi62s4PxY0xIYhw==
+"@gamepark/workshop@~2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@gamepark/workshop/-/workshop-2.1.1.tgz#3556fa5c95f9362e8e4cf0036e12aa6b1fba7801"
+  integrity sha512-5tm/HB4/dgHV6C6ky2Q9X+Yb1BSmBtmB4fDepwyAui3GUlWJqJZUW2heqd2gEiyquJoucUO1LKGnAiBeyZM8ew==
   dependencies:
     "@apollo/client" "^3.1.3"
     "@datadog/browser-logs" "^1.11.4"
