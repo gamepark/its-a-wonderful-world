@@ -78,7 +78,7 @@ const App: FunctionComponent = () => {
       if (willEndGame && player.constructionArea.some(construction => canBuild(player, construction.card))) {
         setConfirmPopup(true)
       } else {
-        play(tellYourAreReady(playerId))
+        play(tellYourAreReady(playerId), willEndGame)
       }
     }
   }
@@ -116,16 +116,19 @@ const backgroundImage = (empire?: EmpireName) => css`
 
 const globalStyle = css`
   ${normalize};
+
   html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
-    *, *::before, *::after {
+
+  *, *::before, *::after {
     -webkit-box-sizing: inherit;
     -moz-box-sizing: inherit;
     box-sizing: inherit;
   }
+
   body {
     margin: 0;
     font-family: 'Oswald', "Roboto Light", serif;
@@ -134,6 +137,7 @@ const globalStyle = css`
       font-size: calc(9vw / 16);
     }
   }
+
   #root {
     position: absolute;
     height: 100vh;
@@ -143,6 +147,7 @@ const globalStyle = css`
     background-color: white;
     background-size: cover;
     background-position: center;
+
     &:before {
       content: '';
       display: block;
@@ -162,7 +167,7 @@ const themeStyle = (theme: Theme) => css`
 `
 
 const portraitInfo = css`
-    @media (min-aspect-ratio: 4/3) {
+  @media (min-aspect-ratio: 4/3) {
     display: none;
   }
   text-align: center;
@@ -172,6 +177,7 @@ const portraitInfo = css`
   top: 55vw;
   left: 10%;
   right: 10%;
+
   & > svg {
     width: 30%;
     margin-top: 1em;

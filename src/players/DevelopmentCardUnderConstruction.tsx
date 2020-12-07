@@ -53,7 +53,9 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
         return
       }
       placeAvailableCubesMoves(player, construction).forEach(move => play(move))
-      window.navigator.vibrate(200)
+      if (window.navigator.vibrate) {
+        window.navigator.vibrate(200)
+      }
     }
   })
   const actions = useActions<Move, EmpireName>()
@@ -177,7 +179,7 @@ const overStyle = css`
 `
 
 export const costSpaceDeltaX = 0.22
-export const costSpaceDeltaY = (index: number) => index * 2.1 + 0.4
+export const costSpaceDeltaY = (index: number) => index * 2.12 + 0.4
 
 const getResourceStyle = (index: number) => css`
   position: absolute;

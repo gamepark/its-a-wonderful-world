@@ -7,6 +7,8 @@ import {useActions, useGame, usePlayerId, usePlayers, useRematch, useSound, useU
 import {useTheme} from 'emotion-theming'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
+// @ts-ignore
+import {orientation} from 'o9n'
 import React, {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import EjectButton from './EjectButton'
@@ -17,7 +19,7 @@ import Move from './moves/Move'
 import QuitPopup from './QuitPopup'
 import RematchPopup from './RematchPopup'
 import ItsAWonderfulWorldRules, {isOver} from './Rules'
-import toggleSound from './sounds/toggle.ogg'
+import toggleSound from './sounds/toggle.mp3'
 import Theme, {LightTheme} from './Theme'
 import TimePopup from './TimePopup'
 import {resetTutorial} from './Tutorial'
@@ -76,7 +78,7 @@ const MainMenu = () => {
   const onFullScreenChange = () => {
     setFullScreen(fscreen.fullscreenElement != null)
     if (fscreen.fullscreenElement) {
-      window.screen.orientation.lock('landscape')
+      orientation.lock('landscape')
         .then(() => noSleep.enable())
         .catch(() => console.info('screen orientation cannot be locked on this device'))
     } else {

@@ -23,7 +23,7 @@ export function useBellAlert(game: GameView) {
       //setReminders([])
     } else if (!playerWasActive) {
       if (!document.hasFocus()) {
-        sound.play()
+        sound.play().catch((error) => console.warn('Sound could not be played', error))
       }
       /*const time = players.find(player => player.id === playerId)?.time
       if (options?.speed === GameSpeed.RealTime && time) {

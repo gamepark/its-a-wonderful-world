@@ -6,7 +6,7 @@ import React, {FC} from 'react'
 import {useTranslation} from 'react-i18next'
 import EmpireName from './material/empires/EmpireName'
 import Images from './material/Images'
-import toggleSound from './sounds/toggle.ogg'
+import toggleSound from './sounds/toggle.mp3'
 import IconButton from './util/IconButton'
 
 type Props = React.HTMLAttributes<HTMLButtonElement> & {
