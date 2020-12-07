@@ -402,7 +402,6 @@ const ItsAWonderfulWorldRules: GameType = {
   },
 
   canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: Game | GameView) {
-    console.log('canUndo', new Date())
     const {playerId, move} = action
     if (game.round === numberOfRounds && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)) {
       return false

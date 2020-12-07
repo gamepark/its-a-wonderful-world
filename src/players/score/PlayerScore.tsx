@@ -48,6 +48,7 @@ const style = css`
   width: auto;
   height: 17%;
   overflow: hidden;
+  pointer-events: auto;
   transition: max-width 0.5s linear, background-color 1s ease-in;
 `
 

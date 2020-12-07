@@ -22,7 +22,6 @@ const EjectButton: FC<Props> = ({subMenu, openEjectPopup, ...props}) => {
   const now = useNow()
   const options = useOptions()
   const playerTimeout = options?.speed === GameSpeed.RealTime && players.some(player => player.time?.playing && player.time.availableTime < now - Date.parse(player.time.lastChange))
-  console.log(playerTimeout)
   if (!playerTimeout) {
     return null
   }

@@ -12,6 +12,7 @@ type Props<T> = {
 export function useLongPress<T>({onClick, onLongPress, ms = 300, moveTolerance = 3}: Props<T>) {
   const timerRef = useRef<NodeJS.Timeout>()
   const eventRef = useRef<PressEvent<T>>()
+  moveTolerance = moveTolerance * (window.devicePixelRatio || 1)
 
   const callback = useCallback(() => {
     if (timerRef.current) {

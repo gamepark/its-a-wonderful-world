@@ -29,7 +29,8 @@ const scorePanelStyle = css`
   right: 20.6%;
   min-width: 69%;
   height: 90%;
-  z-index: 5;   
+  z-index: 5;
+  pointer-events: none;
   overflow: hidden;
 `
 
