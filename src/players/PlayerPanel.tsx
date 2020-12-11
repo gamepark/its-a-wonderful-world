@@ -1,5 +1,6 @@
 import {css} from '@emotion/core'
 import {GameSpeed, useOptions, usePlayer} from '@gamepark/workshop'
+import Avatar from 'avataaars'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Character, {characters} from '../material/characters/Character'
@@ -29,7 +30,10 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
   const bestMultiplier = getBestVictoryPointsMultiplier(player)
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
-      <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
+      {playerInfo?.avatar ?
+        <Avatar style={{position: 'absolute', width: '16%', height: '34%', top: '0%', left: '3%'}} avatarStyle="Circle" {...playerInfo?.avatar}/> :
+        <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
+      }
       <h3 css={[titleStyle, player.eliminated && eliminatedStyle]}>
         <span css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
         {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
@@ -53,7 +57,7 @@ const style = (empire: EmpireName, position: number, highlight: boolean) => css`
   background-position: center;
   border-radius: 5px;
   ${borderStyle(highlight)};
-  
+
   &:before {
     content: '';
     display: block;
@@ -74,6 +78,7 @@ const borderStyle = (highlight: boolean) => highlight ? css`
   border: 0.2em solid lightslategrey;
   box-shadow: 0.2em 0.2em 1em black;
   cursor: pointer;
+
   &:hover {
     border: 0.2em solid rgba(255, 215, 0, 0.5);
     box-shadow: 0 0 0.5em gold;
@@ -82,8 +87,8 @@ const borderStyle = (highlight: boolean) => highlight ? css`
 
 const avatarStyle = css`
   position: absolute;
-  height: 25%;
-  top: 5%;
+  height: 30%;
+  top: 4%;
   left: 3%;
   border: 0.1em solid white;
   border-radius: 100%;
@@ -93,7 +98,7 @@ const titleStyle = css`
   color: #333333;
   position: absolute;
   top: 8%;
-  left: 18%;
+  left: 22%;
   right: 3%;
   margin: 0;
   font-size: 2.9em;
