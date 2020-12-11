@@ -31,7 +31,8 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
       {playerInfo?.avatar ?
-        <Avatar style={{position: 'absolute', width: '16%', height: '34%', top: '0%', left: '3%'}} avatarStyle="Circle" {...playerInfo?.avatar}/> :
+        <Avatar style={{position: 'absolute', width: '16%', height: '34%', top: '0%', left: '3%', filter: 'drop-shadow(0px 0.2em 0.4em black)'}}
+                avatarStyle="Circle" {...playerInfo?.avatar}/> :
         <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       }
       <h3 css={[titleStyle, player.eliminated && eliminatedStyle]}>
