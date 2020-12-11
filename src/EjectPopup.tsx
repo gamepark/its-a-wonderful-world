@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useEjection, useNow} from '@gamepark/workshop'
+import {useEjection, useNow, useOptions} from '@gamepark/workshop'
 import Player from '@gamepark/workshop/dist/Types/Player'
 import {useTheme} from 'emotion-theming'
 import moment from 'moment'
@@ -19,8 +19,6 @@ type Props = {
   onClose: () => void
 }
 
-const maxDuration = 3 * 60 * 1000
-
 const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
   const {t} = useTranslation()
   const now = useNow()
@@ -34,6 +32,7 @@ const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
     }
   }, [awaitedPlayer, onClose, time, playerId, players])
   const eject = useEjection()
+  const maxExceedTime = useOptions()?.maxExceedTime || 0
   if (!awaitedPlayer)
     return null
   const awaitedPlayerName = awaitedPlayer.name || getEmpireName(t, awaitedPlayer.id)
@@ -43,10 +42,10 @@ const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={onClose}><FontAwesomeIcon icon={faTimes}/></div>
         <h2>{t('{player} a dépassé son temps de réflexion', {player: awaitedPlayerName})}</h2>
-        {time > -maxDuration ?
-          <p>{t('Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.', {duration: moment.duration(maxDuration).humanize()})}</p>
+        {time > -maxExceedTime ?
+          <p>{t('Au dela de {duration} de dépassement vous pourrez l’expulser et poursuivre la partie.', {duration: moment.duration(maxExceedTime).humanize()})}</p>
           : <>
-            <p>{t('Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.', {duration: moment.duration(maxDuration).humanize()})}</p>
+            <p>{t('Si vous pensez qu’il·elle ne reviendra pas, vous avez la possibilité de l’expulser de la partie.', {duration: moment.duration(maxExceedTime).humanize()})}</p>
             <Button onClick={() => eject(awaitedPlayer.id)}>{t('Expulser {player}', {player: awaitedPlayerName})}</Button>
           </>
         }
