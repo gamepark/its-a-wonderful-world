@@ -21,7 +21,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
-    "@gamepark/workshop": "~2.2.0",
+    "@gamepark/workshop": "~2.2.1",
     "array.prototype.flatmap": "^1.2.4",
     "avataaars": "^1.2.1",
     "comlink-loader": "^2.0.0",
