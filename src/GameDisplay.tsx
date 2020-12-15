@@ -1,5 +1,5 @@
 import {css, keyframes} from '@emotion/core'
-import {Letterbox, useAnimation, useDisplayState, usePlayerId} from '@gamepark/workshop'
+import {Letterbox, useActions, useAnimation, useDisplayState, usePlayerId} from '@gamepark/workshop'
 import React, {FunctionComponent, useEffect, useMemo, useRef, useState} from 'react'
 import GlobalActions from './GlobalActions'
 import Board from './material/board/Board'
@@ -50,7 +50,8 @@ const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
     entries.sort((a, b) => players.findIndex(p => p.empire === a[0]) - players.findIndex(p => p.empire === b[0]))
     return entries
   }
-  const gameOver = isOver(game)
+  const actions = useActions()
+  const gameOver = isOver(game) && !!actions && actions.every(action => !action.pending)
   const gameWasLive = useRef(!gameOver)
   useEffect(() => {
     const onkeydown = (event: KeyboardEvent) => {
@@ -86,7 +87,7 @@ const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
         <PlayerPanel key={player.empire} player={player} position={index} highlight={player.empire === displayedEmpire} showScore={gameOver}
                      onClick={() => (!game.tutorial || game.round > 1) && setDisplayedEmpire(player.empire)}/>
       )}
-      {isOver(game) && <ScorePanel game={game} animation={gameWasLive.current}/>}
+      {gameOver && <ScorePanel game={game} animation={gameWasLive.current}/>}
       {revealedCards && revealedCards.map((card, index) =>
         <DevelopmentCard key={card} development={developmentCards[card]}
                          css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index),

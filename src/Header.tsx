@@ -1,5 +1,5 @@
 import {css} from '@emotion/core'
-import {useAnimation, usePlay, usePlayerId, usePlayers} from '@gamepark/workshop'
+import {useActions, useAnimation, usePlay, usePlayerId, usePlayers} from '@gamepark/workshop'
 import Animation from '@gamepark/workshop/dist/Types/Animation'
 import PlayerInfo from '@gamepark/workshop/dist/Types/Player'
 import {useTheme} from 'emotion-theming'
@@ -27,7 +27,6 @@ import PlayerView from './types/PlayerView'
 import {isPlayer} from './types/typeguards'
 import Button from './util/Button'
 import {gameOverDelay, headerHeight, textColor} from './util/Styles'
-
 
 const headerStyle = (theme: Theme) => css`
   position: absolute;
@@ -71,7 +70,8 @@ const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
   const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
   const {t} = useTranslation()
   const theme = useTheme<Theme>()
-  const gameOver = game !== undefined && isOver(game)
+  const actions = useActions()
+  const gameOver = game !== undefined && isOver(game) && !!actions && actions.every(action => !action.pending)
   const [scoreSuspense, setScoreSuspense] = useState(false)
   useEffect(() => {
     if (gameOver) {

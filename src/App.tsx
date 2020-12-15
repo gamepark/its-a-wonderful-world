@@ -78,7 +78,7 @@ const App: FunctionComponent = () => {
       if (willEndGame && player.constructionArea.some(construction => canBuild(player, construction.card))) {
         setConfirmPopup(true)
       } else {
-        play(tellYourAreReady(playerId), willEndGame)
+        play(tellYourAreReady(playerId))
       }
     }
   }

@@ -63,8 +63,8 @@ const MainMenu = () => {
   }
 
   useEffect(() => {
-    if (game) {
-      if (isOver(game)) {
+    if (game && actions) {
+      if (isOver(game) && actions.every(action => !action.pending)) {
         if (gameOverRef.current === false) {
           setDisplayRematchTooltip(true)
           gameOverRef.current = true
