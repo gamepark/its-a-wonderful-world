@@ -10,6 +10,7 @@ import EmpireName from '../material/empires/EmpireName'
 import {getItemQuantity, getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
+import gamePointIcon from '../util/game-point.svg'
 import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
 import PlayerConstructions from './PlayerConstructions'
 import PlayerResourceProduction from './PlayerResourceProduction'
@@ -38,6 +39,10 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
       <h3 css={[titleStyle, player.eliminated && eliminatedStyle]}>
         <span css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
         {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
+        {!!playerInfo?.gamePointsDelta && <span>
+            <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
+          {playerInfo?.gamePointsDelta > 0 && '+'}{playerInfo?.gamePointsDelta}
+          </span>}
       </h3>
       <PlayerResourceProduction player={player}/>
       {bestMultiplier && <VictoryPointsMultiplier item={bestMultiplier.item} multiplier={bestMultiplier.multiplier} css={victoryPointsMultiplierStyle}/>}
@@ -116,6 +121,10 @@ const nameStyle = css`
 
 const eliminatedStyle = css`
   text-decoration: line-through;
+`
+
+const gamePointIconStyle = css`
+  height: 1em;
 `
 
 const victoryPointsMultiplierStyle = css`
