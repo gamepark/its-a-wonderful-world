@@ -23,7 +23,6 @@ import Theme, {LightTheme} from './Theme'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
 import Player from './types/Player'
-import PlayerView from './types/PlayerView'
 import {isPlayer} from './types/typeguards'
 import Button from './util/Button'
 import {gameOverDelay, headerHeight, textColor} from './util/Styles'
@@ -81,7 +80,8 @@ const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
     }
   }, [game, gameOver, setScoreSuspense])
   const text = loading ? t('Chargement de la partie...') :
-    gameOver && scoreSuspense ? t('Calcul du score... Qui sera le Suprême Leader ?') :
+    gameOver ? scoreSuspense ? t('Calcul du score... Qui sera le Suprême Leader ?') :
+      getEndOfGameText(t, players, game!, empire) :
       getText(t, validate, play, players, game!, empire, animation)
   return (
     <header css={headerStyle(theme)}>
@@ -178,8 +178,6 @@ function getText(t: TFunction, validate: () => void, play: (move: Move) => void,
           return <Trans defaults="Cliquez sur <0>Valider</0> pour passer au calcul des scores"
                         components={[<Button onClick={validate}>Valider</Button>]}/>
         }
-      } else if (isOver(game)) {
-        return getEndOfGameText(t, playersInfo, game, player)
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 0) {
@@ -248,7 +246,8 @@ function getTutorialText(t: TFunction, game: GameView, player: Player): string |
   return
 }
 
-function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], game: GameView, player?: Player | PlayerView) {
+function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName) {
+  const player = game.players.find(player => player.empire === empire)
   const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getEmpireName(t, empire)
   let highestScore = -1
   let playersWithHighestScore = []
@@ -340,6 +339,7 @@ const characterTokenStyle = css`
   height: 1.25em;
   vertical-align: bottom;
   cursor: pointer;
+
   &:hover, &:active {
     transform: scale(1.1);
   }
