@@ -32,7 +32,7 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
           playerId === rematchOffer.playerId ? (
             rematchOffer.link ?
               <>
-                <h2>{t('Vous avez proposé une revanche')}</h2>
+                <h2>{t('Vous avez proposé une revanche amicale')}</h2>
                 <p>{t('Votre proposition a été transmise aux autres joueurs')}</p>
                 <Button onClick={() => window.location.href = rematchOffer.link!}>{t('Voir la nouvelle partie')}</Button>
               </>
@@ -45,7 +45,7 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
           ) : (
             rematchOffer.link &&
             <>
-              <h2>{t('{player} vous propose une revanche !', {player: getPlayerName(rematchOffer.playerId)})}</h2>
+              <h2>{t('{player} vous propose une revanche amicale !', {player: getPlayerName(rematchOffer.playerId)})}</h2>
               <p>{t('Cliquez sur le lien ci-dessous pour accéder à la nouvelle partie :')}</p>
               <Button onClick={() => window.location.href = rematchOffer.link!}>{t('Voir la nouvelle partie')}</Button>
             </>

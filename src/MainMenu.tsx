@@ -98,7 +98,7 @@ const MainMenu = () => {
         {game && !!playerId && (isOver(game) && !game.tutorial ?
             <IconButton css={[menuButtonStyle, redButtonStyle]} title={t('Proposer une revanche')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
-              {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche')}</span>}
+              {displayRematchTooltip && <span css={tooltipStyle}>{t('Proposer une revanche amicale')}</span>}
             </IconButton> :
             <IconButton css={[menuButtonStyle, undoButtonStyle]} title={t('Annuler mon dernier coup')} aria-label={t('Annuler mon dernier coup')}
                         onClick={() => toggle.play() && undo()} disabled={!canUndo()}>
