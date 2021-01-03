@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {GameSpeed, useOptions, usePlayer} from '@gamepark/workshop'
 import Avatar from 'avataaars'
-import React, {FunctionComponent} from 'react'
+import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import Character, {characters} from '../material/characters/Character'
 import DevelopmentType, {developmentTypes} from '../material/developments/DevelopmentType'
@@ -11,7 +11,7 @@ import {getItemQuantity, getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import gamePointIcon from '../util/game-point.svg'
-import {empireBackground, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
+import {empireBackground, gameOverDelay, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY} from '../util/Styles'
 import PlayerConstructions from './PlayerConstructions'
 import PlayerResourceProduction from './PlayerResourceProduction'
 import Timer from './Timer'
@@ -29,6 +29,12 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
   const options = useOptions()
   const playerInfo = usePlayer<EmpireName>(player.empire)
   const bestMultiplier = getBestVictoryPointsMultiplier(player)
+  const [gamePoints, setGamePoints] = useState(playerInfo?.gamePointsDelta)
+  useEffect(() => {
+    if (typeof playerInfo?.gamePointsDelta === 'number' && typeof gamePoints !== 'number') {
+      setTimeout(() => setGamePoints(playerInfo?.gamePointsDelta), gameOverDelay * 1000)
+    }
+  }, [playerInfo, gamePoints])
   return (
     <div css={style(player.empire, position, highlight)} {...props}>
       {playerInfo?.avatar ?
@@ -36,13 +42,15 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
                 avatarStyle="Circle" {...playerInfo?.avatar}/> :
         <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       }
-      <h3 css={[titleStyle, player.eliminated && eliminatedStyle]}>
-        <span css={nameStyle}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
+      <h3 css={titleStyle}>
+        <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
         {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
-        {!!playerInfo?.gamePointsDelta && <span>
-            <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
-          {playerInfo?.gamePointsDelta > 0 && '+'}{playerInfo?.gamePointsDelta}
-          </span>}
+        {typeof gamePoints === 'number' &&
+        <span css={css`flex-shrink: 0`}>
+          <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
+          {gamePoints > 0 && '+'}{playerInfo?.gamePointsDelta}
+        </span>
+        }
       </h3>
       <PlayerResourceProduction player={player}/>
       {bestMultiplier && <VictoryPointsMultiplier item={bestMultiplier.item} multiplier={bestMultiplier.multiplier} css={victoryPointsMultiplierStyle}/>}

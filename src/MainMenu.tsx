@@ -73,7 +73,7 @@ const MainMenu = () => {
         gameOverRef.current = false
       }
     }
-  }, [game, gameOverRef])
+  }, [game, actions, gameOverRef])
 
   const onFullScreenChange = () => {
     setFullScreen(fscreen.fullscreenElement != null)
