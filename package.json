@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/its-a-wonderful-world",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "It's a Wonderful World adaptation for Game Park",
   "main": "dist/Rules.js",
   "files": [
