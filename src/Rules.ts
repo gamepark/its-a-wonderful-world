@@ -3,6 +3,7 @@ import WithEliminations from '@gamepark/workshop/dist/Types/WithEliminations'
 import WithScore from '@gamepark/workshop/dist/Types/WithScore'
 import WithTimeLimit from '@gamepark/workshop/dist/Types/WithTimeLimit'
 import WithTutorial from '@gamepark/workshop/dist/Types/WithTutorial'
+import {TFunction} from 'i18next'
 import Character, {characters, ChooseCharacter, isCharacter} from './material/characters/Character'
 import Construction from './material/developments/Construction'
 import Development, {isConstructionBonus} from './material/developments/Development'
@@ -73,6 +74,21 @@ const ItsAWonderfulWorldRules: GameType = {
 
   getPlayerIds(game: Game) {
     return game.players.map(player => player.empire)
+  },
+
+  getPlayerName(empire: EmpireName, t: TFunction): string {
+    switch (empire) {
+      case EmpireName.AztecEmpire:
+        return t('Aztec Empire')
+      case EmpireName.FederationOfAsia:
+        return t('Federation of Asia')
+      case EmpireName.NoramStates:
+        return t('Noram States')
+      case EmpireName.PanafricanUnion:
+        return t('Panafrican Union')
+      case EmpireName.RepublicOfEurope:
+        return t('Republic of Europe')
+    }
   },
 
   getActivePlayers(game: Game) {

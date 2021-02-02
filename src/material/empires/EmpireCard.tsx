@@ -1,12 +1,12 @@
 import {css} from '@emotion/core'
 import {usePlay, usePlayerId} from '@gamepark/workshop'
-import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DragObjectType from '../../drag-objects/DragObjectType'
 import ResourceFromBoard from '../../drag-objects/ResourceFromBoard'
 import {placeResource} from '../../moves/PlaceResource'
+import Rules from '../../Rules'
 import Player from '../../types/Player'
 import PlayerView from '../../types/PlayerView'
 import {empireCardHeight, empireCardWidth, glow} from '../../util/Styles'
@@ -68,7 +68,7 @@ const EmpireCard: FunctionComponent<Props> = ({player, gameOver = false, withRes
   })
   return (
     <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
-      <div css={empireCardTitle}>({player.empireSide}) {getEmpireName(t, player.empire)}</div>
+      <div css={empireCardTitle}>({player.empireSide}) {Rules.getPlayerName(player.empire, t)}</div>
       {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
@@ -142,20 +142,5 @@ export const resourcePosition = [
   [22, 36],
   [34, 45]
 ]
-
-export function getEmpireName(t: TFunction, empire: EmpireName) {
-  switch (empire) {
-    case EmpireName.AztecEmpire:
-      return t('Empire d’Azteca')
-    case EmpireName.FederationOfAsia:
-      return t('Fédération d’Asie')
-    case EmpireName.NoramStates:
-      return t('États du Noram')
-    case EmpireName.PanafricanUnion:
-      return t('Union Panafricaine')
-    case EmpireName.RepublicOfEurope:
-      return t('République d’Europa')
-  }
-}
 
 export default EmpireCard

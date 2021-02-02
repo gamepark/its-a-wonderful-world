@@ -7,8 +7,8 @@ import {useTheme} from 'emotion-theming'
 import moment from 'moment'
 import React, {FunctionComponent, useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
-import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
+import Rules from './Rules'
 import Theme, {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
@@ -35,7 +35,7 @@ const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
   const maxExceedTime = useOptions()?.maxExceedTime || 0
   if (!awaitedPlayer)
     return null
-  const awaitedPlayerName = awaitedPlayer.name || getEmpireName(t, awaitedPlayer.id)
+  const awaitedPlayerName = awaitedPlayer.name || Rules.getPlayerName(awaitedPlayer.id, t)
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
       <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}

@@ -11,14 +11,13 @@ import Character from './material/characters/Character'
 import CharacterToken from './material/characters/CharacterToken'
 import DevelopmentCardsTitles from './material/developments/DevelopmentCardsTitles'
 import {HarborZone, IndustrialComplex, PropagandaCenter, SecretSociety, UniversalExposition, WindTurbines, Zeppelin} from './material/developments/Developments'
-import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
 import Resource from './material/resources/Resource'
 import {isCompleteConstruction} from './moves/CompleteConstruction'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import {isReceiveCharacter, receiveCharacter} from './moves/ReceiveCharacter'
-import {countCharacters, getNextProductionStep, getScore, isOver, numberOfRounds} from './Rules'
+import Rules, {countCharacters, getNextProductionStep, getScore, isOver, numberOfRounds} from './Rules'
 import Theme, {LightTheme} from './Theme'
 import GameView from './types/GameView'
 import Phase from './types/Phase'
@@ -94,7 +93,7 @@ const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
 
 function getText(t: TFunction, validate: () => void, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   const player = game.players.find(player => player.empire === empire)
-  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getEmpireName(t, empire)
+  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || Rules.getPlayerName(empire, t)
   if (game.tutorial && game.round === 1 && !animation && player && isPlayer(player)) {
     const tutorialText = getTutorialText(t, game, player)
     if (tutorialText) {
@@ -248,7 +247,7 @@ function getTutorialText(t: TFunction, game: GameView, player: Player): string |
 
 function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName) {
   const player = game.players.find(player => player.empire === empire)
-  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getEmpireName(t, empire)
+  const getPlayerName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || Rules.getPlayerName(empire, t)
   let highestScore = -1
   let playersWithHighestScore = []
   for (const player of game.players) {

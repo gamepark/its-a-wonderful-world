@@ -6,8 +6,8 @@ import RematchOffer from '@gamepark/workshop/dist/Types/RematchOffer'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
+import Rules from './Rules'
 import Theme, {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
@@ -22,7 +22,7 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
   const theme = useTheme<Theme>()
   const playerId = usePlayerId<EmpireName>()
   const players = usePlayers<EmpireName>()
-  const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name || getEmpireName(t, empire)
+  const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name || Rules.getPlayerName(empire, t)
   return (
     <div css={[popupFixedBackgroundStyle, !rematchOffer && css`display: none`]} onClick={onClose}>
       <div css={[popupStyle, popupPosition, css`width: 60%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}

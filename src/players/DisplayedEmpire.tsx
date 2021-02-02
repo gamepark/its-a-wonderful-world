@@ -4,9 +4,9 @@ import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Character from '../material/characters/Character'
 import CharacterTokenPile from '../material/characters/CharacterTokenPile'
-import EmpireCard, {getEmpireName} from '../material/empires/EmpireCard'
+import EmpireCard from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
-import {isOver} from '../Rules'
+import Rules, {isOver} from '../Rules'
 import GameView from '../types/GameView'
 import Phase from '../types/Phase'
 import Player from '../types/Player'
@@ -31,7 +31,7 @@ type Props = {
 const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) => {
   const {t} = useTranslation()
   const players = usePlayers<EmpireName>()
-  const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name || getEmpireName(t, empire)
+  const getPlayerName = (empire: EmpireName) => players.find(p => p.id === empire)?.name || Rules.getPlayerName(empire, t)
   const gameOver = isOver(game)
   return (
     <>

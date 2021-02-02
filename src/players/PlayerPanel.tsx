@@ -5,9 +5,9 @@ import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import Character, {characters} from '../material/characters/Character'
 import DevelopmentType, {developmentTypes} from '../material/developments/DevelopmentType'
-import {empireAvatar, getEmpireName} from '../material/empires/EmpireCard'
+import {empireAvatar} from '../material/empires/EmpireCard'
 import EmpireName from '../material/empires/EmpireName'
-import {getItemQuantity, getVictoryPointsBonusMultiplier} from '../Rules'
+import Rules, {getItemQuantity, getVictoryPointsBonusMultiplier} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 import gamePointIcon from '../util/game-point.svg'
@@ -43,7 +43,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
         <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       }
       <h3 css={titleStyle}>
-        <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getEmpireName(t, player.empire)}</span>
+        <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || Rules.getPlayerName(player.empire, t)}</span>
         {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
         {typeof gamePoints === 'number' &&
         <span css={css`flex-shrink: 0`}>

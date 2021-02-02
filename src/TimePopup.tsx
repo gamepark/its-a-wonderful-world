@@ -5,8 +5,8 @@ import {usePlayers} from '@gamepark/workshop'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import {getEmpireName} from './material/empires/EmpireCard'
 import EmpireName from './material/empires/EmpireName'
+import Rules from './Rules'
 import Theme, {LightTheme} from './Theme'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 import {humanize} from './util/TimeUtil'
@@ -43,7 +43,7 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
           <tbody>
             {players.map(player => (
               <tr key={player.id}>
-                <td>{player.name || getEmpireName(t, player.id)}</td>
+                <td>{player.name || Rules.getPlayerName(player.id, t)}</td>
                 <td>{player.time && humanize(player.time.highestDownTime)}</td>
                 <td>{player.time && humanize(player.time.cumulatedDownTime)}</td>
                 <td>{player.time && humanize(player.time.highestPlayTime)}</td>

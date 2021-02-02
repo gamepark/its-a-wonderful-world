@@ -5,7 +5,8 @@ import {usePlayer} from '@gamepark/workshop'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import EmpireCard, {getEmpireName} from './material/empires/EmpireCard'
+import EmpireCard from './material/empires/EmpireCard'
+import Rules from './Rules'
 import Theme, {LightTheme} from './Theme'
 import Player from './types/Player'
 import PlayerView from './types/PlayerView'
@@ -23,7 +24,7 @@ const WelcomePopup: FunctionComponent<{ player: Player | PlayerView, close: () =
         <div css={closePopupStyle} onClick={close}><FontAwesomeIcon icon={faTimes}/></div>
         <h2>{t('Bienvenue {playerName}', {playerName: playerInfo?.name})}</h2>
         <EmpireCard player={player} css={empireCardStyle}/>
-        <p>{t('Vous jouez {empire}, face {letter}. Bon jeu !', {empire: getEmpireName(t, player.empire), letter: player.empireSide})}</p>
+        <p>{t('Vous jouez {empire}, face {letter}. Bon jeu !', {empire: Rules.getPlayerName(player.empire, t), letter: player.empireSide})}</p>
         <Button onClick={close}>{t('OK')}</Button>
       </div>
     </div>
