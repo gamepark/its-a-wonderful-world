@@ -595,7 +595,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('D’autres stratégies...'),
+      title: (t: TFunction) => t('D’autres stratégies…'),
       text: (t: TFunction) => t('Cette carte rapporte 3 points de victoire par bâtiment vert construit.'),
       boxTop: 83,
       boxLeft: 31,
@@ -607,7 +607,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('D’autres stratégies...'),
+      title: (t: TFunction) => t('D’autres stratégies…'),
       text: (t: TFunction) => t('Cependant, pour la construire il nous faudrait dépenser 2 précieux Financiers !'),
       boxTop: 69,
       boxLeft: 32,

@@ -32,7 +32,7 @@ const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () =>
 
 const failuresDescription = {
   [Failure.NETWORK]: {
-    title: (t: TFunction) => t('Oups...'),
+    title: (t: TFunction) => t('Oups…'),
     text: (t: TFunction) => t('Une action n’a pas pu aboutir et a été annulée. Êtes-vous toujours connecté à Internet ?')
   },
   [Failure.MOVE_FORBIDDEN]: {
@@ -45,7 +45,7 @@ const failuresDescription = {
   },
   [Failure.TUTORIAL_MOVE_EXPECTED]: {
     title: (t: TFunction) => t('Coup non prévu dans le tutoriel'),
-    text: (t: TFunction) => t('Promis, vous serez bientôt libres de vos choix ! Nous allons vous réafficher la dernière information...')
+    text: (t: TFunction) => t('Promis, vous serez bientôt libres de vos choix ! Nous allons vous réafficher la dernière information…')
   }
 }
 

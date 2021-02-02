@@ -39,7 +39,7 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
               :
               <>
                 <h2>{t('Proposition de revanche')}</h2>
-                <p>{t('Veuillez patienter...')}</p>
+                <p>{t('Veuillez patienter…')}</p>
                 <FontAwesomeIcon css={spinnerStyle} icon={faHourglassEnd}/>
               </>
           ) : (

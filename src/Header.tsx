@@ -78,8 +78,8 @@ const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
       setScoreSuspense(true)
     }
   }, [game, gameOver, setScoreSuspense])
-  const text = loading ? t('Chargement de la partie...') :
-    gameOver ? scoreSuspense ? t('Calcul du score... Qui sera le Suprême Leader ?') :
+  const text = loading ? t('Chargement de la partie…') :
+    gameOver ? scoreSuspense ? t('Calcul du score… Qui sera le Suprême Leader ?') :
       getEndOfGameText(t, players, game!, empire) :
       getText(t, validate, play, players, game!, empire, animation)
   return (
@@ -115,7 +115,7 @@ function getText(t: TFunction, validate: () => void, play: (move: Move) => void,
       } else {
         const players = game.players.filter(player => player.chosenCard === undefined)
         if (players.length === 0) {
-          return t('Envoi du coup au Suprême Dirigeant...')
+          return t('Envoi du coup au Suprême Dirigeant…')
         } else if (players.length === 1) {
           return t('{player} doit choisir une carte développement', {player: getPlayerName(players[0].empire)})
         } else if (player) {
@@ -136,7 +136,7 @@ function getText(t: TFunction, validate: () => void, play: (move: Move) => void,
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 0) {
-          return t('Envoi du coup au Suprême Dirigeant...')
+          return t('Envoi du coup au Suprême Dirigeant…')
         } else if (players.length === 1) {
           return t('{player} doit faire sa planification', {player: getPlayerName(players[0].empire)})
         } else if (player) {
@@ -180,7 +180,7 @@ function getText(t: TFunction, validate: () => void, play: (move: Move) => void,
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 0) {
-          return t('Envoi du coup au Suprême Dirigeant...')
+          return t('Envoi du coup au Suprême Dirigeant…')
         } else if (players.length === 1) {
           return t('{player} doit utiliser les ressources produites', {player: getPlayerName(players[0].empire)})
         } else if (player) {
