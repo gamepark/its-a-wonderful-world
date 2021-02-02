@@ -1,10 +1,10 @@
 import {css} from '@emotion/core'
-import {TFunction} from 'i18next'
 import React, {Fragment, FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'
 import Resource, {resources} from '../material/resources/Resource'
-import Rules, {getProduction} from '../Rules'
+import {getDescription} from '../material/resources/ResourceCube'
+import {getProduction} from '../Rules'
 import Player from '../types/Player'
 import PlayerView from '../types/PlayerView'
 
@@ -49,14 +49,14 @@ const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView 
         if (productionDisplay.multiplier) {
           return [
             <img key={resource + 'Multiplied'} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index!)} draggable="false"
-                 alt={getDescription(t, Rules.getPlayerName(player.empire, t), resource, production.get(resource)!)}/>,
+                 alt={getDescription(t, resource)}/>,
             <ProductionMultiplier key={resource + 'Multiplier'} quantity={productionDisplay.multiplier}
                                   css={productionMultiplierStyle(productionDisplay.index!)}/>
           ]
         } else {
           return [...Array(productionDisplay.size).keys()].map((_, index) =>
             <img key={resource + index} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index! + index)} draggable="false"
-                 alt={getDescription(t, Rules.getPlayerName(player.empire, t), resource, production.get(resource)!)}/>)
+                 alt={getDescription(t, resource)}/>)
         }
       })}
     </Fragment>
@@ -128,22 +128,5 @@ const productionMultiplierQuantityStyle = css`
   color: white;
   text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
 `
-
-const getDescription = (t: TFunction, player: string, resource: Resource, quantity: number) => {
-  switch (resource) {
-    case Resource.Materials:
-      return t('{player} produit {quantity, plural, one{# cube} other{# cubes}} gris (les Matériaux)', {player, quantity})
-    case Resource.Energy:
-      return t('{player} produit {quantity, plural, one{# cube noir} other{# cubes noirs}} (l’Énergie)', {player, quantity})
-    case Resource.Science:
-      return t('{player} produit {quantity, plural, one{# cube vert} other{# cubes verts}} (la Science)', {player, quantity})
-    case Resource.Gold:
-      return t('{player} produit {quantity, plural, one{# cube jaune} other{# cubes jaunes}} (l’Or)', {player, quantity})
-    case Resource.Exploration:
-      return t('{player} produit {quantity, plural, one{# cube bleu} other{# cubes bleus}} (l’Exploration)', {player, quantity})
-    case Resource.Krystallium:
-      return t('{player} produit {quantity, plural, one{# cube rouge} other{# cubes rouges}} (le Krystallium)', {player, quantity})
-  }
-}
 
 export default PlayerResourceProduction

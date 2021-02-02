@@ -22,12 +22,12 @@ export const images = {
   [Character.General]: Images.general
 }
 
-function getDescription(t: TFunction, character: Character) {
+export function getDescription(t: TFunction, character: Character) {
   switch (character) {
     case Character.Financier:
-      return t('Un jeton Financier')
+      return t('Financier token')
     case Character.General:
-      return t('Un jeton Général')
+      return t('General token')
   }
 }
 

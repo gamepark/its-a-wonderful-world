@@ -33,20 +33,20 @@ const style = css`
   filter: drop-shadow(0 0 3px white);
 `
 
-const getDescription = (t: TFunction, resource: Resource) => {
+export const getDescription = (t: TFunction, resource: Resource) => {
   switch (resource) {
     case Resource.Materials:
-      return t('Un cube gris représentant la ressource « Matériaux »')
+      return t('Materials')
     case Resource.Energy:
-      return t('Un cube noir représentant la ressource « Énergie »')
+      return t('Energy')
     case Resource.Science:
-      return t('Un cube vert représentant la ressource « Science »')
+      return t('Science')
     case Resource.Gold:
-      return t('Un cube jaune représentant la ressource « Or »')
+      return t('Gold')
     case Resource.Exploration:
-      return t('Un cube bleu représentant la ressource « Exploration »')
+      return t('Exploration')
     case Resource.Krystallium:
-      return t('Un cube rouge représentant la ressource « Krystallium »')
+      return t('Krystallium')
   }
 }
 

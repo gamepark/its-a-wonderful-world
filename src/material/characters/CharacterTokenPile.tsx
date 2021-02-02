@@ -1,6 +1,5 @@
 import {css, keyframes} from '@emotion/core'
 import {useAnimation} from '@gamepark/workshop'
-import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
@@ -20,7 +19,7 @@ import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from '../boa
 import Images from '../Images'
 import Resource from '../resources/Resource'
 import Character from './Character'
-import CharacterToken, {images as characterTokenImages} from './CharacterToken'
+import CharacterToken, {getDescription, images as characterTokenImages} from './CharacterToken'
 
 type Props = {
   player: Player | PlayerView
@@ -61,7 +60,7 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   }
   return (
     <div ref={ref} {...props}>
-      {quantity === 0 && <img alt={emptySpaceDescription[character](t)} src={emptySpaceImages[character]} draggable={false} css={tokenStyle(0)}/>}
+      {quantity === 0 && <img alt={getDescription(t, character)} src={emptySpaceImages[character]} draggable={false} css={tokenStyle(0)}/>}
       {tokens}
       <div css={tokenQuantityStyle}>{quantity}</div>
       <DragPreviewImage connect={preview} src={characterTokenImages[character]}/>
@@ -80,17 +79,14 @@ const emptySpaceImages = {
   [Character.General]: Images.generalShadowed
 }
 
-const emptySpaceDescription = {
-  [Character.Financier]: (t: TFunction) => t('Emplacement des jetons Financiers'),
-  [Character.General]: (t: TFunction) => t('Emplacement des jetons Généraux')
-}
-
 const animateFromConstructedCard = (character: Character, index: number, duration: number) => {
   const pileX = character === Character.Financier ? financiersPileX : generalsPileX
   const x = (constructedCardLeftMargin + cardWidth / 2 - pileX) * 100 / tokenWidth
   const y = (constructedCardY(index) + cardHeight - charactersPilesY - developmentCardVerticalShift * 1.8) * 100 / tokenHeight
   const keyframe = keyframes`
-    from { transform: translate(${x - 50}%, ${y - 50}%)  scale(0.3); }
+    from {
+      transform: translate(${x - 50}%, ${y - 50}%) scale(0.3);
+    }
   `
   return css`
     animation: ${keyframe} ${duration}s ease-in-out forwards;
@@ -103,7 +99,9 @@ const animateFromBoard = (character: Character, resource: Resource, duration: an
   const x = (areasX + getCircleCharacterLeftPosition(resource) * boardWidth / 100 - pileX) * 100 / tokenWidth
   const y = (boardTop + circleCharacterTopPosition * boardHeight / 100 - charactersPilesY) * 100 / tokenHeight
   const keyframe = keyframes`
-    from { transform: translate(${x - 50}%, ${y - 50}%)  scale(0.4) translate(50%, 50%); }
+    from {
+      transform: translate(${x - 50}%, ${y - 50}%) scale(0.4) translate(50%, 50%);
+    }
   `
   return css`
     animation: ${keyframe} ${duration}s ease-in-out forwards;

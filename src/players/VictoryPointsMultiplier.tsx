@@ -21,7 +21,7 @@ const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, qu
       {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
       {isCharacter(item) ?
         <CharacterToken character={item} css={characterTokenImageStyle}/> :
-        <img src={developmentTypeImage[item]} css={developmentTypeImageStyle} alt={getDevelopmentTypeDescription(t, item, multiplier)}/>}
+        <img src={developmentTypeImage[item]} css={developmentTypeImageStyle} alt={getDevelopmentTypeDescription(t, item)}/>}
     </div>
   )
 }
@@ -97,18 +97,18 @@ const quantityStyle = css`
   text-shadow: 0 0 0.5em black;
 `
 
-const getDevelopmentTypeDescription = (t: TFunction, developmentType: DevelopmentType, quantity: number) => {
+const getDevelopmentTypeDescription = (t: TFunction, developmentType: DevelopmentType) => {
   switch (developmentType) {
     case DevelopmentType.Structure:
-      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement gris (les Structures)', {quantity})
+      return t('Structure')
     case DevelopmentType.Vehicle:
-      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement noir (les Véhicules)', {quantity})
+      return t('Vehicle')
     case DevelopmentType.Research:
-      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement vert (les Recherches)', {quantity})
+      return t('Research')
     case DevelopmentType.Project:
-      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement jaune (les Projets)', {quantity})
+      return t('Project')
     case DevelopmentType.Discovery:
-      return t('Ce joueur marque {quantity, plural, one{1 point} other{# points}} par développement bleu (les Découvertes)', {quantity})
+      return t('Discovery')
   }
 }
 
