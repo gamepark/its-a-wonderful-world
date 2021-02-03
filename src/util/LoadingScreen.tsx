@@ -3,7 +3,7 @@ import {faLightbulb, faPaintBrush, faWrench} from '@fortawesome/free-solid-svg-i
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
-import {useTranslation} from 'react-i18next'
+import {useTranslation, Trans} from 'react-i18next'
 import Images from '../material/Images'
 import IWWBox from '../material/IWW_BOX_3D.png'
 import Theme from '../Theme'
@@ -15,14 +15,18 @@ const LoadingScreen: FunctionComponent<{ display: boolean }> = ({display}) => {
   const theme = useTheme<Theme>()
   return (
     <div css={[loadingScreenStyle, textColor(theme), backgroundColor(theme), !display && css`opacity: 0`]}>
-      <Picture css={gameBox} src={IWWBox} alt={t('It’s a Wonderful World')}/>
-      <h2 css={gameTitle}>{t('It’s a Wonderful World')}</h2>
+      <Picture css={gameBox} src={IWWBox} alt={t('Name')}/>
+      <h2 css={gameTitle}>{t('Name')}</h2>
       <p css={gamePeople}>
-        <FontAwesomeIcon css={iconStyle} icon={faLightbulb}/>{t('Auteur : Frédéric Guérard')}
+        <FontAwesomeIcon css={iconStyle} icon={faLightbulb}/>
+        <Trans defaults="A game by <0>{author}</0>" values={{author: 'Frédéric Guérard'}} components={[<strong/>]}/>
         <br/>
-        <FontAwesomeIcon css={iconStyle} icon={faPaintBrush}/>{t('Artiste : Anthony Wolff')}
+        <FontAwesomeIcon css={iconStyle} icon={faPaintBrush}/>
+        <Trans defaults="Illustrated by <0>{artist}</0>" values={{artist: 'Anthony Wolff'}} components={[<strong/>]}/>
         <br/>
-        <FontAwesomeIcon css={iconStyle} icon={faWrench}/>{t('Éditeurs : La Boite de Jeu, Origames')}</p>
+        <FontAwesomeIcon css={iconStyle} icon={faWrench}/>
+        <Trans defaults="Edited by <0>{editor1}</0> and <0>{editor2}</0>" values={{editor1: 'La Boite de Jeu', editor2: 'Origames'}} components={[<strong/>]}/>
+      </p>
     </div>
   )
 }
