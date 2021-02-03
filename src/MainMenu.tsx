@@ -117,14 +117,14 @@ const MainMenu = () => {
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
-        <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} title={t('Menu principal')} aria-label={t('Menu principal')}
+        <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} title={t('Menu')} aria-label={t('Menu')}
                     onClick={() => toggle.play() && setDisplayMenu(true)}>
           <FontAwesomeIcon icon={faChevronDown}/>
         </IconButton>
       </div>
       <div css={[menuStyle, openMenuStyle, !displayMenu && hidden]}>
         <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} onClick={() => toggle.play() && setDisplayMenu(false)}>
-          <span css={subMenuTitle}>{t('Cacher le Menu')}</span>
+          <span css={subMenuTitle}>{t('Close')}</span>
           <FontAwesomeIcon icon={faChevronUp}/>
         </IconButton>
         {fscreen.fullscreenEnabled && (fullScreen ?
