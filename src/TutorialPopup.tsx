@@ -209,7 +209,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
       title: (t: TFunction) => t('Welcome to It’ s a Wonderful World tutorial'),
-      text: (t: TFunction) => t('Welcome to It’ s a Wonderful World tutorialIn It’s a Wonderful World, you are leading an expanding Empire. You must choose the path that will get you to develop faster and better than your competitors!'),
+      text: (t: TFunction) => t('In It’s a Wonderful World, you are leading an expanding Empire. You must choose the path that will get you to develop faster and better than your competitors!'),
       boxTop: 50,
       boxLeft: 50,
       boxWidth: 60
