@@ -18,14 +18,14 @@ const QuitPopup: FunctionComponent<{ onClose: () => void }> = ({onClose}) => {
       <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={onClose}><FontAwesomeIcon icon={faTimes}/></div>
-        <h2>{t('Quitter la partie')}</h2>
-        <p>{t('En quittant la partie, vous serez éliminé et les autres joueurs termineront sans vous.')}</p>
-        <p>{t('Par respect envers les autres joueurs, n’abandonnez la partie qu’en cas de force majeure.')}</p>
+        <h2>{t('Leave the game')}</h2>
+        <p>{t('When you leave the game, you will be eliminated and the other players will finish without you.')}</p>
+        <p>{t('Out of respect for other players, only abandon the game in case of force majeure.')}</p>
         <Button onClick={() => {
           leaveGame()
           onClose()
         }}>
-          {t('Quitter la partie')}
+          {t('Leave the game')}
         </Button>
       </div>
     </div>

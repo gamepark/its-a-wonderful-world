@@ -121,25 +121,25 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
       {maxSpendableResources.length > 1 &&
       <button css={[itemButtonStyle, placeItemButton, itemButtonPosition(getTotalConstructionCost(construction.card) + 0.5)]}
               onClick={() => placeAvailableCubes(construction)}>
-        <span css={getPlaceTextStyle}>{t('Placer')} </span>
+        <span css={getPlaceTextStyle}>{t('Place')} </span>
         {maxSpendableResources.map((resource, index) => <ResourceCube key={index} resource={resource} css={buttonItemStyle}/>)}
       </button>}
       {isPlayer(player) && !gameOver && <>
         {canBuild(player, construction.card) &&
         <button
           css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) + (maxSpendableResources.length > 1 ? 2 : 1))]}
-          onClick={() => build(construction)}>{t('Construire')}</button>
+          onClick={() => build(construction)}>{t('Build')}</button>
         }
         <button css={[textButton, textButtonRight, recyclingButton(developmentCards[construction.card].recyclingBonus)]}
                 onClick={() => play(recycle(player.empire, construction.card))}>
-          {t('Recycler')}
+          {t('Recycle')}
         </button>
       </>}
       <FocusedDevelopmentOptions development={developmentCards[construction.card]} onClose={() => setFocusedCard(undefined)}/>
     </>}
     <div ref={ref} css={getConstructionAreaStyle(row, fullWidth, isValidTarget, isOver)}>
-      {!player.constructionArea.length && <span css={constructionAreaText}>{t('Zone de construction')}</span>}
-      {isValidTarget && <span css={constructAreaText}>&rarr; {t('Mettre en Construction')}</span>}
+      {!player.constructionArea.length && <span css={constructionAreaText}>{t('Construction area')}</span>}
+      {isValidTarget && <span css={constructAreaText}>&rarr; {t('Slate for construction')}</span>}
     </div>
     {constructions.current.map((construction, index) => {
         return <DevelopmentCardUnderConstruction key={construction.card} game={game} gameOver={gameOver} player={player} construction={construction}

@@ -22,9 +22,9 @@ const WelcomePopup: FunctionComponent<{ player: Player | PlayerView, close: () =
       <div css={[popupStyle, popupPosition, css`width: 60%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={close}><FontAwesomeIcon icon={faTimes}/></div>
-        <h2>{t('Bienvenue {playerName}', {playerName: playerInfo?.name})}</h2>
+        <h2>{t('Welcome {playerName}', {playerName: playerInfo?.name})}</h2>
         <EmpireCard player={player} css={empireCardStyle}/>
-        <p>{t('Vous jouez {empire}, face {letter}. Bon jeu !', {empire: Rules.getPlayerName(player.empire, t), letter: player.empireSide})}</p>
+        <p>{t('You play {empire}, face {letter}. Have fun!', {empire: Rules.getPlayerName(player.empire, t), letter: player.empireSide})}</p>
         <Button onClick={close}>{t('OK')}</Button>
       </div>
     </div>

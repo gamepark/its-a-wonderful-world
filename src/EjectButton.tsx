@@ -27,9 +27,9 @@ const EjectButton: FC<Props> = ({subMenu, openEjectPopup, ...props}) => {
   }
   return (
     <>
-      <IconButton css={ejectButtonStyle} title={t('Expulser un joueur')} aria-label={t('Expulser un joueur')}
+      <IconButton css={ejectButtonStyle} title={t('Eject a player')} aria-label={t('Eject a player')}
                   onClick={() => toggle.play() && openEjectPopup()} {...props}>
-        {subMenu && <span css={subMenuTitle}>{t('Expulser un joueur')}</span>}
+        {subMenu && <span css={subMenuTitle}>{t('Eject a player')}</span>}
         <FontAwesomeIcon icon={faUserSlash}/>
       </IconButton>
     </>

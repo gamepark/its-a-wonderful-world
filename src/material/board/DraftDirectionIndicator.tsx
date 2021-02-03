@@ -18,9 +18,9 @@ const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: 
     <Fragment>
       {players.slice(1).map((_, index) => clockwise ?
         <DescendingArrows key={index} color={greenColor} css={css`top: ${headerHeight + (index + 1) * (playerPanelHeight + playerPanelMargin)}%;`}
-                          title={t('Sens de passage des cartes')}/> :
+                          title={t('Draft direction')}/> :
         <AscendingArrows key={index} color={purpleColor} css={css`top: ${25.2 + index * 18}%;`}
-                         title={t('Sens de passage des cartes')}/>
+                         title={t('Draft direction')}/>
       )}
     </Fragment>
   )

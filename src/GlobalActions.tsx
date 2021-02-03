@@ -26,7 +26,7 @@ const GlobalActions: FunctionComponent<Props> = ({game, player, validate}) => {
   const canValidate = legalMoves.some(isTellYouAreReady)
   const chooseCharacter = legalMoves.some(isReceiveCharacter)
   return (<>
-    {canValidate && <Button onClick={validate} css={validateButtonStyle}>{t('Valider')}</Button>}
+    {canValidate && <Button onClick={validate} css={validateButtonStyle}>{t('Validate')}</Button>}
     {chooseCharacter && <>
       <CharacterToken character={Character.Financier} onClick={() => play(receiveCharacter(player.empire, Character.Financier))}
                       css={[characterTokenStyle, financierTokenPosition]}/>,

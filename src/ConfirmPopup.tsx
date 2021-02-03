@@ -16,9 +16,9 @@ const ConfirmPopup: FunctionComponent<{ cancel: () => void, confirm: () => void 
       <div css={[popupStyle, popupPosition, css`width: 50%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={cancel}><FontAwesomeIcon icon={faTimes}/></div>
-        <p>{t('Vous pouvez encore construire une carte. Êtes-vous sûr de vouloir finir la partie sans la construire ?')}</p>
-        <Button css={buttonStyle} onClick={cancel}>{t('Annuler')}</Button>
-        <Button css={buttonStyle} onClick={confirm}>{t('Confirmer')}</Button>
+        <p>{t('You can still build a card. Are you sure you want to finish the game without building it?')}</p>
+        <Button css={buttonStyle} onClick={cancel}>{t('Cancel')}</Button>
+        <Button css={buttonStyle} onClick={confirm}>{t('Confirm')}</Button>
       </div>
     </div>
   )

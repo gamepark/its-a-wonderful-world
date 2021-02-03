@@ -78,8 +78,8 @@ const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
       setScoreSuspense(true)
     }
   }, [game, gameOver, setScoreSuspense])
-  const text = loading ? t('Chargement de la partie…') :
-    gameOver ? scoreSuspense ? t('Calcul du score… Qui sera le Suprême Leader ?') :
+  const text = loading ? t('Game loading…') :
+    gameOver ? scoreSuspense ? t('Score calculation… Who will be the Supreme Leader?') :
       getEndOfGameText(t, players, game!, empire) :
       getText(t, validate, play, players, game!, empire, animation)
   return (
@@ -103,63 +103,63 @@ function getText(t: TFunction, validate: () => void, play: (move: Move) => void,
   switch (game.phase) {
     case Phase.Draft:
       if (animation && animation.move.type === MoveType.RevealChosenCards) {
-        return t('Les joueurs révèlent la carte qu’ils ont choisie')
+        return t('Players reveal the card they have chosen')
       } else if (animation && animation.move.type === MoveType.PassCards) {
         if (game.round % 2 === 1) {
-          return t('Les joueurs passent le reste du paquet à gauche')
+          return t('The players pass the rest of the cards to the left')
         } else {
-          return t('Les joueurs passent le reste du paquet à droite')
+          return t('The players pass the rest of the cards to the right')
         }
       } else if (player && player.chosenCard === undefined) {
-        return t('Choisissez une carte et placez-la dans votre zone de draft')
+        return t('Choose a card and place it in your draft area')
       } else {
         const players = game.players.filter(player => player.chosenCard === undefined)
         if (players.length === 0) {
-          return t('Envoi du coup au Suprême Dirigeant…')
+          return t('Sending move to the Supreme Leader…')
         } else if (players.length === 1) {
-          return t('{player} doit choisir une carte développement', {player: getPlayerName(players[0].empire)})
+          return t('{player} must choose a development card', {player: getPlayerName(players[0].empire)})
         } else if (player) {
-          return t('Les autres joueurs doivent choisir une carte développement')
+          return t('Other players must choose a development card')
         } else {
-          return t('Les joueurs doivent choisir une carte développement')
+          return t('Players must choose a development card')
         }
       }
     case Phase.Planning:
       if (player && player.draftArea.length) {
-        return t('Vous devez mettre en construction ou recycler chacune des cartes draftées')
+        return t('You must slate for construction or recycle each card in your draft area')
       } else if (player && player.availableResources.length) {
-        return t('Placez vos ressources sur vos développements en construction ou votre carte Empire')
+        return t('Place your resources on your developments under construction or your Empire card')
       } else if (player && !player.ready) {
         return <Trans values={{resource: Resource.Materials}}
-                      defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                      components={[<Button onClick={validate}>Valider</Button>]}/>
+                      defaults="Click on <0>Validate</0> if you are ready to proceed to {resource, select, Materials{materials} Energy{energy} Science{science} Gold{gold} other{exploration}} production"
+                      components={[<Button onClick={validate}/>]}/>
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 0) {
-          return t('Envoi du coup au Suprême Dirigeant…')
+          return t('Sending move to the Supreme Leader…')
         } else if (players.length === 1) {
-          return t('{player} doit faire sa planification', {player: getPlayerName(players[0].empire)})
+          return t('{player} has to plan', {player: getPlayerName(players[0].empire)})
         } else if (player) {
-          return t('Les autres joueurs doivent faire leur planification')
+          return t('The other players have to do their planning')
         } else {
-          return t('Les joueurs doivent faire leur planification')
+          return t('Players have to do their planning')
         }
       }
     case Phase.Production:
       if (animation && isReceiveCharacter(animation.move) && !animation.action.consequences.some(isCompleteConstruction)) {
         if (animation.move.playerId === player?.empire) {
-          return t('Vous recevez un {character, select, Financier{Financier} other{Général}} pour votre suprématie en production {resource, select, Materials{de Matériaux} Energy{d’Énergie} Science{de Science} Gold{d’Or} other{d’Exploration}}',
+          return t('You receive a {character, select, Financier{Financier} other{General}} for your {resource, select, Materials{Materials} Energy{Energy} Science{Science} Gold{Gold} other{Exploration}} production supremacy',
             {character: animation.move.character, resource: game.productionStep})
         } else {
-          return t('{player} recoit un {character, select, Financier{Financier} other{Général}} pour sa suprématie en production {resource, select, Materials{de Matériaux} Energy{d’Énergie} Science{de Science} Gold{d’Or} other{d’Exploration}}',
+          return t('{player} receives a {character, select, Financier{Financier} other{General}} for producing the most {resource, select, Materials{Materials} Energy{Energy} Science{Science} Gold{Gold} other{Exploration}}',
             {player: getPlayerName(animation.move.playerId), character: animation.move.character, resource: game.productionStep})
         }
       }
       if (player && !player.ready) {
         if (player.availableResources.length) {
-          return t('Placez les ressources produites sur vos développements en construction ou votre carte Empire')
+          return t('Place the resources produced on your developments under construction or your Empire card')
         } else if (player.bonuses.some(bonus => bonus === 'CHOOSE_CHARACTER')) {
-          return <Trans defaults="Recevez un Financier <0/> ou une Générale <1/> (Bonus de Suprématie en Science)"
+          return <Trans defaults="Receive a Financier <0/> or a General <1/> (Science Supremacy Bonus)"
                         components={[
                           <CharacterToken character={Character.Financier} onClick={() => play(receiveCharacter(player.empire, Character.Financier))}
                                           css={characterTokenStyle}/>,
@@ -168,25 +168,25 @@ function getText(t: TFunction, validate: () => void, play: (move: Move) => void,
                         ]}/>
         } else if (game.productionStep !== Resource.Exploration) {
           return <Trans values={{resource: getNextProductionStep(game)}}
-                        defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer à la production {resource, select, Materials{de matériaux} Energy{d’énergie} Science{de science} Gold{d’or} other{d’exploration}}"
-                        components={[<Button onClick={validate}>Valider</Button>]}/>
+                        defaults="Click on <0>Validate</0> if you are ready to proceed to {resource, select, Materials{materials} Energy{energy} Science{science} Gold{gold} other{exploration}} production"
+                        components={[<Button onClick={validate}/>]}/>
         } else if (game.round < numberOfRounds) {
-          return <Trans defaults="Cliquez sur <0>Valider</0> si vous êtes prêt à passer au tour suivant"
-                        components={[<Button onClick={validate}>Valider</Button>]}/>
+          return <Trans defaults="Click on <0>Validate</0> if you are ready to proceed to the next round"
+                        components={[<Button onClick={validate}/>]}/>
         } else {
-          return <Trans defaults="Cliquez sur <0>Valider</0> pour passer au calcul des scores"
-                        components={[<Button onClick={validate}>Valider</Button>]}/>
+          return <Trans defaults="Click on <0>Validate</0> to proceed to the calculation of the scores"
+                        components={[<Button onClick={validate}/>]}/>
         }
       } else {
         const players = game.players.filter(player => !player.ready)
         if (players.length === 0) {
-          return t('Envoi du coup au Suprême Dirigeant…')
+          return t('Sending move to the Supreme Leader…')
         } else if (players.length === 1) {
-          return t('{player} doit utiliser les ressources produites', {player: getPlayerName(players[0].empire)})
+          return t('{player} must use the resources produced', {player: getPlayerName(players[0].empire)})
         } else if (player) {
-          return t('Les autres joueurs doivent utiliser les ressources produites')
+          return t('The other players must use the resources produced')
         } else {
-          return t('Les joueurs doivent utiliser les ressources produites')
+          return t('Players must use the resources produced')
         }
       }
   }
@@ -198,48 +198,48 @@ function getTutorialText(t: TFunction, game: GameView, player: Player): string |
     case Phase.Draft:
       switch (player.hand.length) {
         case 7 :
-          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
+          return t('Tutorial: choose the card {card} and place it to your draft area', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
         case 6 :
-          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+          return t('Tutorial: choose the card {card} and place it to your draft area', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
         case 5 :
-          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+          return t('Tutorial: choose the card {card} and place it to your draft area', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
         case 4 :
-          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(HarborZone)!(t)})
+          return t('Tutorial: choose the card {card} and place it to your draft area', {card: DevelopmentCardsTitles.get(HarborZone)!(t)})
         case 3 :
-          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
+          return t('Tutorial: choose the card {card} and place it to your draft area', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
         case 2 :
-          return t('Tutoriel : choisissez la carte {card} et placez-la dans votre zone de draft', {card: DevelopmentCardsTitles.get(UniversalExposition)!(t)})
+          return t('Tutorial: choose the card {card} and place it to your draft area', {card: DevelopmentCardsTitles.get(UniversalExposition)!(t)})
       }
       break
     case Phase.Planning:
       switch (player.draftArea.length) {
         case 7 :
-          return t('Tutoriel : sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+          return t('Tutorial: select the card {card} and place it to your construction area', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
         case 6 :
-          return t('Tutoriel : sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+          return t('Tutorial: select the card {card} and place it to your construction area', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
         case 5 :
-          return t('Tutoriel : sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(HarborZone)!(t)})
+          return t('Tutorial: select the card {card} and place it to your construction area', {card: DevelopmentCardsTitles.get(HarborZone)!(t)})
         case 4 :
-          return t('Tutoriel : sélectionnez la carte {card} et placez-la dans votre zone de construction', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
+          return t('Tutorial: select the card {card} and place it to your construction area', {card: DevelopmentCardsTitles.get(SecretSociety)!(t)})
         case 3 :
-          return t('Tutoriel : sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(UniversalExposition)!(t)})
+          return t('Tutorial: select the card {card} and recycle it', {card: DevelopmentCardsTitles.get(UniversalExposition)!(t)})
         case 2 :
           if (player.availableResources.length > 0)
-            return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+            return t('Tutorial: place your resources on the {card} card', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
           else
-            return t('Tutoriel : sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
+            return t('Tutorial: select the card {card} and recycle it', {card: DevelopmentCardsTitles.get(WindTurbines)!(t)})
         case 1 :
           if (player.availableResources.length > 0)
-            return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+            return t('Tutorial: place your resources on the {card} card', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
           else
-            return t('Tutoriel : sélectionnez la carte {card} et recyclez-la', {card: DevelopmentCardsTitles.get(Zeppelin)!(t)})
+            return t('Tutorial: select the card {card} and recycle it', {card: DevelopmentCardsTitles.get(Zeppelin)!(t)})
       }
       break
     case Phase.Production:
       if (player.availableResources.filter(r => r === Resource.Materials).length > 0)
-        return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
+        return t('Tutorial: place your resources on the {card} card', {card: DevelopmentCardsTitles.get(IndustrialComplex)!(t)})
       else if (player.availableResources.filter(r => r === Resource.Gold).length > 0)
-        return t('Tutoriel : placez vos ressources sur la carte {card}', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
+        return t('Tutorial: place your resources on the {card} card', {card: DevelopmentCardsTitles.get(PropagandaCenter)!(t)})
       break
   }
   return
@@ -262,9 +262,9 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
   }
   if (playersWithHighestScore.length === 1) {
     if (player === playersWithHighestScore[0]) {
-      return t('Victoire ! Vous gagnez la partie avec {score} points', {score: highestScore})
+      return t('Victory! You win the game with {score} points', {score: highestScore})
     } else {
-      return t('{player} gagne la partie avec {score} points', {player: getPlayerName(playersWithHighestScore[0].empire), score: highestScore})
+      return t('{player} wins the game with {score} points', {player: getPlayerName(playersWithHighestScore[0].empire), score: highestScore})
     }
   }
   let highestDevelopments = -1
@@ -280,10 +280,10 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
   }
   if (playersWithMostDevelopments.length === 1) {
     if (player === playersWithMostDevelopments[0]) {
-      return t('Victoire ! Vous gagnez la partie avec {score} points et {developments} développements construits',
+      return t('Victory! You win the game with {score} points and {developments} developments built',
         {score: highestScore, developments: highestDevelopments})
     } else {
-      return t('{player} gagne la partie avec {score} points et {developments} développements construits',
+      return t('{player} wins the game with {score} points and {developments} developments built',
         {player: getPlayerName(playersWithMostDevelopments[0].empire), score: highestScore, developments: highestDevelopments})
     }
   }
@@ -301,30 +301,30 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
   }
   if (playersWithMostCharacters.length === 1) {
     if (player === playersWithMostCharacters[0]) {
-      return t('Victoire ! Vous gagnez la partie avec {score} points, {developments} développements et {characters} personnages',
+      return t('Victory! You win the game with {score} points, {developments} developments and {characters} characters',
         {score: highestScore, developments: highestDevelopments, characters: highestCharacters})
     } else {
-      return t('{player} gagne la partie avec {score} points, {developments} développements et {characters} personnages',
+      return t('{player} wins the game with {score} points, {developments} developments and {characters} characters',
         {player: getPlayerName(playersWithMostCharacters[0].empire), score: highestScore, developments: highestDevelopments, characters: highestCharacters})
     }
   }
   if (playersWithMostCharacters.length === game.players.length) {
-    return t('Égalité parfaite ! Tous les joueurs ont {score} points, {developments} développements et {characters} personnages',
+    return t('Perfect tie! All players each have {score} points, {developments} developments and {characters} characters',
       {score: highestScore, developments: highestDevelopments, characters: highestCharacters})
   } else if (playersWithMostCharacters.length === 2) {
-    return t('Égalité parfaite ! {player1} et {player2} ont {score} points, {developments} développements et {characters} personnages',
+    return t('Perfect tie! {player1} and {player2} each have {score} points, {developments} developments and {characters} characters',
       {
         player1: getPlayerName(playersWithMostCharacters[0].empire), player2: getPlayerName(playersWithMostCharacters[1].empire),
         score: highestScore, developments: highestDevelopments, characters: highestCharacters
       })
   } else if (playersWithMostCharacters.length === 3) {
-    return t('Égalité parfaite ! {player1}, {player2} et {player3} ont {score} points, {developments} développements et {characters} personnages',
+    return t('Perfect tie! {player1}, {player2} and {player3} each have {score} points, {developments} developments and {characters} characters',
       {
         player1: getPlayerName(playersWithMostCharacters[0].empire), player2: getPlayerName(playersWithMostCharacters[1].empire),
         player3: getPlayerName(playersWithMostCharacters[2].empire), score: highestScore, developments: highestDevelopments, characters: highestCharacters
       })
   } else {
-    return t('Égalité parfaite ! {player1}, {player2}, {player3} et {player4} ont {score} points, {developments} développements et {characters} personnages',
+    return t('Perfect tie! {player1}, {player2}, {player3} and {player4} each have {score} points, {developments} developments and {characters} characters',
       {
         player1: getPlayerName(playersWithMostCharacters[0].empire), player2: getPlayerName(playersWithMostCharacters[1].empire),
         player3: getPlayerName(playersWithMostCharacters[2].empire), player4: getPlayerName(playersWithMostCharacters[3].empire),

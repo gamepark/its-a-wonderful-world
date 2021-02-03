@@ -103,7 +103,7 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
         <DevelopmentCard development={developmentCards[focusedCard]} css={focusCardStyle}/>
         {canChooseCard &&
         <button css={[textButton, textButtonLeft, chooseCardButton]} onClick={() => play(chooseDevelopmentCard(player.empire, focusedCard))}>
-          {t('Choisir')}
+          {t('Choose')}
         </button>}
         <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>
       </>

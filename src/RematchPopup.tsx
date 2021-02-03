@@ -32,22 +32,22 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
           playerId === rematchOffer.playerId ? (
             rematchOffer.link ?
               <>
-                <h2>{t('Vous avez proposé une revanche amicale')}</h2>
-                <p>{t('Votre proposition a été transmise aux autres joueurs')}</p>
-                <Button onClick={() => window.location.href = rematchOffer.link!}>{t('Voir la nouvelle partie')}</Button>
+                <h2>{t('You offered a friendly rematch')}</h2>
+                <p>{t('You offer was sent to the other players')}</p>
+                <Button onClick={() => window.location.href = rematchOffer.link!}>{t('See the new game')}</Button>
               </>
               :
               <>
-                <h2>{t('Proposition de revanche')}</h2>
-                <p>{t('Veuillez patienter…')}</p>
+                <h2>{t('Rematch offer')}</h2>
+                <p>{t('Please stand by…')}</p>
                 <FontAwesomeIcon css={spinnerStyle} icon={faHourglassEnd}/>
               </>
           ) : (
             rematchOffer.link &&
             <>
-              <h2>{t('{player} vous propose une revanche amicale !', {player: getPlayerName(rematchOffer.playerId)})}</h2>
-              <p>{t('Cliquez sur le lien ci-dessous pour accéder à la nouvelle partie :')}</p>
-              <Button onClick={() => window.location.href = rematchOffer.link!}>{t('Voir la nouvelle partie')}</Button>
+              <h2>{t('{player} offers a friendly rematch!', {player: getPlayerName(rematchOffer.playerId)})}</h2>
+              <p>{t('Click the following link to go to the new game:')}</p>
+              <Button onClick={() => window.location.href = rematchOffer.link!}>{t('See the new game')}</Button>
             </>
           )
         )}

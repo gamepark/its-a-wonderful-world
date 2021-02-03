@@ -22,7 +22,7 @@ const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () =>
         <h2>{description.title(t)}</h2>
         <p>{description.text(t)}</p>
         {failures[0] === Failure.MOVE_FORBIDDEN && <p>
-          <Trans defaults="Si le problème persiste, vous pouvez <0>rafraîchir la partie</0>"
+          <Trans defaults="If the issue remains, try to <0>reload the game</0>"
                  components={[<Button onClick={() => window.location.reload()}>rafraîchir la partie</Button>]}/>
         </p>}
       </div>
@@ -32,25 +32,25 @@ const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () =>
 
 const failuresDescription = {
   [Failure.NETWORK]: {
-    title: (t: TFunction) => t('Oups…'),
-    text: (t: TFunction) => t('Une action n’a pas pu aboutir et a été annulée. Êtes-vous toujours connecté à Internet ?')
+    title: (t: TFunction) => t('Whoops…'),
+    text: (t: TFunction) => t('An action could not be completed and was canceled. Are you still connected to the Internet?')
   },
   [Failure.MOVE_FORBIDDEN]: {
-    title: (t: TFunction) => t('Coup non autorisé !'),
-    text: (t: TFunction) => t('L’action que vous avez jouée n’est pas autorisée.')
+    title: (t: TFunction) => t('Move unauthorized!'),
+    text: (t: TFunction) => t('The action you played is not allowed.')
   },
   [Failure.UNDO_FORBIDDEN]: {
-    title: (t: TFunction) => t('Trop tard !'),
-    text: (t: TFunction) => t('Les autres joueurs ont déjà joué, votre coup n’a pas pu être annulé.')
+    title: (t: TFunction) => t('Too late!'),
+    text: (t: TFunction) => t('The other players have already played, your move could not be canceled.')
   },
   [Failure.TUTORIAL_MOVE_EXPECTED]: {
-    title: (t: TFunction) => t('Coup non prévu dans le tutoriel'),
-    text: (t: TFunction) => t('Promis, vous serez bientôt libres de vos choix ! Nous allons vous réafficher la dernière information…')
+    title: (t: TFunction) => t('Move not expected in the tutorial'),
+    text: (t: TFunction) => t('You will soon be free to make your own choices! Let us show you the last information…')
   }
 }
 
 const fallbackDescription = (failure: string) => ({
-  title: (t: TFunction) => t('Erreur inconnue :'),
+  title: (t: TFunction) => t('Unknown error:'),
   text: () => failure
 })
 

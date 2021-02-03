@@ -48,7 +48,7 @@ const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> =
       {dragging &&
       <div ref={ref} css={[buildDropArea, isValidTarget ? validDropAreaColor(isOver) : invalidDropAreaColor]}>
         <span css={dropAreaText}>
-          {isValidTarget ? t('Construire') : t('Construction impossible')}
+          {isValidTarget ? t('Build') : t('Construction is impossible')}
         </span>
       </div>
       }

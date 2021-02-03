@@ -11,7 +11,7 @@ const PhaseIndicator: FunctionComponent<{ phase: Phase }> = ({phase}) => {
   return (
     <>
       <h3 css={[phaseStyle, draftStyle, phase === Phase.Draft && currentPhase]}>{t('Draft')}</h3>
-      <h3 css={[phaseStyle, planningStyle, phase === Phase.Planning && currentPhase]}>{t('Planification')}</h3>
+      <h3 css={[phaseStyle, planningStyle, phase === Phase.Planning && currentPhase]}>{t('Planning')}</h3>
       <h3 css={[phaseStyle, productionStyle, phase === Phase.Production && currentPhase]}>{t('Production')}</h3>
     </>
   )

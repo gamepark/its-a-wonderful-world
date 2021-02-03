@@ -40,7 +40,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
       {playerInfo?.avatar ?
         <Avatar style={{position: 'absolute', width: '16%', height: '34%', top: '0%', left: '3%', filter: 'drop-shadow(0px 0.2em 0.4em black)'}}
                 avatarStyle="Circle" {...playerInfo?.avatar}/> :
-        <img alt={t('Avatar du joueur')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
+        <img alt={t('Player avatar')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       }
       <h3 css={titleStyle}>
         <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || Rules.getPlayerName(player.empire, t)}</span>

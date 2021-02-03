@@ -17,7 +17,7 @@ const DiscardPile: FunctionComponent<{ game: GameView }> = ({game}) => {
       {displayCatalog &&
         <>
       <DevelopmentCardsCatalog developments={game.discard.map(card => developmentCards[card])} onClose={() => setDisplayCatalog(false)}/>
-      <h2 css={discardLengthStyle}>{t('Il y a {discardLength} cartes dans la défausse.',{discardLength})}</h2>
+      <h2 css={discardLengthStyle}>{t('There is {discardLength} cards in the discard pile.',{discardLength})}</h2>
       </>
       }
       {game.discard.slice(-discardPileMaxSize).map((card, index) =>

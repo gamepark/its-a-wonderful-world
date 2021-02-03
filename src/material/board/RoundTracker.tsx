@@ -10,7 +10,7 @@ const RoundTracker: FunctionComponent<{ round: number }> = ({round}) => {
   const {t} = useTranslation()
   return (
     <>
-      <img alt={t('Le marqueur de tour')} src={round % 2 ? Images.roundTrackerRecto : Images.roundTrackerVerso} draggable="false" css={roundTrackerStyle}/>
+      <img alt={t('Round-tracker token')} src={round % 2 ? Images.roundTrackerRecto : Images.roundTrackerVerso} draggable="false" css={roundTrackerStyle}/>
       <span css={roundTextStyle}>{round}</span>
     </>
   )

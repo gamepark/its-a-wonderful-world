@@ -23,7 +23,7 @@ const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
     `]}/>)}
     <div css={drawPileTooltip} data-tip />
     <ReactTooltip type='warning' effect='solid' place='left' >
-      <span>{t('Nb de cartes : {nbDeck}/{nbCards}',{nbDeck,nbCards})}  </span>
+      <span>{t('Number of cards: {nbDeck}/{nbCards}',{nbDeck,nbCards})}  </span>
     </ReactTooltip>
   </>
 }

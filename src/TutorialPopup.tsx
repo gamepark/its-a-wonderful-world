@@ -84,7 +84,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
       </div>
       {
         !displayPopup && tutorialDescription.length > actionsNumber &&
-        <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>{t('Afficher le Tutoriel')}</Button>
+        <Button css={resetStyle} onClick={() => resetTutorialDisplay()}>{t('Show Tutorial')}</Button>
       }
       {
         currentMessage && currentMessage.arrow &&
@@ -119,9 +119,9 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
             <p>{tutorialEndGame.text(t)}</p>
           </>
           }
-          <Button css={buttonStyle} onClick={() => resetTutorial()}>{t('Recommencer le tutoriel')}</Button>
-          <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>{t('Jouer avec des amis')}</Button>
-          <Button onClick={() => window.location.href = discordUri}>{t('Trouver des joueurs')}</Button>
+          <Button css={buttonStyle} onClick={() => resetTutorial()}>{t('Restart the tutorial')}</Button>
+          <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>{t('Play with friends')}</Button>
+          <Button onClick={() => window.location.href = discordUri}>{t('Find players')}</Button>
         </div>
       }
     </>
@@ -208,15 +208,15 @@ type TutorialStepDescription = {
 const tutorialDescription: TutorialStepDescription[][] = [
   [
     {
-      title: (t: TFunction) => t('Bienvenue dans le tutoriel de It’s a Wonderful World'),
-      text: (t: TFunction) => t('Dans It’s a Wonderful World, vous incarnez un Empire en expansion. À vous de vous développer plus vite et mieux que vos concurrents !'),
+      title: (t: TFunction) => t('Welcome to It’ s a Wonderful World tutorial'),
+      text: (t: TFunction) => t('Welcome to It’ s a Wonderful World tutorialIn It’s a Wonderful World, you are leading an expanding Empire. You must choose the path that will get you to develop faster and better than your competitors!'),
       boxTop: 50,
       boxLeft: 50,
       boxWidth: 60
     },
     {
-      title: (t: TFunction) => t('Votre Empire'),
-      text: (t: TFunction) => t('Voici votre Empire : les États du Noram.'),
+      title: (t: TFunction) => t('Your Empire'),
+      text: (t: TFunction) => t('This is your Empire: the Noram States.'),
       boxTop: 26,
       boxLeft: 40.5,
       boxWidth: 60,
@@ -227,8 +227,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Vos adversaires'),
-      text: (t: TFunction) => t('Dans ce tutoriel, vous jouez contre 2 adversaires contrôlés par la machine : la République d’Europa et la Fédération d’Asie.'),
+      title: (t: TFunction) => t('Your opponents'),
+      text: (t: TFunction) => t('In this tutorial, you play against 2 opponents controlled by the machine: the Republic of Europe and Federation of Asia.'),
       boxTop: 35,
       boxLeft: 40.5,
       boxWidth: 60,
@@ -239,8 +239,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('But du jeu'),
-      text: (t: TFunction) => t('Le jeu consiste à choisir et à construire des cartes Développement. Certaines de ces cartes rapportent des points de victoire. Le joueur ayant le plus de points de victoire à la fin de la partie l’emporte !'),
+      title: (t: TFunction) => t('Goal of the game'),
+      text: (t: TFunction) => t('The game consists of choosing and building Development cards. Some of these cards earn victory points. The player with the most victory points at the end of the game wins!'),
       boxTop: 61,
       boxLeft: 44,
       boxWidth: 60,
@@ -251,8 +251,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Déroulement de la partie'),
-      text: (t: TFunction) => t('Une partie se joue en 4 tours. Nous allons vous guider tout au long du premier tour pour vous apprendre à jouer, puis vous serez libre de vos choix !'),
+      title: (t: TFunction) => t('Flow of the game'),
+      text: (t: TFunction) => t('A game is played in 4 rounds. We will guide you through the first round to teach you how to play, then you will be free to make your own choices!'),
       boxTop: 30,
       boxLeft: 35,
       boxWidth: 60,
@@ -263,8 +263,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Déroulement d’un tour'),
-      text: (t: TFunction) => t('Un tour est composé de 3 phases que les joueurs jouent simultanément : le Draft, la Planification et la Production.'),
+      title: (t: TFunction) => t('Flow of a round'),
+      text: (t: TFunction) => t('A round consists of 3 phases that players play simultaneously: Draft, Planning and Production.'),
       boxTop: 30,
       boxLeft: 43,
       boxWidth: 60,
@@ -275,8 +275,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Phase de Draft'),
-      text: (t: TFunction) => t('Chaque joueur reçoit 7 cartes. Vous devez choisir 1 carte et passer les autres à la République d’Europa.'),
+      title: (t: TFunction) => t('Draft phase'),
+      text: (t: TFunction) => t('Each player receives 7 cards. You must choose 1 card and pass the rest to the Republic of Europe.'),
       boxTop: 61,
       boxLeft: 44,
       boxWidth: 60,
@@ -287,8 +287,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Choisissez votre première carte'),
-      text: (t: TFunction) => t('Déplacez la Société Secrète dans votre zone de draft. Nous verrons plus tard pourquoi cette carte est stratégique pour vous.'),
+      title: (t: TFunction) => t('Choose your first card'),
+      text: (t: TFunction) => t('Move the Secret Society to your draft area. We will see later why this card is strategic for you.'),
       boxTop: 61,
       boxLeft: 43,
       boxWidth: 70,
@@ -301,8 +301,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Choix simultané'),
-      text: (t: TFunction) => t('Comme vous avez pu le constater, la Fédération d’Asie vous a passé 6 cartes. Les joueurs choisissent simultanément 1 carte et passent le reste au joueur suivant.'),
+      title: (t: TFunction) => t('Simultaneous choice'),
+      text: (t: TFunction) => t('As you can see, the Asian Federation has passed you 6 cards. The players choose 1 card simultaneously and pass the rest to the next player.'),
       boxTop: 61,
       boxLeft: 45,
       boxWidth: 80,
@@ -313,8 +313,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Sens du draft'),
-      text: (t: TFunction) => t('Ces flèches indiquent le sens de passage des cartes pour ce tour.'),
+      title: (t: TFunction) => t('Direction of the draft'),
+      text: (t: TFunction) => t('These arrows indicate the direction of the cards for this round.'),
       boxTop: 26,
       boxLeft: 44.5,
       boxWidth: 70,
@@ -325,8 +325,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Choisissez le Complexe Industriel'),
-      text: (t: TFunction) => t('Cette carte va vous permettre de bien démarrer la partie.'),
+      title: (t: TFunction) => t('Choose the Industrial Complex'),
+      text: (t: TFunction) => t('This card will provide you with a good start.'),
       boxTop: 60,
       boxLeft: 40,
       boxWidth: 70,
@@ -339,8 +339,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Production des cartes'),
-      text: (t: TFunction) => t('Certaines cartes produisent des ressources une fois construites. Par exemple, le Complexe Industriel produira une ressource grise (les Matériaux) et une jaune (l’Or)'),
+      title: (t: TFunction) => t('Cards production'),
+      text: (t: TFunction) => t('Some cards produce resources once built. For example, the Industrial Complex will produce a gray resource (Materials) and a yellow one (Gold).'),
       boxTop: 67,
       boxLeft: 62,
       boxWidth: 60,
@@ -351,8 +351,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Coût de construction'),
-      text: (t: TFunction) => t('Les ressources vous permettront de construire les cartes. Par exemple, le Complexe Industriel coûte 3 Matériaux (en gris) et une Énergie (en noir)'),
+      title: (t: TFunction) => t('Construction cost'),
+      text: (t: TFunction) => t('The resources will allow you to build the cards. For example, the Industrial Complex costs 3 Materials (in grey) and one Energy (in black).'),
       boxTop: 52,
       boxLeft: 58.5,
       boxWidth: 60,
@@ -363,8 +363,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Production de l’Empire'),
-      text: (t: TFunction) => t('Heureusement, vous ne commencez pas sans production ! Votre Empire produira chaque tour 3 Matériaux et 1 Or.'),
+      title: (t: TFunction) => t('Production of the Empire'),
+      text: (t: TFunction) => t('Fortunately, you don’t start without production! Your Empire will produce 3 Materials and 1 Gold every round.'),
       boxTop: 78,
       boxLeft: 43,
       boxWidth: 60,
@@ -375,8 +375,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Choisissez à présent le Centre de Propagande'),
-      text: (t: TFunction) => t('Grâce à cette carte, vous pourrez produire de plus en plus d’Or !'),
+      title: (t: TFunction) => t('Now choose the Propaganda Center'),
+      text: (t: TFunction) => t('Thanks to this card, you will be able to produce more and more Gold!'),
       boxTop: 60,
       boxLeft: 40,
       boxWidth: 60,
@@ -389,8 +389,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Production proportionnelle'),
-      text: (t: TFunction) => t('Le Centre de Propagande produira une fois construit autant d’Or que vous avez de cartes jaunes construites.'),
+      title: (t: TFunction) => t('Proportional production'),
+      text: (t: TFunction) => t('Once built, the Propaganda Center will produce as much Gold as you have yellow cards built.'),
       boxTop: 56,
       boxLeft: 34,
       boxWidth: 60,
@@ -401,8 +401,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Types de cartes'),
-      text: (t: TFunction) => t('La Société Secrète et le Centre de Propagande sont toutes les 2 des cartes jaunes. Le symbole en bas à droite des cartes est un rappel de leur type.'),
+      title: (t: TFunction) => t('Types of cards'),
+      text: (t: TFunction) => t('The Secret Society and the Propaganda Center are both yellow cards. The symbol at the bottom right of the cards is a reminder of their type.'),
       boxTop: 56,
       boxLeft: 37.3,
       boxWidth: 60,
@@ -413,8 +413,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Choisissez maintenant la Zone Portuaire'),
-      text: (t: TFunction) => t('Elle coûte cher à construire (5 Ors), mais elle produira ensuite beaucoup à chaque tour (2 Matériaux et 2 Ors).'),
+      title: (t: TFunction) => t('Now choose the Harbor Zone'),
+      text: (t: TFunction) => t('It is expensive to build (5 Gold), but it will then produce a lot each turn (2 Materials and 2 Gold).'),
       boxTop: 60,
       boxLeft: 50,
       boxWidth: 60,
@@ -427,8 +427,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Choisissez les Éoliennes'),
-      text: (t: TFunction) => t('Cette carte n’est pas forcément intéressante à construire, mais nous allons pouvoir en faire bon usage quand même !'),
+      title: (t: TFunction) => t('Choose the Wind Turbines'),
+      text: (t: TFunction) => t('This card is not necessarily interesting to build, but we will be able to make good use of it anyway!'),
       boxTop: 60,
       boxLeft: 35,
       boxWidth: 60,
@@ -441,8 +441,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Bonus de recyclage'),
-      text: (t: TFunction) => t('Pendant la Planification, chaque carte pourra vous offrir une ressource si vous la défaussez. Pour l’Éolienne, c’est une Énergie, c’est indiqué ici.'),
+      title: (t: TFunction) => t('Recycling bonus'),
+      text: (t: TFunction) => t('During Planning, each card can offer you a resource if you discard it. For the Wind Turbine, it is an Energy, it is indicated here.'),
       boxTop: 52,
       boxLeft: 56,
       boxWidth: 60,
@@ -453,8 +453,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Bonus de recyclage'),
-      text: (t: TFunction) => t('Ça tombe bien, il nous manquait justement une Énergie pour construire le Complexe Industriel !'),
+      title: (t: TFunction) => t('Recycling bonus'),
+      text: (t: TFunction) => t('It’s a good thing: we lacked one Energy to build the Industrial Complex!'),
       boxTop: 54,
       boxLeft: 58,
       boxWidth: 60,
@@ -465,8 +465,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Choisissez l’Exposition universelle'),
-      text: (t: TFunction) => t('Comme pour l’Éolienne, nous pourrons recycler cette carte, mais cette fois-ci pour gagner un Or.'),
+      title: (t: TFunction) => t('Choose the Universal Exposition'),
+      text: (t: TFunction) => t('As with the Wind Turbine, we will be able to recycle this card, but this time to win one Gold.'),
       boxTop: 60,
       boxLeft: 45,
       boxWidth: 70,
@@ -479,8 +479,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Fin du Draft'),
-      text: (t: TFunction) => t('Vous avez automatiquement récupéré la dernière carte passée par la Fédération d’Asie, ici un Zeppelin.'),
+      title: (t: TFunction) => t('End of Draft'),
+      text: (t: TFunction) => t('You have automatically retrieved the last card passed by the Asian Federation, a Zeppelin.'),
       boxTop: 63,
       boxLeft: 65,
       boxWidth: 60,
@@ -491,8 +491,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Phase de Planification'),
-      text: (t: TFunction) => t('Nous passons maintenant à la seconde phase du tour, la Planification : chaque carte choisie lors de la phase précédente doit être mise en construction ou recyclée.'),
+      title: (t: TFunction) => t('Planning phase'),
+      text: (t: TFunction) => t('We now move on to the second phase of the round, the Planning: each card chosen in the previous phase must be put under construction or recycled.'),
       boxTop: 30,
       boxLeft: 30,
       boxWidth: 60,
@@ -503,8 +503,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Commençons par le Complexe Industriel'),
-      text: (t: TFunction) => t('Nous voulons construire cette carte. Déplacez-la donc vers la Zone de Construction.'),
+      title: (t: TFunction) => t('Let’s start with the Industrial Complex'),
+      text: (t: TFunction) => t('We want to build this card. So move it to the Construction Area.'),
       boxTop: 62,
       boxLeft: 31,
       boxWidth: 60,
@@ -517,8 +517,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Mettez en construction le Centre de Propagande'),
-      text: (t: TFunction) => t('Glissez également le Centre de Propagande en Zone de Construction.'),
+      title: (t: TFunction) => t('Start the construction of the Propaganda Center.'),
+      text: (t: TFunction) => t('Also slate the Propaganda Center into the Construction Area.'),
       boxTop: 62,
       boxLeft: 31,
       boxWidth: 60,
@@ -531,8 +531,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Points de victoire'),
-      text: (t: TFunction) => t('À cet emplacement, vous pouvez voir que le Centre de Propagande rapporte 1 point de victoire à la fin de la partie, s’il est construit.'),
+      title: (t: TFunction) => t('Victory points'),
+      text: (t: TFunction) => t('At this location, you can see that the Propaganda Center earns 1 victory point at the end of the game, if built.'),
       boxTop: 67,
       boxLeft: 58,
       boxWidth: 60,
@@ -543,8 +543,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Mettez en Construction la Zone Portuaire'),
-      text: (t: TFunction) => t('Une fois construite, cette carte produira 2 Matériaux et 2 Ors chaque tour, mais rapportera aussi 2 points de victoire en fin de partie.'),
+      title: (t: TFunction) => t('Put the Harbor Zone under Construction'),
+      text: (t: TFunction) => t('Once built, this card will produce 2 Materials and 2 Gold each turn, but will also yield 2 victory points at the end of the game.'),
       boxTop: 62,
       boxLeft: 31,
       boxWidth: 60,
@@ -557,8 +557,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Jetons personnages'),
-      text: (t: TFunction) => t('Une autre façon de marquer des points de victoire consiste à accumuler des Financiers et des Générales. Chacun rapporte 1 point.'),
+      title: (t: TFunction) => t('Character tokens'),
+      text: (t: TFunction) => t('Another way to score victory points is to accumulate Financiers and Generals. Each brings 1 point.'),
       boxTop: 81,
       boxLeft: 24,
       boxWidth: 50,
@@ -569,8 +569,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Votre stratégie'),
-      text: (t: TFunction) => t('Votre Empire vous donne un bonus stratégique : chaque jeton Financier vous rapporte un point supplémentaire !'),
+      title: (t: TFunction) => t('Your strategy'),
+      text: (t: TFunction) => t('Your Empire gives you a strategic bonus: each Financier token earns you an extra point!'),
       boxTop: 78,
       boxLeft: 33,
       boxWidth: 50,
@@ -581,8 +581,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Mettez en Construction la Société Secrète'),
-      text: (t: TFunction) => t('La Société Secrète s’inscrit parfaitement dans votre stratégie, puisqu’une fois construite elle vous rapportera également 1 point par jeton Financier : mettez-la en construction.'),
+      title: (t: TFunction) => t('Start the Construction of the Secret Society'),
+      text: (t: TFunction) => t('The Secret Society fits perfectly into your strategy, since once built it will also earn you 1 point per Financial token: put it under construction.'),
       boxTop: 60,
       boxLeft: 34,
       boxWidth: 60,
@@ -595,8 +595,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('D’autres stratégies…'),
-      text: (t: TFunction) => t('Cette carte rapporte 3 points de victoire par bâtiment vert construit.'),
+      title: (t: TFunction) => t('Other strategies…'),
+      text: (t: TFunction) => t('This card earns 3 victory points per green building built.'),
       boxTop: 83,
       boxLeft: 31,
       boxWidth: 60,
@@ -607,8 +607,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('D’autres stratégies…'),
-      text: (t: TFunction) => t('Cependant, pour la construire il nous faudrait dépenser 2 précieux Financiers !'),
+      title: (t: TFunction) => t('Other strategies…'),
+      text: (t: TFunction) => t('However, to build it we would have to spend 2 precious Financiers!'),
       boxTop: 69,
       boxLeft: 32,
       boxWidth: 60,
@@ -619,8 +619,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Recyclez l’Exposition Universelle'),
-      text: (t: TFunction) => t('Glissez cette carte vers la zone de recyclage, au dessus de la Zone de Construction : elle nous sera plus utile ainsi.'),
+      title: (t: TFunction) => t('Recycle the Universal Exposition'),
+      text: (t: TFunction) => t('Slide this card to the Recycling Zone, above the Construction Zone: it will be more useful this way.'),
       boxTop: 62,
       boxLeft: 31,
       boxWidth: 60,
@@ -633,8 +633,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Bonus de recyclage'),
-      text: (t: TFunction) => t('En recyclant l’Exposition Universelle pendant la phase de Planification, nous avons obtenu un Or utilisable immédiatement.'),
+      title: (t: TFunction) => t('Recycling bonus'),
+      text: (t: TFunction) => t('By recycling the Universal Exposition during the Planning phase, we obtained an Gold that can be used immediately.'),
       boxTop: 44,
       boxLeft: 55,
       boxWidth: 60,
@@ -645,8 +645,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Placez l’Or sur le Centre de Propagande'),
-      text: (t: TFunction) => t('Glissez ce cube jaune vers votre Centre de Propagande pour commencer à le construire.'),
+      title: (t: TFunction) => t('Place the Gold on the Propaganda Center'),
+      text: (t: TFunction) => t('Drag this yellow cube to your Propaganda Center to start building it.'),
       boxTop: 44,
       boxLeft: 55,
       boxWidth: 60,
@@ -659,8 +659,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Le cube jaune est là'),
-      text: (t: TFunction) => t('Il ne vous manque plus que 2 Ors pour terminer la construction du Centre de Propagande.'),
+      title: (t: TFunction) => t('The yellow cube is there'),
+      text: (t: TFunction) => t('You only need 2 more Gold to complete the construction of the Propaganda Center.'),
       boxTop: 48,
       boxLeft: 58,
       boxWidth: 60,
@@ -671,8 +671,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Recyclez l’Éolienne'),
-      text: (t: TFunction) => t('Glissez maintenant l’Éolienne vers la zone de recyclage, pour obtenir un cube noir cette fois-ci.'),
+      title: (t: TFunction) => t('Recycle the Wind Turbine'),
+      text: (t: TFunction) => t('Now slide the Wind Turbine to the recycling area, to get a black cube this time.'),
       boxTop: 60,
       boxLeft: 34,
       boxWidth: 60,
@@ -685,8 +685,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Placez l’Énergie sur le Complexe Industriel'),
-      text: (t: TFunction) => t('À présent, glissez le cube noir, obtenu en recyclant l’Éolienne, vers le Complexe Industriel.'),
+      title: (t: TFunction) => t('Place the Energy on the Industrial Complex'),
+      text: (t: TFunction) => t('Now slide the black cube, obtained by recycling the Wind Turbine, to the Industrial Complex.'),
       boxTop: 29,
       boxLeft: 63,
       boxWidth: 55,
@@ -699,8 +699,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Recyclez le Zeppelin'),
-      text: (t: TFunction) => t('Cette carte coûte 2 Énergies (que vous ne produisez pas) et produit 1 cube bleu (l’Exploration), peu utile pour notre stratégie : recyclez-là.'),
+      title: (t: TFunction) => t('Recycle the Zeppelin'),
+      text: (t: TFunction) => t('This card costs 2 Energy (which you do not produce) and produces 1 blue cube (the Exploration), not very useful for our strategy: recycle it.'),
       boxTop: 60,
       boxLeft: 27,
       boxWidth: 50,
@@ -713,8 +713,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Le cube bleu est là'),
-      text: (t: TFunction) => t('En recyclant le Zeppelin, vous obtenez un cube bleu. Cependant, aucune de vos cartes en construction n’a besoin de cette ressource.'),
+      title: (t: TFunction) => t('The blue cube is here'),
+      text: (t: TFunction) => t('By recycling the Zeppelin, you get a blue cube. However, none of your cards under construction need this resource.'),
       boxTop: 81,
       boxLeft: 49,
       boxWidth: 70,
@@ -725,8 +725,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Ressources inutiles ?'),
-      text: (t: TFunction) => t('Une ressource qui ne peut pas être utilisée immédiatement doit être placée ici, sur votre carte Empire.'),
+      title: (t: TFunction) => t('Useless resources?'),
+      text: (t: TFunction) => t('A resource that cannot be used immediately must be placed here on your Empire card.'),
       boxTop: 81,
       boxLeft: 49,
       boxWidth: 70,
@@ -737,8 +737,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Ressources inutiles ?'),
-      text: (t: TFunction) => t('Les Ressources de votre carte Empire ne sont plus utilisables pour construire des cartes Développement.'),
+      title: (t: TFunction) => t('Useless resources?'),
+      text: (t: TFunction) => t('The Resources on your Empire card can no longer be used to build Development cards.'),
       boxTop: 81,
       boxLeft: 49,
       boxWidth: 70,
@@ -749,8 +749,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Génération de Krystallium'),
-      text: (t: TFunction) => t('Cependant, si 5 cubes se trouvent sur votre carte Empire (quelle que soit leur couleur), ils sont convertis en 1 cube rouge, le Krystallium.'),
+      title: (t: TFunction) => t('Generation of Krystallium'),
+      text: (t: TFunction) => t('However, if there are 5 cubes on your Empire card (regardless of their color), they are converted into 1 red cube, the Krystallium.'),
       boxTop: 81,
       boxLeft: 49,
       boxWidth: 70,
@@ -761,8 +761,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Utilisation du Krystallium'),
-      text: (t: TFunction) => t('Le Krystallium peut remplacer n’importe quel cube pour construire une carte, et peut-être utilisé à tout moment.'),
+      title: (t: TFunction) => t('Use of Krystallium'),
+      text: (t: TFunction) => t('The Krystallium can replace any cube to build a card, and can be used at any time.'),
       boxTop: 81,
       boxLeft: 49,
       boxWidth: 70,
@@ -773,8 +773,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Coût en Krystallium'),
-      text: (t: TFunction) => t('Certaines cartes, comme la Société Secrète, nécessitent du Krystallium pour être construites.'),
+      title: (t: TFunction) => t('Krystallium cost'),
+      text: (t: TFunction) => t('Some cards, such as the Secret Society, require Krystallium to be built.'),
       boxTop: 42,
       boxLeft: 41,
       boxWidth: 70,
@@ -785,8 +785,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('N’oubliez pas de valider !'),
-      text: (t: TFunction) => t('Vous devez cliquer sur Valider pour indiquer aux autres joueurs que vous avez terminé votre planification.'),
+      title: (t: TFunction) => t('Don’t forget to validate!'),
+      text: (t: TFunction) => t('You must click on Validate to indicate to the other players that you have completed your planning.'),
       boxTop: 31,
       boxLeft: 53,
       boxWidth: 80,
@@ -799,8 +799,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Phase de Production'),
-      text: (t: TFunction) => t('La phase de production se déroule en 5 étapes : une par ressource, dans l’ordre de la chaîne de Production : gris, noir, vert, jaune et enfin bleu.'),
+      title: (t: TFunction) => t('Production phase'),
+      text: (t: TFunction) => t('The production phase takes place in 5 stages: one per resource, in the order of the production line: grey, black, green, yellow and finally blue.'),
       boxTop: 30,
       boxLeft: 50,
       boxWidth: 60,
@@ -811,8 +811,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Production des Matériaux'),
-      text: (t: TFunction) => t('Tous les joueurs commencent par produire des Matériaux. Vous en produisez 3, qui sont disponibles ici.'),
+      title: (t: TFunction) => t('Materials production'),
+      text: (t: TFunction) => t('All players start by producing Materials. You produce 3 of them, which are available here.'),
       boxTop: 53,
       boxLeft: 36,
       boxWidth: 60,
@@ -823,8 +823,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Bonus de Suprématie'),
-      text: (t: TFunction) => t('À chaque étape de Production, l’Empire qui produit le plus gagne une Générale ou un Financier. Vous produisez le plus de Matériaux, vous gagnez donc un jeton Financier !'),
+      title: (t: TFunction) => t('Supremacy Bonus'),
+      text: (t: TFunction) => t('At each Production step, the Empire that produces the most wins a General or a Financier. You produce the most Materials, so you win a Financier token!'),
       boxTop: 38,
       boxLeft: 30,
       boxWidth: 60,
@@ -835,8 +835,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Jetons Financiers'),
-      text: (t: TFunction) => t('Voici votre jeton. Pour rappel, il rapporte 1 point de victoire de base, + 1 grâce à votre Empire. Une fois la Société Secrète construite, ce sera à nouveau 1 point de plus par Financier.'),
+      title: (t: TFunction) => t('Financier Tokens'),
+      text: (t: TFunction) => t('Here is your token. As a reminder, it gives you 1 victory point, + 1 thanks to your Empire. Once the Secret Society is built, it will be 1 additional point per Financier.'),
       boxTop: 76,
       boxLeft: 49,
       boxWidth: 80,
@@ -847,8 +847,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Construisez le Complexe Industriel'),
-      text: (t: TFunction) => t('Vos 3 Matériaux vont permettre de terminer la construction du Complexe Industriel.'),
+      title: (t: TFunction) => t('Build the Industrial Complex'),
+      text: (t: TFunction) => t('Your 3 Materials will allow us to complete the construction of the Industrial Complex.'),
       boxTop: 49,
       boxLeft: 49,
       boxWidth: 60,
@@ -859,8 +859,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Construisez le Complexe Industriel'),
-      text: (t: TFunction) => t('Plusieurs options s’offrent à vous : glisser la carte vers la gauche, cliquer longtemps sur la carte, déplacer les cubes un par un, ou cliquer sur la carte pour zoomer dessus et avoir accès aux actions possibles.'),
+      title: (t: TFunction) => t('Build the Industrial Complex'),
+      text: (t: TFunction) => t('Several options are available to you: drag the card to the left, click and hold on the card, move the cubes one by one, or click on the card to zoom in and see all the available actions.'),
       boxTop: 49,
       boxLeft: 49,
       boxWidth: 60,
@@ -875,8 +875,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [],
   [
     {
-      title: (t: TFunction) => t('Cartes construites'),
-      text: (t: TFunction) => t('Le Complexe Industriel fait à présent partie de votre Empire, et augmente votre production de 1 Matériau et 1 Or.'),
+      title: (t: TFunction) => t('Built cards'),
+      text: (t: TFunction) => t('The Industrial Complex is now part of your Empire, and increases your production by 1 Material and 1 Gold.'),
       boxTop: 74,
       boxLeft: 47,
       boxWidth: 70,
@@ -887,8 +887,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Ordre des productions'),
-      text: (t: TFunction) => t('L’étape de production des Matériaux a déjà commencé : il est donc trop tard pour produire un Matériau supplémentaire ce tour-ci, mais vous en bénéficierez lors des 3 tours restants.'),
+      title: (t: TFunction) => t('Order of production'),
+      text: (t: TFunction) => t('The Material production step has already started, so it’s too late to produce an additional Material this round, but you will benefit from it during the 3 remaining rounds.'),
       boxTop: 74,
       boxLeft: 47,
       boxWidth: 70,
@@ -899,8 +899,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Ordre des productions'),
-      text: (t: TFunction) => t('Par contre, l’étape de production de l’Or n’a pas encore commencé : vous aurez donc un Or supplémentaire dès ce tour !'),
+      title: (t: TFunction) => t('Order of production'),
+      text: (t: TFunction) => t('On the other hand, the Gold production step hasn’t started yet, so you’ll get an extra Gold starting this round!'),
       boxTop: 74,
       boxLeft: 47,
       boxWidth: 70,
@@ -911,8 +911,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Bonus de construction'),
-      text: (t: TFunction) => t('De plus, en terminant la construction de certaines cartes, vous pouvez gagner un bonus indiqué ici : vous avez gagné un second jeton Financier !'),
+      title: (t: TFunction) => t('Construction bonus'),
+      text: (t: TFunction) => t('In addition, by completing the construction of certain cards, you can win a bonus indicated here: you earned a second Financier token!'),
       boxTop: 72,
       boxLeft: 46,
       boxWidth: 70,
@@ -923,8 +923,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('N’oubliez pas de valider !'),
-      text: (t: TFunction) => t('Une fois que vous avez placé toutes vos ressources, vous devez valider pour indiquer aux autres joueurs que vous êtes prêts.'),
+      title: (t: TFunction) => t('Don’t forget to validate!'),
+      text: (t: TFunction) => t('Once you have placed all your resources, you must validate to let other players know that you are ready.'),
       boxTop: 30,
       boxLeft: 54,
       boxWidth: 77,
@@ -937,8 +937,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Production d’Énergie'),
-      text: (t: TFunction) => t('Le joueur produisant le plus d’Énergie gagne un jeton Générale. Cependant, vos 2 adversaires sont à égalité : dans ce cas, personne ne gagne de jeton.'),
+      title: (t: TFunction) => t('Energy production'),
+      text: (t: TFunction) => t('The player producing the most Energy wins a General token. However, your 2 opponents are tied: in this case, no one wins a token.'),
       boxTop: 38,
       boxLeft: 28,
       boxWidth: 53,
@@ -949,8 +949,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Recyclage'),
-      text: (t: TFunction) => t('À tout moment vous pouvez recycler une carte depuis votre Zone de Construction. Cependant, les cubes placés dessus seront perdus et son bonus de recyclage ira obligatoirement sur votre carte Empire.'),
+      title: (t: TFunction) => t('Recycling'),
+      text: (t: TFunction) => t('At any time you can recycle a card from your Construction Zone. However, the cubes placed on it will be lost and its recycling bonus must be put on your Empire card.'),
       boxTop: 64,
       boxLeft: 51,
       boxWidth: 50,
@@ -961,8 +961,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('N’oubliez pas de valider !'),
-      text: (t: TFunction) => t('Les actions comme recycler une carte ou placer un Krystallium pour terminer une construction sont possibles à tout moment. Vous devez donc valider votre tour à chaque étape de production, même si vous ne produisez rien !'),
+      title: (t: TFunction) => t('Don’t forget to validate!'),
+      text: (t: TFunction) => t('Actions such as recycling a card or placing a Krystallium to complete a construction are possible at any time. You must therefore validate your turn at each production step, even if you don’t produce anything!'),
       boxTop: 30,
       boxLeft: 53,
       boxWidth: 70,
@@ -975,8 +975,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Production de la Science'),
-      text: (t: TFunction) => t('Le joueur produisant le plus de Science peut choisir un jeton Financier ou un jeton Générale. Ici, la République d’Europa a pris une Générale.'),
+      title: (t: TFunction) => t('Science production'),
+      text: (t: TFunction) => t('The player with the most Science can choose either a Financier Tokens or a General Token. Here, the Republic of Europa has taken a General.'),
       boxTop: 39,
       boxLeft: 42,
       boxWidth: 60,
@@ -987,8 +987,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('N’oubliez pas de valider !'),
-      text: (t: TFunction) => t('Bien que vous ne produisiez pas de Science, vous devez quand même cliquer sur valider à nouveau.'),
+      title: (t: TFunction) => t('Don’t forget to validate!'),
+      text: (t: TFunction) => t('Although you are not producing Science, you still have to validate again.'),
       boxTop: 30,
       boxLeft: 53,
       boxWidth: 50,
@@ -1001,8 +1001,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Production de l’Or'),
-      text: (t: TFunction) => t('Vous produisez 2 Or (un grâce à votre Empire et un grâce au Complexe Industriel).'),
+      title: (t: TFunction) => t('Gold production'),
+      text: (t: TFunction) => t('You produce 2 Gold (one thanks to your Empire and one thanks to the Industrial Complex).'),
       boxTop: 54,
       boxLeft: 53,
       boxWidth: 51,
@@ -1013,8 +1013,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Bonus de Suprématie'),
-      text: (t: TFunction) => t('La Fédération d’Asie produit 1 Or de plus que vous et récupère donc le jeton Financier. Essayez de produire plus lors des prochains tours pour gagner ce bonus de Suprématie !'),
+      title: (t: TFunction) => t('Supremacy Bonus'),
+      text: (t: TFunction) => t('The Federation of Asia produces 1 Gold more than you and therefore receives the Financier token. Try to produce more next rounds to win the Supremacy bonus!'),
       boxTop: 53,
       boxLeft: 40,
       boxWidth: 60,
@@ -1025,8 +1025,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Placement des ressources'),
-      text: (t: TFunction) => t('Vous pouvez toujours choisir de placer vos ressources sur votre carte Empire, cependant le Krystallium ne rapporte pas de points en fin de partie.'),
+      title: (t: TFunction) => t('Placement of resources'),
+      text: (t: TFunction) => t('You can always choose to place your resources on your Empire card; however the Krystallium does not earn points at the end of the game.'),
       boxTop: 81,
       boxLeft: 44,
       boxWidth: 60,
@@ -1037,8 +1037,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Placement des ressources'),
-      text: (t: TFunction) => t('Il est préférable de construire vos cartes : placez vos Ors sur votre Centre de Propagande.'),
+      title: (t: TFunction) => t('Placement of resources'),
+      text: (t: TFunction) => t('It is better to build your cards: place your Gold on your Propaganda Center.'),
       boxTop: 49,
       boxLeft: 49,
       boxWidth: 60,
@@ -1052,8 +1052,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   [],
   [
     {
-      title: (t: TFunction) => t('Production de l’Or'),
-      text: (t: TFunction) => t('Votre nouvelle production d’Or arrive trop tard pour ce tour, mais vous servira pour les tours suivants.'),
+      title: (t: TFunction) => t('Gold production'),
+      text: (t: TFunction) => t('Your new Gold production comes too late for this round, but will benefit you in future rounds.'),
       boxTop: 73,
       boxLeft: 37,
       boxWidth: 50,
@@ -1064,8 +1064,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Bonus de construction'),
-      text: (t: TFunction) => t('En terminant la construction du Centre de Propagande, vous avez gagné une Générale, qui vous rapportera 1 point de victoire en fin de partie.'),
+      title: (t: TFunction) => t('Construction bonus'),
+      text: (t: TFunction) => t('By completing the construction of the Propaganda Center, you have won a General, which will give you 1 victory point at the end of the game.'),
       boxTop: 70,
       boxLeft: 36,
       boxWidth: 50,
@@ -1076,8 +1076,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('N’oubliez pas de valider !'),
-      text: (t: TFunction) => t('Comme d’habitude, validez pour passer à l’étape suivante.'),
+      title: (t: TFunction) => t('Don’t forget to validate!'),
+      text: (t: TFunction) => t('As usual, validate to proceed to the next step.'),
       boxTop: 30,
       boxLeft: 53,
       boxWidth: 65,
@@ -1090,8 +1090,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Production totale'),
-      text: (t: TFunction) => t('La production totale de chaque joueur est affichée ici. Vous produirez au prochain tour au moins 4 Matériaux et 3 Ors !'),
+      title: (t: TFunction) => t('Total production'),
+      text: (t: TFunction) => t('The total production of each player is displayed here. You will produce at least 4 Materials and 3 Gold in the next round!'),
       boxTop: 26,
       boxLeft: 40.5,
       boxWidth: 60,
@@ -1102,8 +1102,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Production de l’Exploration'),
-      text: (t: TFunction) => t('Vous ne produisez pas d’Exploration, validez directement pour passer au tour suivant.'),
+      title: (t: TFunction) => t('Exploration production'),
+      text: (t: TFunction) => t('You do not produce any Exploration. Validate now to proceed to the next round.'),
       boxTop: 30,
       boxLeft: 53,
       boxWidth: 50,
@@ -1116,8 +1116,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
   ],
   [
     {
-      title: (t: TFunction) => t('Fin du premier tour'),
-      text: (t: TFunction) => t('Nous sommes maintenant au tour 2, et une nouvelle phase de Draft débute. Le sens de passage des cartes est inversé à chaque tour.'),
+      title: (t: TFunction) => t('End of the first round'),
+      text: (t: TFunction) => t('We are now in round 2, and a new Draft phase begins. The direction of the cards is reversed every turn.'),
       boxTop: 29,
       boxLeft: 36,
       boxWidth: 70,
@@ -1128,8 +1128,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Chaque tour se déroule ainsi'),
-      text: (t: TFunction) => t('Vous avez jusqu’à la fin de la partie pour terminer la construction de vos cartes. Essayez de construire la Zone Portuaire rapidement, pour bénéficier de sa production ! La Société Secrète ne produit rien, vous pouvez sans risque attendre le tour 4 pour la terminer.'),
+      title: (t: TFunction) => t('Each round goes like this'),
+      text: (t: TFunction) => t('You have until the end of the game to complete the construction of your cards. Try to build the Harbor Zone quickly, to benefit from its production! The Secret Society does not produce anything, you can safely wait until turn 4 to finish it.'),
       boxTop: 34,
       boxLeft: 63,
       boxWidth: 55,
@@ -1140,15 +1140,15 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('Vous pouvez changer d’avis !'),
-      text: (t: TFunction) => t('Dans le menu, le bouton [↺] vous permet d’annuler votre dernier coup : il s’affiche en rouge lorsque c’est autorisé.'),
+      title: (t: TFunction) => t('You can change your mind!'),
+      text: (t: TFunction) => t('In the menu, the [↺] button allows you to undo your last move: it is displayed in red when it is allowed.'),
       boxTop: 50,
       boxLeft: 50,
       boxWidth: 55
     },
     {
-      title: (t: TFunction) => t('Surveillez vos adversaires'),
-      text: (t: TFunction) => t('En cliquant sur vos adversaires, vous pouvez voir leur Empire. « Qui connaît son ennemi comme il se connaît, en cent combats ne sera point défait. » - Sun Tzu'),
+      title: (t: TFunction) => t('Keep an eye on your opponents'),
+      text: (t: TFunction) => t('By clicking on your opponents, you can see their Empire. \"If you know your enemies and know yourself, you will not be imperiled in a hundred battles.\" - Sun Tzu'),
       boxTop: 35,
       boxLeft: 44,
       boxWidth: 55,
@@ -1159,8 +1159,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
       }
     },
     {
-      title: (t: TFunction) => t('À vous de jouer !'),
-      text: (t: TFunction) => t('Vous pouvez maintenant finir la partie en faisant vos propres choix. Bonne chance !'),
+      title: (t: TFunction) => t('It’s up to you!'),
+      text: (t: TFunction) => t('You can now finish the game by making your own choices. Good luck!'),
       boxTop: 50,
       boxLeft: 50,
       boxWidth: 60
@@ -1169,24 +1169,24 @@ const tutorialDescription: TutorialStepDescription[][] = [
 ]
 
 const thirdTurnInfo = {
-  title: (t: TFunction) => t('Mode 2 joueurs'),
-  text: (t: TFunction) => t('Pour information, à 2 joueurs, chaque joueur reçoit 10 cartes pour le draft. Cependant les 3 dernières cartes non choisies sont défaussées.'),
+  title: (t: TFunction) => t('2-player game'),
+  text: (t: TFunction) => t('For information, in a 2-player game, each player receives 10 cards for the draft. However, the last 3 cards not chosen are discarded.'),
   boxTop: 50,
   boxLeft: 50,
   boxWidth: 70
 }
 
 const lastTurnInfo = {
-  title: (t: TFunction) => t('Dernier tour !'),
-  text: (t: TFunction) => t('C’est le dernier tour ! C’est le moment de faire un maximum de points de victoire. Pour rappel, le Krystallium ne rapporte pas de points à la fin.'),
+  title: (t: TFunction) => t('Last round!'),
+  text: (t: TFunction) => t('This is the last round! It’s time to score as many victory points as possible. As a reminder, Krystallium does not score points at the end.'),
   boxTop: 50,
   boxLeft: 50,
   boxWidth: 70
 }
 
 const tutorialEndGame = {
-  title: (t: TFunction) => t('Félicitations !'),
-  text: (t: TFunction) => t('Vous avez terminé votre première partie ! Vous pouvez maintenant jouer avec vos amis, ou rencontrer d’autres joueurs via notre salon de rencontre sur Discord.'),
+  title: (t: TFunction) => t('Congratulations!'),
+  text: (t: TFunction) => t('You have finished your first game! You can now play with your friends, or meet other players via our chat room on Discord.'),
   boxTop: 81,
   boxLeft: 53,
   boxWidth: 87

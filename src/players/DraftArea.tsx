@@ -123,11 +123,11 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         {isPlayer(player) && game.phase === Phase.Planning &&
         <>
           <button css={[textButton, textButtonLeft, draftConstructionButton]} onClick={() => play(slateForConstruction(player.empire, focusedCard))}>
-            {t('Construire')}
+            {t('Build')}
           </button>
           <button css={[textButton, textButtonRight, recyclingButton(developmentCards[focusedCard].recyclingBonus)]}
                   onClick={() => play(recycle(player.empire, focusedCard))}>
-            {t('Recycler')}
+            {t('Recycle')}
           </button>
           <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>
         </>
@@ -135,9 +135,9 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       </>
       }
       <div ref={ref} css={getDraftAreaStyle(row, game.players.length === 2, isValidTarget, isOver)}>
-        {!player.draftArea.length && <span css={draftAreaText}>{t('Zone de draft')}</span>}
+        {!player.draftArea.length && <span css={draftAreaText}>{t('Draft area')}</span>}
         {isValidTarget && <span css={draftActionAreaText}>&rarr; {
-          dragItemType === DragObjectType.DEVELOPMENT_FROM_HAND ? t('Sélectionner cette carte') : t('Annuler la construction')
+          dragItemType === DragObjectType.DEVELOPMENT_FROM_HAND ? t('Choose this card') : t('Cancel construction')
         }</span>}
       </div>
       {player.draftArea.map((card, index) => (
@@ -155,8 +155,8 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
                                                       choosingDevelopment && css`opacity: 0;`]}
                                                     onClick={() => typeof chosenCard == 'number' && setFocusedCard(chosenCard)}/>}
       {isPlayer(player) && game.phase === Phase.Planning && player.draftArea.length > 0 && !buildingOrRecyclingAll && <div css={buttonsArea}>
-        <Button onClick={buildAll}>{t('Tout construire')}</Button>
-        <Button onClick={recycleAll}>{t('Tout recycler')}</Button>
+        <Button onClick={buildAll}>{t('Build all')}</Button>
+        <Button onClick={recycleAll}>{t('Recycle all')}</Button>
       </div>}
     </>
   )

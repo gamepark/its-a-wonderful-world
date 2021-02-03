@@ -93,9 +93,9 @@ const App: FunctionComponent = () => {
         <LoadingScreen display={loading}/>
         {!loading && <GameDisplay game={game!} validate={validate}/>}
         <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
-          {t('La résolution idéale pour jouer est en mode paysage, en 16/9.')}
+          {t('The ideal resolution for playing is in landscape mode, in 16:9.')}
           <br/>
-          <Button onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>{t('Passer en plein écran')}</Button>
+          <Button onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>{t('Go to full screen')}</Button>
         </p>
         <Header game={game} loading={loading} validate={validate}/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}

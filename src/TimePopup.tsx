@@ -27,15 +27,15 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
         <table css={tableStyle}>
           <thead>
             <tr>
-              <th>{t('Joueur')}</th>
-              <th>{t('Temps d’attente maximum')}</th>
-              <th>{t('Temps d’attente total')}</th>
-              <th>{t('Temps de réflexion maximum')}</th>
-              <th>{t('Temps de réflexion total')}</th>
+              <th>{t('Player')}</th>
+              <th>{t('Maximum down time')}</th>
+              <th>{t('Total down time')}</th>
+              <th>{t('Maximum thinking time')}</th>
+              <th>{t('Total thinking time')}</th>
               {players.length > 2 &&
               <>
-                <th>{t('A fait attendre les autres joueurs')}</th>
-                <th>{t('A fait attendre les autres (pondéré par le nombre de joueurs attendus)')}</th>
+                <th>{t('Made other players wait')}</th>
+                <th>{t('Made others wait (weighted by the number of awaited players)')}</th>
               </>
               }
             </tr>

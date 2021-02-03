@@ -42,16 +42,16 @@ const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) =
       <ConstructedCardsArea player={player}/>
       <CharacterTokenPile character={Character.Financier} quantity={player.characters[Character.Financier]} player={player} gameOver={gameOver}
                           title={isPlayer(player) ?
-                            t('Vous avez {quantity, plural, one{# jeton Financier} other{# jetons Financiers}}',
+                            t('You have {quantity, plural, one{# Financier token} other{# Financier tokens}}',
                               {quantity: player.characters[Character.Financier]}) :
-                            t('{player} a {quantity, plural, one{# jeton Financier} other{# jetons Financiers}}',
+                            t('{player} has {quantity, plural, one{# Financier token} other{# Financier tokens}}',
                               {player: getPlayerName(player.empire), quantity: player.characters[Character.Financier]})}
                           css={financiersPilePosition} draggable={isPlayer(player)}/>
       <CharacterTokenPile character={Character.General} quantity={player.characters[Character.General]} player={player} gameOver={gameOver}
                           title={isPlayer(player) ?
-                            t('Vous avez {quantity, plural, one{# jeton Général} other{# jetons Généraux}}',
+                            t('You have {quantity, plural, one{# General token} other{# General tokens}}',
                               {quantity: player.characters[Character.General]}) :
-                            t('{player} a {quantity, plural, one{# jeton Général} other{# jetons Généraux}}',
+                            t('{player} has {quantity, plural, one{# General token} other{# General tokens}}',
                               {player: getPlayerName(player.empire), quantity: player.characters[Character.General]})}
                           css={generalsPilePosition} draggable={isPlayer(player)}/>
       {isPlayer(player) ?

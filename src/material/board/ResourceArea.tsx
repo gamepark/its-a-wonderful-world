@@ -80,7 +80,7 @@ const ResourceArea: FunctionComponent<Props> = ({game, player, resource, quantit
       <div ref={ref}
            css={[circleStyle, circleStylePosition(resource), game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle, isPlayer(player) && quantity > 0 && canDragStyle]}/>
       <button disabled={!canPlayerValidate} css={(theme: Theme) => [arrowStyle, arrowTheme(theme), arrowPosition(resource)]}
-              onClick={validate} title={t('Valider')}/>
+              onClick={validate} title={t('Validate')}/>
       <img src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]} alt={resourceCharacterText[resource](t)}
            title={resourceCharacterText[resource](t)} draggable="false"
            css={[characterStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
@@ -147,11 +147,11 @@ const resourceCharacterOff = {
 }
 
 const resourceCharacterText = {
-  [Materials]: (t: TFunction) => t('Le joueur produisant seul le plus de Matériaux gagne un jeton Financier'),
-  [Energy]: (t: TFunction) => t('Le joueur produisant seul le plus d’Énergie gagne un jeton Militaire'),
-  [Science]: (t: TFunction) => t('Le joueur produisant seul le plus de Science gagne un jeton Financier ou Militaire'),
-  [Gold]: (t: TFunction) => t('Le joueur produisant seul le plus d’Or gagne un jeton Financier'),
-  [Exploration]: (t: TFunction) => t('Le joueur produisant seul le plus d’Exploration gagne un jeton Militaire')
+  [Materials]: (t: TFunction) => t('The player producing the single most Materials receives a Financier token'),
+  [Energy]: (t: TFunction) => t('The player producing the single most Energy receives a General token'),
+  [Science]: (t: TFunction) => t('The player producing the single most Science receives a Financier or General token'),
+  [Gold]: (t: TFunction) => t('The player producing the single most Gold receives a Financier token'),
+  [Exploration]: (t: TFunction) => t('The player producing the single most Exploration receives a General token')
 }
 
 const areaHighlight = css`

@@ -18,32 +18,32 @@ const FocusedDevelopmentOptions: FunctionComponent<Props> = ({development, onClo
     <>
       <button css={[button, closeButton]} onClick={onClose}>
         <FontAwesomeIcon icon={faTimes}/>
-        {t('Fermer')}
+        {t('Close')}
       </button>
       <button css={[button, helpButton, help && toggled]} onClick={() => setHelp(!help)}>
         <FontAwesomeIcon icon={faQuestion}/>
-        {t('Aide')}
+        {t('Help')}
       </button>
       {help && <>
-        <span css={[helpText, css`top: 8%; left: 28%`]}>{t('Coût de construction')}</span>
+        <span css={[helpText, css`top: 8%; left: 28%`]}>{t('Construction cost')}</span>
         <hr css={[helpLine, css`width: 2%; top: 15%; left: 38.3%; transform: rotate(59deg);`]}/>
         {development.constructionBonus && <>
-          <span css={[helpText, css`top: 74%; right: 66%`]}>{t('Bonus de construction')}</span>
+          <span css={[helpText, css`top: 74%; right: 66%`]}>{t('Construction bonus')}</span>
           <hr css={[helpLine, css`width: 15%; top: 74%; left: 33.3%; transform: rotate(-7deg);`]}/>
         </>}
         {development.victoryPoints && <>
-          <span css={[helpText, css`top: 87%; right: 66%`]}>{t('Points de victoire')}</span>
+          <span css={[helpText, css`top: 87%; right: 66%`]}>{t('Victory points')}</span>
           <hr css={[helpLine, css`width: 5.5%; top: 85.8%; left: 32.7%; transform: rotate(-31deg);`]}/>
         </>}
         {development.production && <>
           <span css={[helpText, css`top: 87%; left: 50%; transform: translateX(-50%)`]}>{t('Production')}</span>
           <hr css={[helpLine, css`width: 1.5%; top: 85.5%; left: 49.4%; transform: rotate(-90deg);`]}/>
         </>}
-        <span css={[helpText, css`top: 85%; left: 66%`]}>{t('Type de développement')}</span>
+        <span css={[helpText, css`top: 85%; left: 66%`]}>{t('Development type')}</span>
         <hr css={[helpLine, css`width: 5%; top: 84.8%; left: 62.1%; transform: rotate(28deg);`]}/>
-        <span css={[helpText, css`top: 75%; left: 66%`]}>{t('Bonus de recyclage')}</span>
+        <span css={[helpText, css`top: 75%; left: 66%`]}>{t('Recycling bonus')}</span>
         <hr css={[helpLine, css`width: 5.2%; top: 73.7%; left: 61.3%; transform: rotate(28deg);`]}/>
-        <span css={[helpText, css`top: 8%; left: 58%`]}>{t('Nombre d’exemplaires dans le jeu')}</span>
+        <span css={[helpText, css`top: 8%; left: 58%`]}>{t('Number of copies in the game')}</span>
         <hr css={[helpLine, css`width: 2%; top: 15%; left: 61.3%; transform: rotate(-59deg);`]}/>
       </>}
     </>

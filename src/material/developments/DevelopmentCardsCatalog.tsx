@@ -28,7 +28,7 @@ const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, on
   return (
     <>
       <div css={popupBackgroundStyle} onClick={onClose}/>
-      {discardLength > 3 && <button disabled={disableLeftArrow} css={[arrowStyle,leftArrowStyle]} onClick={() => slide(-manualShift,3)} title={t('Faire défiler les cartes' )}/>}
+      {discardLength > 3 && <button disabled={disableLeftArrow} css={[arrowStyle,leftArrowStyle]} onClick={() => slide(-manualShift,3)} title={t('Swipe cards' )}/>}
       <Swipeable css={swipeZoneStyle} trackMouse={true} preventDefaultTouchmoveEvent={true} delta={3}
                  onSwiping={event => setDeltaX(event.deltaX)}
                  onSwiped={event => slide(event.deltaX, event.velocity)}>
@@ -36,7 +36,7 @@ const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, on
           <DevelopmentCard key={index} development={development} css={[cardStyle, cardPosition(index, focusedIndex, deltaX), deltaX === 0 && cardTransition]}/>
         )}
       </Swipeable>
-      {discardLength > 3 && <button disabled={disableRightArrow} css={[arrowStyle,rightArrowStyle]} onClick={() => slide(manualShift,3)} title={t('Faire défiler les cartes' )}/>}
+      {discardLength > 3 && <button disabled={disableRightArrow} css={[arrowStyle,rightArrowStyle]} onClick={() => slide(manualShift,3)} title={t('Swipe cards' )}/>}
     </>
   )
 }
