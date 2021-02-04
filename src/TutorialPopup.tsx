@@ -1148,7 +1148,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('Keep an eye on your opponents'),
-      text: (t: TFunction) => t('By clicking on your opponents, you can see their Empire. \"If you know your enemies and know yourself, you will not be imperiled in a hundred battles.\" - Sun Tzu'),
+      text: (t: TFunction) => t('By clicking on your opponents, you can see their Empire. "If you know your enemies and know yourself, you will not be imperiled in a hundred battles." - Sun Tzu'),
       boxTop: 35,
       boxLeft: 44,
       boxWidth: 55,
