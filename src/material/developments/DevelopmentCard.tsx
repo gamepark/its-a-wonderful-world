@@ -62,6 +62,7 @@ const frontFace = css`
 `
 
 const getBackgroundImage = (development?: Development) => css`
+  image-rendering: -webkit-optimize-contrast;
   background-image: url(${development ? images.get(development) : Images.developmentBack});
 `
 
