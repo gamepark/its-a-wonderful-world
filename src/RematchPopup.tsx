@@ -33,7 +33,7 @@ const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
             rematchOffer.link ?
               <>
                 <h2>{t('You offered a friendly rematch')}</h2>
-                <p>{t('You offer was sent to the other players')}</p>
+                <p>{t('Your offer was sent to the other players')}</p>
                 <Button onClick={() => window.location.href = rematchOffer.link!}>{t('See the new game')}</Button>
               </>
               :
