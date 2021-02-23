@@ -1,7 +1,5 @@
 {
-  "packages": [
-    "rules",
-    "app"
-  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
   "version": "1.0.4"
 }
