@@ -1,11 +1,13 @@
 {
+  "name": "its-a-wonderful-world",
   "version": "1.0.3",
   "private": true,
   "description": "Workspace with React application and Game rules",
-  "workspaces": ["app", "rules"],
+  "workspaces": ["rules", "app"],
   "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
   "license": "ISC",
   "devDependencies": {
+    "lerna": "^3.22.1",
     "typescript": "^3.8.3"
   },
   "scripts": {

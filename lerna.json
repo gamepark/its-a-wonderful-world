@@ -1,0 +1,4 @@
+{
+  "packages": ["rules", "app"],
+  "version": "1.0.3"
+}
