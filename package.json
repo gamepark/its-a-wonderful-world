@@ -10,7 +10,6 @@
   },
   "scripts": {
     "start": "yarn workspace @gamepark/its-a-wonderful-world-app run start",
-    "build": "yarn workspace @gamepark/its-a-wonderful-world-app run build",
-    "prepublishOnly": "yarn workspace @gamepark/its-a-wonderful-world run build"
+    "build": "yarn workspace @gamepark/its-a-wonderful-world-app run build"
   }
 }
