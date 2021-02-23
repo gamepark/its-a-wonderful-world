@@ -1,0 +1,22 @@
+{
+  "name": "@gamepark/its-a-wonderful-world",
+  "version": "1.0.2",
+  "description": "It's a Wonderful World rules for Game Park",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@gamepark/workshop": "~2.4.0",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}
