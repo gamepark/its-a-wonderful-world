@@ -46,6 +46,10 @@ const failuresDescription = {
   [Failure.TUTORIAL_MOVE_EXPECTED]: {
     title: (t: TFunction) => t('Move not expected in the tutorial'),
     text: (t: TFunction) => t('You will soon be free to make your own choices! Let us show you the last information…')
+  },
+  ['You must subscribe to offer a friendly rematch']: {
+    title: (t: TFunction) => t('Subscription required'),
+    text: (t: TFunction) => t('Game Park is evolving! You must subscribe to offer a rematch and invite everyone to play friendly games.')
   }
 }
 

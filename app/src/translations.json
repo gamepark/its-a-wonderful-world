@@ -380,7 +380,9 @@
       "Close": "Close",
       "Help": "Help",
       "Move not expected in the tutorial": "Move not expected in the tutorial",
-      "You will soon be free to make your own choices! Let us show you the last information…": "You will soon be free to make your own choices! Let us show you the last information…"
+      "You will soon be free to make your own choices! Let us show you the last information…": "You will soon be free to make your own choices! Let us show you the last information…",
+      "Subscription required": "Subscription required",
+      "Game Park is evolving! You must subscribe to offer a rematch and invite everyone to play friendly games.": "Game Park is evolving! You must subscribe to offer a rematch and invite everyone to play friendly games."
     }
   },
   "fr": {
@@ -764,7 +766,9 @@
       "Close": "Fermer",
       "Help": "Aide",
       "Move not expected in the tutorial": "Coup non prévu dans le tutoriel",
-      "You will soon be free to make your own choices! Let us show you the last information…": "Promis, vous serez bientôt libres de vos choix ! Nous allons vous réafficher la dernière information…"
+      "You will soon be free to make your own choices! Let us show you the last information…": "Promis, vous serez bientôt libres de vos choix ! Nous allons vous réafficher la dernière information…",
+      "Subscription required": "Abonnement requis",
+      "Game Park is evolving! You must subscribe to offer a rematch and invite everyone to play friendly games.": "Game Park évolue ! Vous devez être abonné pour proposer une revanche et inviter tout le monde à jouer une partie amicale."
     }
   }
 }
