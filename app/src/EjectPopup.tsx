@@ -2,9 +2,8 @@ import {css} from '@emotion/core'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
-import Rules from '@gamepark/its-a-wonderful-world/Rules'
-import {useEjection, useNow, useOptions} from '@gamepark/workshop'
-import Player from '@gamepark/workshop/dist/Types/Player'
+import {getPlayerName} from '@gamepark/its-a-wonderful-world/Rules'
+import {Player, useEjection, useNow, useOptions} from '@gamepark/react-client'
 import {useTheme} from 'emotion-theming'
 import moment from 'moment'
 import React, {FunctionComponent, useEffect} from 'react'
@@ -35,7 +34,7 @@ const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
   const maxExceedTime = useOptions()?.maxExceedTime || 0
   if (!awaitedPlayer)
     return null
-  const awaitedPlayerName = awaitedPlayer.name || Rules.getPlayerName(awaitedPlayer.id, t)
+  const awaitedPlayerName = awaitedPlayer.name || getPlayerName(awaitedPlayer.id, t)
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
       <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}

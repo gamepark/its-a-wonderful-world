@@ -3,8 +3,8 @@ import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import Rules from '@gamepark/its-a-wonderful-world/Rules'
-import {usePlayer} from '@gamepark/workshop'
+import {getPlayerName} from '@gamepark/its-a-wonderful-world/Rules'
+import {usePlayer} from '@gamepark/react-client'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -24,7 +24,7 @@ const WelcomePopup: FunctionComponent<{ player: Player | PlayerView, close: () =
         <div css={closePopupStyle} onClick={close}><FontAwesomeIcon icon={faTimes}/></div>
         <h2>{t('Welcome {playerName}', {playerName: playerInfo?.name})}</h2>
         <EmpireCard player={player} css={empireCardStyle}/>
-        <p>{t('You play {empire}, face {letter}. Have fun!', {empire: Rules.getPlayerName(player.empire, t), letter: player.empireSide})}</p>
+        <p>{t('You play {empire}, face {letter}. Have fun!', {empire: getPlayerName(player.empire, t), letter: player.empireSide})}</p>
         <Button onClick={close}>{t('OK')}</Button>
       </div>
     </div>

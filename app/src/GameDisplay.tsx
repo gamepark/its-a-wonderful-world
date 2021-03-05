@@ -8,7 +8,8 @@ import {isRevealChosenCards, RevealChosenCardsView} from '@gamepark/its-a-wonder
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {getPlayer, isOver} from '@gamepark/its-a-wonderful-world/Rules'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {Letterbox, useActions, useAnimation, useDisplayState, usePlayerId} from '@gamepark/workshop'
+import {useActions, useAnimation, useDisplayState, usePlayerId} from '@gamepark/react-client'
+import {Letterbox} from '@gamepark/react-components'
 import React, {FunctionComponent, useEffect, useMemo, useRef, useState} from 'react'
 import GlobalActions from './GlobalActions'
 import Board from './material/board/Board'
@@ -23,7 +24,7 @@ import DrawPile from './material/developments/DrawPile'
 import DisplayedEmpire from './players/DisplayedEmpire'
 import PlayerPanel from './players/PlayerPanel'
 import ScorePanel from './players/score/ScorePanel'
-import TutorialPopup from './TutorialPopup'
+import TutorialPopup from './tutorial/TutorialPopup'
 import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth

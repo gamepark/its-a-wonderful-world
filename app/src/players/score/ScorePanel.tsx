@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
-import {usePlayerId} from '@gamepark/workshop'
+import {usePlayerId} from '@gamepark/react-client'
 import React, {FunctionComponent, useMemo, useState} from 'react'
 import {getPlayersStartingWith} from '../../GameDisplay'
 import PlayerScore from './PlayerScore'

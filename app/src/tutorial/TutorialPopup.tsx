@@ -7,18 +7,18 @@ import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isOver} from '@gamepark/its-a-wonderful-world/Rules'
-import {useActions, useAnimation, useFailures, usePlayerId} from '@gamepark/workshop'
+import {useActions, useAnimation, useFailures, usePlayerId} from '@gamepark/react-client'
 import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import Theme, {LightTheme} from './Theme'
-import Button from './util/Button'
+import Theme, {LightTheme} from '../Theme'
+import Button from '../util/Button'
 import {
   closePopupStyle, discordUri, hidePopupOverlayStyle, platformUri, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle
-} from './util/Styles'
-import tutorialArrowDark from './util/tutorial-arrow-dark.png'
-import tutorialArrowLight from './util/tutorial-arrow-light.png'
+} from '../util/Styles'
+import tutorialArrowDark from '../util/tutorial-arrow-dark.png'
+import tutorialArrowLight from '../util/tutorial-arrow-light.png'
 
 const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const {t} = useTranslation()

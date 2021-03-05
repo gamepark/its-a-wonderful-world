@@ -19,7 +19,7 @@ import {tellYourAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAre
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import Rules, {
+import ItsAWonderfulWorld, {
   canBuild, constructionsThatMayReceiveCubes, getMovesToBuild, getNextProductionStep, getProduction, getRemainingCost, getScore, numberOfRounds,
   placeAvailableCubesMoves
 } from '@gamepark/its-a-wonderful-world/Rules'
@@ -70,8 +70,9 @@ export default class TutorialAI {
       moves: [chooseDevelopmentCard(this.playerId, card)],
       next: (game: Game) => {
         const planningSimulation = produce(game, draft => {
-          Rules.play(revealChosenCards(), draft, this.playerId)
-          Rules.play(startPhase(Phase.Planning), draft, this.playerId)
+          const itsAWonderfulWorld = new ItsAWonderfulWorld(draft)
+          itsAWonderfulWorld.play(revealChosenCards(), this.playerId)
+          itsAWonderfulWorld.play(startPhase(Phase.Planning), this.playerId)
         })
         return ({note: this.planScore(planningSimulation).note, moves: []})
       },
@@ -182,7 +183,7 @@ export default class TutorialAI {
     options.sort((a, b) => b.rate - a.rate)
     for (const option of options) {
       const newState = produce(game, draft => {
-        option.moves.forEach(move => Rules.play(move, draft, this.playerId))
+        option.moves.forEach(move => new ItsAWonderfulWorld(draft).play(move, this.playerId))
         applyAutomaticMoves(draft, this.playerId)
       })
       const evaluation = option.next(newState)
@@ -267,13 +268,14 @@ export default class TutorialAI {
         moves: [tellYourAreReady(this.playerId)],
         next: (game: Game) => {
           game = produce(game, draft => {
+            const itsAWonderfulWorld = new ItsAWonderfulWorld(draft)
             if (draft.phase === Phase.Planning) {
-              Rules.play(startPhase(Phase.Production), draft, this.playerId)
-              Rules.play(produceResources(Resource.Materials), draft, this.playerId)
+              itsAWonderfulWorld.play(startPhase(Phase.Production), this.playerId)
+              itsAWonderfulWorld.play(produceResources(Resource.Materials), this.playerId)
             } else {
               const nextProductionStep = getNextProductionStep(draft)
               if (nextProductionStep) {
-                Rules.play(produceResources(nextProductionStep), draft, this.playerId)
+                itsAWonderfulWorld.play(produceResources(nextProductionStep), this.playerId)
               }
             }
           })
@@ -414,9 +416,10 @@ const empiresExpectedScore: Record<EmpireName, Record<Character | DevelopmentTyp
 function applyAutomaticMoves(game: Game, playerId?: EmpireName): Move[] {
   const moves: Move[] = []
   while (true) {
-    const move = Rules.getAutomaticMove(game)
+    const itsAWonderfulWorld = new ItsAWonderfulWorld(game)
+    const move = itsAWonderfulWorld.getAutomaticMove()
     if (move) {
-      Rules.play(move, game, playerId)
+      itsAWonderfulWorld.play(move, playerId)
       moves.push(move)
     } else {
       return moves

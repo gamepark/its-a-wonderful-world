@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
-import {useNow} from '@gamepark/workshop'
-import PlayerTime from '@gamepark/workshop/dist/Types/PlayerTime'
+import {useNow} from '@gamepark/react-client'
+import PlayerTime from '@gamepark/react-client/dist/Types/PlayerTime'
 import React, {FunctionComponent} from 'react'
 import {humanize} from '../util/TimeUtil'
 

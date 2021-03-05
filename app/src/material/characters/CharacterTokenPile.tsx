@@ -8,7 +8,7 @@ import {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveC
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {useAnimation} from '@gamepark/workshop'
+import {useAnimation} from '@gamepark/react-client'
 import React, {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'

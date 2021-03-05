@@ -6,7 +6,7 @@ import {isReceiveCharacter, receiveCharacter} from '@gamepark/its-a-wonderful-wo
 import {isTellYouAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import {getLegalMoves} from '@gamepark/its-a-wonderful-world/Rules'
-import {usePlay} from '@gamepark/workshop'
+import {usePlay} from '@gamepark/react-client'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import CharacterToken from './material/characters/CharacterToken'

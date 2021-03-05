@@ -1,10 +1,6 @@
-import {Action, GameWithIncompleteInformation, SimultaneousGame, WithAnimations, WithAutomaticMoves, WithOptions, WithUndo} from '@gamepark/workshop'
-import WithEliminations from '@gamepark/workshop/dist/Types/WithEliminations'
-import WithScore from '@gamepark/workshop/dist/Types/WithScore'
-import WithTimeLimit from '@gamepark/workshop/dist/Types/WithTimeLimit'
-import WithTutorial from '@gamepark/workshop/dist/Types/WithTutorial'
+import {Action, Competitive, Eliminations, IncompleteInformation, SimultaneousGame, TimeLimit} from '@gamepark/rules-api'
 import Game from './Game'
-import GameOptions from './GameOptions'
+import GameOptions, {isGameOptions} from './GameOptions'
 import GameView from './GameView'
 import Character, {characters, ChooseCharacter, isCharacter} from './material/Character'
 import Construction from './material/Construction'
@@ -37,7 +33,6 @@ import Phase from './Phase'
 import Player from './Player'
 import PlayerView from './PlayerView'
 import shuffle from './shuffle'
-import {setupTutorial, tutorialMoves} from './Tutorial'
 import {isGameView, isPlayerView} from './typeguards'
 
 export const numberOfCardsToDraft = 7
@@ -48,66 +43,52 @@ const playersMax = 5
 export const defaultNumberOfPlayers = 2
 const defaultEmpireCardsSide = EmpireSide.A
 
-type GameType = SimultaneousGame<Game, Move, EmpireName>
-  & WithScore<Game, Move, EmpireName>
-  & GameWithIncompleteInformation<Game, Move, EmpireName, GameView, MoveView>
-  & WithOptions<Game, GameOptions>
-  & WithAutomaticMoves<Game, Move>
-  & WithUndo<Game, Move, EmpireName>
-  & WithAnimations<GameView, MoveView, EmpireName, EmpireName>
-  & WithEliminations<Game, Move, EmpireName>
-  & WithTimeLimit<Game, EmpireName>
-  & WithTutorial<Game, Move>
-
 // noinspection JSUnusedGlobalSymbols
-const Rules: GameType = {
-  setup(options?: GameOptions) {
-    return {
-      players: setupPlayers(options?.players, options?.empiresSide),
-      deck: shuffle(Array.from(developmentCards.keys())),
-      discard: [],
-      round: 1,
-      phase: Phase.Draft
-    }
-  },
+export default class ItsAWonderfulWorld extends SimultaneousGame<Game | GameView, Move, EmpireName> implements Competitive<Move, EmpireName>,
+  IncompleteInformation<Move, EmpireName, GameView, MoveView>, Eliminations<Move, EmpireName>, TimeLimit<EmpireName> {
 
-  getPlayerIds(game: Game) {
-    return game.players.map(player => player.empire)
-  },
+  constructor(state: Game | GameView)
+  constructor(options?: GameOptions)
+  constructor(arg?: GameOptions | Game | GameView) {
+    if (!arg || isGameOptions(arg)) {
+      super({
+        players: setupPlayers(arg),
+        deck: shuffle(Array.from(developmentCards.keys())),
+        discard: [],
+        round: 1,
+        phase: Phase.Draft
+      })
+    } else {
+      super(arg)
+    }
+  }
+
+  getPlayerIds(): EmpireName[] {
+    return (this.state as Game).players.map(player => player.empire)
+  }
 
   getPlayerName(empire: EmpireName, t: (name: string) => string): string {
-    switch (empire) {
-      case EmpireName.AztecEmpire:
-        return t('Aztec Empire')
-      case EmpireName.FederationOfAsia:
-        return t('Federation of Asia')
-      case EmpireName.NoramStates:
-        return t('Noram States')
-      case EmpireName.PanafricanUnion:
-        return t('Panafrican Union')
-      case EmpireName.RepublicOfEurope:
-        return t('Republic of Europe')
-    }
-  },
+    return getPlayerName(empire, t)
+  }
 
-  getActivePlayers(game: Game) {
-    switch (game.phase) {
+  getActivePlayers(): EmpireName[] {
+    switch (this.state.phase) {
       case Phase.Draft:
-        return game.players.filter(player => player.chosenCard === undefined && player.hand.length > 0).map(player => player.empire)
+        return this.state.players.filter(player => player.chosenCard === undefined && getHandSize(player) > 0).map(player => player.empire)
       case Phase.Planning:
       case Phase.Production:
-        return game.players.filter(player => !player.ready).map(player => player.empire)
+        return this.state.players.filter(player => !player.ready).map(player => player.empire)
     }
-  },
+  }
 
-  getAutomaticMove(game: Game | GameView) {
-    if (!isGameView(game)) {
-      switch (game.phase) {
+  getAutomaticMove() {
+    if (!isGameView(this.state)) {
+      switch (this.state.phase) {
         case Phase.Draft:
-          const anyPlayer = game.players.filter(player => !player.eliminated)[0]
+          const anyPlayer = this.state.players.filter(player => !player.eliminated)[0]
           if (anyPlayer && !anyPlayer.hand.length && !anyPlayer.draftArea.length) {
             return dealDevelopmentCards()
-          } else if (game.players.every(player => player.chosenCard !== undefined || (player.eliminated && !player.hand.length))) {
+          } else if (this.state.players.every(player => player.chosenCard !== undefined || (player.eliminated && !player.hand.length))) {
             return revealChosenCards()
           } else if (anyPlayer && anyPlayer.cardsToPass) {
             return passCards()
@@ -118,7 +99,7 @@ const Rules: GameType = {
               return startPhase(Phase.Planning)
             }
           } else {
-            for (const player of game.players) {
+            for (const player of this.state.players) {
               if (player.chosenCard === undefined && player.hand.length === 1) {
                 return chooseDevelopmentCard(player.empire, player.hand[0])
               }
@@ -126,25 +107,25 @@ const Rules: GameType = {
           }
           break
         case Phase.Planning:
-          if (game.players.every(player => player.ready)) {
+          if (this.state.players.every(player => player.ready)) {
             return startPhase(Phase.Production)
           }
           break
         case Phase.Production:
-          if (!game.productionStep) {
+          if (!this.state.productionStep) {
             return produce(Resource.Materials)
-          } else if (game.players.every(player => player.ready)) {
-            const nextProductionStep = getNextProductionStep(game)
+          } else if (this.state.players.every(player => player.ready)) {
+            const nextProductionStep = getNextProductionStep(this.state)
             if (nextProductionStep) {
               return produce(nextProductionStep)
-            } else if (game.round < numberOfRounds) {
+            } else if (this.state.round < numberOfRounds) {
               return startPhase(Phase.Draft)
             }
           }
           break
       }
     }
-    for (const player of game.players) {
+    for (const player of this.state.players) {
       for (const construction of player.constructionArea) {
         if (construction.costSpaces.every(space => space !== null)) {
           return completeConstruction(player.empire, construction.card)
@@ -168,43 +149,43 @@ const Rules: GameType = {
       }
     }
     return
-  },
+  }
 
-  getLegalMoves(game: Game, empire: EmpireName) {
-    const player = game.players.find(player => player.empire === empire)
-    if (!player || (game.round === numberOfRounds && game.productionStep === Resource.Exploration && player.ready)) {
+  getLegalMoves(empire: EmpireName) {
+    const player = this.state.players.find(player => player.empire === empire)
+    if (!player || isPlayerView(player) || (this.state.round === numberOfRounds && this.state.productionStep === Resource.Exploration && player.ready)) {
       return []
     }
-    return getLegalMoves(player, game.phase)
-  },
+    return getLegalMoves(player, this.state.phase)
+  }
 
-  play(move: Move | MoveView, game: Game | GameView, playerId: EmpireName) {
+  play(move: Move | MoveView, playerId?: EmpireName) {
     switch (move.type) {
       case MoveType.DealDevelopmentCards: {
-        const players = game.players.filter(player => !player.eliminated)
+        const players = this.state.players.filter(player => !player.eliminated)
         if (players.length === 1) {
-          players.push(game.players.filter(player => player.eliminated).sort((a, b) => b.eliminated! - a.eliminated!)[0])
+          players.push(this.state.players.filter(player => player.eliminated).sort((a, b) => b.eliminated! - a.eliminated!)[0])
         }
         const cardsToDeal = players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft
         players.forEach(player => {
-          if (isGameView(game)) {
-            game.deck -= cardsToDeal
+          if (isGameView(this.state)) {
+            this.state.deck -= cardsToDeal
             if (playerId && player.empire === playerId && isDealDevelopmentCardsView(move)) {
               player.hand = move.playerCards
             } else {
               player.hand = cardsToDeal
             }
           } else {
-            player.hand = game.deck.splice(0, cardsToDeal)
+            player.hand = this.state.deck.splice(0, cardsToDeal)
           }
         })
         if (playerId && isDealDevelopmentCardsView(move)) {
-          getPlayer(game, playerId).hand = move.playerCards
+          getPlayer(this.state, playerId).hand = move.playerCards
         }
         break
       }
       case MoveType.ChooseDevelopmentCard: {
-        const player = getPlayer(game, move.playerId)
+        const player = getPlayer(this.state, move.playerId)
         if (isPlayerView(player)) {
           player.hand--
           player.chosenCard = true
@@ -216,12 +197,12 @@ const Rules: GameType = {
       }
       case MoveType.RevealChosenCards: {
         if (isRevealChosenCardsView(move)) {
-          game.players.forEach(player => {
+          this.state.players.forEach(player => {
             player.draftArea.push(move.revealedCards[player.empire]!)
             delete player.chosenCard
           })
-        } else if (!isGameView(game)) {
-          game.players.forEach(player => {
+        } else if (!isGameView(this.state)) {
+          this.state.players.forEach(player => {
             if (player.chosenCard !== undefined) {
               player.draftArea.push(player.chosenCard)
               delete player.chosenCard
@@ -235,11 +216,11 @@ const Rules: GameType = {
       }
       case MoveType.PassCards: {
         if (playerId && isPassCardsView(move)) {
-          const player = getPlayer(game, playerId)
+          const player = getPlayer(this.state, playerId)
           player.hand = move.receivedCards
-        } else if (!isGameView(game)) {
-          const players = game.players.filter(player => player.cardsToPass)
-          const draftDirection = game.round % 2 ? -1 : 1
+        } else if (!isGameView(this.state)) {
+          const players = this.state.players.filter(player => player.cardsToPass)
+          const draftDirection = this.state.round % 2 ? -1 : 1
           for (let i = 0; i < players.length; i++) {
             let previousPlayer = players[(i + players.length + draftDirection) % players.length]
             players[i].hand = previousPlayer.cardsToPass!
@@ -249,10 +230,10 @@ const Rules: GameType = {
         break
       }
       case MoveType.DiscardLeftoverCards: {
-        if (!isGameView(game)) {
-          game.players.forEach(player => game.discard.push(...player.hand.splice(0)))
+        if (!isGameView(this.state)) {
+          this.state.players.forEach(player => this.state.discard.push(...player.hand.splice(0)))
         } else {
-          game.players.forEach(player => {
+          this.state.players.forEach(player => {
             if (isPlayerView(player)) {
               player.hand = 0
             } else {
@@ -260,28 +241,28 @@ const Rules: GameType = {
             }
           })
           if (isDiscardLeftoverCardsView(move)) {
-            game.discard.push(...move.discardedCards)
+            this.state.discard.push(...move.discardedCards)
           }
         }
         break
       }
       case MoveType.StartPhase: {
-        game.phase = move.phase
-        game.players.forEach(player => player.ready = false)
+        this.state.phase = move.phase
+        this.state.players.forEach(player => player.ready = false)
         if (move.phase === Phase.Draft) {
-          delete game.productionStep
-          game.round++
+          delete this.state.productionStep
+          this.state.round++
         }
         break
       }
       case MoveType.SlateForConstruction: {
-        const player = getPlayer(game, move.playerId)
+        const player = getPlayer(this.state, move.playerId)
         player.draftArea = player.draftArea.filter(card => card !== move.card)
         player.constructionArea.push({card: move.card, costSpaces: Array(costSpaces(developmentCards[move.card])).fill(null)})
         break
       }
       case MoveType.Recycle: {
-        const player = getPlayer(game, move.playerId)
+        const player = getPlayer(this.state, move.playerId)
         const indexInDraftArea = player.draftArea.findIndex(card => card === move.card)
         if (indexInDraftArea !== -1) {
           player.draftArea.splice(indexInDraftArea, 1)
@@ -290,11 +271,11 @@ const Rules: GameType = {
           player.constructionArea = player.constructionArea.filter(construction => construction.card !== move.card)
           player.bonuses.push(developmentCards[move.card].recyclingBonus)
         }
-        game.discard.push(move.card)
+        this.state.discard.push(move.card)
         break
       }
       case MoveType.PlaceResource: {
-        const player = getPlayer(game, move.playerId)
+        const player = getPlayer(this.state, move.playerId)
         const bonusIndex = player.bonuses.findIndex(bonus => bonus === move.resource)
         if (bonusIndex !== -1) {
           player.bonuses.splice(bonusIndex, 1)
@@ -316,7 +297,7 @@ const Rules: GameType = {
         break
       }
       case MoveType.CompleteConstruction: {
-        const player = getPlayer(game, move.playerId)
+        const player = getPlayer(this.state, move.playerId)
         player.constructionArea = player.constructionArea.filter(construction => construction.card !== move.card)
         player.constructedDevelopments.push(move.card)
         const bonus = developmentCards[move.card].constructionBonus
@@ -330,7 +311,7 @@ const Rules: GameType = {
         break
       }
       case MoveType.TransformIntoKrystallium: {
-        const player = getPlayer(game, move.playerId)
+        const player = getPlayer(this.state, move.playerId)
         for (let i = 0; i < 5; i++) {
           player.empireCardResources.splice(player.empireCardResources.findIndex(resource => resource !== Resource.Krystallium), 1)
         }
@@ -338,14 +319,14 @@ const Rules: GameType = {
         break
       }
       case MoveType.TellYouAreReady: {
-        getPlayer(game, move.playerId).ready = true
+        getPlayer(this.state, move.playerId).ready = true
         break
       }
       case MoveType.Produce: {
-        game.productionStep = move.resource
+        this.state.productionStep = move.resource
         let highestProduction = 0
         let singleMostPlayer: Player | PlayerView | undefined
-        game.players.forEach(player => {
+        this.state.players.forEach(player => {
           player.availableResources = new Array(getProduction(player, move.resource)).fill(move.resource)
           player.ready = false
           if (player.availableResources.length > highestProduction) {
@@ -373,7 +354,7 @@ const Rules: GameType = {
         break
       }
       case MoveType.ReceiveCharacter: {
-        const player = getPlayer(game, move.playerId)
+        const player = getPlayer(this.state, move.playerId)
         player.characters[move.character]++
         let bonusIndex = player.bonuses.indexOf(move.character)
         if (bonusIndex === -1) {
@@ -383,25 +364,25 @@ const Rules: GameType = {
         break
       }
       case MoveType.PlaceCharacter: {
-        const player = getPlayer(game, move.playerId)
+        const player = getPlayer(this.state, move.playerId)
         player.characters[move.character]--
         player.constructionArea.find(construction => construction.card === move.card)!.costSpaces[move.space] = move.character
         break
       }
       case MoveType.Concede: {
-        const player = getPlayer(game, move.playerId)
-        player.eliminated = game.players.filter(player => player.eliminated).length + 1
+        const player = getPlayer(this.state, move.playerId)
+        player.eliminated = this.state.players.filter(player => player.eliminated).length + 1
         break
       }
     }
-  },
+  }
 
-  getScore(game: Game, empire: EmpireName): number {
-    return getScore(getPlayer(game, empire))
-  },
+  getScore(empire: EmpireName): number {
+    return getScore(getPlayer(this.state, empire))
+  }
 
-  rankPlayers(game: Game, empireA: EmpireName, empireB: EmpireName): number {
-    const playerA = getPlayer(game, empireA), playerB = getPlayer(game, empireB)
+  rankPlayers(empireA: EmpireName, empireB: EmpireName): number {
+    const playerA = getPlayer(this.state, empireA), playerB = getPlayer(this.state, empireB)
     if (playerA.eliminated || playerB.eliminated) {
       return playerA.eliminated ? playerB.eliminated ? playerB.eliminated - playerA.eliminated : 1 : -1
     }
@@ -414,14 +395,14 @@ const Rules: GameType = {
       return buildingsB - buildingsA
     }
     return countCharacters(playerB) - countCharacters(playerA)
-  },
+  }
 
-  canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[], game: Game | GameView) {
+  canUndo(action: Action<Move, EmpireName>, consecutiveActions: Action<Move, EmpireName>[]) {
     const {playerId, move} = action
-    if (game.round === numberOfRounds && game.productionStep === Resource.Exploration && game.players.every(player => player.ready)) {
+    if (this.state.round === numberOfRounds && this.state.productionStep === Resource.Exploration && this.state.players.every(player => player.ready)) {
       return false
     }
-    const player = game.players.find(player => player.empire === playerId)!
+    const player = this.state.players.find(player => player.empire === playerId)!
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
         return player.chosenCard === move.card
@@ -456,12 +437,13 @@ const Rules: GameType = {
       default:
         return false
     }
-  },
+  }
 
-  getView(game: Game, playerId?: EmpireName): GameView {
+  getView(playerId?: EmpireName | undefined): GameView {
+    if (isGameView(this.state)) throw new Error('getView should only be used on server side')
     return {
-      ...game, deck: game.deck.length,
-      players: game.players.map(player => {
+      ...this.state, deck: this.state.deck.length,
+      players: this.state.players.map(player => {
         if (player.empire === playerId) {
           return player
         } else {
@@ -473,12 +455,13 @@ const Rules: GameType = {
         }
       })
     }
-  },
+  }
 
-  getMoveView(move: Move, playerId: EmpireName, game: Game): MoveView {
+  getMoveView(move: Move, playerId: EmpireName | undefined): MoveView {
+    if (isGameView(this.state)) throw new Error('getMoveView should only be used on server side')
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
-        return playerId ? {...move, playerCards: game.players.find(player => player.empire === playerId)!.hand} : move
+        return playerId ? {...move, playerCards: this.state.players.find(player => player.empire === playerId)!.hand} : move
       case MoveType.ChooseDevelopmentCard:
         if (playerId !== move.playerId) {
           const {card, ...moveView} = move
@@ -487,95 +470,46 @@ const Rules: GameType = {
         break
       case MoveType.RevealChosenCards:
         return {
-          ...move, revealedCards: game.players.reduce<{ [key in EmpireName]?: number }>((revealedCards, player) => {
+          ...move, revealedCards: this.state.players.reduce<{ [key in EmpireName]?: number }>((revealedCards, player) => {
             revealedCards[player.empire] = player.draftArea[player.draftArea.length - 1]
             return revealedCards
           }, {})
         }
       case MoveType.PassCards:
-        return {...move, receivedCards: playerId ? game.players.find(player => player.empire === playerId)!.hand : undefined}
+        return {...move, receivedCards: playerId ? this.state.players.find(player => player.empire === playerId)!.hand : undefined}
       case MoveType.DiscardLeftoverCards:
-        return {...move, discardedCards: game.discard.slice((numberOfCardsToDraft - numberOfCardsDeal2Players) * game.players.length)}
+        return {...move, discardedCards: this.state.discard.slice((numberOfCardsToDraft - numberOfCardsDeal2Players) * this.state.players.length)}
     }
     return move
-  },
+  }
 
-  isEliminated(game: Game, playerId: EmpireName): boolean {
-    return !!getPlayer(game, playerId).eliminated
-  },
+  isEliminated(playerId: EmpireName): boolean {
+    return !!getPlayer(this.state, playerId).eliminated
+  }
 
   getConcedeMove(playerId: EmpireName): Move {
     return concede(playerId)
-  },
+  }
 
-  giveTime(game: Game, playerId: EmpireName): number {
-    switch (game.phase) {
+  giveTime(playerId: EmpireName): number {
+    switch (this.state.phase) {
       case Phase.Draft:
-        if (game.round === 1 && getPlayer(game, playerId).draftArea.length === 0) {
+        if (this.state.round === 1 && getPlayer(this.state, playerId).draftArea.length === 0) {
           return 180
         } else {
-          return (numberOfCardsToDraft - getPlayer(game, playerId).draftArea.length - 1) * 10
+          return (numberOfCardsToDraft - getPlayer(this.state, playerId).draftArea.length - 1) * 10
         }
       case Phase.Planning:
-        return (game.round + 1) * 60
+        return (this.state.round + 1) * 60
       case Phase.Production:
         return 15
     }
-  },
-
-  getAnimationDuration(move: MoveView, {action, game, playerId: currentPlayerId, displayState: displayedPlayerId}) {
-    switch (move.type) {
-      case MoveType.ChooseDevelopmentCard:
-        return move.playerId === displayedPlayerId ? 0.5 : 0
-      case MoveType.RevealChosenCards:
-        return (1 + (currentPlayerId ? game.players.length - 2 : game.players.length - 1) * 0.7) * 2.5
-      case MoveType.PassCards:
-        return 3
-      case MoveType.SlateForConstruction:
-      case MoveType.Recycle:
-      case MoveType.CompleteConstruction:
-        return move.playerId === displayedPlayerId ? 0.3 : 0
-      case MoveType.PlaceResource:
-        if (move.playerId !== displayedPlayerId) {
-          return 0
-        }
-        if (move.playerId === currentPlayerId) {
-          if (isPlaceResourceOnConstruction(move) || move.resource === Resource.Krystallium) {
-            return 0
-          }
-        }
-        return 0.2
-      case MoveType.ReceiveCharacter:
-        if (action.consequences.some(isCompleteConstruction)) {
-          return move.playerId === displayedPlayerId ? 0.5 : 0
-        } else {
-          return 1
-        }
-      default:
-        return 0
-    }
-  },
-
-  getUndoAnimationDuration(move: MoveView) {
-    switch (move.type) {
-      case MoveType.ChooseDevelopmentCard:
-      case MoveType.SlateForConstruction:
-        return 0.3
-      default:
-        return 0
-    }
-  },
-
-  setupTutorial(): Game {
-    return setupTutorial(setupPlayers)
-  },
-
-  expectedMoves(): Move[] {
-    return tutorialMoves
   }
 }
 
-function setupPlayers(players?: number | { empire?: EmpireName }[], empireSide?: EmpireSide) {
+export function setupPlayers(options?: GameOptions) {
+  const players = options?.players
+  const empireSide = options?.empiresSide
   if (Array.isArray(players) && players.length >= playersMin && players.length <= playersMax) {
     const empiresLeft = shuffle(Object.values(EmpireName).filter(empire => players.some(player => player.empire === empire)))
     return players.map<Player>(player => setupPlayer(player.empire || empiresLeft.pop()!, empireSide))
@@ -846,5 +780,21 @@ function actionCompletedCardConstruction(action: Action<Move, EmpireName>, card:
   return action.consequences.some(consequence => isCompleteConstruction(consequence) && consequence.card === card)
 }
 
-// noinspection JSUnusedGlobalSymbols
-export default Rules
+function getHandSize(player: Player | PlayerView) {
+  return isPlayerView(player) ? player.hand : player.hand.length
+}
+
+export function getPlayerName(empire: EmpireName, t: (name: string) => string): string {
+  switch (empire) {
+    case EmpireName.AztecEmpire:
+      return t('Aztec Empire')
+    case EmpireName.FederationOfAsia:
+      return t('Federation of Asia')
+    case EmpireName.NoramStates:
+      return t('Noram States')
+    case EmpireName.PanafricanUnion:
+      return t('Panafrican Union')
+    case EmpireName.RepublicOfEurope:
+      return t('Republic of Europe')
+  }
+}

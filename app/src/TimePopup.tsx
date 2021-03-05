@@ -2,8 +2,8 @@ import {css} from '@emotion/core'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
-import Rules from '@gamepark/its-a-wonderful-world/Rules'
-import {usePlayers} from '@gamepark/workshop'
+import {getPlayerName} from '@gamepark/its-a-wonderful-world/Rules'
+import {usePlayers} from '@gamepark/react-client'
 import {useTheme} from 'emotion-theming'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -43,7 +43,7 @@ const TimePopup: FunctionComponent<Props> = ({onClose}) => {
           <tbody>
             {players.map(player => (
               <tr key={player.id}>
-                <td>{player.name || Rules.getPlayerName(player.id, t)}</td>
+                <td>{player.name || getPlayerName(player.id, t)}</td>
                 <td>{player.time && humanize(player.time.highestDownTime)}</td>
                 <td>{player.time && humanize(player.time.cumulatedDownTime)}</td>
                 <td>{player.time && humanize(player.time.highestPlayTime)}</td>

@@ -1,6 +1,6 @@
 import {css} from '@emotion/core'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
-import {Draggable} from '@gamepark/workshop'
+import {Draggable} from '@gamepark/react-components'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'

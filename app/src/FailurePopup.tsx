@@ -1,7 +1,7 @@
 import {css} from '@emotion/core'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Failure} from '@gamepark/workshop'
+import {Failure} from '@gamepark/react-client'
 import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
 import React, {FunctionComponent} from 'react'

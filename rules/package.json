@@ -13,13 +13,13 @@
     "access": "public"
   },
   "devDependencies": {
-    "@gamepark/workshop": "^2.4.0",
     "typescript": "^3.8.3"
   },
-  "peerDependencies": {
-    "@gamepark/workshop": "^2.4.0"
-  },
+  "peerDependencies": {},
   "scripts": {
     "build": "tsc"
+  },
+  "dependencies": {
+    "@gamepark/rules-api": "3.0.3"
   }
 }

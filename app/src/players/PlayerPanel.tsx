@@ -4,8 +4,8 @@ import DevelopmentType, {developmentTypes} from '@gamepark/its-a-wonderful-world
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import Rules, {getItemQuantity, getVictoryPointsBonusMultiplier} from '@gamepark/its-a-wonderful-world/Rules'
-import {GameSpeed, useOptions, usePlayer} from '@gamepark/workshop'
+import {getItemQuantity, getPlayerName, getVictoryPointsBonusMultiplier} from '@gamepark/its-a-wonderful-world/Rules'
+import {GameSpeed, useOptions, usePlayer} from '@gamepark/react-client'
 import Avatar from 'avataaars'
 import React, {FunctionComponent, useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -43,7 +43,7 @@ const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, sho
         <img alt={t('Player avatar')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
       }
       <h3 css={titleStyle}>
-        <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || Rules.getPlayerName(player.empire, t)}</span>
+        <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getPlayerName(player.empire, t)}</span>
         {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
         {typeof gamePoints === 'number' &&
         <span css={css`flex-shrink: 0`}>

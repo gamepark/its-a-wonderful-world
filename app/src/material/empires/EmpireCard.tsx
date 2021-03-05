@@ -5,8 +5,8 @@ import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import {placeResource} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import Rules from '@gamepark/its-a-wonderful-world/Rules'
-import {usePlay, usePlayerId} from '@gamepark/workshop'
+import {getPlayerName} from '@gamepark/its-a-wonderful-world/Rules'
+import {usePlay, usePlayerId} from '@gamepark/react-client'
 import React, {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
@@ -68,7 +68,7 @@ const EmpireCard: FunctionComponent<Props> = ({player, gameOver = false, withRes
   })
   return (
     <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
-      <div css={empireCardTitle}>({player.empireSide}) {Rules.getPlayerName(player.empire, t)}</div>
+      <div css={empireCardTitle}>({player.empireSide}) {getPlayerName(player.empire, t)}</div>
       {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>

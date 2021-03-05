@@ -7,7 +7,7 @@ import {tellYourAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAre
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import {canBuild, getPlayer, numberOfRounds} from '@gamepark/its-a-wonderful-world/Rules'
-import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/workshop'
+import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import normalize from 'emotion-normalize'
 import {ThemeProvider} from 'emotion-theming'
 import fscreen from 'fscreen'
@@ -91,7 +91,7 @@ const App: FunctionComponent = () => {
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
         <LoadingScreen display={loading}/>
-        {!loading && <GameDisplay game={game!} validate={validate}/>}
+        {!loading && <GameDisplay game={game} validate={validate}/>}
         <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
           {t('The ideal resolution for playing is in landscape mode, in 16:9.')}
           <br/>
