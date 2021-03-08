@@ -1,7 +1,8 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
-import React, {FunctionComponent, useState} from 'react'
+import {FunctionComponent, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {cardHeight, cardStyle, cardWidth} from '../../util/Styles'
 import DevelopmentCard from './DevelopmentCard'

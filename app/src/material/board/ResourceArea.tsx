@@ -1,4 +1,5 @@
-import {css, keyframes} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, keyframes, Theme} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Resource'
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
@@ -10,12 +11,12 @@ import {getProduction} from '@gamepark/its-a-wonderful-world/Rules'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimations} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
 import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
-import Theme, {LightTheme} from '../../Theme'
+import {LightTheme} from '../../Theme'
 import {
   areasX, boardHeight, boardTop, boardWidth, empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, getAreaCardX, getAreaCardY, glow
 } from '../../util/Styles'

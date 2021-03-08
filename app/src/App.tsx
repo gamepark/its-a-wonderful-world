@@ -1,4 +1,5 @@
-import {css, Global} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, Global, Theme, ThemeProvider} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
@@ -9,13 +10,12 @@ import Player from '@gamepark/its-a-wonderful-world/Player'
 import {canBuild, getPlayer, numberOfRounds} from '@gamepark/its-a-wonderful-world/Rules'
 import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import normalize from 'emotion-normalize'
-import {ThemeProvider} from 'emotion-theming'
 import fscreen from 'fscreen'
 import i18next from 'i18next'
 import ICU from 'i18next-icu'
 import moment from 'moment'
 import 'moment/locale/fr'
-import React, {FunctionComponent, useEffect, useState} from 'react'
+import {FunctionComponent, useEffect, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {initReactI18next, useTranslation} from 'react-i18next'
@@ -24,7 +24,7 @@ import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
 import Header from './Header'
 import Images from './material/Images'
-import Theme, {DarkTheme, LightTheme} from './Theme'
+import {Color, DarkTheme, LightTheme} from './Theme'
 import translations from './translations.json'
 import Button from './util/Button'
 import ImagesLoader from './util/ImagesLoader'
@@ -50,17 +50,17 @@ moment.locale(locale)
 
 const App: FunctionComponent = () => {
   const {t} = useTranslation()
-  const [themeColor, setThemeColor] = useState(() => localStorage.getItem(userTheme) || DarkTheme)
+  const [themeColor, setThemeColor] = useState<Color>(() => (localStorage.getItem(userTheme) || DarkTheme) as Color)
   const game = useGame<GameView>()
   const [failures, clearFailures] = useFailures<Move>()
   const [imagesLoading, setImagesLoading] = useState(true)
   const play = usePlay<Move>()
   const playerId = usePlayerId<EmpireName>()
   const [displayedEmpire] = useDisplayState<EmpireName | undefined>(undefined)
-  const theme = {
+  const theme: Theme = {
     color: themeColor,
     switchThemeColor: () => {
-      let newThemeColor = themeColor === LightTheme ? DarkTheme : LightTheme
+      let newThemeColor: Color = themeColor === LightTheme ? DarkTheme : LightTheme
       setThemeColor(newThemeColor)
       localStorage.setItem(userTheme, newThemeColor)
     }

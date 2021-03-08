@@ -1,9 +1,10 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Resource'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {getProduction} from '@gamepark/its-a-wonderful-world/Rules'
-import React, {Fragment, FunctionComponent} from 'react'
+import {Fragment, FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'
 import {getDescription} from '../material/resources/ResourceCube'

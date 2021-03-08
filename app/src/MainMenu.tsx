@@ -1,4 +1,5 @@
-import {css, keyframes} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, keyframes, useTheme } from '@emotion/react'
 import {
   faChess, faChevronDown, faChevronUp, faClock, faCompress, faExpand, faFastBackward, faHome, faMoon, faSignOutAlt, faSun, faUndoAlt, faVolumeMute, faVolumeUp
 } from '@fortawesome/free-solid-svg-icons'
@@ -8,12 +9,11 @@ import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import Rules, {isOver} from '@gamepark/its-a-wonderful-world/Rules'
 import {useActions, useGame, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/react-client'
-import {useTheme} from 'emotion-theming'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 // @ts-ignore
 import {orientation} from 'o9n'
-import React, {useEffect, useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import EjectButton from './EjectButton'
 import EjectPopup from './EjectPopup'
@@ -21,7 +21,7 @@ import Images from './material/Images'
 import QuitPopup from './QuitPopup'
 import RematchPopup from './RematchPopup'
 import toggleSound from './sounds/toggle.mp3'
-import Theme, {LightTheme} from './Theme'
+import {LightTheme} from './Theme'
 import TimePopup from './TimePopup'
 import {resetTutorial} from './tutorial/TutorialPopup'
 import IconButton from './util/IconButton'
@@ -37,7 +37,7 @@ const MainMenu = () => {
   const [undo, canUndo] = useUndo(Rules)
   const playerId = usePlayerId<EmpireName>()
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const players = usePlayers<EmpireName>()
   const player = players.find(player => player.id === playerId)
   const quit = game?.players.find(player => player.empire === playerId)?.eliminated

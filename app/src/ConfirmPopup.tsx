@@ -1,16 +1,16 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useTheme} from 'emotion-theming'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import Theme, {LightTheme} from './Theme'
+import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
 const ConfirmPopup: FunctionComponent<{ cancel: () => void, confirm: () => void }> = ({cancel, confirm}) => {
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
     <div css={[popupOverlayStyle, showPopupOverlayStyle]}>
       <div css={[popupStyle, popupPosition, css`width: 50%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}

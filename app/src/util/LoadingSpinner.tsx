@@ -1,5 +1,5 @@
-import {css, keyframes} from '@emotion/core'
-import React from 'react'
+/** @jsxImportSource @emotion/react */
+import {css, keyframes} from '@emotion/react'
 
 const LoadingSpinner = (props: React.HTMLAttributes<HTMLDivElement>) => (
   <div css={style} {...props}>

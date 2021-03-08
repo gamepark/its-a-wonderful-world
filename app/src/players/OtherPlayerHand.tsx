@@ -1,10 +1,11 @@
-import {css, keyframes} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, keyframes} from '@emotion/react'
 import ChooseDevelopmentCard, {isChooseDevelopmentCard} from '@gamepark/its-a-wonderful-world/moves/ChooseDevelopmentCard'
 import PassCards, {isPassCards} from '@gamepark/its-a-wonderful-world/moves/PassCards'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {Animation, useAnimation} from '@gamepark/react-client'
 import {Hand} from '@gamepark/react-components'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {cardHeight, cardRatio, cardStyle, cardWidth, playerPanelHeight, playerPanelWidth, playerPanelY} from '../util/Styles'
 import {getChosenCardAnimation, hand2PlayersX, handPosition, handPosition2Players, handX, handY, playerHandCardStyle} from './PlayerHand'

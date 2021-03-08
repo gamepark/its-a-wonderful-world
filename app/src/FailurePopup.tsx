@@ -1,18 +1,18 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {Failure} from '@gamepark/react-client'
-import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
-import Theme, {LightTheme} from './Theme'
+import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
 const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () => {} }> = ({failures, clearFailures}) => {
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const description = failuresDescription[failures[0]] || fallbackDescription(failures[0])
   return (
     <div css={[popupOverlayStyle, showPopupOverlayStyle]} onClick={clearFailures}>

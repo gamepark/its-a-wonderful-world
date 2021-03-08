@@ -1,5 +1,6 @@
-import {css, keyframes} from '@emotion/core'
-import React, {ButtonHTMLAttributes, FunctionComponent} from 'react'
+/** @jsxImportSource @emotion/react */
+import {css, keyframes} from '@emotion/react'
+import {ButtonHTMLAttributes, FunctionComponent} from 'react'
 
 const Button: FunctionComponent<ButtonHTMLAttributes<HTMLButtonElement>> = ({children, ...props}) => {
   return <button css={style} {...props}><span/><span/><span/><span/>{children}</button>

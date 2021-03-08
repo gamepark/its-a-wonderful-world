@@ -1,5 +1,6 @@
-import {css} from '@emotion/core'
-import React, {FunctionComponent} from 'react'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {areasX, cardWidth, headerHeight} from '../../util/Styles'
 import {drawPileScale} from '../developments/DrawPile'

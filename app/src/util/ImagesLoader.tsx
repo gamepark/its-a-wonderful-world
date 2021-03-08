@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useRef} from 'react'
+import {FunctionComponent, useRef} from 'react'
 
 type Props = {
   images: string[]

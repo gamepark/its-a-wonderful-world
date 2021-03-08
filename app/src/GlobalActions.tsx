@@ -1,4 +1,5 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
@@ -7,7 +8,7 @@ import {isTellYouAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAr
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import {getLegalMoves} from '@gamepark/its-a-wonderful-world/Rules'
 import {usePlay} from '@gamepark/react-client'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import CharacterToken from './material/characters/CharacterToken'
 import Button from './util/Button'

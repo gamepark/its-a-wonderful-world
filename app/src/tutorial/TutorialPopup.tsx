@@ -1,4 +1,5 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, useTheme} from '@emotion/react'
 import {faMinusSquare, faPlusSquare, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
@@ -8,11 +9,10 @@ import {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveC
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isOver} from '@gamepark/its-a-wonderful-world/Rules'
 import {useActions, useAnimation, useFailures, usePlayerId} from '@gamepark/react-client'
-import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
-import React, {FunctionComponent, useEffect, useRef, useState} from 'react'
+import {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import Theme, {LightTheme} from '../Theme'
+import {LightTheme} from '../Theme'
 import Button from '../util/Button'
 import {
   closePopupStyle, discordUri, hidePopupOverlayStyle, platformUri, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle
@@ -22,7 +22,7 @@ import tutorialArrowLight from '../util/tutorial-arrow-light.png'
 
 const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const [failures] = useFailures()
   const playerId = usePlayerId<EmpireName>()
   const actions = useActions<Move, EmpireName>()

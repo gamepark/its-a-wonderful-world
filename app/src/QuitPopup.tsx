@@ -1,17 +1,17 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useLeaveGame} from '@gamepark/react-client'
-import {useTheme} from 'emotion-theming'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import Theme, {LightTheme} from './Theme'
+import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 
 const QuitPopup: FunctionComponent<{ onClose: () => void }> = ({onClose}) => {
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const leaveGame = useLeaveGame()
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>

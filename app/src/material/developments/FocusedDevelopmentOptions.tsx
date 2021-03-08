@@ -1,8 +1,9 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import {faQuestion, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
-import React, {FunctionComponent, useState} from 'react'
+import {FunctionComponent, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {cardWidth} from '../../util/Styles'
 

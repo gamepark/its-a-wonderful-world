@@ -1,21 +1,21 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Rules'
 import {usePlayer} from '@gamepark/react-client'
-import {useTheme} from 'emotion-theming'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import EmpireCard from './material/empires/EmpireCard'
-import Theme, {LightTheme} from './Theme'
+import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
 const WelcomePopup: FunctionComponent<{ player: Player | PlayerView, close: () => void }> = ({player, close}) => {
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const playerInfo = usePlayer(player.empire)
   return (
     <div css={[popupOverlayStyle, showPopupOverlayStyle, style]} onClick={close}>

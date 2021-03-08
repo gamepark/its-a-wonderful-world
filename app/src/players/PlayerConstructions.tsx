@@ -1,5 +1,6 @@
-import {css} from '@emotion/core'
-import React, {FunctionComponent} from 'react'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
+import {FunctionComponent} from 'react'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import CharacterTokenNumber from '../material/characters/CharacterTokenNumber'
 import Player from '@gamepark/its-a-wonderful-world/Player'

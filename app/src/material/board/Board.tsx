@@ -1,10 +1,11 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {isResource, productionSteps} from '@gamepark/its-a-wonderful-world/material/Resource'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {areasX, boardHeight, boardTop, boardWidth} from '../../util/Styles'
 import ResourceArea from './ResourceArea'
 

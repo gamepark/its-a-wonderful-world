@@ -1,7 +1,8 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {recycle} from '@gamepark/its-a-wonderful-world/moves/Recycle'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'

@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useRef} from 'react'
+import {useCallback, useMemo, useRef} from 'react'
 
 type PressEvent<T> = React.MouseEvent<T> | React.TouchEvent<T>
 

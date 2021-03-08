@@ -1,7 +1,8 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import {useNow} from '@gamepark/react-client'
 import PlayerTime from '@gamepark/react-client/dist/Types/PlayerTime'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {humanize} from '../util/TimeUtil'
 
 const Timer: FunctionComponent<{ time: PlayerTime }> = ({time}) => {

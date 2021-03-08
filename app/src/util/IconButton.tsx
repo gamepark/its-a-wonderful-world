@@ -1,5 +1,6 @@
-import {css} from '@emotion/core'
-import React, {FunctionComponent, useEffect, useState} from 'react'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
+import {FunctionComponent, useEffect, useState} from 'react'
 
 type Props = React.HTMLAttributes<HTMLButtonElement> & { disabled?: boolean }
 

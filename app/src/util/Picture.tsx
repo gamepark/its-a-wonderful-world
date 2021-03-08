@@ -1,4 +1,4 @@
-import React, {FunctionComponent, ImgHTMLAttributes} from 'react'
+import {FunctionComponent, ImgHTMLAttributes} from 'react'
 
 const Picture: FunctionComponent<ImgHTMLAttributes<HTMLImageElement>> = (props) => {
   const srcTest = props.src ? props.src.match(/(.*)\.(jpg|png)$/) : undefined

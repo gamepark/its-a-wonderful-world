@@ -1,4 +1,5 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, Theme, useTheme} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import {
@@ -15,14 +16,13 @@ import Player from '@gamepark/its-a-wonderful-world/Player'
 import {countCharacters, getNextProductionStep, getPlayerName, getScore, isOver, numberOfRounds} from '@gamepark/its-a-wonderful-world/Rules'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {Animation, Player as PlayerInfo, useActions, useAnimation, usePlay, usePlayerId, usePlayers} from '@gamepark/react-client'
-import {useTheme} from 'emotion-theming'
 import {TFunction} from 'i18next'
-import React, {FunctionComponent, useEffect, useState} from 'react'
+import {FunctionComponent, useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import MainMenu from './MainMenu'
 import CharacterToken from './material/characters/CharacterToken'
 import DevelopmentCardsTitles from './material/developments/DevelopmentCardsTitles'
-import Theme, {LightTheme} from './Theme'
+import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {gameOverDelay, headerHeight, textColor} from './util/Styles'
 
@@ -67,7 +67,7 @@ const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
   const players = usePlayers<EmpireName>()
   const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const actions = useActions()
   const gameOver = game !== undefined && isOver(game) && !!actions && actions.every(action => !action.pending)
   const [scoreSuspense, setScoreSuspense] = useState(false)

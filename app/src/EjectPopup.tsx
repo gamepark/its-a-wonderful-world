@@ -1,14 +1,14 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Rules'
 import {Player, useEjection, useNow, useOptions} from '@gamepark/react-client'
-import {useTheme} from 'emotion-theming'
 import moment from 'moment'
-import React, {FunctionComponent, useEffect} from 'react'
+import {FunctionComponent, useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
-import Theme, {LightTheme} from './Theme'
+import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 
@@ -21,7 +21,7 @@ type Props = {
 const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
   const {t} = useTranslation()
   const now = useNow()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const [awaitedPlayer, time] = players.filter(player => player.time?.playing)
     .map<[Player<EmpireName>, number]>(player => [player, player.time!.availableTime - now + Date.parse(player.time!.lastChange)])
     .sort(([, availableTimeA], [, availableTimeB]) => availableTimeA - availableTimeB)[0]

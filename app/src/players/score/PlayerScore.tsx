@@ -1,14 +1,14 @@
-import {css, keyframes} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, keyframes, Theme, useTheme} from '@emotion/react'
 import {characters} from '@gamepark/its-a-wonderful-world/material/Character'
 import {developmentTypes} from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {getScore} from '@gamepark/its-a-wonderful-world/Rules'
-import {useTheme} from 'emotion-theming'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../../material/Images'
-import Theme, {LightTheme} from '../../Theme'
+import {LightTheme} from '../../Theme'
 import {fadeIn, gameOverDelay} from '../../util/Styles'
 import ScorePart from './ScorePart'
 
@@ -23,7 +23,7 @@ type Props = {
 const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, setDisplayScore, animation}) => {
   const {t} = useTranslation()
   const score = getScore(player)
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
     <div css={[style, topPosition(position), backgroundStyle(theme), animation && growAnimation, displayScore ? displayPlayerScore : hidePlayerScore]}>
       <button css={[arrowStyle(theme), animation && fadeInAnimation, displayScore ? arrowStandardStyle : arrowReverseStyle]}

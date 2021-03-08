@@ -1,6 +1,7 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {headerHeight} from '../../util/Styles'
 import Images from '../Images'

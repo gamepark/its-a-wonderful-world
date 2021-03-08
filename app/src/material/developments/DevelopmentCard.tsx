@@ -1,4 +1,5 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
 import {
   AirborneLaboratory, AircraftCarrier, AlexandersTomb, AncientAstronauts, Aquaculture, ArkOfTheCovenant, Atlantis, BermudaTriangle, BionicCrafts,
@@ -10,7 +11,7 @@ import {
   Supercomputer, SuperSoldiers, SuperSonar, TankDivision, Teleportation, TimeTravel, Transmutation, TransportationNetwork, TreasureOfTheTemplars,
   UndergroundCity, UnderwaterCity, UniversalExposition, UniversalVaccine, University, UnknownTechnology, VirtualReality, WindTurbines, WorldCongress, Zeppelin
 } from '@gamepark/its-a-wonderful-world/material/Developments'
-import React, {forwardRef} from 'react'
+import {forwardRef} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../Images'
 import DevelopmentCardsTitles from './DevelopmentCardsTitles'

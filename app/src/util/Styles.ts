@@ -1,8 +1,8 @@
-import {css, keyframes} from '@emotion/core'
+import {css, keyframes, Theme} from '@emotion/react'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {numberOfCardsToDraft} from '@gamepark/its-a-wonderful-world/Rules'
 import Images from '../material/Images'
-import Theme, {LightTheme} from '../Theme'
+import {LightTheme} from '../Theme'
 
 export const screenRatio = 16 / 9
 export const boardWidth = 66

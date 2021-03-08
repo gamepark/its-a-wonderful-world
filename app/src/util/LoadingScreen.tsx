@@ -1,18 +1,17 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, useTheme} from '@emotion/react'
 import {faLightbulb, faPaintBrush, faWrench} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useTheme} from 'emotion-theming'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import Images from '../material/Images'
 import IWWBox from '../material/IWW_BOX_3D.png'
-import Theme from '../Theme'
 import Picture from './Picture'
 import {backgroundColor, textColor} from './Styles'
 
 const LoadingScreen: FunctionComponent<{ display: boolean }> = ({display}) => {
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
     <div css={[loadingScreenStyle, textColor(theme), backgroundColor(theme), !display && css`opacity: 0`]}>
       <Picture css={gameBox} src={IWWBox} alt={t('Name')}/>

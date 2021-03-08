@@ -1,10 +1,11 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import DevelopmentType from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {getComboVictoryPoints, getFlatVictoryPoints, getItemQuantity, getVictoryPointsMultiplier} from '@gamepark/its-a-wonderful-world/Rules'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import Images from '../../material/Images'
 import VictoryPointsMultiplier from '../VictoryPointsMultiplier'
 

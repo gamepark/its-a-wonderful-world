@@ -1,8 +1,9 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import {Draggable} from '@gamepark/react-components'
 import {TFunction} from 'i18next'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {krystalliumFromEmpire} from '../../drag-objects/KrystalliumCube'
 import {screenRatio} from '../../util/Styles'

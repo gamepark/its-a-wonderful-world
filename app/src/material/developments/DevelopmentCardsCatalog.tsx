@@ -1,6 +1,7 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
-import React, {FunctionComponent, useState} from 'react'
+import {FunctionComponent, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {Swipeable} from 'react-swipeable'
 import {cardHeight, cardWidth, popupBackgroundStyle} from '../../util/Styles'

@@ -1,9 +1,10 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import {faUserSlash} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {GameSpeed, useNow, useOptions, usePlayers, useSound} from '@gamepark/react-client'
-import React, {FC} from 'react'
+import {FC} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from './material/Images'
 import toggleSound from './sounds/toggle.mp3'

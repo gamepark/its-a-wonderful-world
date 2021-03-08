@@ -1,17 +1,17 @@
-import {css, keyframes} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, keyframes, useTheme} from '@emotion/react'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {useTheme} from 'emotion-theming'
-import React, {Fragment, FunctionComponent} from 'react'
+import {Fragment, FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import Theme, {LightTheme} from '../../Theme'
+import {LightTheme} from '../../Theme'
 import DownArrowIcon from '../../util/DownArrowIcon'
 import {headerHeight, playerPanelHeight, playerPanelMargin} from '../../util/Styles'
 import UpArrowIcon from '../../util/UpArrowIcon'
 
 const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: (Player | PlayerView)[] }> = ({clockwise, players}) => {
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const greenColor = theme.color === LightTheme ? 'forestgreen' : 'lightgreen'
   const purpleColor = theme.color === LightTheme ? 'purple' : 'lightpink'
   return (

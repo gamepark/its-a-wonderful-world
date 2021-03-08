@@ -1,13 +1,13 @@
-import {css} from '@emotion/core'
+/** @jsxImportSource @emotion/react */
+import {css, Theme, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Rules'
 import {usePlayers} from '@gamepark/react-client'
-import {useTheme} from 'emotion-theming'
-import React, {FunctionComponent} from 'react'
+import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import Theme, {LightTheme} from './Theme'
+import {LightTheme} from './Theme'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 import {humanize} from './util/TimeUtil'
 
@@ -17,7 +17,7 @@ type Props = {
 
 const TimePopup: FunctionComponent<Props> = ({onClose}) => {
   const {t} = useTranslation()
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const players = usePlayers<EmpireName>({withTimeUpdate: true})
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
