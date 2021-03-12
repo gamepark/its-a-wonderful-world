@@ -11,42 +11,22 @@ import {canBuild, getPlayer, numberOfRounds} from '@gamepark/its-a-wonderful-wor
 import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import normalize from 'emotion-normalize'
 import fscreen from 'fscreen'
-import i18next from 'i18next'
-import ICU from 'i18next-icu'
-import moment from 'moment'
-import 'moment/locale/fr'
 import {FunctionComponent, useEffect, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
-import {initReactI18next, useTranslation} from 'react-i18next'
+import {useTranslation} from 'react-i18next'
 import ConfirmPopup from './ConfirmPopup'
 import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
 import Header from './Header'
 import Images from './material/Images'
 import {Color, DarkTheme, LightTheme} from './Theme'
-import translations from './translations.json'
 import Button from './util/Button'
 import ImagesLoader from './util/ImagesLoader'
 import LoadingScreen from './util/LoadingScreen'
 import {backgroundColor, empireBackground, textColor} from './util/Styles'
 
-i18next.use(initReactI18next).use(ICU)
-
-const query = new URLSearchParams(window.location.search)
-const locale = query.get('locale') || 'en'
 const userTheme = 'userTheme'
-
-i18next.init({
-  lng: locale,
-  debug: process.env.NODE_ENV === 'development',
-  fallbackLng: 'en',
-  keySeparator: false,
-  nsSeparator: false,
-  resources: translations
-})
-
-moment.locale(locale)
 
 const App: FunctionComponent = () => {
   const {t} = useTranslation()
