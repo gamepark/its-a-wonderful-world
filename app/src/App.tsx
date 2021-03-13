@@ -6,9 +6,10 @@ import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {tellYourAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import Player from '@gamepark/its-a-wonderful-world/Player'
 import {canBuild, getPlayer, numberOfRounds} from '@gamepark/its-a-wonderful-world/Rules'
+import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
+import {LoadingScreen} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
 import fscreen from 'fscreen'
 import {FunctionComponent, useEffect, useState} from 'react'
@@ -20,10 +21,10 @@ import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
 import Header from './Header'
 import Images from './material/Images'
+import IWWBox from './material/IWW_BOX_3D.png'
 import {Color, DarkTheme, LightTheme} from './Theme'
 import Button from './util/Button'
 import ImagesLoader from './util/ImagesLoader'
-import LoadingScreen from './util/LoadingScreen'
 import {backgroundColor, empireBackground, textColor} from './util/Styles'
 
 const userTheme = 'userTheme'
@@ -54,8 +55,8 @@ const App: FunctionComponent = () => {
   const validate = () => {
     if (game && playerId) {
       const willEndGame = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration
-      const player = getPlayer(game, playerId) as Player
-      if (willEndGame && player.constructionArea.some(construction => canBuild(player, construction.card))) {
+      const player = getPlayer(game, playerId)
+      if (player && isPlayer(player) && willEndGame && player.constructionArea.some(construction => canBuild(player, construction.card))) {
         setConfirmPopup(true)
       } else {
         play(tellYourAreReady(playerId))
@@ -63,14 +64,16 @@ const App: FunctionComponent = () => {
     }
   }
   const confirm = () => {
+    if (!playerId) return
     setConfirmPopup(false)
-    play(tellYourAreReady(playerId!))
+    play(tellYourAreReady(playerId))
   }
   return (
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
-        <LoadingScreen display={loading}/>
+        <LoadingScreen gameBox={IWWBox} author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} display={loading}
+                       css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
         {!loading && <GameDisplay game={game} validate={validate}/>}
         <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
           {t('The ideal resolution for playing is in landscape mode, in 16:9.')}
@@ -162,4 +165,9 @@ const portraitInfo = css`
     width: 30%;
     margin-top: 1em;
   }
+`
+
+const loadingScreenStyle = css`
+  background-image: url(${Images.coverArtwork});
+
 `
