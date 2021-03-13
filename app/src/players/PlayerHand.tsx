@@ -48,7 +48,7 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
         item: developmentFromHand(card),
         disabled: !canChooseCard,
         animation: {seconds: animation?.duration ?? 0.2},
-        onDrop: () => play(chooseDevelopmentCard(player.empire, card))
+        drop: () => play(chooseDevelopmentCard(player.empire, card))
       },
       css: passingCard ? getZIndexRevert(index) : ignore ? css`z-index: 10;` : undefined,
       animation: animation ? {

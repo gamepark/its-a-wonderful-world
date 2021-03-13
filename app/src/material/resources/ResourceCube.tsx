@@ -2,6 +2,7 @@
 import {css} from '@emotion/react'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import {Draggable} from '@gamepark/react-components'
+import {DraggableProps} from '@gamepark/react-components/dist/Draggable/Draggable'
 import {TFunction} from 'i18next'
 import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -11,8 +12,7 @@ import Images from '../Images'
 
 type Props = {
   resource: Resource
-  draggable?: boolean
-} & React.HTMLAttributes<HTMLElement>
+} & Omit<DraggableProps<any, any, any>, 'item'>
 
 const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ...props}) => {
   const {t} = useTranslation()

@@ -108,7 +108,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
   const animations = useAnimations<PlaceResourceOnConstruction>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire
     && isPlaceResourceOnConstruction(animation.move) && animation.move.card === construction.card)
 
-  const onDrop = (move: Recycle | CompleteConstruction | SlateForConstruction) => {
+  const drop = (move: Recycle | CompleteConstruction | SlateForConstruction) => {
     if (isRecycle(move)) {
       construction.costSpaces.forEach((item, index) => {
         if (!item) return
@@ -134,8 +134,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
 
   return (
     <Draggable item={developmentFromConstructionArea(construction.card)} disabled={gameOver || !canRecycle || canDrop || focused}
-               css={[cardStyle, areaCardStyle]}
-               onDrop={onDrop} {...longPress} {...props}>
+               css={[cardStyle, areaCardStyle]} drop={drop} {...longPress} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>
         {[...construction.costSpaces].reverse().map((item, index) => {

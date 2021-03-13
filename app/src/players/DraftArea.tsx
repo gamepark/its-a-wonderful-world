@@ -108,7 +108,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
     setBuildingOrRecyclingAll(true)
     player.draftArea.forEach(card => play(recycle(player.empire, card), true))
   }
-  const onDrop = (move: SlateForConstruction | Recycle | CompleteConstruction) => {
+  const drop = (move: SlateForConstruction | Recycle | CompleteConstruction) => {
     if (isCompleteConstruction(move)) {
       play(slateForConstruction(move.playerId, move.card))
       getMovesToBuild(player as Player, move.card).forEach(move => play(move))
@@ -143,7 +143,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         }</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={card} item={developmentFromDraftArea(card)} onDrop={onDrop} postTransform={getTransform(card, index)}
+        <Draggable key={card} item={developmentFromDraftArea(card)} drop={drop} postTransform={getTransform(card, index)}
                    css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card),
                      undoingSlateForConstruction?.card === card && css`display: none`]}
                    disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning || focusedCard !== undefined}

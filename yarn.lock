@@ -1593,10 +1593,10 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@gamepark/react-client@~3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-3.2.0.tgz#6fa8d006e5e7687e28eca26ff1a5cea6ec887a18"
-  integrity sha512-9wdEaMVeCBF1iQ+gES+OCaXQgMen18/CULGkNPqnIErfPV0vmgyUKjF70lXuEmrjK0EqWQJS2u8JyFomqB0/aw==
+"@gamepark/react-client@~3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-3.3.0.tgz#0496b744149ea867027844908efd21ecb984f93f"
+  integrity sha512-jYY3e86PqvQBYf34cthV4FDBoOEp33oFoFp6JD4Su+ECS3rzKixA2KBZmbdaNnxoUnMdndCZ4YYRpSzaNrFftA==
   dependencies:
     "@apollo/client" "^3.1.3"
     "@datadog/browser-logs" "^1.11.4"
@@ -1610,22 +1610,15 @@
     pusher-js "^7.0.0"
     redux ">=4.0.5"
 
-"@gamepark/react-components@~3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-3.1.0.tgz#61ec8e4b8e2526bce86f08574dcfb1b26224422a"
-  integrity sha512-9rysbIoydfKMj695fG1gQdzmhhb1bTNiVm/50bke7SSHQ+QBHyJ/xHQjsrhdSQ78z3M4QQzM/QdfDBjPDEacWw==
+"@gamepark/react-components@~3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-3.3.0.tgz#dc0ef85294fbfc961fcea7971cd21ce999d5aabd"
+  integrity sha512-ff+C5xy5hoOKydq6Z7q6smjKFVDIG6OYDu/wCX6xjEMDTKW4uRBxsx/KLBc8vN0hOFY2VkNftz41+NFAfw1wPQ==
 
-"@gamepark/rules-api@^3.2.0":
+"@gamepark/rules-api@^3.2.0", "@gamepark/rules-api@~3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-3.2.0.tgz#9974858b8892c1285333ae3a201c0a9ae820f14e"
   integrity sha512-dOTLvcLOoncy8fzcV32rnF5kuiUlsfOln5yzv37aGjiMmSi9RA0HlaCdhF++72MKAaaS1gNadIZTLmj0NNim6w==
-  dependencies:
-    fast-deep-equal "^3.1.3"
-
-"@gamepark/rules-api@~3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-3.1.0.tgz#ead851cb8fe28d6db8df3b936b46295bccd02dfa"
-  integrity sha512-2n+9RNZpu60kD7L1AzE6D5e7bM16L/t4buJBUxGKwxkCdRN2uX0ZJNe5xa7PqPXmK/uPpV8vjolbcXYsgg9SKA==
   dependencies:
     fast-deep-equal "^3.1.3"
 
