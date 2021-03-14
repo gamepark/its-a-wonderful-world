@@ -26,3 +26,6 @@ yarn-error.log*
 # IntelliJ IDEA
 /.idea
 *.iml
+
+# Visual Studio Code
+.vscode
