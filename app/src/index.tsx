@@ -1,8 +1,9 @@
+import ItsAWonderfulWorldView from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldView'
+import {ItsAWonderfulWorldOptionsDescription} from '@gamepark/its-a-wonderful-world/Options'
 import Rules from '@gamepark/its-a-wonderful-world/Rules'
-import {createGameStore, setupTranslation} from '@gamepark/react-client'
+import {GameProvider, setupTranslation} from '@gamepark/react-client'
 import {StrictMode} from 'react'
 import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
 import ItsAWonderfulAnimations from './Animations'
 import App from './App'
 import translations from './translations.json'
@@ -15,11 +16,11 @@ setupTranslation(translations)
 
 ReactDOM.render(
   <StrictMode>
-    <Provider store={createGameStore('its-a-wonderful-world', Rules, {
-      animations: ItsAWonderfulAnimations, tutorial: ItsAWonderfulTutorial, ai
-    })}>
+    <GameProvider game="its-a-wonderful-world" Rules={Rules} RulesView={ItsAWonderfulWorldView}
+                  optionsDescription={ItsAWonderfulWorldOptionsDescription}
+                  animations={ItsAWonderfulAnimations} tutorial={ItsAWonderfulTutorial} ai={ai}>
       <App/>
-    </Provider>
+    </GameProvider>
   </StrictMode>,
   document.getElementById('root')
 )
