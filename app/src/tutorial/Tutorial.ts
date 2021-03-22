@@ -12,8 +12,8 @@ import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {setupPlayers} from '@gamepark/its-a-wonderful-world/Rules'
-import shuffle from '@gamepark/its-a-wonderful-world/shuffle'
 import {Tutorial} from '@gamepark/react-client'
+import shuffle from 'lodash.shuffle'
 
 const harborZone = developmentCards.findIndex(development => development === HarborZone)
 const centerOfEarth = developmentCards.findIndex(development => development === CenterOfTheEarth)
@@ -47,17 +47,18 @@ const initialCards = [
   windTurbine, humanCloning, industrialComplex, lunarBase, researchCenter, juggernaut, cityOfAgartha
 ]
 
-const setup: GameState = {
-  players: setupPlayers({players: [{id: EmpireName.NoramStates}, {id: EmpireName.RepublicOfEurope}, {id: EmpireName.FederationOfAsia}], empiresSide: EmpireSide.A, corruptionAndAscension: false}),
-  deck: [...initialCards, ...shuffle(Array.from(developmentCards.keys()).filter(card => !initialCards.includes(card)))],
-  discard: [],
-  round: 1,
-  phase: Phase.Draft,
-  tutorial: true
-}
-
 const ItsAWonderfulTutorial: Tutorial<GameState, Move, EmpireName> = {
-  setupTutorial: () => [setup, [EmpireName.NoramStates, EmpireName.RepublicOfEurope, EmpireName.FederationOfAsia]],
+  setupTutorial: () => [{
+    players: setupPlayers({
+      players: [{id: EmpireName.NoramStates}, {id: EmpireName.RepublicOfEurope}, {id: EmpireName.FederationOfAsia}], empiresSide: EmpireSide.A,
+      corruptionAndAscension: false
+    }),
+    deck: [...initialCards, ...shuffle(Array.from(developmentCards.keys()).filter(card => !initialCards.includes(card)))],
+    discard: [],
+    round: 1,
+    phase: Phase.Draft,
+    tutorial: true
+  }, [EmpireName.NoramStates, EmpireName.RepublicOfEurope, EmpireName.FederationOfAsia]],
   expectedMoves: () => [
     // Automatic Tutorial Draft Phase
     {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.RepublicOfEurope, card: centerOfEarth},

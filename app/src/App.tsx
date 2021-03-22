@@ -41,7 +41,7 @@ const App: FunctionComponent = () => {
   const theme: Theme = {
     color: themeColor,
     switchThemeColor: () => {
-      let newThemeColor: Color = themeColor === LightTheme ? DarkTheme : LightTheme
+      const newThemeColor: Color = themeColor === LightTheme ? DarkTheme : LightTheme
       setThemeColor(newThemeColor)
       localStorage.setItem(userTheme, newThemeColor)
     }

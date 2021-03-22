@@ -1,4 +1,5 @@
 import {Action, Competitive, Eliminations, SecretInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
+import shuffle from 'lodash.shuffle'
 import canUndo from './canUndo'
 import GameState from './GameState'
 import GameView from './GameView'
@@ -33,8 +34,7 @@ import {isGameOptions, ItsAWonderfulWorldOptions} from './Options'
 import Phase from './Phase'
 import Player from './Player'
 import PlayerView from './PlayerView'
-import shuffle from './shuffle'
-import {isGameView, isPlayerView} from './typeguards'
+import {isPlayerView} from './typeguards'
 
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
@@ -197,7 +197,6 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   }
 
   getView(playerId?: EmpireName | undefined): GameView {
-    if (isGameView(this.state)) throw new Error('getView should only be used on server side')
     return {
       ...this.state, deck: this.state.deck.length,
       players: this.state.players.map(player => {
@@ -219,7 +218,6 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   }
 
   getMoveView(move: Move, playerId?: EmpireName): MoveView {
-    if (isGameView(this.state)) throw new Error('getMoveView should only be used on server side')
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
         return playerId ? {...move, playerCards: this.state.players.find(player => player.empire === playerId)!.hand} : move
