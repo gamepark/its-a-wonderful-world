@@ -34,7 +34,6 @@ import {isGameOptions, ItsAWonderfulWorldOptions} from './Options'
 import Phase from './Phase'
 import Player from './Player'
 import PlayerView from './PlayerView'
-import {isPlayerView} from './typeguards'
 
 export const numberOfCardsToDraft = 7
 const numberOfCardsDeal2Players = 10
@@ -71,7 +70,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
     if (!player) return false
     switch (this.state.phase) {
       case Phase.Draft:
-        return player.chosenCard === undefined && getHandSize(player) > 0
+        return player.chosenCard === undefined && player.hand.length > 0
       case Phase.Planning:
       case Phase.Production:
         return !player.ready
@@ -129,7 +128,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
 
   getLegalMoves(empire: EmpireName) {
     const player = this.state.players.find(player => player.empire === empire)
-    if (!player || isPlayerView(player) || (this.state.round === numberOfRounds && this.state.productionStep === Resource.Exploration && player.ready)) {
+    if (!player || (this.state.round === numberOfRounds && this.state.productionStep === Resource.Exploration && player.ready)) {
       return []
     }
     return getLegalMoves(player, this.state.phase)
@@ -173,11 +172,17 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   }
 
   getScore(empire: EmpireName): number {
-    return getScore(getPlayer(this.state, empire))
+    return getScore(this.getPlayer(empire))
+  }
+
+  getPlayer(playerId: EmpireName): Player {
+    const player = this.state.players.find(player => player.empire === playerId)
+    if (!player) throw new Error(`${playerId} is expected on ${this.state}`)
+    return player
   }
 
   rankPlayers(empireA: EmpireName, empireB: EmpireName): number {
-    const playerA = getPlayer(this.state, empireA), playerB = getPlayer(this.state, empireB)
+    const playerA = this.getPlayer(empireA), playerB = this.getPlayer(empireB)
     if (playerA.eliminated || playerB.eliminated) {
       return playerA.eliminated ? playerB.eliminated ? playerB.eliminated - playerA.eliminated : 1 : -1
     }
@@ -247,7 +252,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   }
 
   isEliminated(playerId: EmpireName): boolean {
-    return !!getPlayer(this.state, playerId).eliminated
+    return !!this.getPlayer(playerId).eliminated
   }
 
   getConcedeMove(playerId: EmpireName): Move {
@@ -257,10 +262,10 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   giveTime(playerId: EmpireName): number {
     switch (this.state.phase) {
       case Phase.Draft:
-        if (this.state.round === 1 && getPlayer(this.state, playerId).draftArea.length === 0) {
+        if (this.state.round === 1 && this.getPlayer(playerId).draftArea.length === 0) {
           return 180
         } else {
-          return (numberOfCardsToDraft - getPlayer(this.state, playerId).draftArea.length - 1) * 10
+          return (numberOfCardsToDraft - this.getPlayer(playerId).draftArea.length - 1) * 10
         }
       case Phase.Planning:
         return (this.state.round + 1) * 60
@@ -282,12 +287,6 @@ function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
     empire, empireSide: empireSide || defaultEmpireCardsSide, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [],
     constructedDevelopments: [], ready: false, characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
   }
-}
-
-export function getPlayer(game: GameState, empire: EmpireName): Player
-export function getPlayer(game: GameState | GameView, empire: EmpireName): Player | PlayerView
-export function getPlayer(game: GameState | GameView, empire: EmpireName): Player | PlayerView {
-  return game.players.find(player => player.empire === empire)!
 }
 
 export function getPredictableAutomaticMoves(state: GameState | GameView): Move | void {
@@ -555,23 +554,4 @@ export function placeAvailableCubesMoves(player: Player | PlayerView, constructi
     }
   })
   return moves
-}
-
-function getHandSize(player: Player | PlayerView) {
-  return isPlayerView(player) ? player.hand : player.hand.length
-}
-
-export function getPlayerName(empire: EmpireName, t: (name: string) => string): string {
-  switch (empire) {
-    case EmpireName.AztecEmpire:
-      return t('Aztec Empire')
-    case EmpireName.FederationOfAsia:
-      return t('Federation of Asia')
-    case EmpireName.NoramStates:
-      return t('Noram States')
-    case EmpireName.PanafricanUnion:
-      return t('Panafrican Union')
-    case EmpireName.RepublicOfEurope:
-      return t('Republic of Europe')
-  }
 }

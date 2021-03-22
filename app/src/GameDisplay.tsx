@@ -7,7 +7,7 @@ import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import ReceiveCharacter, {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import {isRevealChosenCards, RevealChosenCardsView} from '@gamepark/its-a-wonderful-world/moves/RevealChosenCards'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {getPlayer, isOver} from '@gamepark/its-a-wonderful-world/Rules'
+import {isOver} from '@gamepark/its-a-wonderful-world/Rules'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useActions, useAnimation, useDisplayState, usePlayerId} from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
@@ -40,6 +40,7 @@ type Props = {
 
 const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
   const playerId = usePlayerId<EmpireName>()
+  const player = game.players.find(player => player.empire === playerId)
   const [displayedEmpire, setDisplayedEmpire] = useDisplayState(playerId || game.players[0].empire)
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
   const displayedPlayerPanelIndex = players.findIndex(player => player.empire === displayedEmpire)
@@ -99,7 +100,7 @@ const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
                                          css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
       {isPlayer(displayedPlayer) && <GlobalActions game={game} player={displayedPlayer} validate={validate}/>}
       {game.tutorial && <TutorialPopup game={game}/>}
-      {showWelcomePopup && playerId && <WelcomePopup player={getPlayer(game, playerId)} close={() => setWelcomePopupClosed(true)}/>}
+      {showWelcomePopup && player && <WelcomePopup player={player} close={() => setWelcomePopupClosed(true)}/>}
     </Letterbox>
   )
 }

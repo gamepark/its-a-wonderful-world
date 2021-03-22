@@ -6,7 +6,7 @@ import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {canBuild, getPlayer, numberOfRounds} from '@gamepark/its-a-wonderful-world/Rules'
+import {canBuild, numberOfRounds} from '@gamepark/its-a-wonderful-world/Rules'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import {LoadingScreen} from '@gamepark/react-components'
@@ -55,7 +55,7 @@ const App: FunctionComponent = () => {
   const validate = () => {
     if (game && playerId) {
       const willEndGame = game.round === numberOfRounds && game.phase === Phase.Production && game.productionStep === Resource.Exploration
-      const player = getPlayer(game, playerId)
+      const player = game.players.find(player => player.empire === playerId)
       if (player && isPlayer(player) && willEndGame && player.constructionArea.some(construction => canBuild(player, construction.card))) {
         setConfirmPopup(true)
       } else {

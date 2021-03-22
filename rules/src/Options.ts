@@ -33,20 +33,22 @@ export const ItsAWonderfulWorldOptionsDescription: OptionsDescription<ItsAWonder
       type: OptionType.LIST,
       getLabel: (t: TFunction) => t('Empire'),
       values: Object.values(EmpireName),
-      getValueLabel: (empire: EmpireName, t: TFunction) => {
-        switch (empire) {
-          case EmpireName.AztecEmpire:
-            return t('Aztec Empire')
-          case EmpireName.FederationOfAsia:
-            return t('Federation of Asia')
-          case EmpireName.NoramStates:
-            return t('Noram States')
-          case EmpireName.PanafricanUnion:
-            return t('Panafrican Union')
-          case EmpireName.RepublicOfEurope:
-            return t('Republic of Europe')
-        }
-      }
+      getValueLabel: getPlayerName
     }
+  }
+}
+
+export function getPlayerName(empire: EmpireName, t: (name: string) => string): string {
+  switch (empire) {
+    case EmpireName.AztecEmpire:
+      return t('Aztec Empire')
+    case EmpireName.FederationOfAsia:
+      return t('Federation of Asia')
+    case EmpireName.NoramStates:
+      return t('Noram States')
+    case EmpireName.PanafricanUnion:
+      return t('Panafrican Union')
+    case EmpireName.RepublicOfEurope:
+      return t('Republic of Europe')
   }
 }
