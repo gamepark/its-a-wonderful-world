@@ -105,16 +105,16 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   }, [player, buildingOrRecyclingAll])
   const buildAll = () => {
     setBuildingOrRecyclingAll(true)
-    player.draftArea.forEach(card => play({type: MoveType.SlateForConstruction, playerId: player.empire, card}, true))
+    player.draftArea.forEach(card => play({type: MoveType.SlateForConstruction, playerId: player.empire, card}, {delayed: true}))
   }
   const recycleAll = () => {
     setBuildingOrRecyclingAll(true)
-    player.draftArea.forEach(card => play({type: MoveType.Recycle, playerId: player.empire, card}, true))
+    player.draftArea.forEach(card => play({type: MoveType.Recycle, playerId: player.empire, card}, {delayed: true}))
   }
   const drop = (move: SlateForConstruction | Recycle | CompleteConstruction) => {
     if (isCompleteConstruction(move)) {
-      play({type: MoveType.SlateForConstruction, playerId: move.playerId, card: move.card})
-      getMovesToBuild(player as Player, move.card).forEach(move => play(move, true))
+      play({type: MoveType.SlateForConstruction, playerId: move.playerId, card: move.card}, {skipAnimation: true})
+      getMovesToBuild(player as Player, move.card).forEach(move => play(move))
     } else {
       play(move)
     }

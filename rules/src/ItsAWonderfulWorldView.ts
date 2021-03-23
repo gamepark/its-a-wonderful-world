@@ -30,7 +30,7 @@ export default class ItsAWonderfulWorldView implements Game<GameView, MoveView>,
   }
 
   getAutomaticMove(): MoveView | void {
-    getPredictableAutomaticMoves(this.state)
+    return getPredictableAutomaticMoves(this.state)
   }
 
   play(move: MoveView): void {

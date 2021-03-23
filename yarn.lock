@@ -1321,10 +1321,10 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@gamepark/react-client@~4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-4.0.4.tgz#99ad29cb1b814c60cea71f5ae0898d75459135cb"
-  integrity sha512-ZrofcCzNB1BlM2/rvrJf75/iNXegl6AcFcOrKPXxukiChmcz78FEjJ3b1eM8bmW6F1KFsMlHHZHUDz8X4QdZhQ==
+"@gamepark/react-client@~4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-4.1.0.tgz#9cd6e88c23823d69160aa46b386f41fd680791fc"
+  integrity sha512-Ete8UFsRnK4pnRN/h6Cf5dGoeDCXYW8I8r97K5UpsWnvkE5pI48Gj4Vtql1ZiUOq9B0E8XWYAScMxLsABO+uZg==
   dependencies:
     "@apollo/client" "^3.1.3"
     "@datadog/browser-logs" "^1.11.4"

@@ -289,7 +289,7 @@ function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
   }
 }
 
-export function getPredictableAutomaticMoves(state: GameState | GameView): Move | void {
+export function getPredictableAutomaticMoves(state: GameState | GameView): Move & MoveView | void {
   for (const player of state.players) {
     for (const construction of player.constructionArea) {
       if (construction.costSpaces.every(space => space !== null)) {
