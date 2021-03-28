@@ -1,4 +1,4 @@
-import {Action, Game, Undo} from '../../../Workshop/packages/rules-api'
+import {Action, Game, Undo} from '@gamepark/rules-api'
 import canUndo from './canUndo'
 import GameView from './GameView'
 import EmpireName from './material/EmpireName'

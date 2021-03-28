@@ -1,4 +1,4 @@
-import {Action} from '../../../Workshop/packages/rules-api'
+import {Action} from '@gamepark/rules-api'
 import GameState from './GameState'
 import GameView from './GameView'
 import EmpireName from './material/EmpireName'
