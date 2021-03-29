@@ -3,8 +3,7 @@ import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
-import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
-import {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
+import {isReceiveCharacter, receiveCharacterMove} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import {isTellYouAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import {getLegalMoves} from '@gamepark/its-a-wonderful-world/Rules'
@@ -30,11 +29,9 @@ const GlobalActions: FunctionComponent<Props> = ({game, player, validate}) => {
   return (<>
     {canValidate && <Button onClick={validate} css={validateButtonStyle}>{t('Validate')}</Button>}
     {chooseCharacter && <>
-      <CharacterToken character={Character.Financier} onClick={() => play({
-        type: MoveType.ReceiveCharacter, playerId: player.empire, character: Character.Financier
-      })}
+      <CharacterToken character={Character.Financier} onClick={() => play(receiveCharacterMove(player.empire, Character.Financier))}
                       css={[characterTokenStyle, financierTokenPosition]}/>,
-      <CharacterToken character={Character.General} onClick={() => play({type: MoveType.ReceiveCharacter, playerId: player.empire, character: Character.General})}
+      <CharacterToken character={Character.General} onClick={() => play(receiveCharacterMove(player.empire, Character.General))}
                       css={[characterTokenStyle, generalTokenPosition]}/>
     </>}
   </>)

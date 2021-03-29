@@ -8,8 +8,13 @@ import {
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import EmpireSide from '@gamepark/its-a-wonderful-world/material/EmpireSide'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
+import {chooseDevelopmentCardMove} from '@gamepark/its-a-wonderful-world/moves/ChooseDevelopmentCard'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
-import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
+import {placeResourceOnConstructionMove} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
+import {receiveCharacterMove} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
+import {recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
+import {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
+import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {setupPlayers} from '@gamepark/its-a-wonderful-world/Rules'
 import {Tutorial} from '@gamepark/react-client'
@@ -61,107 +66,107 @@ const ItsAWonderfulTutorial: Tutorial<GameState, Move, EmpireName> = {
   }, [EmpireName.NoramStates, EmpireName.RepublicOfEurope, EmpireName.FederationOfAsia]],
   expectedMoves: () => [
     // Automatic Tutorial Draft Phase
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.RepublicOfEurope, card: centerOfEarth},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.FederationOfAsia, card: lunarBase},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.NoramStates, card: secretSociety},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.RepublicOfEurope, card: militaryBase},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.FederationOfAsia, card: worldCongress},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.NoramStates, card: industrialComplex},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.RepublicOfEurope, card: cityOfAgartha},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.FederationOfAsia, card: arkOfTheCovenant},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.NoramStates, card: propagandaCenter},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.RepublicOfEurope, card: transportationNetwork},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.FederationOfAsia, card: juggernaut},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.NoramStates, card: harborZone},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.RepublicOfEurope, card: financialCenter},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.FederationOfAsia, card: recyclingPlant},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.NoramStates, card: windTurbine},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.RepublicOfEurope, card: humanCloning},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.FederationOfAsia, card: offshoreOilRig},
-    {type: MoveType.ChooseDevelopmentCard, playerId: EmpireName.NoramStates, card: universalExposition},
+    chooseDevelopmentCardMove(EmpireName.RepublicOfEurope, centerOfEarth),
+    chooseDevelopmentCardMove(EmpireName.FederationOfAsia, lunarBase),
+    chooseDevelopmentCardMove(EmpireName.NoramStates, secretSociety),
+    chooseDevelopmentCardMove(EmpireName.RepublicOfEurope, militaryBase),
+    chooseDevelopmentCardMove(EmpireName.FederationOfAsia, worldCongress),
+    chooseDevelopmentCardMove(EmpireName.NoramStates, industrialComplex),
+    chooseDevelopmentCardMove(EmpireName.RepublicOfEurope, cityOfAgartha),
+    chooseDevelopmentCardMove(EmpireName.FederationOfAsia, arkOfTheCovenant),
+    chooseDevelopmentCardMove(EmpireName.NoramStates, propagandaCenter),
+    chooseDevelopmentCardMove(EmpireName.RepublicOfEurope, transportationNetwork),
+    chooseDevelopmentCardMove(EmpireName.FederationOfAsia, juggernaut),
+    chooseDevelopmentCardMove(EmpireName.NoramStates, harborZone),
+    chooseDevelopmentCardMove(EmpireName.RepublicOfEurope, financialCenter),
+    chooseDevelopmentCardMove(EmpireName.FederationOfAsia, recyclingPlant),
+    chooseDevelopmentCardMove(EmpireName.NoramStates, windTurbine),
+    chooseDevelopmentCardMove(EmpireName.RepublicOfEurope, humanCloning),
+    chooseDevelopmentCardMove(EmpireName.FederationOfAsia, offshoreOilRig),
+    chooseDevelopmentCardMove(EmpireName.NoramStates, universalExposition),
 
     // Second Player Planning Phase
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.RepublicOfEurope, card: militaryBase},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.RepublicOfEurope, card: airborneLaboratory},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.RepublicOfEurope, card: cityOfAgartha},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.RepublicOfEurope, card: centerOfEarth},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.RepublicOfEurope, card: humanCloning},
-    {type: MoveType.Recycle, playerId: EmpireName.RepublicOfEurope, card: transportationNetwork},
-    {type: MoveType.Recycle, playerId: EmpireName.RepublicOfEurope, card: financialCenter},
-    {type: MoveType.PlaceResource, playerId: EmpireName.RepublicOfEurope, resource: Resource.Materials, card: militaryBase, space: 0},
-    {type: MoveType.PlaceResource, playerId: EmpireName.RepublicOfEurope, resource: Resource.Gold, card: humanCloning, space: 2},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.RepublicOfEurope},
+    slateForConstructionMove(EmpireName.RepublicOfEurope, militaryBase),
+    slateForConstructionMove(EmpireName.RepublicOfEurope, airborneLaboratory),
+    slateForConstructionMove(EmpireName.RepublicOfEurope, cityOfAgartha),
+    slateForConstructionMove(EmpireName.RepublicOfEurope, centerOfEarth),
+    slateForConstructionMove(EmpireName.RepublicOfEurope, humanCloning),
+    recycleMove(EmpireName.RepublicOfEurope, transportationNetwork),
+    recycleMove(EmpireName.RepublicOfEurope, financialCenter),
+    placeResourceOnConstructionMove(EmpireName.RepublicOfEurope, Resource.Materials, militaryBase, 0),
+    placeResourceOnConstructionMove(EmpireName.RepublicOfEurope, Resource.Gold, humanCloning, 2),
+    tellYouAreReadyMove(EmpireName.RepublicOfEurope),
 
     // Third Player Planning Phase
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.FederationOfAsia, card: worldCongress},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.FederationOfAsia, card: lunarBase},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.FederationOfAsia, card: offshoreOilRig},
-    {type: MoveType.Recycle, playerId: EmpireName.FederationOfAsia, card: arkOfTheCovenant},
-    {type: MoveType.Recycle, playerId: EmpireName.FederationOfAsia, card: juggernaut},
-    {type: MoveType.Recycle, playerId: EmpireName.FederationOfAsia, card: recyclingPlant},
-    {type: MoveType.Recycle, playerId: EmpireName.FederationOfAsia, card: researchCenter},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Materials, card: offshoreOilRig, space: 0},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Materials, card: offshoreOilRig, space: 1},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Exploration, card: offshoreOilRig, space: 3},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Science, card: lunarBase, space: 2},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.FederationOfAsia},
+    slateForConstructionMove(EmpireName.FederationOfAsia, worldCongress),
+    slateForConstructionMove(EmpireName.FederationOfAsia, lunarBase),
+    slateForConstructionMove(EmpireName.FederationOfAsia, offshoreOilRig),
+    recycleMove(EmpireName.FederationOfAsia, arkOfTheCovenant),
+    recycleMove(EmpireName.FederationOfAsia, juggernaut),
+    recycleMove(EmpireName.FederationOfAsia, recyclingPlant),
+    recycleMove(EmpireName.FederationOfAsia, researchCenter),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Materials, offshoreOilRig, 0),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Materials, offshoreOilRig, 1),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Exploration, offshoreOilRig, 3),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Science, lunarBase, 2),
+    tellYouAreReadyMove(EmpireName.FederationOfAsia),
 
     // Active Player Planning Phase
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.NoramStates, card: industrialComplex},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.NoramStates, card: propagandaCenter},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.NoramStates, card: harborZone},
-    {type: MoveType.SlateForConstruction, playerId: EmpireName.NoramStates, card: secretSociety},
-    {type: MoveType.Recycle, playerId: EmpireName.NoramStates, card: universalExposition},
-    {type: MoveType.PlaceResource, playerId: EmpireName.NoramStates, resource: Resource.Gold, card: propagandaCenter, space: 0},
-    {type: MoveType.Recycle, playerId: EmpireName.NoramStates, card: windTurbine},
-    {type: MoveType.PlaceResource, playerId: EmpireName.NoramStates, resource: Resource.Energy, card: industrialComplex, space: 3},
-    {type: MoveType.Recycle, playerId: EmpireName.NoramStates, card: zeppelin},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.NoramStates},
+    slateForConstructionMove(EmpireName.NoramStates, industrialComplex),
+    slateForConstructionMove(EmpireName.NoramStates, propagandaCenter),
+    slateForConstructionMove(EmpireName.NoramStates, harborZone),
+    slateForConstructionMove(EmpireName.NoramStates, secretSociety),
+    recycleMove(EmpireName.NoramStates, universalExposition),
+    placeResourceOnConstructionMove(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 0),
+    recycleMove(EmpireName.NoramStates, windTurbine),
+    placeResourceOnConstructionMove(EmpireName.NoramStates, Resource.Energy, industrialComplex, 3),
+    recycleMove(EmpireName.NoramStates, zeppelin),
+    tellYouAreReadyMove(EmpireName.NoramStates),
 
     // Material production
-    {type: MoveType.PlaceResource, playerId: EmpireName.RepublicOfEurope, resource: Resource.Materials, card: militaryBase, space: 1},
-    {type: MoveType.PlaceResource, playerId: EmpireName.RepublicOfEurope, resource: Resource.Materials, card: militaryBase, space: 2},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.RepublicOfEurope},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Materials, card: offshoreOilRig, space: 2},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.FederationOfAsia},
+    placeResourceOnConstructionMove(EmpireName.RepublicOfEurope, Resource.Materials, militaryBase, 1),
+    placeResourceOnConstructionMove(EmpireName.RepublicOfEurope, Resource.Materials, militaryBase, 2),
+    tellYouAreReadyMove(EmpireName.RepublicOfEurope),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Materials, offshoreOilRig, 2),
+    tellYouAreReadyMove(EmpireName.FederationOfAsia),
     ...Array(3).fill([
-      {type: MoveType.PlaceResource, playerId: EmpireName.NoramStates, resource: Resource.Materials, card: industrialComplex, space: 0},
-      {type: MoveType.PlaceResource, playerId: EmpireName.NoramStates, resource: Resource.Materials, card: industrialComplex, space: 1},
-      {type: MoveType.PlaceResource, playerId: EmpireName.NoramStates, resource: Resource.Materials, card: industrialComplex, space: 2}
+      placeResourceOnConstructionMove(EmpireName.NoramStates, Resource.Materials, industrialComplex, 0),
+      placeResourceOnConstructionMove(EmpireName.NoramStates, Resource.Materials, industrialComplex, 1),
+      placeResourceOnConstructionMove(EmpireName.NoramStates, Resource.Materials, industrialComplex, 2)
     ]),
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.NoramStates},
+    tellYouAreReadyMove(EmpireName.NoramStates),
 
     // Energy production
-    {type: MoveType.PlaceResource, playerId: EmpireName.RepublicOfEurope, resource: Resource.Energy, card: militaryBase, space: 3},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.RepublicOfEurope},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Energy, card: lunarBase, space: 0},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.FederationOfAsia},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.NoramStates},
+    placeResourceOnConstructionMove(EmpireName.RepublicOfEurope, Resource.Energy, militaryBase, 3),
+    tellYouAreReadyMove(EmpireName.RepublicOfEurope),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Energy, lunarBase, 0),
+    tellYouAreReadyMove(EmpireName.FederationOfAsia),
+    tellYouAreReadyMove(EmpireName.NoramStates),
 
     // Science production
-    {type: MoveType.PlaceResource, playerId: EmpireName.RepublicOfEurope, resource: Resource.Science, card: humanCloning, space: 0},
-    {type: MoveType.PlaceResource, playerId: EmpireName.RepublicOfEurope, resource: Resource.Science, card: humanCloning, space: 1},
-    {type: MoveType.ReceiveCharacter, playerId: EmpireName.RepublicOfEurope, character: Character.General},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.RepublicOfEurope},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.FederationOfAsia},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.NoramStates},
+    placeResourceOnConstructionMove(EmpireName.RepublicOfEurope, Resource.Science, humanCloning, 0),
+    placeResourceOnConstructionMove(EmpireName.RepublicOfEurope, Resource.Science, humanCloning, 1),
+    receiveCharacterMove(EmpireName.RepublicOfEurope, Character.General),
+    tellYouAreReadyMove(EmpireName.RepublicOfEurope),
+    tellYouAreReadyMove(EmpireName.FederationOfAsia),
+    tellYouAreReadyMove(EmpireName.NoramStates),
 
     // Gold production
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.RepublicOfEurope},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Gold, card: lunarBase, space: 4},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Gold, card: lunarBase, space: 5},
-    {type: MoveType.PlaceResource, playerId: EmpireName.FederationOfAsia, resource: Resource.Gold, card: worldCongress, space: 0},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.FederationOfAsia},
+    tellYouAreReadyMove(EmpireName.RepublicOfEurope),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Gold, lunarBase, 4),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Gold, lunarBase, 5),
+    placeResourceOnConstructionMove(EmpireName.FederationOfAsia, Resource.Gold, worldCongress, 0),
+    tellYouAreReadyMove(EmpireName.FederationOfAsia),
     ...Array(2).fill([
-      {type: MoveType.PlaceResource, playerId: EmpireName.NoramStates, resource: Resource.Gold, card: propagandaCenter, space: 1},
-      {type: MoveType.PlaceResource, playerId: EmpireName.NoramStates, resource: Resource.Gold, card: propagandaCenter, space: 2}
+      placeResourceOnConstructionMove(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 1),
+      placeResourceOnConstructionMove(EmpireName.NoramStates, Resource.Gold, propagandaCenter, 2)
     ]),
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.NoramStates},
+    tellYouAreReadyMove(EmpireName.NoramStates),
 
     // Exploration production
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.RepublicOfEurope},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.FederationOfAsia},
-    {type: MoveType.TellYouAreReady, playerId: EmpireName.NoramStates}
+    tellYouAreReadyMove(EmpireName.RepublicOfEurope),
+    tellYouAreReadyMove(EmpireName.FederationOfAsia),
+    tellYouAreReadyMove(EmpireName.NoramStates)
   ]
 }
 

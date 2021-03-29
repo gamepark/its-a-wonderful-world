@@ -10,6 +10,8 @@ export default PassCards
 
 export type PassCardsView = PassCards & { receivedCards: number[] }
 
+export const passCardsMove: PassCards = {type: MoveType.PassCards}
+
 export function passCards(state: GameState) {
   const players = state.players.filter(player => player.cardsToPass)
   const draftDirection = state.round % 2 ? -1 : 1

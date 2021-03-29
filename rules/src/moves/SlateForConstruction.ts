@@ -12,6 +12,10 @@ export default interface SlateForConstruction {
   card: number
 }
 
+export const slateForConstructionMove = (playerId: EmpireName, card: number): SlateForConstruction => ({
+  type: MoveType.SlateForConstruction, playerId, card
+})
+
 export function slateForConstruction(state: GameState | GameView, move: SlateForConstruction) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': could not find player')

@@ -13,6 +13,10 @@ export default interface ChooseDevelopmentCard {
 
 export type ChooseDevelopmentCardView = Omit<ChooseDevelopmentCard, 'card'>
 
+export const chooseDevelopmentCardMove = (playerId: EmpireName, card: number): ChooseDevelopmentCard => ({
+  type: MoveType.ChooseDevelopmentCard, playerId, card
+})
+
 export function chooseDevelopmentCard(state: GameState | GameView, move: ChooseDevelopmentCard) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': player id is missing')

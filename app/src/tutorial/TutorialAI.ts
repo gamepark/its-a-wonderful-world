@@ -6,10 +6,16 @@ import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Develop
 import DevelopmentType, {isDevelopmentType} from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource, {isResource, resources} from '@gamepark/its-a-wonderful-world/material/Resource'
+import {chooseDevelopmentCardMove} from '@gamepark/its-a-wonderful-world/moves/ChooseDevelopmentCard'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
-import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
-import Recycle from '@gamepark/its-a-wonderful-world/moves/Recycle'
-import SlateForConstruction from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
+import {placeResourceOnEmpireMove} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
+import {produceMove} from '@gamepark/its-a-wonderful-world/moves/Produce'
+import {receiveCharacterMove} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
+import Recycle, {recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
+import {revealChosenCardsMove} from '@gamepark/its-a-wonderful-world/moves/RevealChosenCards'
+import {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
+import {startPhaseMove} from '@gamepark/its-a-wonderful-world/moves/StartPhase'
+import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
@@ -61,12 +67,12 @@ export default class TutorialAI {
       return map
     }, new Map<number, number>())
     return this.evaluateOptions(game, player.hand.map(card => ({
-      moves: [{type: MoveType.ChooseDevelopmentCard, playerId: this.playerId, card}],
+      moves: [chooseDevelopmentCardMove(this.playerId, card)],
       next: (game: GameState) => {
         const planningSimulation = produce(game, draft => {
           const itsAWonderfulWorld = new ItsAWonderfulWorld(draft)
-          itsAWonderfulWorld.play({type: MoveType.RevealChosenCards})
-          itsAWonderfulWorld.play({type: MoveType.StartPhase, phase: Phase.Planning})
+          itsAWonderfulWorld.play(revealChosenCardsMove)
+          itsAWonderfulWorld.play(startPhaseMove(Phase.Planning))
         })
         return ({note: this.planScore(planningSimulation).note, moves: []})
       },
@@ -201,9 +207,8 @@ export default class TutorialAI {
     }
     let confidence = 1, highestConfidenceOptions: AIOptions[] = []
     for (const card of player.draftArea) {
-      const slateForConstruction: SlateForConstruction = {type: MoveType.SlateForConstruction, playerId: this.playerId, card}
-      const buildOption = {moves: [slateForConstruction], next: (game: GameState) => this.planScore(game), rate: 0}
-      const recycle: Recycle = {type: MoveType.Recycle, playerId: this.playerId, card}
+      const buildOption = {moves: [slateForConstructionMove(this.playerId, card)], next: (game: GameState) => this.planScore(game), rate: 0}
+      const recycle: Recycle = recycleMove(this.playerId, card)
       const recycleOption = {moves: [recycle], next: (game: GameState) => this.planScore(game), rate: 0}
       const buildRate = this.buildRate(developmentCards[card], player, game.round)
       const recycleRate = this.recycleRate(developmentCards[card], player, game.round)
@@ -227,7 +232,7 @@ export default class TutorialAI {
       const constructions = constructionsThatMayReceiveCubes(player).filter(construction => !doNotBuild.includes(construction))
       return this.evaluateOptions(game, [
         {
-          moves: player.availableResources.map(resource => ({type: MoveType.PlaceResource, playerId: this.playerId, resource})),
+          moves: player.availableResources.map(resource => (placeResourceOnEmpireMove(this.playerId, resource))),
           next: (game: GameState) => this.placeResourcesScore(game, doNotBuild),
           rate: 0
         },
@@ -247,7 +252,7 @@ export default class TutorialAI {
     }
     if (player.bonuses.includes(ChooseCharacter)) {
       return this.evaluateOptions(game, [Character.Financier, Character.General].map(character => ({
-        moves: [{type: MoveType.ReceiveCharacter, playerId: this.playerId, character}],
+        moves: [receiveCharacterMove(this.playerId, character)],
         next: (game: GameState) => this.placeResourcesScore(game, doNotBuild),
         rate: 0
       })))
@@ -261,17 +266,17 @@ export default class TutorialAI {
           rate: 0
         })),
       {
-        moves: [{type: MoveType.TellYouAreReady, playerId: this.playerId}],
+        moves: [tellYouAreReadyMove(this.playerId)],
         next: (game: GameState) => {
           game = produce(game, draft => {
             const itsAWonderfulWorld = new ItsAWonderfulWorld(draft)
             if (draft.phase === Phase.Planning) {
-              itsAWonderfulWorld.play({type: MoveType.StartPhase, phase: Phase.Production})
-              itsAWonderfulWorld.play({type: MoveType.Produce, resource: Resource.Materials})
+              itsAWonderfulWorld.play(startPhaseMove(Phase.Production))
+              itsAWonderfulWorld.play(produceMove(Resource.Materials))
             } else {
               const nextProductionStep = getNextProductionStep(draft)
               if (nextProductionStep) {
-                itsAWonderfulWorld.play({type: MoveType.Produce, resource: nextProductionStep})
+                itsAWonderfulWorld.play(produceMove(nextProductionStep))
               }
             }
           })

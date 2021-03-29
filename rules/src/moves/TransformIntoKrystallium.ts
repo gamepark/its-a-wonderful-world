@@ -9,6 +9,10 @@ export default interface TransformIntoKrystallium {
   playerId: EmpireName
 }
 
+export const transformIntoKrystalliumMove = (playerId: EmpireName): TransformIntoKrystallium => ({
+  type: MoveType.TransformIntoKrystallium, playerId
+})
+
 export function transformIntoKrystallium(state: GameState | GameView, move: TransformIntoKrystallium) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': could not find player')

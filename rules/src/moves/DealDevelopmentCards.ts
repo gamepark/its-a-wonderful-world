@@ -10,6 +10,8 @@ export default DealDevelopmentCards
 
 export type DealDevelopmentCardsView = DealDevelopmentCards & { playerCards: number[] }
 
+export const dealDevelopmentCardsMove: DealDevelopmentCards = {type: MoveType.DealDevelopmentCards}
+
 const numberOfCardsDeal2Players = 10
 
 function getRemainingPlayersToDealCardsTo(state: GameState | GameView) {

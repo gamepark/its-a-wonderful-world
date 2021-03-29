@@ -11,6 +11,10 @@ export default interface ReceiveCharacter {
   character: Character
 }
 
+export const receiveCharacterMove = (playerId: EmpireName, character: Character): ReceiveCharacter => ({
+  type: MoveType.ReceiveCharacter, playerId, character
+})
+
 export function receiveCharacter(state: GameState | GameView, move: ReceiveCharacter) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': could not find player')

@@ -12,6 +12,10 @@ export default interface CompleteConstruction {
   card: number
 }
 
+export const completeConstructionMove = (playerId: EmpireName, card: number): CompleteConstruction => ({
+  type: MoveType.CompleteConstruction, playerId, card
+})
+
 export function completeConstruction(state: GameState | GameView, move: CompleteConstruction) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': could not find player')

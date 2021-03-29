@@ -7,6 +7,10 @@ type StartPhase = { type: typeof MoveType.StartPhase, phase: Phase }
 
 export default StartPhase
 
+export const startPhaseMove = (phase: Phase): StartPhase => ({
+  type: MoveType.StartPhase, phase
+})
+
 export function startPhase(state: GameState | GameView, move: StartPhase) {
   state.phase = move.phase
   state.players.forEach(player => player.ready = false)

@@ -13,6 +13,8 @@ export type RevealChosenCardsView = RevealChosenCards & {
   revealedCards: { [key in EmpireName]?: number }
 }
 
+export const revealChosenCardsMove: RevealChosenCards = {type: MoveType.RevealChosenCards}
+
 export function revealChosenCards(state: GameState) {
   state.players.forEach(player => {
     if (player.chosenCard !== undefined) {

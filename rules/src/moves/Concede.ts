@@ -8,6 +8,10 @@ export default interface Concede {
   playerId: EmpireName
 }
 
+export const concedeMove = (playerId: EmpireName): Concede => ({
+  type: MoveType.Concede, playerId
+})
+
 export function concede(state: GameState | GameView, move: Concede) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': player id is missing')

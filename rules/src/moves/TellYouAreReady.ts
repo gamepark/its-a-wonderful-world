@@ -9,6 +9,10 @@ export default interface TellYouAreReady {
   playerId: EmpireName
 }
 
+export const tellYouAreReadyMove = (playerId: EmpireName): TellYouAreReady => ({
+  type: MoveType.TellYouAreReady, playerId
+})
+
 export function tellYouAreReady(state: GameState | GameView, move: TellYouAreReady) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': could not find player')

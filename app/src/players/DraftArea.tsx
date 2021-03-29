@@ -5,12 +5,11 @@ import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Develop
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import ChooseDevelopmentCard, {
-  ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
+  chooseDevelopmentCardMove, ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
 } from '@gamepark/its-a-wonderful-world/moves/ChooseDevelopmentCard'
 import CompleteConstruction, {isCompleteConstruction} from '@gamepark/its-a-wonderful-world/moves/CompleteConstruction'
-import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
-import Recycle, {isRecycle} from '@gamepark/its-a-wonderful-world/moves/Recycle'
-import SlateForConstruction, {isSlateForConstruction} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
+import Recycle, {isRecycle, recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
+import SlateForConstruction, {isSlateForConstruction, slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
@@ -53,7 +52,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
   const chosenCard = choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : player.chosenCard
   const canDrop = (item: DevelopmentFromHand | DevelopmentFromConstructionArea) => item.type === DragObjectType.DEVELOPMENT_FROM_HAND
-    || (canUndo({type: MoveType.SlateForConstruction, playerId: playerId!, card: item.card}))
+    || (canUndo(slateForConstructionMove(playerId!, item.card)))
   const [{dragItemType, isValidTarget, isOver}, ref] = useDrop({
     accept: [DragObjectType.DEVELOPMENT_FROM_HAND, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA], canDrop,
     collect: (monitor) => ({
@@ -61,9 +60,9 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       isValidTarget: monitor.canDrop() && canDrop(monitor.getItem()),
       isOver: monitor.isOver()
     }),
-    drop: item => item.type === DragObjectType.DEVELOPMENT_FROM_HAND ? {type: MoveType.ChooseDevelopmentCard, playerId: player.empire, card: item.card} : {
-      type: MoveType.SlateForConstruction, playerId: player.empire, card: item.card
-    }
+    drop: item => item.type === DragObjectType.DEVELOPMENT_FROM_HAND ?
+      chooseDevelopmentCardMove(player.empire, item.card) :
+      slateForConstructionMove(player.empire, item.card)
   })
   useEffect(() => {
     if (!animation && focusedCard !== player.chosenCard && !player.draftArea.some(card => card === focusedCard)) {
@@ -105,15 +104,15 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   }, [player, buildingOrRecyclingAll])
   const buildAll = () => {
     setBuildingOrRecyclingAll(true)
-    player.draftArea.forEach(card => play({type: MoveType.SlateForConstruction, playerId: player.empire, card}, {delayed: true}))
+    player.draftArea.forEach(card => play(slateForConstructionMove(player.empire, card), {delayed: true}))
   }
   const recycleAll = () => {
     setBuildingOrRecyclingAll(true)
-    player.draftArea.forEach(card => play({type: MoveType.Recycle, playerId: player.empire, card}, {delayed: true}))
+    player.draftArea.forEach(card => play(recycleMove(player.empire, card), {delayed: true}))
   }
   const drop = (move: SlateForConstruction | Recycle | CompleteConstruction) => {
     if (isCompleteConstruction(move)) {
-      play({type: MoveType.SlateForConstruction, playerId: move.playerId, card: move.card}, {skipAnimation: true})
+      play(slateForConstructionMove(move.playerId, move.card), {skipAnimation: true})
       getMovesToBuild(player as Player, move.card).forEach(move => play(move))
     } else {
       play(move)
@@ -127,13 +126,11 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
         {isPlayer(player) && game.phase === Phase.Planning &&
         <>
-          <button css={[textButton, textButtonLeft, draftConstructionButton]} onClick={() => play({
-            type: MoveType.SlateForConstruction, playerId: player.empire, card: focusedCard
-          })}>
+          <button css={[textButton, textButtonLeft, draftConstructionButton]} onClick={() => play(slateForConstructionMove(player.empire, focusedCard))}>
             {t('Build')}
           </button>
           <button css={[textButton, textButtonRight, recyclingButton(developmentCards[focusedCard].recyclingBonus)]}
-                  onClick={() => play({type: MoveType.Recycle, playerId: player.empire, card: focusedCard})}>
+                  onClick={() => play(recycleMove(player.empire, focusedCard))}>
             {t('Recycle')}
           </button>
           <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>

@@ -13,6 +13,8 @@ export default interface Produce {
   resource: Resource
 }
 
+export const produceMove = (resource: Resource): Produce => ({type: MoveType.Produce, resource})
+
 export function produce(state: GameState | GameView, move: Produce) {
   state.productionStep = move.resource
   let highestProduction = 0

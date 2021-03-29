@@ -13,6 +13,10 @@ export default interface PlaceCharacter {
   space: number
 }
 
+export const placeCharacterMove = (playerId: EmpireName, character: Character, card: number, space: number): PlaceCharacter => ({
+  type: MoveType.PlaceCharacter, playerId, character, card, space
+})
+
 export function placeCharacter(state: GameState | GameView, move: PlaceCharacter) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': could not find player')

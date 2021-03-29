@@ -12,24 +12,26 @@ import EmpireName from './material/EmpireName'
 import Empires from './material/Empires'
 import EmpireSide from './material/EmpireSide'
 import Resource, {isResource, resources} from './material/Resource'
-import {chooseDevelopmentCard} from './moves/ChooseDevelopmentCard'
-import {completeConstruction} from './moves/CompleteConstruction'
-import {concede} from './moves/Concede'
-import {dealDevelopmentCards} from './moves/DealDevelopmentCards'
-import {discardLeftOverCards} from './moves/DiscardLeftoverCards'
+import {chooseDevelopmentCard, chooseDevelopmentCardMove} from './moves/ChooseDevelopmentCard'
+import {completeConstruction, completeConstructionMove} from './moves/CompleteConstruction'
+import {concede, concedeMove} from './moves/Concede'
+import {dealDevelopmentCards, dealDevelopmentCardsMove} from './moves/DealDevelopmentCards'
+import {discardLeftOverCards, discardLeftOverCardsMove} from './moves/DiscardLeftoverCards'
 import Move, {MoveView} from './moves/Move'
 import MoveType from './moves/MoveType'
-import {passCards} from './moves/PassCards'
-import PlaceCharacter, {isPlaceCharacter, placeCharacter} from './moves/PlaceCharacter'
-import PlaceResource, {isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction} from './moves/PlaceResource'
-import {produce} from './moves/Produce'
-import {receiveCharacter} from './moves/ReceiveCharacter'
-import {recycle} from './moves/Recycle'
-import {revealChosenCards} from './moves/RevealChosenCards'
-import {slateForConstruction} from './moves/SlateForConstruction'
-import {startPhase} from './moves/StartPhase'
-import {tellYouAreReady} from './moves/TellYouAreReady'
-import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
+import {passCards, passCardsMove} from './moves/PassCards'
+import PlaceCharacter, {isPlaceCharacter, placeCharacter, placeCharacterMove} from './moves/PlaceCharacter'
+import PlaceResource, {
+  isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction, placeResourceOnConstructionMove, placeResourceOnEmpireMove
+} from './moves/PlaceResource'
+import {produce, produceMove} from './moves/Produce'
+import {receiveCharacter, receiveCharacterMove} from './moves/ReceiveCharacter'
+import {recycle, recycleMove} from './moves/Recycle'
+import {revealChosenCards, revealChosenCardsMove} from './moves/RevealChosenCards'
+import {slateForConstruction, slateForConstructionMove} from './moves/SlateForConstruction'
+import {startPhase, startPhaseMove} from './moves/StartPhase'
+import {tellYouAreReady, tellYouAreReadyMove} from './moves/TellYouAreReady'
+import {transformIntoKrystallium, transformIntoKrystalliumMove} from './moves/TransformIntoKrystallium'
 import {isGameOptions, ItsAWonderfulWorldOptions} from './Options'
 import Phase from './Phase'
 import Player from './Player'
@@ -86,39 +88,39 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
       case Phase.Draft:
         const anyPlayer = this.state.players.filter(player => !player.eliminated)[0]
         if (anyPlayer && !anyPlayer.hand.length && !anyPlayer.draftArea.length) {
-          return {type: MoveType.DealDevelopmentCards}
+          return dealDevelopmentCardsMove
         } else if (this.state.players.every(player => player.chosenCard !== undefined || (player.eliminated && !player.hand.length))) {
-          return {type: MoveType.RevealChosenCards}
+          return revealChosenCardsMove
         } else if (anyPlayer && anyPlayer.cardsToPass) {
-          return {type: MoveType.PassCards}
+          return passCardsMove
         } else if (anyPlayer && anyPlayer.draftArea.length === numberOfCardsToDraft) {
           if (anyPlayer.hand.length) {
-            return {type: MoveType.DiscardLeftoverCards}
+            return discardLeftOverCardsMove
           } else {
-            return {type: MoveType.StartPhase, phase: Phase.Planning}
+            return startPhaseMove(Phase.Planning)
           }
         } else {
           for (const player of this.state.players) {
             if (player.chosenCard === undefined && player.hand.length === 1) {
-              return {type: MoveType.ChooseDevelopmentCard, playerId: player.empire, card: player.hand[0]}
+              return chooseDevelopmentCardMove(player.empire, player.hand[0])
             }
           }
         }
         break
       case Phase.Planning:
         if (this.state.players.every(player => player.ready)) {
-          return {type: MoveType.StartPhase, phase: Phase.Production}
+          return startPhaseMove(Phase.Production)
         }
         break
       case Phase.Production:
         if (!this.state.productionStep) {
-          return {type: MoveType.Produce, resource: Resource.Materials}
+          return produceMove(Resource.Materials)
         } else if (this.state.players.every(player => player.ready)) {
           const nextProductionStep = getNextProductionStep(this.state)
           if (nextProductionStep) {
-            return {type: MoveType.Produce, resource: nextProductionStep}
+            return produceMove(nextProductionStep)
           } else if (this.state.round < numberOfRounds) {
-            return {type: MoveType.StartPhase, phase: Phase.Draft}
+            return startPhaseMove(Phase.Draft)
           }
         }
         break
@@ -256,7 +258,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   }
 
   getConcedeMove(playerId: EmpireName): Move {
-    return {type: MoveType.Concede, playerId}
+    return concedeMove(playerId)
   }
 
   giveTime(playerId: EmpireName): number {
@@ -293,23 +295,23 @@ export function getPredictableAutomaticMoves(state: GameState | GameView): Move 
   for (const player of state.players) {
     for (const construction of player.constructionArea) {
       if (construction.costSpaces.every(space => space !== null)) {
-        return {type: MoveType.CompleteConstruction, playerId: player.empire, card: construction.card}
+        return completeConstructionMove(player.empire, construction.card)
       }
     }
     if (player.empireCardResources.filter(resource => resource !== Resource.Krystallium).length >= 5) {
-      return {type: MoveType.TransformIntoKrystallium, playerId: player.empire}
+      return transformIntoKrystalliumMove(player.empire)
     }
     const bonus = player.bonuses.find(bonus => bonus !== ChooseCharacter)
     if (isResource(bonus)) {
-      return {type: MoveType.PlaceResource, playerId: player.empire, resource: bonus}
+      return placeResourceOnEmpireMove(player.empire, bonus)
     } else if (isCharacter(bonus)) {
-      return {type: MoveType.ReceiveCharacter, playerId: player.empire, character: bonus}
+      return receiveCharacterMove(player.empire, bonus)
     }
     for (const resource of [...new Set(player.availableResources)]) {
       if (!player.draftArea.some(card => developmentCards[card].constructionCost[resource])
         && !player.constructionArea.some(construction => getSpacesMissingItem(construction, item => item === resource).length > 0)) {
         // Automatically place resources on the Empire card if there is 0 chance to place it on a development
-        return {type: MoveType.PlaceResource, playerId: player.empire, resource}
+        return placeResourceOnEmpireMove(player.empire, resource)
       }
     }
   }
@@ -320,47 +322,45 @@ export function getLegalMoves(player: Player, phase: Phase) {
   switch (phase) {
     case Phase.Draft:
       if (player.chosenCard === undefined) {
-        player.hand.forEach(card => moves.push({type: MoveType.ChooseDevelopmentCard, playerId: player.empire, card}))
+        player.hand.forEach(card => moves.push(chooseDevelopmentCardMove(player.empire, card)))
       }
       break
     case Phase.Planning:
-      player.draftArea.forEach(card => moves.push({type: MoveType.SlateForConstruction, playerId: player.empire, card}, {
-        type: MoveType.Recycle, playerId: player.empire, card
-      }))
+      player.draftArea.forEach(card => moves.push(slateForConstructionMove(player.empire, card), recycleMove(player.empire, card)))
       if (!player.draftArea.length && !player.availableResources.length && !player.ready) {
-        moves.push({type: MoveType.TellYouAreReady, playerId: player.empire})
+        moves.push(tellYouAreReadyMove(player.empire))
       }
       break
     case Phase.Production:
       if (!player.bonuses.length && !player.availableResources.length && !player.ready) {
-        moves.push({type: MoveType.TellYouAreReady, playerId: player.empire})
+        moves.push(tellYouAreReadyMove(player.empire))
       }
       break
   }
   [...new Set(player.availableResources)].forEach(resource => {
     player.constructionArea.forEach(construction => {
       getSpacesMissingItem(construction, item => item === resource)
-        .forEach(space => moves.push({type: MoveType.PlaceResource, playerId: player.empire, resource, card: construction.card, space}))
+        .forEach(space => moves.push(placeResourceOnConstructionMove(player.empire, resource, construction.card, space)))
     })
-    moves.push({type: MoveType.PlaceResource, playerId: player.empire, resource})
+    moves.push(placeResourceOnEmpireMove(player.empire, resource))
   })
   if (player.bonuses.some(bonus => bonus === ChooseCharacter)) {
-    characters.forEach(character => moves.push({type: MoveType.ReceiveCharacter, playerId: player.empire, character}))
+    characters.forEach(character => moves.push(receiveCharacterMove(player.empire, character)))
   }
   player.constructionArea.forEach(construction => {
-    moves.push({type: MoveType.Recycle, playerId: player.empire, card: construction.card})
+    moves.push(recycleMove(player.empire, construction.card))
   })
   if (player.empireCardResources.some(resource => resource === Resource.Krystallium)) {
     player.constructionArea.forEach(construction => {
       getSpacesMissingItem(construction, item => isResource(item))
-        .forEach(space => moves.push({type: MoveType.PlaceResource, playerId: player.empire, resource: Resource.Krystallium, card: construction.card, space}))
+        .forEach(space => moves.push(placeResourceOnConstructionMove(player.empire, Resource.Krystallium, construction.card, space)))
     })
   }
   characters.forEach(character => {
     if (player.characters[character]) {
       player.constructionArea.forEach(construction => {
         getSpacesMissingItem(construction, item => item === character)
-          .forEach(space => moves.push({type: MoveType.PlaceCharacter, playerId: player.empire, character, card: construction.card, space}))
+          .forEach(space => moves.push(placeCharacterMove(player.empire, character, construction.card, space)))
       })
     }
   })
@@ -496,16 +496,16 @@ export function getMovesToBuild(player: Player, card: number): (PlaceResourceOnC
     let resources = player.availableResources.filter(r => r === resource).length
     for (const cost of resourceCosts) {
       if (resources > 0) {
-        moves.push({type: MoveType.PlaceResource, playerId: player.empire, resource, card, space: cost.space})
+        moves.push(placeResourceOnConstructionMove(player.empire, resource, card, cost.space))
         resources--
       } else {
-        moves.push({type: MoveType.PlaceResource, playerId: player.empire, resource: Resource.Krystallium, card, space: cost.space})
+        moves.push(placeResourceOnConstructionMove(player.empire, Resource.Krystallium, card, cost.space))
       }
     }
   }
   for (const cost of remainingCost) {
     if (isCharacter(cost.item)) {
-      moves.push({type: MoveType.PlaceCharacter, playerId: player.empire, character: cost.item, card, space: cost.space})
+      moves.push(placeCharacterMove(player.empire, cost.item, card, cost.space))
     }
   }
   return moves
@@ -548,7 +548,7 @@ export function placeAvailableCubesMoves(player: Player | PlayerView, constructi
   getRemainingCost(construction).forEach(cost => {
     if (isResource(cost.item)) {
       if (availableResource.some(resource => resource === cost.item)) {
-        moves.push({type: MoveType.PlaceResource, playerId: player.empire, resource: cost.item, card: construction.card, space: cost.space})
+        moves.push(placeResourceOnConstructionMove(player.empire, cost.item, construction.card, cost.space))
         availableResource.splice(availableResource.findIndex(resource => resource === cost.item), 1)
       }
     }

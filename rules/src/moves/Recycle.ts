@@ -11,6 +11,10 @@ export default interface Recycle {
   card: number
 }
 
+export const recycleMove = (playerId: EmpireName, card: number): Recycle => ({
+  type: MoveType.Recycle, playerId, card
+})
+
 export function recycle(state: GameState | GameView, move: Recycle) {
   const player = state.players.find(player => player.empire === move.playerId)
   if (!player) return console.error('Cannot apply', move, 'on', state, ': could not find player')

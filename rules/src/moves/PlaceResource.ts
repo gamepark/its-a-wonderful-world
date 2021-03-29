@@ -9,6 +9,14 @@ type PlaceResource = PlaceResourceOnEmpire | PlaceResourceOnConstruction
 
 export default PlaceResource
 
+export const placeResourceOnEmpireMove = (playerId: EmpireName, resource: Resource): PlaceResourceOnEmpire => ({
+  type: MoveType.PlaceResource, playerId, resource
+})
+
+export const placeResourceOnConstructionMove = (playerId: EmpireName, resource: Resource, card: number, space: number): PlaceResourceOnConstruction => ({
+  type: MoveType.PlaceResource, playerId, resource, card, space
+})
+
 export function isPlaceResource(move: Move | MoveView): move is PlaceResource {
   return move.type === MoveType.PlaceResource
 }

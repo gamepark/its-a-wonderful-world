@@ -9,6 +9,8 @@ export default DiscardLeftoverCards
 
 export type DiscardLeftoverCardsView = DiscardLeftoverCards & { discardedCards: number[] }
 
+export const discardLeftOverCardsMove: DiscardLeftoverCards = {type: MoveType.DiscardLeftoverCards}
+
 export function discardLeftOverCards(state: GameState) {
   state.players.forEach(player => state.discard.push(...player.hand.splice(0)))
 }
