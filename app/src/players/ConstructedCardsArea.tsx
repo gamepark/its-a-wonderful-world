@@ -6,34 +6,42 @@ import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {canBuild, canPay, getCost} from '@gamepark/its-a-wonderful-world/Rules'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {FunctionComponent, useState} from 'react'
-import {useDrop} from 'react-dnd'
+import {FunctionComponent, useCallback, useState} from 'react'
+import {DropTargetMonitor, useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
-import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
-import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
-import DragObjectType from '../drag-objects/DragObjectType'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import DevelopmentCardsCatalogs from '../material/developments/DevelopmentCardsCatalog'
+import DragItemType from '../material/DragItemType'
 import {
   cardHeight, cardStyle, cardWidth, constructedCardBottomMargin, constructedCardLeftMargin, constructedCardY, empireCardLeftMargin, empireCardWidth,
   headerHeight, topMargin
 } from '../util/Styles'
 
+type DropItem = { card: number }
+
 const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
   const {t} = useTranslation()
   const [focusedCardIndex, setFocusedCardIndex] = useState<number>()
-  const canDrop = (item: DevelopmentFromConstructionArea | DevelopmentFromDraftArea) =>
-    isPlayer(player) && (item.type === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA ? canBuild(player, item.card) : canPay(player, getCost(item.card)))
+
+  const canDrop = useCallback((monitor: DropTargetMonitor<DropItem>, card: number = monitor.getItem().card) => {
+    if (!isPlayer(player)) return false
+    if (monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA) {
+      return canBuild(player, card)
+    } else {
+      return canPay(player, getCost(card))
+    }
+  }, [player])
+
   const [{dragging, isValidTarget, isOver}, ref] = useDrop({
-    accept: [DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA, DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA],
-    canDrop,
+    accept: [DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA, DragItemType.DEVELOPMENT_FROM_DRAFT_AREA],
+    canDrop: (item, monitor) => canDrop(monitor, item.card),
     collect: (monitor) => ({
-      dragging: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA || monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
-      isValidTarget: (monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA || monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA)
-        && canDrop(monitor.getItem()),
+      dragging: monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA || monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_DRAFT_AREA,
+      isValidTarget: (monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA
+        || monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_DRAFT_AREA) && canDrop(monitor),
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromConstructionArea | DevelopmentFromDraftArea) => completeConstructionMove(player.empire, item.card)
+    drop: (item: DropItem) => completeConstructionMove(player.empire, item.card)
   })
 
   return (

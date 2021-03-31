@@ -14,12 +14,12 @@ import {TFunction} from 'i18next'
 import {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
-import {resourceFromBoard} from '../../drag-objects/ResourceFromBoard'
 import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
 import {LightTheme} from '../../Theme'
 import {
   areasX, boardHeight, boardTop, boardWidth, empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, getAreaCardX, getAreaCardY, glow
 } from '../../util/Styles'
+import DragItemType from '../DragItemType'
 import {resourcePosition as empireCardResourcePosition} from '../empires/EmpireCard'
 import Images from '../Images'
 import ResourceCube, {cubeHeight, cubeWidth, images as resourceCubeImages} from '../resources/ResourceCube'
@@ -37,7 +37,8 @@ type Props = {
 const ResourceArea: FunctionComponent<Props> = ({game, player, resource, quantity, validate}) => {
   const {t} = useTranslation()
   const [{dragging}, ref, preview] = useDrag({
-    item: resourceFromBoard(resource),
+    type: DragItemType.RESOURCE_FROM_BOARD,
+    item: {resource},
     canDrag: isPlayer(player) && quantity > 0,
     collect: monitor => ({
       dragging: monitor.isDragging()

@@ -6,19 +6,19 @@ import {DraggableProps} from '@gamepark/react-components/dist/Draggable/Draggabl
 import {TFunction} from 'i18next'
 import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
-import {krystalliumFromEmpire} from '../../drag-objects/KrystalliumCube'
 import {screenRatio} from '../../util/Styles'
+import DragItemType from '../DragItemType'
 import Images from '../Images'
 
 type Props = {
   resource: Resource
-} & Omit<DraggableProps<any, any, any>, 'item'>
+} & Omit<DraggableProps<any, any, any>, 'type'>
 
 const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ...props}) => {
   const {t} = useTranslation()
   if (draggable) {
     return (
-      <Draggable item={krystalliumFromEmpire} css={style} {...props}>
+      <Draggable type={DragItemType.KRYSTALLIUM_FROM_EMPIRE} css={style} {...props}>
         <img src={images[resource]} css={css`width: 100%;`} draggable={false} alt={getDescription(t, resource)}/>
       </Draggable>
     )

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
-import {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
+import Character, {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
 import Construction from '@gamepark/its-a-wonderful-world/material/Construction'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
@@ -23,14 +23,10 @@ import {useActions, useAnimations, usePlay, usePlayerId, useUndo} from '@gamepar
 import {Draggable} from '@gamepark/react-components'
 import {DragAroundProps} from '@gamepark/react-components/dist/Draggable/DragAround'
 import {FunctionComponent} from 'react'
-import {useDrop} from 'react-dnd'
-import CharacterTokenFromEmpire from '../drag-objects/CharacterTokenFromEmpire'
-import {developmentFromConstructionArea} from '../drag-objects/DevelopmentFromConstructionArea'
-import DragObjectType from '../drag-objects/DragObjectType'
-import KrystalliumFromEmpire from '../drag-objects/KrystalliumCube'
-import ResourceFromBoard from '../drag-objects/ResourceFromBoard'
+import {DropTargetMonitor, useDrop} from 'react-dnd'
 import CharacterToken from '../material/characters/CharacterToken'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
+import DragItemType from '../material/DragItemType'
 import ResourceCube, {cubeHeight, cubeWidth} from '../material/resources/ResourceCube'
 import {areaCardStyle, cardHeight, cardStyle, cardWidth, glow} from '../util/Styles'
 import {useLongPress} from '../util/useLongPress'
@@ -44,6 +40,8 @@ type Props = {
   focused: boolean
   setFocus: () => void
 } & Omit<DragAroundProps, 'dragging'>
+
+type DropItem = { resource: Resource } & { character: Character }
 
 const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameOver, player, construction, canRecycle, focused, setFocus, ...props}) => {
   const playerId = usePlayerId<EmpireName>()
@@ -67,28 +65,30 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
     .filter(move => move.card === construction.card)
   const placeCharacterMoves: PlaceCharacter[] = legalMoves.filter(isPlaceCharacter).filter(move => move.card === construction.card)
   const [{canDrop, isOver}, ref] = useDrop({
-    accept: [DragObjectType.RESOURCE_FROM_BOARD, DragObjectType.KRYSTALLIUM_FROM_EMPIRE, DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE],
-    canDrop: (item: ResourceFromBoard | KrystalliumFromEmpire | CharacterTokenFromEmpire) => {
-      switch (item.type) {
-        case DragObjectType.RESOURCE_FROM_BOARD:
+    accept: [DragItemType.RESOURCE_FROM_BOARD, DragItemType.KRYSTALLIUM_FROM_EMPIRE, DragItemType.CHARACTER_TOKEN_FROM_EMPIRE],
+    canDrop: (item: DropItem, monitor: DropTargetMonitor) => {
+      switch (monitor.getItemType()) {
+        case DragItemType.RESOURCE_FROM_BOARD:
           return placeResourceMoves.some(move => move.resource === item.resource)
-        case DragObjectType.KRYSTALLIUM_FROM_EMPIRE:
+        case DragItemType.KRYSTALLIUM_FROM_EMPIRE:
           return placeResourceMoves.length > 0
-        case DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE:
+        case DragItemType.CHARACTER_TOKEN_FROM_EMPIRE:
           return placeCharacterMoves.some(move => move.character === item.character)
+        default:
+          return false
       }
     },
     collect: monitor => ({
       canDrop: monitor.canDrop(),
       isOver: monitor.isOver()
     }),
-    drop: (item: ResourceFromBoard | KrystalliumFromEmpire | CharacterTokenFromEmpire) => {
-      switch (item.type) {
-        case DragObjectType.RESOURCE_FROM_BOARD:
+    drop: (item: DropItem, monitor: DropTargetMonitor) => {
+      switch (monitor.getItemType()) {
+        case DragItemType.RESOURCE_FROM_BOARD:
           const firstSpace = Math.min(...placeResourceMoves.filter(move => move.resource === item.resource).map(move => move.space))
           play(placeResourceOnConstructionMove(playerId!, item.resource, construction.card, firstSpace))
           break
-        case DragObjectType.KRYSTALLIUM_FROM_EMPIRE:
+        case DragItemType.KRYSTALLIUM_FROM_EMPIRE:
           const remainingCost = getRemainingCost(construction)
           const krystalliumCost = remainingCost.find(cost => cost.item === Resource.Krystallium)
           if (krystalliumCost) {
@@ -102,7 +102,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
             }
           }
           break
-        case DragObjectType.CHARACTER_TOKEN_FROM_EMPIRE:
+        case DragItemType.CHARACTER_TOKEN_FROM_EMPIRE:
           play(placeCharacterMove(playerId!, item.character, construction.card, Math.min(...placeCharacterMoves.map(move => move.space))))
           break
       }
@@ -137,7 +137,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
   }
 
   return (
-    <Draggable item={developmentFromConstructionArea(construction.card)} disabled={gameOver || !canRecycle || canDrop || focused}
+    <Draggable type={DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA} item={{card: construction.card}} disabled={gameOver || !canRecycle || canDrop || focused}
                css={[cardStyle, areaCardStyle]} drop={drop} {...longPress} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>

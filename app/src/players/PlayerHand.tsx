@@ -11,9 +11,9 @@ import {Animation, useAnimation, usePlay} from '@gamepark/react-client'
 import {Hand} from '@gamepark/react-components'
 import {FunctionComponent, useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import {developmentFromHand} from '../drag-objects/DevelopmentFromHand'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import FocusedDevelopmentOptions from '../material/developments/FocusedDevelopmentOptions'
+import DragItemType from '../material/DragItemType'
 import Images from '../material/Images'
 import {
   bottomMargin, cardHeight, cardRatio, cardStyle, cardWidth, constructedCardLeftMargin, getAreaCardX, getAreaCardY, playerPanelHeight, playerPanelWidth,
@@ -45,7 +45,8 @@ const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
       ignore,
       hoverStyle: css`transform: translateY(-25%) scale(1.5);`,
       drag: {
-        item: developmentFromHand(card),
+        type: DragItemType.DEVELOPMENT_FROM_HAND,
+        item: {card},
         disabled: !canChooseCard,
         animation: {seconds: animation?.duration ?? 0.2},
         drop: () => play(chooseDevelopmentCardMove(player.empire, card))

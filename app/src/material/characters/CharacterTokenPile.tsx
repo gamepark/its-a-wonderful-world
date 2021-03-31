@@ -10,15 +10,15 @@ import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimation} from '@gamepark/react-client'
-import {FunctionComponent} from 'react'
+import {FunctionComponent, HTMLAttributes} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
-import {characterTokenFromEmpire} from '../../drag-objects/CharacterTokenFromEmpire'
 import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardWidth, charactersPilesY, constructedCardLeftMargin, constructedCardY, developmentCardVerticalShift,
   financiersPileX, generalsPileX, tokenHeight, tokenWidth
 } from '../../util/Styles'
 import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from '../board/ResourceArea'
+import DragItemType from '../DragItemType'
 import Images from '../Images'
 import CharacterToken, {getDescription, images as characterTokenImages} from './CharacterToken'
 
@@ -28,7 +28,7 @@ type Props = {
   quantity: number
   gameOver: boolean
   draggable?: boolean
-} & React.HTMLAttributes<HTMLDivElement>
+} & HTMLAttributes<HTMLDivElement>
 
 const maxDisplayedTokens = 5
 
@@ -37,7 +37,8 @@ const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quanti
   const animation = useAnimation<Move>(animation => isReceiveCharacter(animation.move) && animation.move.character === character
     && animation.move.playerId === player.empire)
   const [, ref, preview] = useDrag({
-    item: characterTokenFromEmpire(character),
+    type: DragItemType.CHARACTER_TOKEN_FROM_EMPIRE,
+    item: {character},
     canDrag: isPlayer(player) && quantity > 0 && !gameOver,
     collect: monitor => ({
       dragging: monitor.isDragging()

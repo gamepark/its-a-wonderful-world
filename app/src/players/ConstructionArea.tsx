@@ -20,12 +20,11 @@ import {useAnimation, usePlay, usePlayerId, useUndo} from '@gamepark/react-clien
 import {FunctionComponent, useEffect, useRef, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
-import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
-import DragObjectType from '../drag-objects/DragObjectType'
 import CharacterToken from '../material/characters/CharacterToken'
 import constructionCost from '../material/developments/ConstructionCost'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
 import FocusedDevelopmentOptions from '../material/developments/FocusedDevelopmentOptions'
+import DragItemType from '../material/DragItemType'
 import Images from '../material/Images'
 import ResourceCube from '../material/resources/ResourceCube'
 import {
@@ -64,12 +63,12 @@ const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, p
     }
   }, [player, focusedCard, animation])
   const [{isValidTarget, isOver}, ref] = useDrop({
-    accept: DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
+    accept: DragItemType.DEVELOPMENT_FROM_DRAFT_AREA,
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA,
+      isValidTarget: monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_DRAFT_AREA,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromDraftArea) => (slateForConstructionMove(player.empire, item.card))
+    drop: (item: { card: number }) => (slateForConstructionMove(player.empire, item.card))
   })
 
   function getTransform(card: number, index: number) {

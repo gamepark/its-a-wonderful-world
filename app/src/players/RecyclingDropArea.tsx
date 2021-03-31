@@ -5,20 +5,18 @@ import {recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
 import {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
-import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
-import DevelopmentFromDraftArea from '../drag-objects/DevelopmentFromDraftArea'
-import DragObjectType from '../drag-objects/DragObjectType'
+import DragItemType from '../material/DragItemType'
 import {areasX, areaWidth} from '../util/Styles'
 
 const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) => {
   const {t} = useTranslation()
   const [{isValidTarget, isOver}, ref] = useDrop({
-    accept: [DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
+    accept: [DragItemType.DEVELOPMENT_FROM_DRAFT_AREA, DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
     collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_DRAFT_AREA || monitor.getItemType() === DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
+      isValidTarget: monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_DRAFT_AREA || monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA,
       isOver: monitor.isOver()
     }),
-    drop: (item: DevelopmentFromDraftArea | DevelopmentFromConstructionArea) => recycleMove(empire, item.card)
+    drop: ({card}: { card: number }) => recycleMove(empire, card)
   })
   return (
     <div ref={ref} css={getStyle(isValidTarget, isOver)}>

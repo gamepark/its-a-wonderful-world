@@ -18,21 +18,20 @@ import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimation, usePlay, usePlayerId, useUndo} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import {FunctionComponent, useEffect, useState} from 'react'
-import {useDrop} from 'react-dnd'
+import {DropTargetMonitor, useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
-import DevelopmentFromConstructionArea from '../drag-objects/DevelopmentFromConstructionArea'
-import {developmentFromDraftArea} from '../drag-objects/DevelopmentFromDraftArea'
-import DevelopmentFromHand from '../drag-objects/DevelopmentFromHand'
-import DragObjectType from '../drag-objects/DragObjectType'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {discardPileCardX, discardPileCardY, discardPileMaxSize, discardPileScale} from '../material/developments/DiscardPile'
 import FocusedDevelopmentOptions from '../material/developments/FocusedDevelopmentOptions'
+import DragItemType from '../material/DragItemType'
 import Images from '../material/Images'
 import Button from '../util/Button'
 import {
   areaCardStyle, cardHeight, cardStyle, cardWidth, getAreaCardTransform, getAreaCardX, getAreaCardY, getAreasStyle, getCardFocusTransform, playerPanelMargin,
   playerPanelWidth, popupBackgroundStyle
 } from '../util/Styles'
+
+type DropItem = { card: number }
 
 const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
   const {t} = useTranslation()
@@ -51,16 +50,17 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
   const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
   const chosenCard = choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : player.chosenCard
-  const canDrop = (item: DevelopmentFromHand | DevelopmentFromConstructionArea) => item.type === DragObjectType.DEVELOPMENT_FROM_HAND
-    || (canUndo(slateForConstructionMove(playerId!, item.card)))
+  const canDrop = (monitor: DropTargetMonitor<DropItem>, card = monitor.getItem().card) => monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_HAND
+    || (canUndo(slateForConstructionMove(playerId!, card)))
   const [{dragItemType, isValidTarget, isOver}, ref] = useDrop({
-    accept: [DragObjectType.DEVELOPMENT_FROM_HAND, DragObjectType.DEVELOPMENT_FROM_CONSTRUCTION_AREA], canDrop,
+    accept: [DragItemType.DEVELOPMENT_FROM_HAND, DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
+    canDrop: (item: DropItem, monitor) => canDrop(monitor, item.card),
     collect: (monitor) => ({
       dragItemType: monitor.getItemType(),
-      isValidTarget: monitor.canDrop() && canDrop(monitor.getItem()),
+      isValidTarget: monitor.canDrop() && canDrop(monitor),
       isOver: monitor.isOver()
     }),
-    drop: item => item.type === DragObjectType.DEVELOPMENT_FROM_HAND ?
+    drop: (item: DropItem, monitor) => monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_HAND ?
       chooseDevelopmentCardMove(player.empire, item.card) :
       slateForConstructionMove(player.empire, item.card)
   })
@@ -141,11 +141,11 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
       <div ref={ref} css={getDraftAreaStyle(row, game.players.length === 2, isValidTarget, isOver)}>
         {!player.draftArea.length && <span css={draftAreaText}>{t('Draft area')}</span>}
         {isValidTarget && <span css={draftActionAreaText}>&rarr; {
-          dragItemType === DragObjectType.DEVELOPMENT_FROM_HAND ? t('Choose this card') : t('Cancel construction')
+          dragItemType === DragItemType.DEVELOPMENT_FROM_HAND ? t('Choose this card') : t('Cancel construction')
         }</span>}
       </div>
       {player.draftArea.map((card, index) => (
-        <Draggable key={card} item={developmentFromDraftArea(card)} drop={drop} postTransform={getTransform(card, index)}
+        <Draggable key={card} type={DragItemType.DEVELOPMENT_FROM_DRAFT_AREA} item={{card}} drop={drop} postTransform={getTransform(card, index)}
                    css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card),
                      undoingSlateForConstruction?.card === card && css`display: none`]}
                    disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning || focusedCard !== undefined}
