@@ -74,7 +74,7 @@ const App: FunctionComponent = () => {
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
         <LoadingScreen gameBox={IWWBox} author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} display={loading}
                        css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
-        {!loading && <GameDisplay game={game} validate={validate}/>}
+        {!loading && <GameDisplay game={game!} validate={validate}/>}
         <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
           {t('The ideal resolution for playing is in landscape mode, in 16:9.')}
           <br/>

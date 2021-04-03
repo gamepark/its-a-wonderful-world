@@ -12,7 +12,7 @@ import Images from '../Images'
 
 type Props = {
   resource: Resource
-} & Omit<DraggableProps<any, any, any>, 'type'>
+} & Omit<DraggableProps, 'type'>
 
 const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ...props}) => {
   const {t} = useTranslation()

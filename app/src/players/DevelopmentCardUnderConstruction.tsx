@@ -137,7 +137,7 @@ const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameO
   }
 
   return (
-    <Draggable type={DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA} item={{card: construction.card}} disabled={gameOver || !canRecycle || canDrop || focused}
+    <Draggable type={DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA} item={{card: construction.card}} canDrag={!gameOver && canRecycle && !canDrop && !focused}
                css={[cardStyle, areaCardStyle]} drop={drop} {...longPress} {...props}>
       <div ref={ref} css={getInnerStyle(canDrop, isOver)}>
         <DevelopmentCard development={developmentCards[construction.card]} css={css`height: 100%;`}/>

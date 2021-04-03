@@ -148,7 +148,7 @@ const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView
         <Draggable key={card} type={DragItemType.DEVELOPMENT_FROM_DRAFT_AREA} item={{card}} drop={drop} postTransform={getTransform(card, index)}
                    css={[cardStyle, areaCardStyle, focusedCard === card && getCardFocusTransform, zIndexStyle(card),
                      undoingSlateForConstruction?.card === card && css`display: none`]}
-                   disabled={animation !== undefined || playerId !== player.empire || game.phase !== Phase.Planning || focusedCard !== undefined}
+                   canDrag={!animation && playerId === player.empire && game.phase === Phase.Planning && focusedCard === undefined}
                    animation={{properties: ['transform', 'z-index'], seconds: animation?.duration ?? 0.2}}>
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>
