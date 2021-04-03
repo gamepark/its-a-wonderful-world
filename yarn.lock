@@ -1358,10 +1358,10 @@
     pusher-js "^7.0.0"
     redux ">=4.0.5"
 
-"@gamepark/react-components@~4.6.0":
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-4.6.0.tgz#0db2d29f93514a5e09391be1a02c6ce8126301c9"
-  integrity sha512-Dkh5Fhk29/8yIoIUgf15CLys+BlUbwgbDcg9DHTwxBmbfoyh0AKGXNkO5UQ/jRD8RnyOYtTzdkK2PJyerdxzVQ==
+"@gamepark/react-components@~4.6.1":
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-4.6.1.tgz#eb88bfb4d6f98c340f40338dc189aeef228188b7"
+  integrity sha512-u5Tq7sS68K6WxTWQsOsIL8LFWxXpcbyJj6bvMhUD9mJuVJkMDEy79Gahvwp0kzCLZryHxUNbV54L1Q2EP0W3ig==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.34"
     "@fortawesome/free-solid-svg-icons" "^5.15.2"
