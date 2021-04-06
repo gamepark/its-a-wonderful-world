@@ -1,6 +1,6 @@
 import ItsAWonderfulWorldView from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldView'
 import {ItsAWonderfulWorldOptionsDescription} from '@gamepark/its-a-wonderful-world/Options'
-import Rules from '@gamepark/its-a-wonderful-world/Rules'
+import Rules from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {GameProvider, setupTranslation} from '@gamepark/react-client'
 import {StrictMode} from 'react'
 import ReactDOM from 'react-dom'

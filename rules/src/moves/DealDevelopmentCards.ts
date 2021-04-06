@@ -1,6 +1,6 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
-import {numberOfCardsToDraft} from '../Rules'
+import {numberOfCardsToDraft} from '../ItsAWonderfulWorld'
 import {isPlayer} from '../typeguards'
 import MoveType from './MoveType'
 

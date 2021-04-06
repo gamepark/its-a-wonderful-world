@@ -14,7 +14,7 @@ import {isReceiveCharacter, receiveCharacterMove} from '@gamepark/its-a-wonderfu
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
-import {countCharacters, getNextProductionStep, getScore, isOver, numberOfRounds} from '@gamepark/its-a-wonderful-world/Rules'
+import {countCharacters, getNextProductionStep, getScore, isOver, numberOfRounds} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {Animation, Player as PlayerInfo, useActions, useAnimation, usePlay, usePlayerId, usePlayers} from '@gamepark/react-client'
 import {TFunction} from 'i18next'

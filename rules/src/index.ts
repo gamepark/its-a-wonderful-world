@@ -1,2 +1,2 @@
-export {default} from './Rules'
+export {default} from './ItsAWonderfulWorld'
 export {ItsAWonderfulWorldOptionsDescription} from './Options'

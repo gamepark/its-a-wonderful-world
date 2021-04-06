@@ -1,6 +1,6 @@
 import {css, keyframes, Theme} from '@emotion/react'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
-import {numberOfCardsToDraft} from '@gamepark/its-a-wonderful-world/Rules'
+import {numberOfCardsToDraft} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Images from '../material/Images'
 import {LightTheme} from '../Theme'
 

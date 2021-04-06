@@ -7,7 +7,7 @@ import PlaceResource, {isPlaceResourceOnConstruction} from '@gamepark/its-a-wond
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getProduction} from '@gamepark/its-a-wonderful-world/Rules'
+import {getProduction} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimations} from '@gamepark/react-client'
 import {TFunction} from 'i18next'

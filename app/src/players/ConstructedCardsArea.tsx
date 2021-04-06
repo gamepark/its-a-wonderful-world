@@ -4,7 +4,7 @@ import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Develop
 import {completeConstructionMove} from '@gamepark/its-a-wonderful-world/moves/CompleteConstruction'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {canBuild, canPay, getCost} from '@gamepark/its-a-wonderful-world/Rules'
+import {canBuild, canPay, getCost} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {FunctionComponent, useCallback, useState} from 'react'
 import {DropTargetMonitor, useDrop} from 'react-dnd'

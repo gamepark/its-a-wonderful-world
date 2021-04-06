@@ -257,7 +257,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
     return !!this.getPlayer(playerId).eliminated
   }
 
-  getConcedeMove(playerId: EmpireName): Move {
+  giveUpMove(playerId: EmpireName): Move {
     return concedeMove(playerId)
   }
 

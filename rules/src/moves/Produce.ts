@@ -4,7 +4,7 @@ import Character, {ChooseCharacter} from '../material/Character'
 import Resource from '../material/Resource'
 import Player from '../Player'
 import PlayerView from '../PlayerView'
-import {getProduction} from '../Rules'
+import {getProduction} from '../ItsAWonderfulWorld'
 import Move, {MoveView} from './Move'
 import MoveType from './MoveType'
 

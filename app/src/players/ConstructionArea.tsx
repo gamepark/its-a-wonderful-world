@@ -14,7 +14,7 @@ import SlateForConstruction, {isSlateForConstruction, slateForConstructionMove} 
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {canBuild, getMovesToBuild, getRemainingCost, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/Rules'
+import {canBuild, getMovesToBuild, getRemainingCost, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimation, usePlay, usePlayerId, useUndo} from '@gamepark/react-client'
 import {FunctionComponent, useEffect, useRef, useState} from 'react'

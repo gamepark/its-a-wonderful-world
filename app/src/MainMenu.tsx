@@ -7,8 +7,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
-import {isOver} from '@gamepark/its-a-wonderful-world/Rules'
-import {useActions, useGame, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/react-client'
+import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
+import {useActions, useGame, useGiveUp, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/react-client'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 // @ts-ignore
@@ -51,6 +51,7 @@ const MainMenu = () => {
   const [toggle, {mute, unmute, muted}] = useSound(toggleSound)
   const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
   const [quitPopupOpen, setQuitPopupOpen] = useState(false)
+  const [,canGiveUp] = useGiveUp()
 
   function toggleSounds() {
     if (muted) {
@@ -179,7 +180,7 @@ const MainMenu = () => {
           <FontAwesomeIcon icon={faClock}/>
         </IconButton>
         }
-        {game && player && !quit && !isOver(game) &&
+        {canGiveUp &&
         <IconButton css={[menuButtonStyle, redButtonStyle]} onClick={() => setQuitPopupOpen(true)}>
           <span css={subMenuTitle}>{t('Leave the game')}</span>
           <FontAwesomeIcon icon={faSignOutAlt}/>

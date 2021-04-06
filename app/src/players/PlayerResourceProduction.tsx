@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
+import {getProduction} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Resource'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getProduction} from '@gamepark/its-a-wonderful-world/Rules'
 import {Fragment, FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'

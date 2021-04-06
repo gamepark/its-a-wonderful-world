@@ -16,7 +16,7 @@ import {recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
 import {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {setupPlayers} from '@gamepark/its-a-wonderful-world/Rules'
+import {setupPlayers} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {Tutorial} from '@gamepark/react-client'
 import shuffle from 'lodash.shuffle'
 

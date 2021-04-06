@@ -20,7 +20,7 @@ import {slateForConstruction} from './moves/SlateForConstruction'
 import {startPhase} from './moves/StartPhase'
 import {tellYouAreReady} from './moves/TellYouAreReady'
 import {transformIntoKrystallium} from './moves/TransformIntoKrystallium'
-import {getPredictableAutomaticMoves} from './Rules'
+import {getPredictableAutomaticMoves} from './ItsAWonderfulWorld'
 
 export default class ItsAWonderfulWorldView implements Game<GameView, MoveView>, Undo<GameView, MoveView, EmpireName> {
   state: GameView

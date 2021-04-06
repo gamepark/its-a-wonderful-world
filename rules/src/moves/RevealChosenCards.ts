@@ -1,7 +1,7 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
 import EmpireName from '../material/EmpireName'
-import {numberOfCardsToDraft} from '../Rules'
+import {numberOfCardsToDraft} from '../ItsAWonderfulWorld'
 import Move from './Move'
 import MoveType from './MoveType'
 

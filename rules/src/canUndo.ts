@@ -1,6 +1,7 @@
 import {Action} from '@gamepark/rules-api'
 import GameState from './GameState'
 import GameView from './GameView'
+import {isOver, isPlaceItemOnCard} from './ItsAWonderfulWorld'
 import EmpireName from './material/EmpireName'
 import Resource from './material/Resource'
 import {isChosenDevelopmentCardVisible} from './moves/ChooseDevelopmentCard'
@@ -10,7 +11,6 @@ import MoveType from './moves/MoveType'
 import {isPlaceResourceOnConstruction} from './moves/PlaceResource'
 import {isRecycle} from './moves/Recycle'
 import {isTellYouAreReady} from './moves/TellYouAreReady'
-import {isOver, isPlaceItemOnCard} from './Rules'
 
 type ItsAWonderfulWorldAction = Action<Move | MoveView, EmpireName>
 

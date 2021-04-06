@@ -22,7 +22,7 @@ import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import ItsAWonderfulWorld, {
   canBuild, constructionsThatMayReceiveCubes, getMovesToBuild, getNextProductionStep, getProduction, getRemainingCost, getScore, numberOfRounds,
   placeAvailableCubesMoves
-} from '@gamepark/its-a-wonderful-world/Rules'
+} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import produce from 'immer'
 
 type AIOptions = {

@@ -1,6 +1,6 @@
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
-import {isActive} from '@gamepark/its-a-wonderful-world/Rules'
+import {isActive} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {useOptions, usePlayerId, usePlayers, useSound} from '@gamepark/react-client'
 import {useEffect, useState} from 'react'
 import bellSound from '../sounds/bell.mp3'

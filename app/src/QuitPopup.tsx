@@ -2,7 +2,7 @@
 import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useLeaveGame} from '@gamepark/react-client'
+import {useGiveUp} from '@gamepark/react-client'
 import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {LightTheme} from './Theme'
@@ -12,7 +12,7 @@ import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightSt
 const QuitPopup: FunctionComponent<{ onClose: () => void }> = ({onClose}) => {
   const {t} = useTranslation()
   const theme = useTheme()
-  const leaveGame = useLeaveGame()
+  const [giveUp] = useGiveUp()
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
       <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
@@ -22,7 +22,7 @@ const QuitPopup: FunctionComponent<{ onClose: () => void }> = ({onClose}) => {
         <p>{t('When you leave the game, you will be eliminated and the other players will finish without you.')}</p>
         <p>{t('Out of respect for other players, only abandon the game in case of force majeure.')}</p>
         <Button onClick={() => {
-          leaveGame()
+          giveUp()
           onClose()
         }}>
           {t('Leave the game')}
