@@ -264,11 +264,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   giveTime(playerId: EmpireName): number {
     switch (this.state.phase) {
       case Phase.Draft:
-        if (this.state.round === 1 && this.getPlayer(playerId).draftArea.length === 0) {
-          return 180
-        } else {
-          return (numberOfCardsToDraft - this.getPlayer(playerId).draftArea.length - 1) * 10
-        }
+        return (numberOfCardsToDraft - this.getPlayer(playerId).draftArea.length - 1) * 10
       case Phase.Planning:
         return (this.state.round + 1) * 60
       case Phase.Production:
