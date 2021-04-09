@@ -79,7 +79,7 @@ const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
       setScoreSuspense(true)
     }
   }, [game, gameOver, setScoreSuspense])
-  const text = loading ? t('Game loading…') :
+  const text = loading ? t('Game loading...') :
     gameOver ? scoreSuspense ? t('Score calculation… Who will be the Supreme Leader?') :
       getEndOfGameText(t, players, game!, empire) :
       getText(t, validate, play, players, game!, empire, animation)

@@ -40,11 +40,11 @@ const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
       <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={onClose}><FontAwesomeIcon icon={faTimes}/></div>
-        <h2>{t('{player} has exceeded their thinking time', {player: awaitedPlayerName})}</h2>
+        <h2>{t('eject.dialog.p1', {player: awaitedPlayerName})}</h2>
         {time > -maxExceedTime ?
-          <p>{t('Beyond {duration} you will be allowed to eject them and continue the game.', {duration: moment.duration(maxExceedTime).humanize()})}</p>
+          <p>{t('eject.dialog.p2', {duration: moment.duration(maxExceedTime).humanize()})}</p>
           : <>
-            <p>{t('If you don’t think they are coming back, you have the option of ejecting them from the game.', {duration: moment.duration(maxExceedTime).humanize()})}</p>
+            <p>{t('eject.dialog.p3')}</p>
             <Button onClick={() => eject(awaitedPlayer.id)}>{t('Eject {player}', {player: awaitedPlayerName})}</Button>
           </>
         }
