@@ -1,6 +1,6 @@
-import {useCallback, useMemo, useRef} from 'react'
+import {MouseEvent, Touch, TouchEvent, useCallback, useMemo, useRef} from 'react'
 
-type PressEvent<T> = React.MouseEvent<T> | React.TouchEvent<T>
+type PressEvent<T> = MouseEvent<T> | TouchEvent<T>
 
 type Props<T> = {
   onClick?: (event: PressEvent<T>) => void
@@ -69,7 +69,7 @@ export function useLongPress<T>({onClick, onLongPress, ms = 300, moveTolerance =
   )
 }
 
-type Point = React.MouseEvent<any> | React.Touch
+type Point = MouseEvent<any> | Touch
 
 function getLocation<T>(event: PressEvent<T>): Point {
   if (isMouseEvent(event)) {
@@ -79,8 +79,8 @@ function getLocation<T>(event: PressEvent<T>): Point {
   }
 }
 
-function isMouseEvent<T>(event: PressEvent<T>): event is React.MouseEvent<T> {
-  return (event as React.MouseEvent<T>).clientX !== undefined
+function isMouseEvent<T>(event: PressEvent<T>): event is MouseEvent<T> {
+  return (event as MouseEvent<T>).clientX !== undefined
 }
 
 function distance(pointA: Point, pointB: Point) {

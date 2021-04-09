@@ -2,29 +2,24 @@
 import {css} from '@emotion/react'
 import {faUserSlash} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
-import {useNow, useOptions, usePlayers, useSound} from '@gamepark/react-client'
-import {GameSpeed} from '@gamepark/rules-api'
-import {FC} from 'react'
+import {useOpponentWithMaxTime, useSound} from '@gamepark/react-client'
+import {HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from './material/Images'
 import toggleSound from './sounds/toggle.mp3'
 import IconButton from './util/IconButton'
 
-type Props = React.HTMLAttributes<HTMLButtonElement> & {
+type Props = HTMLAttributes<HTMLButtonElement> & {
   openEjectPopup: () => void
   subMenu?: boolean
   disabled?: boolean
 }
 
-const EjectButton: FC<Props> = ({subMenu, openEjectPopup, ...props}) => {
+export default function EjectButton({subMenu, openEjectPopup, ...props}: Props) {
   const {t} = useTranslation()
-  const players = usePlayers<EmpireName>()
+  const opponentWithNegativeTime = useOpponentWithMaxTime(0)
   const [toggle] = useSound(toggleSound)
-  const now = useNow()
-  const options = useOptions()
-  const playerTimeout = options?.speed === GameSpeed.RealTime && players.some(player => player.time?.playing && player.time.availableTime < now - Date.parse(player.time.lastChange))
-  if (!playerTimeout) {
+  if (!opponentWithNegativeTime) {
     return null
   }
   return (
@@ -51,5 +46,3 @@ const subMenuTitle = css`
   text-transform: uppercase;
   margin-right: 1em;
 `
-
-export default EjectButton

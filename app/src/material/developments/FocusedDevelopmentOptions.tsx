@@ -3,7 +3,7 @@ import {css} from '@emotion/react'
 import {faQuestion, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
-import {FunctionComponent, useState} from 'react'
+import {useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {cardWidth} from '../../util/Styles'
 
@@ -12,7 +12,7 @@ type Props = {
   onClose: () => void
 }
 
-const FocusedDevelopmentOptions: FunctionComponent<Props> = ({development, onClose}) => {
+export default function FocusedDevelopmentOptions({development, onClose}: Props) {
   const {t} = useTranslation()
   const [help, setHelp] = useState(false)
   return (
@@ -139,5 +139,3 @@ const helpLine = css`
   border-width: 0.1em;
   border-style: solid;
 `
-
-export default FocusedDevelopmentOptions

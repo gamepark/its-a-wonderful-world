@@ -1,17 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes, Theme} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {getProduction} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Resource'
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
 import PlaceResource, {isPlaceResourceOnConstruction} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getProduction} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimations} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
-import {FunctionComponent} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
@@ -34,7 +33,7 @@ type Props = {
   validate: () => void
 }
 
-const ResourceArea: FunctionComponent<Props> = ({game, player, resource, quantity, validate}) => {
+export default function ResourceArea({game, player, resource, quantity, validate}: Props) {
   const {t} = useTranslation()
   const [{dragging}, ref, preview] = useDrag({
     type: DragItemType.RESOURCE_FROM_BOARD,
@@ -341,5 +340,3 @@ const toHexagonalSpiralPosition = (index: number) => {
       return {x: (distance * 11 - index * 2) * xFactor, y: distance}
   }
 }
-
-export default ResourceArea

@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
+import {getItemQuantity, getVictoryPointsBonusMultiplier} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character, {characters} from '@gamepark/its-a-wonderful-world/material/Character'
 import DevelopmentType, {developmentTypes} from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getItemQuantity, getVictoryPointsBonusMultiplier} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {useOptions, usePlayer} from '@gamepark/react-client'
 import {GameSpeed} from '@gamepark/rules-api'
 import Avatar from 'avataaars'
-import {FunctionComponent, useEffect, useState} from 'react'
+import {HTMLAttributes, useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {empireAvatar} from '../material/empires/EmpireCard'
 import gamePointIcon from '../util/game-point.svg'
@@ -25,9 +25,9 @@ type Props = {
   position: number
   highlight: boolean
   showScore: boolean
-} & React.HTMLAttributes<HTMLDivElement>
+} & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel: FunctionComponent<Props> = ({player, position, highlight, showScore, ...props}) => {
+export default function PlayerPanel({player, position, highlight, showScore, ...props}: Props) {
   const {t} = useTranslation()
   const options = useOptions()
   const playerInfo = usePlayer<EmpireName>(player.empire)
@@ -161,5 +161,3 @@ const getBestVictoryPointsMultiplier = (player: Player | PlayerView) => {
   }
   return bestMultiplier
 }
-
-export default PlayerPanel

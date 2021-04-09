@@ -1,18 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
+import {HTMLAttributes} from 'react'
 
-const LoadingSpinner = (props: React.HTMLAttributes<HTMLDivElement>) => (
-  <div css={style} {...props}>
-    <div css={bullet1}/>
-    <div css={bullet2}/>
-    <div css={bullet3}/>
-    <div css={bullet4}/>
-    <div css={bullet5}/>
-    <div css={bullet6}/>
-    <div css={bullet7}/>
-    <div css={bullet8}/>
-  </div>
-)
+export default function LoadingSpinner(props: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div css={style} {...props}>
+      <div css={bullet1}/>
+      <div css={bullet2}/>
+      <div css={bullet3}/>
+      <div css={bullet4}/>
+      <div css={bullet5}/>
+      <div css={bullet6}/>
+      <div css={bullet7}/>
+      <div css={bullet8}/>
+    </div>
+  )
+}
 
 const keyframe = keyframes`
   from {
@@ -118,5 +121,3 @@ const bullet8 = css`
     left: 0.6em;
   }
 `
-
-export default LoadingSpinner

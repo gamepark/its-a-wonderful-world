@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character, {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
 import Construction from '@gamepark/its-a-wonderful-world/material/Construction'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
@@ -17,12 +18,10 @@ import Recycle, {isRecycle} from '@gamepark/its-a-wonderful-world/moves/Recycle'
 import SlateForConstruction, {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useActions, useAnimations, usePlay, usePlayerId, useUndo} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import {DragAroundProps} from '@gamepark/react-components/dist/Draggable/DragAround'
-import {FunctionComponent} from 'react'
 import {DropTargetMonitor, useDrop} from 'react-dnd'
 import CharacterToken from '../material/characters/CharacterToken'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
@@ -43,7 +42,7 @@ type Props = {
 
 type DropItem = { resource: Resource } & { character: Character }
 
-const DevelopmentCardUnderConstruction: FunctionComponent<Props> = ({game, gameOver, player, construction, canRecycle, focused, setFocus, ...props}) => {
+export default function DevelopmentCardUnderConstruction({game, gameOver, player, construction, canRecycle, focused, setFocus, ...props}: Props) {
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
   const legalMoves = isPlayer(player) ? getLegalMoves(player, game.phase) : []
@@ -200,5 +199,3 @@ const getCharacterTokenStyle = (index: number) => css`
   left: 2.5%;
   top: ${index * 9 + 3}%;
 `
-
-export default DevelopmentCardUnderConstruction

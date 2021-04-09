@@ -5,14 +5,13 @@ import PassCards, {isPassCards} from '@gamepark/its-a-wonderful-world/moves/Pass
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {Animation, useAnimation} from '@gamepark/react-client'
 import {Hand} from '@gamepark/react-components'
-import {FunctionComponent} from 'react'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import {cardHeight, cardRatio, cardStyle, cardWidth, playerPanelHeight, playerPanelWidth, playerPanelY} from '../util/Styles'
 import {getChosenCardAnimation, hand2PlayersX, handPosition, handPosition2Players, handX, handY, playerHandCardStyle} from './PlayerHand'
 
 type Props = { player: PlayerView, players: number, round: number, panelIndex: number }
 
-const OtherPlayerHand: FunctionComponent<Props> = ({player, players, round, panelIndex}) => {
+export default function OtherPlayerHand({player, players, round, panelIndex}: Props) {
   const animation = useAnimation<ChooseDevelopmentCard | PassCards>(animation =>
     (isChooseDevelopmentCard(animation.move) && animation.move.playerId === player.empire) || isPassCards(animation.move)
   )
@@ -86,5 +85,3 @@ const receiveCardAnimation = (origin: number, animation: Animation, players: num
     animation: ${keyframe} ${animation.duration}s ease-in-out;
   `
 }
-
-export default OtherPlayerHand

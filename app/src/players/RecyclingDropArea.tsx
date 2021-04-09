@@ -2,13 +2,14 @@
 import {css} from '@emotion/react'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
-import {FunctionComponent} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DragItemType from '../material/DragItemType'
 import {areasX, areaWidth} from '../util/Styles'
 
-const RecyclingDropArea: FunctionComponent<{ empire: EmpireName }> = ({empire}) => {
+type Props = { empire: EmpireName }
+
+export default function RecyclingDropArea({empire}: Props) {
   const {t} = useTranslation()
   const [{isValidTarget, isOver}, ref] = useDrop({
     accept: [DragItemType.DEVELOPMENT_FROM_DRAFT_AREA, DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
@@ -49,5 +50,3 @@ const text = css`
   color: antiquewhite;
   font-size: 6em;
 `
-
-export default RecyclingDropArea

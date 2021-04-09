@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
+import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import {TFunction} from 'i18next'
-import {FunctionComponent} from 'react'
+import {HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../Images'
-import Character from '@gamepark/its-a-wonderful-world/material/Character'
 
-type Props = { character: Character } & React.HTMLAttributes<HTMLImageElement>
+type Props = { character: Character } & HTMLAttributes<HTMLImageElement>
 
-const CharacterToken: FunctionComponent<Props> = ({character, ...props}) => {
+export default function CharacterToken({character, ...props}: Props) {
   const {t} = useTranslation()
   return <img alt={getDescription(t, character)} src={images[character]} css={style} draggable={false} {...props}/>
 }
@@ -31,5 +31,3 @@ export function getDescription(t: TFunction, character: Character) {
       return t('General token')
   }
 }
-
-export default CharacterToken

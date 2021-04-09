@@ -5,7 +5,6 @@ import {isResource, productionSteps} from '@gamepark/its-a-wonderful-world/mater
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {FunctionComponent} from 'react'
 import {areasX, boardHeight, boardTop, boardWidth} from '../../util/Styles'
 import ResourceArea from './ResourceArea'
 
@@ -15,7 +14,7 @@ type Props = {
   validate: () => void
 }
 
-const Board: FunctionComponent<Props> = ({game, player, validate}) => {
+export default function Board({game, player, validate}: Props) {
   const reducedSize = game.phase === Phase.Draft && game.round > 1
   const playerResources = [...player.availableResources, ...player.bonuses.filter(isResource)]
   return (
@@ -39,5 +38,3 @@ const style = css`
 const reducedSizeStyle = css`
   transform: translate(15%, -81%) scale(0.5);
 `
-
-export default Board

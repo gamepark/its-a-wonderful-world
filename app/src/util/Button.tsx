@@ -1,52 +1,52 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import {ButtonHTMLAttributes, FunctionComponent} from 'react'
+import {ButtonHTMLAttributes} from 'react'
 
-const Button: FunctionComponent<ButtonHTMLAttributes<HTMLButtonElement>> = ({children, ...props}) => {
+export default function Button({children, ...props}: ButtonHTMLAttributes<HTMLButtonElement>) {
   return <button css={style} {...props}><span/><span/><span/><span/>{children}</button>
 }
 
 const animateTop = keyframes`
   0% {
     -webkit-transform: translateX(100%);
-            transform: translateX(100%);
+    transform: translateX(100%);
   }
   100% {
     -webkit-transform: translateX(-100%);
-            transform: translateX(-100%);
+    transform: translateX(-100%);
   }
 `
 
 const animateRight = keyframes`
   0% {
     -webkit-transform: translateY(100%);
-            transform: translateY(100%);
+    transform: translateY(100%);
   }
   100% {
     -webkit-transform: translateY(-100%);
-            transform: translateY(-100%);
+    transform: translateY(-100%);
   }
 `
 
 const animateBottom = keyframes`
   0% {
     -webkit-transform: translateX(-100%);
-            transform: translateX(-100%);
+    transform: translateX(-100%);
   }
   100% {
     -webkit-transform: translateX(100%);
-            transform: translateX(100%);
+    transform: translateX(100%);
   }
 `
 
 const animateLeft = keyframes`
   0% {
     -webkit-transform: translateY(-100%);
-            transform: translateY(-100%);
+    transform: translateY(-100%);
   }
   100% {
     -webkit-transform: translateY(100%);
-            transform: translateY(100%);
+    transform: translateY(100%);
   }
 `
 
@@ -98,7 +98,7 @@ const style = css`
     background: -webkit-gradient(linear, right top, left top, from(rgba(8, 43, 43, 0)), to(#26d9d9));
     background: linear-gradient(to left, rgba(8, 43, 43, 0), #26d9d9);
     -webkit-animation: 2s ${animateTop} linear infinite;
-            animation: 2s ${animateTop} linear infinite;
+    animation: 2s ${animateTop} linear infinite;
   }
 
   & > span:nth-of-type(2) {
@@ -109,7 +109,7 @@ const style = css`
     background: -webkit-gradient(linear, left bottom, left top, from(rgba(8, 43, 43, 0)), to(#26d9d9));
     background: linear-gradient(to top, rgba(8, 43, 43, 0), #26d9d9);
     -webkit-animation: 2s ${animateRight} linear -1s infinite;
-            animation: 2s ${animateRight} linear -1s infinite;
+    animation: 2s ${animateRight} linear -1s infinite;
   }
 
   & > span:nth-of-type(3) {
@@ -123,7 +123,7 @@ const style = css`
     animation: 2s ${animateBottom} linear infinite;
   }
 
-  & >  span:nth-of-type(4) {
+  & > span:nth-of-type(4) {
     top: 0;
     left: 0;
     height: 100%;
@@ -134,5 +134,3 @@ const style = css`
     animation: 2s ${animateLeft} linear -1s infinite;
   }
 `
-
-export default Button

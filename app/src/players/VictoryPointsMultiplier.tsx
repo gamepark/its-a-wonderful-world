@@ -3,7 +3,7 @@ import {css} from '@emotion/react'
 import Character, {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
 import DevelopmentType from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import {TFunction} from 'i18next'
-import {FunctionComponent} from 'react'
+import {HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import CharacterToken from '../material/characters/CharacterToken'
 import Images from '../material/Images'
@@ -12,9 +12,9 @@ type Props = {
   item: DevelopmentType | Character
   multiplier: number
   quantity?: number
-} & React.HTMLAttributes<HTMLDivElement>
+} & HTMLAttributes<HTMLDivElement>
 
-const VictoryPointsMultiplier: FunctionComponent<Props> = ({item, multiplier, quantity, ...props}) => {
+export default function VictoryPointsMultiplier({item, multiplier, quantity, ...props}: Props) {
   const {t} = useTranslation()
   return (
     <div {...props} css={[style, quantity === undefined ? backgroundStyle : '']}>
@@ -112,5 +112,3 @@ const getDevelopmentTypeDescription = (t: TFunction, developmentType: Developmen
       return t('Discovery')
   }
 }
-
-export default VictoryPointsMultiplier

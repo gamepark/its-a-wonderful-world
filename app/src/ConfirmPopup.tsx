@@ -2,13 +2,14 @@
 import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
-const ConfirmPopup: FunctionComponent<{ cancel: () => void, confirm: () => void }> = ({cancel, confirm}) => {
+type Props = { cancel: () => void, confirm: () => void }
+
+export default function ConfirmPopup({cancel, confirm}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   return (
@@ -27,5 +28,3 @@ const ConfirmPopup: FunctionComponent<{ cancel: () => void, confirm: () => void 
 const buttonStyle = css`
   margin-right: 1em;
 `
-
-export default ConfirmPopup

@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {areasX, cardWidth, headerHeight} from '../../util/Styles'
 import {drawPileScale} from '../developments/DrawPile'
 import Images from '../Images'
 
-const RoundTracker: FunctionComponent<{ round: number }> = ({round}) => {
+type Props = { round: number }
+
+export default function RoundTracker({round}: Props) {
   const {t} = useTranslation()
   return (
     <>
@@ -37,5 +38,3 @@ const roundTextStyle = css`
   font-weight: bold;
   text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
 `
-
-export default RoundTracker

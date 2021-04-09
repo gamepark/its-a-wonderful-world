@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, Theme, useTheme} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {countCharacters, getNextProductionStep, getScore, isOver, numberOfRounds} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import {
   HarborZone, IndustrialComplex, PropagandaCenter, SecretSociety, UniversalExposition, WindTurbines, Zeppelin
@@ -14,11 +15,10 @@ import {isReceiveCharacter, receiveCharacterMove} from '@gamepark/its-a-wonderfu
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
-import {countCharacters, getNextProductionStep, getScore, isOver, numberOfRounds} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {Animation, Player as PlayerInfo, useActions, useAnimation, usePlay, usePlayerId, usePlayers} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
-import {FunctionComponent, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import MainMenu from './MainMenu'
 import CharacterToken from './material/characters/CharacterToken'
@@ -27,42 +27,13 @@ import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {gameOverDelay, headerHeight, textColor} from './util/Styles'
 
-const headerStyle = (theme: Theme) => css`
-  position: absolute;
-  display: flex;
-  width: 100%;
-  height: ${headerHeight}em;
-  padding: 0 30em 0 0;
-  text-align: center;
-  background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 30, 0.5)'};
-  transition: background-color 1s ease-in;
-`
-
-const bufferArea = css`
-  width: 30em;
-  flex-shrink: 1;
-`
-
-const textStyle = css`
-  flex-grow: 1;
-  flex-shrink: 0;
-  transition: color 1s ease-in;
-  padding: 0.25em;
-  margin: 0;
-  line-height: 1.25;
-  font-size: 4em;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-`
-
 type Props = {
   game?: GameView
   loading: boolean
   validate: () => void
 }
 
-const Header: FunctionComponent<Props> = ({game, loading, validate}) => {
+export default function Header({game, loading, validate}: Props) {
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const players = usePlayers<EmpireName>()
@@ -334,6 +305,35 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
   }
 }
 
+const headerStyle = (theme: Theme) => css`
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: ${headerHeight}em;
+  padding: 0 30em 0 0;
+  text-align: center;
+  background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 30, 0.5)'};
+  transition: background-color 1s ease-in;
+`
+
+const bufferArea = css`
+  width: 30em;
+  flex-shrink: 1;
+`
+
+const textStyle = css`
+  flex-grow: 1;
+  flex-shrink: 0;
+  transition: color 1s ease-in;
+  padding: 0.25em;
+  margin: 0;
+  line-height: 1.25;
+  font-size: 4em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`
+
 const characterTokenStyle = css`
   width: 1.25em;
   height: 1.25em;
@@ -344,5 +344,3 @@ const characterTokenStyle = css`
     transform: scale(1.1);
   }
 `
-
-export default Header

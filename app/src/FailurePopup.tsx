@@ -4,13 +4,17 @@ import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {Failure} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
-import {FunctionComponent} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
-const FailurePopup: FunctionComponent<{ failures: string[], clearFailures: () => {} }> = ({failures, clearFailures}) => {
+type Props = {
+  failures: string[]
+  clearFailures: () => {}
+}
+
+export default function FailurePopup({failures, clearFailures}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   const description = failuresDescription[failures[0]] || fallbackDescription(failures[0])
@@ -57,5 +61,3 @@ const fallbackDescription = (failure: string) => ({
   title: (t: TFunction) => t('Unknown error:'),
   text: () => failure
 })
-
-export default FailurePopup

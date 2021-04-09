@@ -3,13 +3,14 @@ import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useGiveUp} from '@gamepark/react-client'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 
-const QuitPopup: FunctionComponent<{ onClose: () => void }> = ({onClose}) => {
+type Props = { onClose: () => void }
+
+export default function QuitPopup({onClose}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   const [giveUp] = useGiveUp()
@@ -31,5 +32,3 @@ const QuitPopup: FunctionComponent<{ onClose: () => void }> = ({onClose}) => {
     </div>
   )
 }
-
-export default QuitPopup

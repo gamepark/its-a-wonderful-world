@@ -1,17 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import ReceiveCharacter, {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import {isRevealChosenCards, RevealChosenCardsView} from '@gamepark/its-a-wonderful-world/moves/RevealChosenCards'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useActions, useAnimation, useDisplayState, usePlayerId} from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
-import {FunctionComponent, useEffect, useMemo, useRef, useState} from 'react'
+import {useEffect, useMemo, useRef, useState} from 'react'
 import GlobalActions from './GlobalActions'
 import Board from './material/board/Board'
 import DraftDirectionIndicator from './material/board/DraftDirectionIndicator'
@@ -38,7 +38,7 @@ type Props = {
   validate: () => void
 }
 
-const GameDisplay: FunctionComponent<Props> = ({game, validate}) => {
+export default function GameDisplay({game, validate}: Props) {
   const playerId = usePlayerId<EmpireName>()
   const player = game.players.find(player => player.empire === playerId)
   const [displayedEmpire, setDisplayedEmpire] = useDisplayState(playerId || game.players[0].empire)
@@ -171,5 +171,3 @@ const supremacyBonusAnimation = (resource: Resource, panelIndex: number, duratio
     animation: ${keyframe} ${duration}s ease-in-out forwards;
   `
 }
-
-export default GameDisplay

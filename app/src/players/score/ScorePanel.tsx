@@ -3,13 +3,13 @@ import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {usePlayerId} from '@gamepark/react-client'
-import {FunctionComponent, useMemo, useState} from 'react'
+import {HTMLAttributes, useMemo, useState} from 'react'
 import {getPlayersStartingWith} from '../../GameDisplay'
 import PlayerScore from './PlayerScore'
 
-type Props = { game: GameView, animation: boolean } & React.HTMLAttributes<HTMLDivElement>
+type Props = { game: GameView, animation: boolean } & HTMLAttributes<HTMLDivElement>
 
-const ScorePanel: FunctionComponent<Props> = ({game, animation}) => {
+export default function ScorePanel({game, animation}: Props) {
   const playerId = usePlayerId<EmpireName>()
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
   const [displayScore, setDisplayScore] = useState(true)
@@ -34,5 +34,3 @@ const scorePanelStyle = css`
   pointer-events: none;
   overflow: hidden;
 `
-
-export default ScorePanel

@@ -1,11 +1,11 @@
-import {FunctionComponent, useRef} from 'react'
+import {useRef} from 'react'
 
 type Props = {
   images: string[]
   onImagesLoad?: () => void
 }
 
-const ImagesLoader: FunctionComponent<Props> = ({images, onImagesLoad}) => {
+export default function ImagesLoader({images, onImagesLoad}: Props) {
   const loadCount = useRef(0)
   const onLoad = () => {
     loadCount.current++
@@ -15,9 +15,7 @@ const ImagesLoader: FunctionComponent<Props> = ({images, onImagesLoad}) => {
   }
   return (
     <>
-      {images.map((image, index) => <img key={index} src={image} alt='' style={{display: 'none'}} onLoad={onLoad}/>)}
+      {images.map((image, index) => <img key={index} src={image} alt="" style={{display: 'none'}} onLoad={onLoad}/>)}
     </>
   )
 }
-
-export default ImagesLoader

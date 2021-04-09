@@ -1,16 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {usePlayers} from '@gamepark/react-client'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import CharacterTokenPile from '../material/characters/CharacterTokenPile'
 import EmpireCard from '../material/empires/EmpireCard'
@@ -30,7 +29,7 @@ type Props = {
   panelIndex: number
 }
 
-const DisplayedEmpire: FunctionComponent<Props> = ({game, player, panelIndex}) => {
+export default function DisplayedEmpire({game, player, panelIndex}: Props) {
   const {t} = useTranslation()
   const players = usePlayers<EmpireName>()
   const getName = (empire: EmpireName) => players.find(p => p.id === empire)?.name || getPlayerName(empire, t)
@@ -87,5 +86,3 @@ const generalsPilePosition = css`
   width: ${tokenWidth}%;
   height: ${tokenHeight}%;
 `
-
-export default DisplayedEmpire

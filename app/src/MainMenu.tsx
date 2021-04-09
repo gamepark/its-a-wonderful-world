@@ -5,9 +5,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
-import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {useActions, useGame, useGiveUp, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/react-client'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
@@ -30,7 +30,7 @@ import {platformUri} from './util/Styles'
 
 const noSleep = new NoSleep()
 
-const MainMenu = () => {
+export default function MainMenu() {
   const game = useGame<GameView>()
   const actions = useActions<Move, EmpireName>()
   const nonGuaranteedUndoPending = actions?.some(action => action.cancelled && action.cancelPending && !action.animation && !action.delayed)
@@ -51,7 +51,7 @@ const MainMenu = () => {
   const [toggle, {mute, unmute, muted}] = useSound(toggleSound)
   const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
   const [quitPopupOpen, setQuitPopupOpen] = useState(false)
-  const [,canGiveUp] = useGiveUp()
+  const [, canGiveUp] = useGiveUp()
 
   function toggleSounds() {
     if (muted) {
@@ -198,7 +198,7 @@ const MainMenu = () => {
       </div>
       <RematchPopup rematchOffer={rematchOffer} onClose={ignoreRematch}/>
       {timePopupOpen && <TimePopup onClose={() => setTimePopupOpen(false)}/>}
-      {ejectPopupOpen && <EjectPopup playerId={playerId!} players={players} onClose={() => setEjectPopupOpen(false)}/>}
+      {ejectPopupOpen && <EjectPopup onClose={() => setEjectPopupOpen(false)}/>}
       {quitPopupOpen && <QuitPopup onClose={() => setQuitPopupOpen(false)}/>}
     </>
   )
@@ -349,5 +349,3 @@ const tooltipStyle = css`
     border-bottom: 0.5em solid black;
   }
 `
-
-export default MainMenu

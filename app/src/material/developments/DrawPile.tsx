@@ -1,14 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import {FunctionComponent} from 'react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
+import {useTranslation} from 'react-i18next'
+import ReactTooltip from 'react-tooltip'
 import {cardHeight, cardStyle, cardWidth, headerHeight, topMargin} from '../../util/Styles'
 import DevelopmentCard from './DevelopmentCard'
-import ReactTooltip from 'react-tooltip'
-import {useTranslation} from 'react-i18next'
-import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 
-const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
+type Props = { game: GameView }
+
+export default function DrawPile({game}: Props) {
   const {t} = useTranslation()
   const nbDeck = game.deck
   const nbCards = developmentCards.length
@@ -24,7 +25,7 @@ const DrawPile: FunctionComponent<{ game: GameView }> = ({game}) => {
       }
     `]}/>)}
     <div css={drawPileTooltip} data-tip/>
-    <ReactTooltip type='warning' effect='solid' place='left'>
+    <ReactTooltip type="warning" effect="solid" place="left">
       <span>{t('Number of cards: {nbDeck}/{nbCards}', {nbDeck, nbCards})}  </span>
     </ReactTooltip>
   </>
@@ -43,5 +44,3 @@ const drawPileTooltip = css`
   height: ${cardHeight}%;
   transform: scale(${drawPileScale});
 `
-
-export default DrawPile

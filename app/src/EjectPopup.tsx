@@ -2,55 +2,48 @@
 import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
-import {Player, useEjection, useNow, useOptions} from '@gamepark/react-client'
+import {ejectPlayerAction, useOpponentWithMaxTime} from '@gamepark/react-client'
+import GamePageState from '@gamepark/react-client/dist/Types/GamePageState'
 import moment from 'moment'
-import {FunctionComponent, useEffect} from 'react'
+import {useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
+import {useDispatch, useSelector} from 'react-redux'
 import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
 
-type Props = {
-  playerId: EmpireName
-  players: Player<EmpireName>[]
-  onClose: () => void
-}
+type Props = { onClose: () => void }
 
-const EjectPopup: FunctionComponent<Props> = ({playerId, players, onClose}) => {
+export default function EjectPopup({onClose}: Props) {
   const {t} = useTranslation()
-  const now = useNow()
+  const maxExceedTime = useSelector((state: GamePageState) => state.options?.maxExceedTime ?? 60000)
+  const opponentWithNegativeTime = useOpponentWithMaxTime(0)
+  console.log(opponentWithNegativeTime)
+  const opponentThatCanBeEjected = useOpponentWithMaxTime()
+  const dispatch = useDispatch()
   const theme = useTheme()
-  const [awaitedPlayer, time] = players.filter(player => player.time?.playing)
-    .map<[Player<EmpireName>, number]>(player => [player, player.time!.availableTime - now + Date.parse(player.time!.lastChange)])
-    .sort(([, availableTimeA], [, availableTimeB]) => availableTimeA - availableTimeB)[0]
   useEffect(() => {
-    if (players.find(player => player.id === playerId)?.time?.playing || !awaitedPlayer || time >= 0) {
+    if (!opponentWithNegativeTime) {
       onClose()
     }
-  }, [awaitedPlayer, onClose, time, playerId, players])
-  const eject = useEjection()
-  const maxExceedTime = useOptions()?.maxExceedTime || 0
-  if (!awaitedPlayer)
-    return null
-  const awaitedPlayerName = awaitedPlayer.name || getPlayerName(awaitedPlayer.id, t)
+  }, [opponentWithNegativeTime])
+  if (!opponentWithNegativeTime) return null
+  const opponentName = opponentWithNegativeTime.name || getPlayerName(opponentWithNegativeTime.id, t)
   return (
     <div css={popupFixedBackgroundStyle} onClick={onClose}>
       <div css={[popupStyle, popupPosition, css`width: 70%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={onClose}><FontAwesomeIcon icon={faTimes}/></div>
-        <h2>{t('eject.dialog.p1', {player: awaitedPlayerName})}</h2>
-        {time > -maxExceedTime ?
+        <h2>{t('eject.dialog.p1', {player: opponentName})}</h2>
+        {!opponentThatCanBeEjected ?
           <p>{t('eject.dialog.p2', {duration: moment.duration(maxExceedTime).humanize()})}</p>
           : <>
             <p>{t('eject.dialog.p3')}</p>
-            <Button onClick={() => eject(awaitedPlayer.id)}>{t('Eject {player}', {player: awaitedPlayerName})}</Button>
+            <Button onClick={() => dispatch(ejectPlayerAction(opponentThatCanBeEjected.id))}>{t('Eject {player}', {player: opponentName})}</Button>
           </>
         }
       </div>
     </div>
   )
 }
-
-export default EjectPopup

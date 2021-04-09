@@ -11,12 +11,12 @@ import {
   Supercomputer, SuperSoldiers, SuperSonar, TankDivision, Teleportation, TimeTravel, Transmutation, TransportationNetwork, TreasureOfTheTemplars,
   UndergroundCity, UnderwaterCity, UniversalExposition, UniversalVaccine, University, UnknownTechnology, VirtualReality, WindTurbines, WorldCongress, Zeppelin
 } from '@gamepark/its-a-wonderful-world/material/Developments'
-import {forwardRef} from 'react'
+import {forwardRef, HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../Images'
 import DevelopmentCardsTitles from './DevelopmentCardsTitles'
 
-type Props = { development?: Development } & React.HTMLAttributes<HTMLDivElement>
+type Props = { development?: Development } & HTMLAttributes<HTMLDivElement>
 
 const DevelopmentCard = forwardRef<HTMLDivElement, Props>(({development, ...props}, ref) => {
   const {t} = useTranslation()

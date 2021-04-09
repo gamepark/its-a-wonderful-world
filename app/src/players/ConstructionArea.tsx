@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {canBuild, getMovesToBuild, getRemainingCost, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import Construction from '@gamepark/its-a-wonderful-world/material/Construction'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
@@ -14,10 +15,9 @@ import SlateForConstruction, {isSlateForConstruction, slateForConstructionMove} 
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {canBuild, getMovesToBuild, getRemainingCost, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimation, usePlay, usePlayerId, useUndo} from '@gamepark/react-client'
-import {FunctionComponent, useEffect, useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import CharacterToken from '../material/characters/CharacterToken'
@@ -33,7 +33,13 @@ import {
 import DevelopmentCardUnderConstruction from './DevelopmentCardUnderConstruction'
 import {recyclingButton, textButton, textButtonFontStyle, textButtonLeft, textButtonRight} from './DraftArea'
 
-const ConstructionArea: FunctionComponent<{ game: GameView, gameOver: boolean, player: Player | PlayerView }> = ({game, gameOver, player}) => {
+type Props = {
+  game: GameView
+  gameOver: boolean
+  player: Player | PlayerView
+}
+
+export default function ConstructionArea({game, gameOver, player}: Props) {
   const {t} = useTranslation()
   const playerId = usePlayerId<EmpireName>()
   const [focusedCard, setFocusedCard] = useState<number>()
@@ -310,5 +316,3 @@ const undoPlaceItemButton = css`
 const itemButtonPosition = (index: number) => css`
   top: ${index * 6.4 + 16.5}%;
 `
-
-export default ConstructionArea

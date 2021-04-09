@@ -5,7 +5,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import {usePlayers} from '@gamepark/react-client'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {LightTheme} from './Theme'
 import {closePopupStyle, popupDarkStyle, popupFixedBackgroundStyle, popupLightStyle, popupPosition, popupStyle} from './util/Styles'
@@ -15,7 +14,7 @@ type Props = {
   onClose: () => void
 }
 
-const TimePopup: FunctionComponent<Props> = ({onClose}) => {
+export default function TimePopup({onClose}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   const players = usePlayers<EmpireName>({withTimeUpdate: true})
@@ -86,5 +85,3 @@ const tableStyle = (theme: Theme) => css`
     }
   }
 `
-
-export default TimePopup

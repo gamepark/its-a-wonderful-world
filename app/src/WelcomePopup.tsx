@@ -6,14 +6,18 @@ import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {usePlayer} from '@gamepark/react-client'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import EmpireCard from './material/empires/EmpireCard'
 import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
-const WelcomePopup: FunctionComponent<{ player: Player | PlayerView, close: () => void }> = ({player, close}) => {
+type Props = {
+  player: Player | PlayerView
+  close: () => void
+}
+
+export default function WelcomePopup({player, close}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   const playerInfo = usePlayer(player.empire)
@@ -43,5 +47,3 @@ const empireCardStyle = css`
   width: 20em;
   margin-top: 1em;
 `
-
-export default WelcomePopup

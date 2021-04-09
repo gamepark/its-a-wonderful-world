@@ -3,14 +3,14 @@ import {css, useTheme} from '@emotion/react'
 import {faMinusSquare, faPlusSquare, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {useActions, useAnimation, useFailures, usePlayerId} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
-import {FunctionComponent, useEffect, useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {LightTheme} from '../Theme'
 import Button from '../util/Button'
@@ -20,7 +20,9 @@ import {
 import tutorialArrowDark from '../util/tutorial-arrow-dark.png'
 import tutorialArrowLight from '../util/tutorial-arrow-light.png'
 
-const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
+type Props = { game: GameView }
+
+export default function TutorialPopup({game}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   const [failures] = useFailures()
@@ -87,7 +89,7 @@ const TutorialPopup: FunctionComponent<{ game: GameView }> = ({game}) => {
       }
       {
         currentMessage && currentMessage.arrow &&
-        <img alt='Arrow pointing toward current tutorial interest' src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
+        <img alt="Arrow pointing toward current tutorial interest" src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
              css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
       }
       {
@@ -1195,5 +1197,3 @@ const tutorialEndGame = {
   boxLeft: 53,
   boxWidth: 87
 }
-
-export default TutorialPopup

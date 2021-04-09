@@ -9,7 +9,7 @@ import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {Animation, useAnimation, usePlay} from '@gamepark/react-client'
 import {Hand} from '@gamepark/react-components'
-import {FunctionComponent, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
 import FocusedDevelopmentOptions from '../material/developments/FocusedDevelopmentOptions'
@@ -23,7 +23,7 @@ import {textButton, textButtonLeft} from './DraftArea'
 
 type Props = { player: Player, players: number, round: number }
 
-const PlayerHand: FunctionComponent<Props> = ({player, players, round}) => {
+export default function PlayerHand({player, players, round}: Props) {
   const {t} = useTranslation()
   const play = usePlay<ChooseDevelopmentCard>()
   const [focusedCard, setFocusedCard] = useState<number>()
@@ -251,5 +251,3 @@ const chooseCardButton = css`
     background-image: url(${Images.titleOrange});
   }
 `
-
-export default PlayerHand

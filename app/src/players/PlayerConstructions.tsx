@@ -1,17 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import {FunctionComponent} from 'react'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
-import CharacterTokenNumber from '../material/characters/CharacterTokenNumber'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
+import CharacterTokenNumber from '../material/characters/CharacterTokenNumber'
 
-const PlayerConstructions: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => (
-  <div css={[extraInfoPosition, player.characters[Character.General] > player.characters[Character.Financier] && reverseOrder]}>
+type Props = { player: Player | PlayerView }
+
+export default function PlayerConstructions({player}: Props) {
+  return <div css={[extraInfoPosition, player.characters[Character.General] > player.characters[Character.Financier] && reverseOrder]}>
     <CharacterTokenNumber character={Character.Financier} quantity={player.characters[Character.Financier]} css={itemPosition}/>
     <CharacterTokenNumber character={Character.General} quantity={player.characters[Character.General]} css={itemPosition}/>
   </div>
-)
+}
 
 const extraInfoPosition = css`
   position: absolute;
@@ -36,5 +37,3 @@ const itemPosition = css`
   height: auto;
   margin-right: 4%;
 `
-
-export default PlayerConstructions

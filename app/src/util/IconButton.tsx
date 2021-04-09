@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import {FunctionComponent, useEffect, useState} from 'react'
+import {HTMLAttributes, MouseEvent, useEffect, useState} from 'react'
 
-type Props = React.HTMLAttributes<HTMLButtonElement> & { disabled?: boolean }
+type Props = HTMLAttributes<HTMLButtonElement> & { disabled?: boolean }
 
-const IconButton: FunctionComponent<Props> = ({children, disabled = false, ...props}) => {
+export default function IconButton({children, disabled = false, ...props}: Props) {
   const [active, setActive] = useState(false)
   const [timer, setTimer] = useState<NodeJS.Timeout>()
 
-  function onMouseDown(event: React.MouseEvent<HTMLButtonElement>) {
+  function onMouseDown(event: MouseEvent<HTMLButtonElement>) {
     setActive(true)
     if (timer) {
       clearTimeout(timer)
@@ -18,7 +18,7 @@ const IconButton: FunctionComponent<Props> = ({children, disabled = false, ...pr
     }
   }
 
-  function onMouseUp(event: React.MouseEvent<HTMLButtonElement>) {
+  function onMouseUp(event: MouseEvent<HTMLButtonElement>) {
     setTimer(setTimeout(() => setActive(false), 500))
     if (props.onMouseUp) {
       props.onMouseUp(event)
@@ -96,5 +96,3 @@ const activeStyle = css`
 const disabledStyle = css`
   opacity: 0.5;
 `
-
-export default IconButton

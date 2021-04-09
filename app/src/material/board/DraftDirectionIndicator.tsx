@@ -2,14 +2,19 @@
 import {css, keyframes, useTheme} from '@emotion/react'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {Fragment, FunctionComponent} from 'react'
+import {FC, Fragment, HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import {LightTheme} from '../../Theme'
 import DownArrowIcon from '../../util/DownArrowIcon'
 import {headerHeight, playerPanelHeight, playerPanelMargin} from '../../util/Styles'
 import UpArrowIcon from '../../util/UpArrowIcon'
 
-const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: (Player | PlayerView)[] }> = ({clockwise, players}) => {
+type Props = {
+  clockwise: boolean
+  players: (Player | PlayerView)[]
+}
+
+export default function DraftDirectionIndicator({clockwise, players}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   const greenColor = theme.color === LightTheme ? 'forestgreen' : 'lightgreen'
@@ -26,7 +31,7 @@ const DraftDirectionIndicator: FunctionComponent<{ clockwise: boolean, players: 
   )
 }
 
-const DescendingArrows: FunctionComponent<React.HTMLAttributes<HTMLDivElement> & { color: string }> = ({color, ...props}) => (
+const DescendingArrows: FC<HTMLAttributes<HTMLDivElement> & { color: string }> = ({color, ...props}) => (
   <div css={[slider, scrollDownAnimation]} {...props}>
     <div>
       <DownArrowIcon fill={color} style={{top: 0}}/>
@@ -38,7 +43,7 @@ const DescendingArrows: FunctionComponent<React.HTMLAttributes<HTMLDivElement> &
   </div>
 )
 
-const AscendingArrows: FunctionComponent<React.HTMLAttributes<HTMLDivElement> & { color: string }> = ({color, ...props}) => (
+const AscendingArrows: FC<HTMLAttributes<HTMLDivElement> & { color: string }> = ({color, ...props}) => (
   <div css={[slider, scrollUpAnimation]} {...props}>
     <div>
       <UpArrowIcon fill={color} style={{top: 0}}/>
@@ -98,5 +103,3 @@ const scrollUpAnimation = css`
     animation: ${scrollUp} 2s linear infinite;
   }
 `
-
-export default DraftDirectionIndicator

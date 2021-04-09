@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
-import {FunctionComponent, useState} from 'react'
+import {useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {Swipeable} from 'react-swipeable'
 import {cardHeight, cardWidth, popupBackgroundStyle} from '../../util/Styles'
@@ -14,7 +14,7 @@ type Props = {
   initialIndex?: number
 }
 
-const DevelopmentCardsCatalog: FunctionComponent<Props> = ({initialIndex = 0, onClose, developments}) => {
+export default function DevelopmentCardsCatalog({initialIndex = 0, onClose, developments}: Props) {
   const {t} = useTranslation()
   const [focusedIndex, setFocusedIndex] = useState(initialIndex)
   const [deltaX, setDeltaX] = useState(0)
@@ -114,5 +114,3 @@ const cardPosition = (index: number, focusedIndex: number, deltaX: number) => cs
 const cardTransition = css`
   transition: transform 1s ease-in-out;
 `
-
-export default DevelopmentCardsCatalog

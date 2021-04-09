@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
+import {canBuild, canPay, getCost} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import {completeConstructionMove} from '@gamepark/its-a-wonderful-world/moves/CompleteConstruction'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {canBuild, canPay, getCost} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {FunctionComponent, useCallback, useState} from 'react'
+import {useCallback, useState} from 'react'
 import {DropTargetMonitor, useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
@@ -18,8 +18,9 @@ import {
 } from '../util/Styles'
 
 type DropItem = { card: number }
+type Props = { player: Player | PlayerView }
 
-const ConstructedCardsArea: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
+export default function ConstructedCardsArea({player}: Props) {
   const {t} = useTranslation()
   const [focusedCardIndex, setFocusedCardIndex] = useState<number>()
 
@@ -102,5 +103,3 @@ const dropAreaText = css`
   font-size: 2.5em;
   color: white;
 `
-
-export default ConstructedCardsArea

@@ -4,13 +4,15 @@ import {getProduction} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Resource'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {Fragment, FunctionComponent} from 'react'
+import {FC, Fragment, HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'
 import {getDescription} from '../material/resources/ResourceCube'
 
+type Props = { player: Player | PlayerView }
+
 // Display player's production the best way we can: each resource individually up to 11, then using multipliers for resources with the highest production
-const PlayerResourceProduction: FunctionComponent<{ player: Player | PlayerView }> = ({player}) => {
+export default function PlayerResourceProduction({player}: Props) {
   const {t} = useTranslation()
   const production = resources.reduce((map, resource) => {
     map.set(resource, getProduction(player, resource))
@@ -99,7 +101,7 @@ const productionStyle = (index: number) => {
   }
 }
 
-const ProductionMultiplier: FunctionComponent<{ quantity: number } & React.HTMLAttributes<HTMLDivElement>> = ({quantity, ...props}) => (
+const ProductionMultiplier: FC<{ quantity: number } & HTMLAttributes<HTMLDivElement>> = ({quantity, ...props}) => (
   <div {...props} css={productionMultiplierQuantityStyle}>{quantity}</div>
 )
 
@@ -129,5 +131,3 @@ const productionMultiplierQuantityStyle = css`
   color: white;
   text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
 `
-
-export default PlayerResourceProduction

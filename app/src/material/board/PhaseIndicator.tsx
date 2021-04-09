@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {headerHeight} from '../../util/Styles'
 import Images from '../Images'
 import {roundTrackerX} from './RoundTracker'
 
-const PhaseIndicator: FunctionComponent<{ phase: Phase }> = ({phase}) => {
+type Props = { phase: Phase }
+
+export default function PhaseIndicator({phase}: Props) {
   const {t} = useTranslation()
   return (
     <>
@@ -87,5 +88,3 @@ const currentPhase = css`
     color: rgb(0, 107, 165);
   }
 `
-
-export default PhaseIndicator

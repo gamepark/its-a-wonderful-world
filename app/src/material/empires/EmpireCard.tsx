@@ -8,13 +8,43 @@ import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {usePlay, usePlayerId} from '@gamepark/react-client'
-import {FunctionComponent, HTMLAttributes} from 'react'
+import {HTMLAttributes} from 'react'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import {empireCardHeight, empireCardWidth, glow} from '../../util/Styles'
 import DragItemType from '../DragItemType'
 import Images from '../Images'
 import ResourceCube, {cubeHeight, cubeWidth} from '../resources/ResourceCube'
+
+type Props = {
+  player: Player | PlayerView
+  gameOver?: boolean
+  withResourceDrop?: boolean
+} & HTMLAttributes<HTMLDivElement>
+
+export default function EmpireCard({player, gameOver = false, withResourceDrop = false, ...props}: Props) {
+  const {t} = useTranslation()
+  const play = usePlay()
+  const playerId = usePlayerId<EmpireName>()
+  const [{isValidTarget, isOver}, ref] = useDrop({
+    accept: DragItemType.RESOURCE_FROM_BOARD,
+    canDrop: () => withResourceDrop,
+    collect: (monitor) => ({
+      isValidTarget: monitor.getItemType() === DragItemType.RESOURCE_FROM_BOARD,
+      isOver: monitor.isOver()
+    }),
+    drop: ({resource}: { resource: Resource }) => play(placeResourceOnEmpireMove(player.empire, resource))
+  })
+  return (
+    <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
+      <div css={empireCardTitle}>({player.empireSide}) {getPlayerName(player.empire, t)}</div>
+      {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
+      {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
+        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={!gameOver && player.empire === playerId}/>)}
+    </div>
+  )
+}
 
 const empiresImages = {
   [EmpireName.AztecEmpire]: {
@@ -45,36 +75,6 @@ export const empireAvatar = {
   [EmpireName.NoramStates]: Images.noramStatesAvatar,
   [EmpireName.PanafricanUnion]: Images.panafricanUnionAvatar,
   [EmpireName.RepublicOfEurope]: Images.republicOfEuropeAvatar
-}
-
-type Props = {
-  player: Player | PlayerView
-  gameOver?: boolean
-  withResourceDrop?: boolean
-} & HTMLAttributes<HTMLDivElement>
-
-const EmpireCard: FunctionComponent<Props> = ({player, gameOver = false, withResourceDrop = false, ...props}) => {
-  const {t} = useTranslation()
-  const play = usePlay()
-  const playerId = usePlayerId<EmpireName>()
-  const [{isValidTarget, isOver}, ref] = useDrop({
-    accept: DragItemType.RESOURCE_FROM_BOARD,
-    canDrop: () => withResourceDrop,
-    collect: (monitor) => ({
-      isValidTarget: monitor.getItemType() === DragItemType.RESOURCE_FROM_BOARD,
-      isOver: monitor.isOver()
-    }),
-    drop: ({resource}: { resource: Resource }) => play(placeResourceOnEmpireMove(player.empire, resource))
-  })
-  return (
-    <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
-      <div css={empireCardTitle}>({player.empireSide}) {getPlayerName(player.empire, t)}</div>
-      {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
-      {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
-        <ResourceCube key={index} resource={resource} css={getKrystalliumStyle(index)} draggable={!gameOver && player.empire === playerId}/>)}
-    </div>
-  )
 }
 
 const style = css`
@@ -142,5 +142,3 @@ export const resourcePosition = [
   [22, 36],
   [34, 45]
 ]
-
-export default EmpireCard

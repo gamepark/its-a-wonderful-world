@@ -2,14 +2,16 @@
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
-import {FunctionComponent, useState} from 'react'
+import {useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {cardHeight, cardStyle, cardWidth} from '../../util/Styles'
 import DevelopmentCard from './DevelopmentCard'
 import DevelopmentCardsCatalog, {swipeableScale} from './DevelopmentCardsCatalog'
 import {drawPileCardX, drawPileCardY, drawPileMaxSize, drawPileScale} from './DrawPile'
 
-const DiscardPile: FunctionComponent<{ game: GameView }> = ({game}) => {
+type Props = { game: GameView }
+
+export default function DiscardPile({game}: Props) {
   const [displayCatalog, setDisplayCatalog] = useState(false)
   const discardLength = game.discard.length
   const {t} = useTranslation()
@@ -54,5 +56,3 @@ const discardLengthStyle = css`
   text-shadow: 0 0 2px black;
   font-size: 5em;
 `
-
-export default DiscardPile

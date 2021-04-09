@@ -10,7 +10,7 @@ import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimation} from '@gamepark/react-client'
-import {FunctionComponent, HTMLAttributes} from 'react'
+import {HTMLAttributes} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import {
@@ -32,7 +32,7 @@ type Props = {
 
 const maxDisplayedTokens = 5
 
-const CharacterTokenPile: FunctionComponent<Props> = ({player, character, quantity, gameOver, draggable = false, ...props}) => {
+export default function CharacterTokenPile({player, character, quantity, gameOver, draggable = false, ...props}: Props) {
   const {t} = useTranslation()
   const animation = useAnimation<Move>(animation => isReceiveCharacter(animation.move) && animation.move.character === character
     && animation.move.playerId === player.empire)
@@ -120,5 +120,3 @@ const tokenQuantityStyle = css`
   top: 0.4em;
   left: 0.2em;
 `
-
-export default CharacterTokenPile

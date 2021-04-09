@@ -4,7 +4,6 @@ import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import {Draggable} from '@gamepark/react-components'
 import {DraggableProps} from '@gamepark/react-components/dist/Draggable/Draggable'
 import {TFunction} from 'i18next'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {screenRatio} from '../../util/Styles'
 import DragItemType from '../DragItemType'
@@ -14,7 +13,7 @@ type Props = {
   resource: Resource
 } & Omit<DraggableProps, 'type'>
 
-const ResourceCube: FunctionComponent<Props> = ({resource, draggable = false, ...props}) => {
+export default function ResourceCube({resource, draggable = false, ...props}: Props) {
   const {t} = useTranslation()
   if (draggable) {
     return (
@@ -59,5 +58,3 @@ export const images = {
   [Resource.Exploration]: Images.explorationCube,
   [Resource.Krystallium]: Images.krystalliumCube
 }
-
-export default ResourceCube

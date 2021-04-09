@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes, Theme, useTheme} from '@emotion/react'
+import {getScore} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {characters} from '@gamepark/its-a-wonderful-world/material/Character'
 import {developmentTypes} from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getScore} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
-import {FunctionComponent} from 'react'
+import {HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../../material/Images'
 import {LightTheme} from '../../Theme'
@@ -18,9 +18,9 @@ type Props = {
   displayScore: boolean
   setDisplayScore: (displayScore: boolean) => void
   animation: boolean
-} & React.HTMLAttributes<HTMLDivElement>
+} & HTMLAttributes<HTMLDivElement>
 
-const PlayerScore: FunctionComponent<Props> = ({player, position, displayScore, setDisplayScore, animation}) => {
+export default function PlayerScore({player, position, displayScore, setDisplayScore, animation}: Props) {
   const {t} = useTranslation()
   const score = getScore(player)
   const theme = useTheme()
@@ -164,6 +164,3 @@ const scorePartStyle = css`
   overflow: hidden;
   height: 100%;
 `
-
-
-export default PlayerScore

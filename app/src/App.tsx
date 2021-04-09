@@ -1,18 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import {css, Global, Theme, ThemeProvider} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {canBuild, numberOfRounds} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {canBuild, numberOfRounds} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import {LoadingScreen} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
 import fscreen from 'fscreen'
-import {FunctionComponent, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {useTranslation} from 'react-i18next'
@@ -29,7 +29,7 @@ import {backgroundColor, empireBackground, textColor} from './util/Styles'
 
 const userTheme = 'userTheme'
 
-const App: FunctionComponent = () => {
+export default function App() {
   const {t} = useTranslation()
   const [themeColor, setThemeColor] = useState<Color>(() => (localStorage.getItem(userTheme) || DarkTheme) as Color)
   const game = useGame<GameView>()
@@ -88,8 +88,6 @@ const App: FunctionComponent = () => {
     </DndProvider>
   )
 }
-
-export default App
 
 const backgroundImage = (empire?: EmpireName) => css`
   #root {

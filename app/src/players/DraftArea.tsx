@@ -17,7 +17,7 @@ import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimation, usePlay, usePlayerId, useUndo} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
-import {FunctionComponent, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {DropTargetMonitor, useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
@@ -33,7 +33,9 @@ import {
 
 type DropItem = { card: number }
 
-const DraftArea: FunctionComponent<{ game: GameView, player: Player | PlayerView }> = ({game, player}) => {
+type Props = { game: GameView, player: Player | PlayerView }
+
+export default function DraftArea({game, player}: Props) {
   const {t} = useTranslation()
   const row = game.phase === Phase.Draft ? 1 : 0
   const playerId = usePlayerId<EmpireName>()
@@ -286,5 +288,3 @@ const buttonsArea = css`
   display: flex;
   justify-content: space-evenly;
 `
-
-export default DraftArea

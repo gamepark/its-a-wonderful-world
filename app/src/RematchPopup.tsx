@@ -6,7 +6,6 @@ import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import {usePlayerId, usePlayers} from '@gamepark/react-client'
 import RematchOffer from '@gamepark/react-client/dist/Types/RematchOffer'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import {LightTheme} from './Theme'
 import Button from './util/Button'
@@ -17,7 +16,7 @@ type Props = {
   onClose: () => void
 }
 
-const RematchPopup: FunctionComponent<Props> = ({rematchOffer, onClose}) => {
+export default function RematchPopup({rematchOffer, onClose}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   const playerId = usePlayerId<EmpireName>()
@@ -70,5 +69,3 @@ const spinnerStyle = css`
   animation: ${rotate} 1s ease-in-out infinite;
   margin-bottom: 0.5em;
 `
-
-export default RematchPopup

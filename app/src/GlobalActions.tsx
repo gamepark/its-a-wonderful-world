@@ -1,14 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {getLegalMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {isReceiveCharacter, receiveCharacterMove} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import {isTellYouAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Player from '@gamepark/its-a-wonderful-world/Player'
-import {getLegalMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {usePlay} from '@gamepark/react-client'
-import {FunctionComponent} from 'react'
 import {useTranslation} from 'react-i18next'
 import CharacterToken from './material/characters/CharacterToken'
 import Button from './util/Button'
@@ -20,7 +19,7 @@ type Props = {
   validate: () => void
 }
 
-const GlobalActions: FunctionComponent<Props> = ({game, player, validate}) => {
+export default function GlobalActions({game, player, validate}: Props) {
   const {t} = useTranslation()
   const play = usePlay<Move>()
   const legalMoves = getLegalMoves(player, game.phase)
@@ -64,5 +63,3 @@ const financierTokenPosition = css`
 const generalTokenPosition = css`
   left: 51%;
 `
-
-export default GlobalActions

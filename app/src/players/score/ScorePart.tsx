@@ -1,20 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
+import {getComboVictoryPoints, getFlatVictoryPoints, getItemQuantity, getVictoryPointsMultiplier} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import DevelopmentType from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getComboVictoryPoints, getFlatVictoryPoints, getItemQuantity, getVictoryPointsMultiplier} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
-import {FunctionComponent} from 'react'
+import {HTMLAttributes} from 'react'
 import Images from '../../material/Images'
 import VictoryPointsMultiplier from '../VictoryPointsMultiplier'
 
 type Props = {
   player: Player | PlayerView
   item?: DevelopmentType | Character
-} & React.HTMLAttributes<HTMLDivElement>
+} & HTMLAttributes<HTMLDivElement>
 
-const ScorePart: FunctionComponent<Props> = ({player, item}) => {
+export default function ScorePart({player, item}: Props) {
   const score = item ? getComboVictoryPoints(player, item) : getFlatVictoryPoints(player)
   if (!score) {
     return null
@@ -75,5 +75,3 @@ const multiplierStyle = css`
     filter: none;
   }
 `
-
-export default ScorePart
