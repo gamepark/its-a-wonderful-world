@@ -95,7 +95,7 @@ export default function MainMenu() {
   return (
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
-        {game && !!playerId && !isPlaying && !isOver(game) && <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} css={menuButtonStyle}/>}
+        <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} css={menuButtonStyle}/>
         {game && !!playerId && (isOver(game) && !game.tutorial ?
             <IconButton css={[menuButtonStyle, redButtonStyle]} title={t('Offer a rematch')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
@@ -186,9 +186,7 @@ export default function MainMenu() {
           <FontAwesomeIcon icon={faSignOutAlt}/>
         </IconButton>
         }
-        {game && !!playerId && !isPlaying && !isOver(game) &&
         <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} subMenu={true} css={menuButtonStyle}/>
-        }
         {game && game.tutorial &&
         <IconButton css={[menuButtonStyle, tutorialButtonStyle]} onClick={() => resetTutorial()}>
           <span css={subMenuTitle}>{t('Restart the tutorial')}</span>
