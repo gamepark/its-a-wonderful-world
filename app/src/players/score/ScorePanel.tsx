@@ -4,7 +4,7 @@ import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {usePlayerId} from '@gamepark/react-client'
 import {HTMLAttributes, useMemo, useState} from 'react'
-import {getPlayersStartingWith} from '../../GameDisplay'
+import {getPlayersStartingWith} from '../PlayerPanels'
 import PlayerScore from './PlayerScore'
 
 type Props = { game: GameView, animation: boolean } & HTMLAttributes<HTMLDivElement>
