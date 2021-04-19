@@ -1,8 +1,9 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
 import {isPlayer} from '../typeguards'
-import Move, {MoveView} from './Move'
+import Move from './Move'
 import MoveType from './MoveType'
+import MoveView from './MoveView'
 
 type PassCards = { type: typeof MoveType.PassCards }
 

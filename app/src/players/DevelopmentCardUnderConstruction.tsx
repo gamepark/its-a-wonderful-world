@@ -8,8 +8,8 @@ import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Develop
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource, {isResource} from '@gamepark/its-a-wonderful-world/material/Resource'
 import CompleteConstruction, {isCompleteConstruction} from '@gamepark/its-a-wonderful-world/moves/CompleteConstruction'
-import {MoveView} from '@gamepark/its-a-wonderful-world/moves/Move'
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
+import MoveView from '@gamepark/its-a-wonderful-world/moves/MoveView'
 import PlaceCharacter, {isPlaceCharacter, placeCharacterMove} from '@gamepark/its-a-wonderful-world/moves/PlaceCharacter'
 import PlaceResource, {
   isPlaceResourceOnConstruction, PlaceResourceOnConstruction, placeResourceOnConstructionMove

@@ -3,8 +3,9 @@ import GameView from '../GameView'
 import {isConstructionBonus} from '../material/Development'
 import {developmentCards} from '../material/Developments'
 import EmpireName from '../material/EmpireName'
-import Move, {MoveView} from './Move'
+import Move from './Move'
 import MoveType from './MoveType'
+import MoveView from './MoveView'
 
 export default interface CompleteConstruction {
   type: typeof MoveType.CompleteConstruction

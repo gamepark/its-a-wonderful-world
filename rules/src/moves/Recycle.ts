@@ -2,8 +2,9 @@ import GameState from '../GameState'
 import GameView from '../GameView'
 import {developmentCards} from '../material/Developments'
 import EmpireName from '../material/EmpireName'
-import Move, {MoveView} from './Move'
+import Move from './Move'
 import MoveType from './MoveType'
+import MoveView from './MoveView'
 
 export default interface Recycle {
   type: typeof MoveType.Recycle

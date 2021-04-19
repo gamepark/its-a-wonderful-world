@@ -1,15 +1,15 @@
-import ChooseDevelopmentCard, {ChooseDevelopmentCardView} from './ChooseDevelopmentCard'
+import ChooseDevelopmentCard from './ChooseDevelopmentCard'
 import CompleteConstruction from './CompleteConstruction'
 import Concede from './Concede'
-import DealDevelopmentCards, {DealDevelopmentCardsView} from './DealDevelopmentCards'
-import DiscardLeftoverCards, {DiscardLeftoverCardsView} from './DiscardLeftoverCards'
-import PassCards, {PassCardsView} from './PassCards'
+import DealDevelopmentCards from './DealDevelopmentCards'
+import DiscardLeftoverCards from './DiscardLeftoverCards'
+import PassCards from './PassCards'
 import PlaceCharacter from './PlaceCharacter'
 import PlaceResource from './PlaceResource'
 import Produce from './Produce'
 import ReceiveCharacter from './ReceiveCharacter'
 import Recycle from './Recycle'
-import RevealChosenCards, {RevealChosenCardsView} from './RevealChosenCards'
+import RevealChosenCards from './RevealChosenCards'
 import SlateForConstruction from './SlateForConstruction'
 import StartPhase from './StartPhase'
 import TellYouAreReady from './TellYouAreReady'
@@ -20,5 +20,3 @@ type Move = DealDevelopmentCards | ChooseDevelopmentCard | RevealChosenCards | P
 
 export default Move
 
-export type MoveView = Exclude<Move, RevealChosenCards | DiscardLeftoverCards>
-  | DealDevelopmentCardsView | ChooseDevelopmentCardView | RevealChosenCardsView | PassCardsView | DiscardLeftoverCardsView

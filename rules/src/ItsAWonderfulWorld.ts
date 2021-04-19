@@ -17,8 +17,9 @@ import {completeConstruction, completeConstructionMove} from './moves/CompleteCo
 import {concede, concedeMove} from './moves/Concede'
 import {dealDevelopmentCards, dealDevelopmentCardsMove} from './moves/DealDevelopmentCards'
 import {discardLeftOverCards, discardLeftOverCardsMove} from './moves/DiscardLeftoverCards'
-import Move, {MoveView} from './moves/Move'
+import Move from './moves/Move'
 import MoveType from './moves/MoveType'
+import MoveView from './moves/MoveView'
 import {passCards, passCardsMove} from './moves/PassCards'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter, placeCharacterMove} from './moves/PlaceCharacter'
 import PlaceResource, {

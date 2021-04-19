@@ -1,12 +1,13 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
+import {getProduction} from '../ItsAWonderfulWorld'
 import Character, {ChooseCharacter} from '../material/Character'
 import Resource from '../material/Resource'
 import Player from '../Player'
 import PlayerView from '../PlayerView'
-import {getProduction} from '../ItsAWonderfulWorld'
-import Move, {MoveView} from './Move'
+import Move from './Move'
 import MoveType from './MoveType'
+import MoveView from './MoveView'
 
 export default interface Produce {
   type: typeof MoveType.Produce

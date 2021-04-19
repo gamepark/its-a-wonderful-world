@@ -2,8 +2,9 @@ import GameState from '../GameState'
 import GameView from '../GameView'
 import EmpireName from '../material/EmpireName'
 import {isPlayerView} from '../typeguards'
-import Move, {MoveView} from './Move'
+import Move from './Move'
 import MoveType from './MoveType'
+import MoveView from './MoveView'
 
 export default interface ChooseDevelopmentCard {
   type: typeof MoveType.ChooseDevelopmentCard
