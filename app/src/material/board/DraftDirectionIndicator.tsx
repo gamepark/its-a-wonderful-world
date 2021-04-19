@@ -1,8 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes, useTheme} from '@emotion/react'
-import Player from '@gamepark/its-a-wonderful-world/Player'
-import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {FC, Fragment, HTMLAttributes} from 'react'
+import {FC, HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import {LightTheme} from '../../Theme'
 import DownArrowIcon from '../../util/DownArrowIcon'
@@ -11,7 +9,7 @@ import UpArrowIcon from '../../util/UpArrowIcon'
 
 type Props = {
   clockwise: boolean
-  players: (Player | PlayerView)[]
+  players: number
 }
 
 export default function DraftDirectionIndicator({clockwise, players}: Props) {
@@ -20,14 +18,14 @@ export default function DraftDirectionIndicator({clockwise, players}: Props) {
   const greenColor = theme.color === LightTheme ? 'forestgreen' : 'lightgreen'
   const purpleColor = theme.color === LightTheme ? 'purple' : 'lightpink'
   return (
-    <Fragment>
-      {players.slice(1).map((_, index) => clockwise ?
+    <>
+      {[...Array(players - 1)].map((_, index) => clockwise ?
         <DescendingArrows key={index} color={greenColor} css={css`top: ${headerHeight + (index + 1) * (playerPanelHeight + playerPanelMargin)}%;`}
                           title={t('Draft direction')}/> :
         <AscendingArrows key={index} color={purpleColor} css={css`top: ${25.2 + index * 18}%;`}
                          title={t('Draft direction')}/>
       )}
-    </Fragment>
+    </>
   )
 }
 

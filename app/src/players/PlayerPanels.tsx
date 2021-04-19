@@ -59,7 +59,7 @@ export default function PlayerPanels({game}: Props) {
     .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
   return (
     <>
-      {game.players.length > 2 && game.phase === Phase.Draft && <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players}/>}
+      {game.players.length > 2 && game.phase === Phase.Draft && <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players.length}/>}
       {players.map((player, index) =>
         <PlayerPanel key={player.empire} player={player} position={index} highlight={player.empire === displayedEmpire} showScore={gameOver}
                      onClick={() => (!game.tutorial || game.round > 1) && setDisplayedEmpire(player.empire)}/>
