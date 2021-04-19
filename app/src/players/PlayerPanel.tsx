@@ -24,10 +24,9 @@ type Props = {
   player: Player | PlayerView
   position: number
   highlight: boolean
-  showScore: boolean
 } & HTMLAttributes<HTMLDivElement>
 
-export default function PlayerPanel({player, position, highlight, showScore, ...props}: Props) {
+export default function PlayerPanel({player, position, highlight, ...props}: Props) {
   const {t} = useTranslation()
   const options = useOptions()
   const playerInfo = usePlayer<EmpireName>(player.empire)
