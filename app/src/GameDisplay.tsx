@@ -9,7 +9,7 @@ import ReceiveCharacter, {isReceiveCharacter} from '@gamepark/its-a-wonderful-wo
 import {isRevealChosenCards, RevealChosenCardsView} from '@gamepark/its-a-wonderful-world/moves/RevealChosenCards'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {useActions, useAnimation, useDisplayState, usePlayerId} from '@gamepark/react-client'
+import {useActions, useAnimation, useDisplayState, usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
 import {useEffect, useMemo, useRef, useState} from 'react'
 import GlobalActions from './GlobalActions'
@@ -56,6 +56,7 @@ export default function GameDisplay({game, validate}: Props) {
   const actions = useActions()
   const gameOver = isOver(game) && !!actions && actions.every(action => !action.pending)
   const gameWasLive = useRef(!gameOver)
+  const tutorial = useTutorial()
   useEffect(() => {
     const onkeydown = (event: KeyboardEvent) => {
       if (event.code === 'ArrowDown') {
@@ -99,7 +100,7 @@ export default function GameDisplay({game, validate}: Props) {
       {supremacyBonus && <CharacterToken character={supremacyBonus.character}
                                          css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
       {isPlayer(displayedPlayer) && <GlobalActions game={game} player={displayedPlayer} validate={validate}/>}
-      {game.tutorial && <TutorialPopup game={game}/>}
+      {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
       {showWelcomePopup && player && <WelcomePopup player={player} close={() => setWelcomePopupClosed(true)}/>}
     </Letterbox>
   )

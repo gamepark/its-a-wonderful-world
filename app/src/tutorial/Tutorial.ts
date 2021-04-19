@@ -17,7 +17,7 @@ import {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/Sl
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {setupPlayers} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
-import {Tutorial} from '@gamepark/react-client'
+import {TutorialDescription} from '@gamepark/react-client'
 import shuffle from 'lodash.shuffle'
 
 const harborZone = developmentCards.findIndex(development => development === HarborZone)
@@ -52,7 +52,7 @@ const initialCards = [
   windTurbine, humanCloning, industrialComplex, lunarBase, researchCenter, juggernaut, cityOfAgartha
 ]
 
-const ItsAWonderfulTutorial: Tutorial<GameState, Move, EmpireName> = {
+const ItsAWonderfulTutorial: TutorialDescription<GameState, Move, EmpireName> = {
   setupTutorial: () => [{
     players: setupPlayers({
       players: [{id: EmpireName.NoramStates}, {id: EmpireName.RepublicOfEurope}, {id: EmpireName.FederationOfAsia}], empiresSide: EmpireSide.A,

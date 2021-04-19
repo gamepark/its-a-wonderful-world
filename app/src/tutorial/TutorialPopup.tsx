@@ -8,7 +8,7 @@ import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {useActions, useAnimation, useFailures, usePlayerId} from '@gamepark/react-client'
+import {Tutorial, useActions, useAnimation, useFailures, usePlayerId} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
 import {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -20,9 +20,12 @@ import {
 import tutorialArrowDark from '../util/tutorial-arrow-dark.png'
 import tutorialArrowLight from '../util/tutorial-arrow-light.png'
 
-type Props = { game: GameView }
+type Props = {
+  game: GameView
+  tutorial: Tutorial
+}
 
-export default function TutorialPopup({game}: Props) {
+export default function TutorialPopup({game, tutorial}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
   const [failures] = useFailures()
@@ -36,6 +39,7 @@ export default function TutorialPopup({game}: Props) {
   const [tutorialDisplay, setTutorialDisplay] = useState(tutorialDescription.length > actionsNumber)
   const [hideLastTurnInfo, setHideLastTurnInfo] = useState(false)
   const [hideThirdTurnInfo, setHideThirdTurnInfo] = useState(false)
+  useEffect(() => tutorial.setOpponentsPlayAutomatically(true), [])
   const toggleTutorialEnd = () => {
     setTutorialEnd(!tutorialEnd)
   }

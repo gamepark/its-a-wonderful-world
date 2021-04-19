@@ -11,7 +11,7 @@ export function useBellAlert(game: GameView) {
   const playerId = usePlayerId<EmpireName>()
   const options = useOptions()
   const players = usePlayers<EmpireName>()
-  const [sound] = useSound(bellSound)
+  const sound = useSound(bellSound)
   const [playerWasActive, setPlayerWasActive] = useState(false)
   //const [reminders, setReminders] = useState<NodeJS.Timeout[]>([])
 

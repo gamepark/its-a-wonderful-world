@@ -18,7 +18,7 @@ type Props = HTMLAttributes<HTMLButtonElement> & {
 export default function EjectButton({subMenu, openEjectPopup, ...props}: Props) {
   const {t} = useTranslation()
   const opponentWithNegativeTime = useOpponentWithMaxTime(0)
-  const [toggle] = useSound(toggleSound)
+  const toggle = useSound(toggleSound)
   if (!opponentWithNegativeTime) {
     return null
   }

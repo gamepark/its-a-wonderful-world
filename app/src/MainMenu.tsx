@@ -8,7 +8,7 @@ import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
-import {useActions, useGame, useGiveUp, usePlayerId, usePlayers, useRematch, useSound, useUndo} from '@gamepark/react-client'
+import {useActions, useGame, useGiveUp, usePlayerId, usePlayers, useRematch, useSound, useSoundControls, useUndo} from '@gamepark/react-client'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 // @ts-ignore
@@ -48,7 +48,8 @@ export default function MainMenu() {
   const [displayRematchTooltip, setDisplayRematchTooltip] = useState(false)
   const [timePopupOpen, setTimePopupOpen] = useState(false)
   const {rematch, rematchOffer, ignoreRematch} = useRematch<EmpireName>()
-  const [toggle, {mute, unmute, muted}] = useSound(toggleSound)
+  const toggle = useSound(toggleSound)
+  const {mute, unmute, muted} = useSoundControls()
   const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
   const [quitPopupOpen, setQuitPopupOpen] = useState(false)
   const [, canGiveUp] = useGiveUp()
