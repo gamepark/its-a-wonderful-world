@@ -4,7 +4,7 @@ import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {useDisplayState, usePlayerId, useTutorial} from '@gamepark/react-client'
+import {usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
 import {useState} from 'react'
 import GlobalActions from './GlobalActions'
@@ -26,14 +26,13 @@ type Props = {
 
 export default function GameDisplay({game, validate}: Props) {
   const playerId = usePlayerId<EmpireName>()
-  const [displayedEmpire] = useDisplayState(playerId || game.players[0].empire)
   const player = game.players.find(player => player.empire === playerId)
-  const displayedPlayer = game.players.find(player => player.empire === displayedEmpire)
+  const displayedPlayerId = game.displayedPlayer ?? playerId ?? game.players[0].empire
+  const displayedPlayer = game.players.find(player => player.empire === displayedPlayerId)!
   const tutorial = useTutorial()
   useBellAlert(game)
   const [welcomePopupClosed, setWelcomePopupClosed] = useState(false)
   const showWelcomePopup = game.round === 1 && game.phase === Phase.Draft && !game.tutorial && !welcomePopupClosed
-  if (!displayedPlayer) return null
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <Board game={game} player={displayedPlayer} validate={validate}/>

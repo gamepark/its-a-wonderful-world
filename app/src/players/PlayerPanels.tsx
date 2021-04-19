@@ -8,12 +8,13 @@ import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import ReceiveCharacter, {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import {isRevealChosenCards, RevealChosenCardsView} from '@gamepark/its-a-wonderful-world/moves/RevealChosenCards'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {useActions, useAnimation, useDisplayState, usePlayerId} from '@gamepark/react-client'
+import {useActions, useAnimation, usePlay, usePlayerId, useTutorial} from '@gamepark/react-client'
 import {useEffect, useMemo, useRef} from 'react'
 import DraftDirectionIndicator from '../material/board/DraftDirectionIndicator'
 import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from '../material/board/ResourceArea'
 import CharacterToken from '../material/characters/CharacterToken'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
+import {displayPlayerMove} from '../moves/DisplayPlayer'
 import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
@@ -26,9 +27,13 @@ type Props = {
 }
 
 export default function PlayerPanels({game}: Props) {
+  const tutorial = useTutorial()
+  const canDisplayOtherPlayers = !tutorial || game.round > 1
+  const play = usePlay()
   const playerId = usePlayerId<EmpireName>()
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
-  const [displayedEmpire, setDisplayedEmpire] = useDisplayState<EmpireName | undefined>(undefined)
+  const displayedPlayerId = game.displayedPlayer ?? playerId ?? game.players[0].empire
+
   useEffect(() => {
     const onkeydown = (event: KeyboardEvent) => {
       if (event.code === 'ArrowDown') {
@@ -38,14 +43,14 @@ export default function PlayerPanels({game}: Props) {
       }
     }
     const switchPlayer = (increment: number) => {
-      const displayedPlayerIndex = players.findIndex(player => player.empire === displayedEmpire)
-      setDisplayedEmpire(players[(displayedPlayerIndex + players.length + increment) % players.length].empire)
+      const displayedPlayerIndex = players.findIndex(player => player.empire === displayedPlayerId)
+      play(displayPlayerMove(players[(displayedPlayerIndex + players.length + increment) % players.length].empire), {local: true})
     }
     window.document.addEventListener('keydown', onkeydown)
     return () => window.document.removeEventListener('keydown', onkeydown)
-  }, [players, displayedEmpire, setDisplayedEmpire])
+  }, [displayedPlayerId, play, players])
   const animation = useAnimation<RevealChosenCardsView | ReceiveCharacter>(animation => isRevealChosenCards(animation.move)
-    || (isReceiveCharacter(animation.move) && animation.move.playerId !== displayedEmpire))
+    || (isReceiveCharacter(animation.move) && animation.move.playerId !== displayedPlayerId))
   const revealingCards = animation && isRevealChosenCards(animation.move) ? animation.move : undefined
   const supremacyBonus = animation && isReceiveCharacter(animation.move) ? animation.move : undefined
   const sortByPanel = (entries: [EmpireName, number][]) => {
@@ -61,15 +66,14 @@ export default function PlayerPanels({game}: Props) {
     <>
       {game.players.length > 2 && game.phase === Phase.Draft && <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players.length}/>}
       {players.map((player, index) =>
-        <PlayerPanel key={player.empire} player={player} position={index} highlight={player.empire === displayedEmpire}
-                     onClick={() => (!game.tutorial || game.round > 1) && setDisplayedEmpire(player.empire)}/>
+        <PlayerPanel key={player.empire} player={player} position={index} highlight={player.empire === displayedPlayerId}
+                     onClick={() => canDisplayOtherPlayers && play(displayPlayerMove(player.empire), {local: true})}/>
       )}
       {gameOver && <ScorePanel game={game} animation={gameWasLive.current}/>}
       {revealedCards && revealedCards.map((card, index) =>
         <DevelopmentCard key={card} development={developmentCards[card]}
                          css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index),
                            revealedCardAnimation(index, animation!.duration / (playerId ? game.players.length - 1 : game.players.length))]}/>)}
-
       {supremacyBonus && <CharacterToken character={supremacyBonus.character}
                                          css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
     </>

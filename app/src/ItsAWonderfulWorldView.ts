@@ -21,8 +21,11 @@ import {startPhase} from '@gamepark/its-a-wonderful-world/moves/StartPhase'
 import {tellYouAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import {transformIntoKrystallium} from '@gamepark/its-a-wonderful-world/moves/TransformIntoKrystallium'
 import {Action, Game, Undo} from '@gamepark/rules-api'
+import DisplayPlayer, {displayPlayer} from './moves/DisplayPlayer'
 
-export default class ItsAWonderfulWorldView implements Game<GameView, MoveView>, Undo<GameView, MoveView, EmpireName> {
+type LocalMove = MoveView | DisplayPlayer
+
+export default class ItsAWonderfulWorldView implements Game<GameView, LocalMove>, Undo<GameView, MoveView, EmpireName> {
   state: GameView
 
   constructor(state: GameView) {
@@ -33,7 +36,7 @@ export default class ItsAWonderfulWorldView implements Game<GameView, MoveView>,
     return getPredictableAutomaticMoves(this.state)
   }
 
-  play(move: MoveView): void {
+  play(move: LocalMove): void {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
         return revealDealtDevelopmentCards(this.state, move)
@@ -67,6 +70,8 @@ export default class ItsAWonderfulWorldView implements Game<GameView, MoveView>,
         return placeCharacter(this.state, move)
       case MoveType.Concede:
         return concede(this.state, move)
+      case 'DisplayPlayer':
+        return displayPlayer(this.state, move)
     }
   }
 

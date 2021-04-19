@@ -8,21 +8,26 @@ import {isPlaceResourceOnConstruction} from '@gamepark/its-a-wonderful-world/mov
 import {Animations} from '@gamepark/react-client'
 
 // noinspection JSUnusedGlobalSymbols
-const ItsAWonderfulAnimations: Animations<GameView, MoveView, EmpireName, EmpireName> = {
-  getAnimationDuration(move: MoveView, {action, state, playerId: currentPlayerId, displayState: displayedPlayerId}) {
+const ItsAWonderfulAnimations: Animations<GameView, MoveView, EmpireName> = {
+  getAnimationDuration(move: MoveView, {action, state, playerId: currentPlayerId}) {
     switch (move.type) {
-      case MoveType.ChooseDevelopmentCard:
-        return move.playerId === displayedPlayerId ? 0.5 : 0
+      case MoveType.ChooseDevelopmentCard: {
+        const displayedPlayer = state.displayedPlayer ?? currentPlayerId ?? state.players[0].empire
+        return move.playerId === displayedPlayer ? 0.5 : 0
+      }
       case MoveType.RevealChosenCards:
         return (1 + (currentPlayerId ? state.players.length - 2 : state.players.length - 1) * 0.7) * 2.5
       case MoveType.PassCards:
         return 3
       case MoveType.SlateForConstruction:
       case MoveType.Recycle:
-      case MoveType.CompleteConstruction:
-        return move.playerId === displayedPlayerId ? 0.3 : 0
-      case MoveType.PlaceResource:
-        if (move.playerId !== displayedPlayerId) {
+      case MoveType.CompleteConstruction: {
+        const displayedPlayer = state.displayedPlayer ?? currentPlayerId ?? state.players[0].empire
+        return move.playerId === displayedPlayer ? 0.3 : 0
+      }
+      case MoveType.PlaceResource: {
+        const displayedPlayer = state.displayedPlayer ?? currentPlayerId ?? state.players[0].empire
+        if (move.playerId !== displayedPlayer) {
           return 0
         }
         if (move.playerId === currentPlayerId) {
@@ -31,9 +36,11 @@ const ItsAWonderfulAnimations: Animations<GameView, MoveView, EmpireName, Empire
           }
         }
         return 0.2
+      }
       case MoveType.ReceiveCharacter:
         if (action.consequences.some(isCompleteConstruction)) {
-          return move.playerId === displayedPlayerId ? 0.5 : 0
+          const displayedPlayer = state.displayedPlayer ?? currentPlayerId ?? state.players[0].empire
+          return move.playerId === displayedPlayer ? 0.5 : 0
         } else {
           return 1
         }

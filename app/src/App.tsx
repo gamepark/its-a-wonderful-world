@@ -8,7 +8,7 @@ import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {useDisplayState, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
+import {useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import {LoadingScreen} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
 import fscreen from 'fscreen'
@@ -37,7 +37,6 @@ export default function App() {
   const [imagesLoading, setImagesLoading] = useState(true)
   const play = usePlay<Move>()
   const playerId = usePlayerId<EmpireName>()
-  const [displayedEmpire] = useDisplayState<EmpireName | undefined>(undefined)
   const theme: Theme = {
     color: themeColor,
     switchThemeColor: () => {
@@ -71,7 +70,7 @@ export default function App() {
   return (
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
-        <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedEmpire)]}/>
+        <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(game?.displayedPlayer)]}/>
         <LoadingScreen gameBox={IWWBox} author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} display={loading}
                        css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
         {!loading && <GameDisplay game={game!} validate={validate}/>}
