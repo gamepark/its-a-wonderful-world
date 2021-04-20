@@ -32,7 +32,7 @@ export default function GameDisplay({game, validate}: Props) {
   const tutorial = useTutorial()
   useBellAlert(game)
   const [welcomePopupClosed, setWelcomePopupClosed] = useState(false)
-  const showWelcomePopup = game.round === 1 && game.phase === Phase.Draft && !game.tutorial && !welcomePopupClosed
+  const showWelcomePopup = game.round === 1 && game.phase === Phase.Draft && !tutorial && !welcomePopupClosed
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <Board game={game} player={displayedPlayer} validate={validate}/>

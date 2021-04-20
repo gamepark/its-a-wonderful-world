@@ -8,7 +8,7 @@ import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {isOver} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Move from '@gamepark/its-a-wonderful-world/moves/Move'
-import {useActions, useGame, useGiveUp, usePlayerId, usePlayers, useRematch, useSound, useSoundControls, useUndo} from '@gamepark/react-client'
+import {useActions, useGame, useGiveUp, usePlayerId, usePlayers, useRematch, useSound, useSoundControls, useTutorial, useUndo} from '@gamepark/react-client'
 import fscreen from 'fscreen'
 import NoSleep from 'nosleep.js'
 // @ts-ignore
@@ -53,6 +53,7 @@ export default function MainMenu() {
   const [ejectPopupOpen, setEjectPopupOpen] = useState(false)
   const [quitPopupOpen, setQuitPopupOpen] = useState(false)
   const [, canGiveUp] = useGiveUp()
+  const tutorial = useTutorial()
 
   function toggleSounds() {
     if (muted) {
@@ -97,7 +98,7 @@ export default function MainMenu() {
     <>
       <div css={[menuStyle, displayMenu && hidden]}>
         <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} css={menuButtonStyle}/>
-        {game && !!playerId && (isOver(game) && !game.tutorial ?
+        {game && !!playerId && (isOver(game) && !tutorial ?
             <IconButton css={[menuButtonStyle, redButtonStyle]} title={t('Offer a rematch')} onClick={() => rematch()}>
               <FontAwesomeIcon icon={faChess}/>
               {displayRematchTooltip && <span css={tooltipStyle}>{t('Offer a friendly rematch')}</span>}
@@ -141,7 +142,7 @@ export default function MainMenu() {
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
-        {game && player && isOver(game) && !game.tutorial &&
+        {game && player && isOver(game) && !tutorial &&
         <IconButton css={[menuButtonStyle, redButtonStyle]} title={t('Offer a rematch')}>
           <span css={subMenuTitle}>{t('Offer a rematch')}</span>
           <FontAwesomeIcon icon={faChess}/>
@@ -175,7 +176,7 @@ export default function MainMenu() {
             </>
           }
         </IconButton>
-        {game && !game.tutorial &&
+        {game && !tutorial &&
         <IconButton css={[menuButtonStyle, clockButtonStyle]} onClick={() => toggle.play() && setTimePopupOpen(true)}>
           <span css={subMenuTitle}>{t('Thinking time')}</span>
           <FontAwesomeIcon icon={faClock}/>
@@ -188,7 +189,7 @@ export default function MainMenu() {
         </IconButton>
         }
         <EjectButton openEjectPopup={() => setEjectPopupOpen(true)} subMenu={true} css={menuButtonStyle}/>
-        {game && game.tutorial &&
+        {game && tutorial &&
         <IconButton css={[menuButtonStyle, tutorialButtonStyle]} onClick={() => resetTutorial()}>
           <span css={subMenuTitle}>{t('Restart the tutorial')}</span>
           <FontAwesomeIcon icon={faFastBackward}/>

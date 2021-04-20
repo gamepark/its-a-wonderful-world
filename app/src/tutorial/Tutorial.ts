@@ -1,4 +1,5 @@
 import GameState from '@gamepark/its-a-wonderful-world/GameState'
+import {setupPlayers} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import {
   AirborneLaboratory, ArkOfTheCovenant, CenterOfTheEarth, CityOfAgartha, developmentCards, FinancialCenter, HarborZone, HumanCloning, IndustrialComplex,
@@ -16,7 +17,6 @@ import {recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
 import {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
-import {setupPlayers} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import {TutorialDescription} from '@gamepark/react-client'
 import shuffle from 'lodash.shuffle'
 
@@ -61,8 +61,7 @@ const ItsAWonderfulTutorial: TutorialDescription<GameState, Move, EmpireName> = 
     deck: [...initialCards, ...shuffle(Array.from(developmentCards.keys()).filter(card => !initialCards.includes(card)))],
     discard: [],
     round: 1,
-    phase: Phase.Draft,
-    tutorial: true
+    phase: Phase.Draft
   }, [EmpireName.NoramStates, EmpireName.RepublicOfEurope, EmpireName.FederationOfAsia]],
   expectedMoves: () => [
     // Automatic Tutorial Draft Phase

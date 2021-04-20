@@ -9,7 +9,6 @@ type GameState = {
   round: number
   phase: Phase
   productionStep?: Resource
-  tutorial?: boolean
 }
 
 export default GameState

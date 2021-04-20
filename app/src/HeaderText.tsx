@@ -16,7 +16,7 @@ import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {Animation, Player as PlayerInfo, useActions, useAnimation, usePlay, usePlayerId, usePlayers} from '@gamepark/react-client'
+import {Animation, Player as PlayerInfo, useActions, useAnimation, usePlay, usePlayerId, usePlayers, useTutorial} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
 import {useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
@@ -37,6 +37,7 @@ export default function HeaderText({game, loading, validate}: Props) {
   const players = usePlayers<EmpireName>()
   const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
   const {t} = useTranslation()
+  const tutorial = useTutorial()
   const actions = useActions()
   const gameOver = game !== undefined && isOver(game) && !!actions && actions.every(action => !action.pending)
   const [scoreSuspense, setScoreSuspense] = useState(false)
@@ -47,22 +48,25 @@ export default function HeaderText({game, loading, validate}: Props) {
       setScoreSuspense(true)
     }
   }, [game, gameOver, setScoreSuspense])
-  const text = loading ? t('Game loading...') :
-    gameOver ? scoreSuspense ? t('Score calculation… Who will be the Supreme Leader?') :
-      getEndOfGameText(t, players, game!, empire) :
-      getText(t, validate, play, players, game!, empire, animation)
-  return <>{text}</>
+  if (loading) return <>{t('Game loading...')}</>
+  if (gameOver) {
+    if (scoreSuspense) return <>{t('Score calculation… Who will be the Supreme Leader?')}</>
+    else return <>{getEndOfGameText(t, players, game!, empire)}</>
+  }
+  if (!game) return null
+  const player = game.players.find(player => player.empire === empire)
+  if (tutorial && game.round === 1 && !animation && player && isPlayer(player)) {
+    const tutorialText = getTutorialText(t, game, player)
+    if (tutorialText) {
+      return <>{tutorialText}</>
+    }
+  }
+  return <>{getText(t, validate, play, players, game!, empire, animation)}</>
 }
 
 function getText(t: TFunction, validate: () => void, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
   const player = game.players.find(player => player.empire === empire)
   const getName = (empire: EmpireName) => playersInfo.find(p => p.id === empire)?.name || getPlayerName(empire, t)
-  if (game.tutorial && game.round === 1 && !animation && player && isPlayer(player)) {
-    const tutorialText = getTutorialText(t, game, player)
-    if (tutorialText) {
-      return tutorialText
-    }
-  }
   switch (game.phase) {
     case Phase.Draft:
       if (animation && animation.move.type === MoveType.RevealChosenCards) {
