@@ -23,10 +23,9 @@ import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 type Props = {
   player: Player | PlayerView
   position: number
-  highlight: boolean
 } & HTMLAttributes<HTMLDivElement>
 
-export default function PlayerPanel({player, position, highlight, ...props}: Props) {
+export default function PlayerPanel({player, position, ...props}: Props) {
   const {t} = useTranslation()
   const options = useOptions()
   const playerInfo = usePlayer<EmpireName>(player.empire)
@@ -38,7 +37,7 @@ export default function PlayerPanel({player, position, highlight, ...props}: Pro
     }
   }, [playerInfo, gamePoints])
   return (
-    <div css={style(player.empire, position, highlight)} {...props}>
+    <div css={style(player.empire, position)} {...props}>
       {playerInfo?.avatar ?
         <Avatar style={{position: 'absolute', width: '16%', height: '34%', top: '0%', left: '3%', filter: 'drop-shadow(0px 0.2em 0.4em black)'}}
                 avatarStyle="Circle" {...playerInfo?.avatar}/> :
@@ -61,7 +60,7 @@ export default function PlayerPanel({player, position, highlight, ...props}: Pro
   )
 }
 
-const style = (empire: EmpireName, position: number, highlight: boolean) => css`
+const style = (empire: EmpireName, position: number) => css`
   position: absolute;
   z-index: 1;
   top: ${playerPanelY(position)}%;
@@ -72,7 +71,6 @@ const style = (empire: EmpireName, position: number, highlight: boolean) => css`
   background-size: cover;
   background-position: center;
   border-radius: 5px;
-  ${borderStyle(highlight)};
 
   &:before {
     content: '';
@@ -84,20 +82,6 @@ const style = (empire: EmpireName, position: number, highlight: boolean) => css`
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
-  }
-`
-
-const borderStyle = (highlight: boolean) => highlight ? css`
-  border: 0.2em solid gold;
-  box-shadow: 0.2em 0.2em 1em gold;
-` : css`
-  border: 0.2em solid lightslategrey;
-  box-shadow: 0.2em 0.2em 1em black;
-  cursor: pointer;
-
-  &:hover {
-    border: 0.2em solid rgba(255, 215, 0, 0.5);
-    box-shadow: 0 0 0.5em gold;
   }
 `
 

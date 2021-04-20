@@ -9,7 +9,7 @@ import ReceiveCharacter, {isReceiveCharacter} from '@gamepark/its-a-wonderful-wo
 import {isRevealChosenCards, RevealChosenCardsView} from '@gamepark/its-a-wonderful-world/moves/RevealChosenCards'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {useActions, useAnimation, usePlay, usePlayerId, useTutorial} from '@gamepark/react-client'
-import {useEffect, useMemo, useRef} from 'react'
+import {useCallback, useMemo, useRef} from 'react'
 import DraftDirectionIndicator from '../material/board/DraftDirectionIndicator'
 import {circleCharacterTopPosition, getCircleCharacterLeftPosition} from '../material/board/ResourceArea'
 import CharacterToken from '../material/characters/CharacterToken'
@@ -19,6 +19,7 @@ import {
   areasX, boardHeight, boardTop, boardWidth, cardHeight, cardStyle, playerPanelHeight, playerPanelRightMargin, playerPanelWidth, playerPanelY, tokenHeight,
   tokenWidth
 } from '../util/Styles'
+import useKeyDown from '../util/useKeyDown'
 import PlayerPanel from './PlayerPanel'
 import ScorePanel from './score/ScorePanel'
 
@@ -34,21 +35,24 @@ export default function PlayerPanels({game}: Props) {
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
   const displayedPlayerId = game.displayedPlayer ?? playerId ?? game.players[0].empire
 
-  useEffect(() => {
-    const onkeydown = (event: KeyboardEvent) => {
-      if (event.code === 'ArrowDown') {
-        switchPlayer(1)
-      } else if (event.code === 'ArrowUp') {
-        switchPlayer(-1)
-      }
+  const displayPlayer = useCallback((player: EmpireName) => {
+    if (canDisplayOtherPlayers) {
+      play(displayPlayerMove(player), {local: true})
     }
-    const switchPlayer = (increment: number) => {
-      const displayedPlayerIndex = players.findIndex(player => player.empire === displayedPlayerId)
-      play(displayPlayerMove(players[(displayedPlayerIndex + players.length + increment) % players.length].empire), {local: true})
-    }
-    window.document.addEventListener('keydown', onkeydown)
-    return () => window.document.removeEventListener('keydown', onkeydown)
-  }, [displayedPlayerId, play, players])
+  }, [canDisplayOtherPlayers, play])
+
+  const displayNextPlayer = useCallback(() => {
+    const displayedPlayerIndex = players.findIndex(player => player.empire === displayedPlayerId)
+    displayPlayer(players[(displayedPlayerIndex + 1) % players.length].empire)
+  }, [displayPlayer, players])
+  useKeyDown('ArrowDown', displayNextPlayer)
+
+  const displayPreviousPlayer = useCallback(() => {
+    const displayedPlayerIndex = players.findIndex(player => player.empire === displayedPlayerId)
+    displayPlayer(players[(displayedPlayerIndex + players.length - 1) % players.length].empire)
+  }, [displayPlayer, players])
+  useKeyDown('ArrowUp', displayPreviousPlayer)
+
   const animation = useAnimation<RevealChosenCardsView | ReceiveCharacter>(animation => isRevealChosenCards(animation.move)
     || (isReceiveCharacter(animation.move) && animation.move.playerId !== displayedPlayerId))
   const revealingCards = animation && isRevealChosenCards(animation.move) ? animation.move : undefined
@@ -66,8 +70,8 @@ export default function PlayerPanels({game}: Props) {
     <>
       {game.players.length > 2 && game.phase === Phase.Draft && <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players.length}/>}
       {players.map((player, index) =>
-        <PlayerPanel key={player.empire} player={player} position={index} highlight={player.empire === displayedPlayerId}
-                     onClick={() => canDisplayOtherPlayers && play(displayPlayerMove(player.empire), {local: true})}/>
+        <PlayerPanel key={player.empire} player={player} position={index} onClick={() => displayPlayer(player.empire)}
+                     css={[player.empire === displayedPlayerId ? activePanel : (canDisplayOtherPlayers && clickablePanel)]}/>
       )}
       {gameOver && <ScorePanel game={game} animation={gameWasLive.current}/>}
       {revealedCards && revealedCards.map((card, index) =>
@@ -88,6 +92,22 @@ export const getPlayersStartingWith = (game: GameView, playerId?: EmpireName) =>
     return game.players
   }
 }
+
+const activePanel = css`
+  border: 0.2em solid gold;
+  box-shadow: 0.2em 0.2em 1em gold;
+`
+
+const clickablePanel = css`
+  border: 0.2em solid lightslategrey;
+  box-shadow: 0.2em 0.2em 1em black;
+  cursor: pointer;
+
+  &:hover {
+    border: 0.2em solid rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 0.5em gold;
+  }
+`
 
 const revealedCardStyle = css`
   position: absolute;
