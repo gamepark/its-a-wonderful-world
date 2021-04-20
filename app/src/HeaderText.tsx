@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {css, Theme, useTheme} from '@emotion/react'
+import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {countCharacters, getNextProductionStep, getScore, isOver, numberOfRounds} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
@@ -20,12 +20,10 @@ import {Animation, Player as PlayerInfo, useActions, useAnimation, usePlay, useP
 import {TFunction} from 'i18next'
 import {useEffect, useState} from 'react'
 import {Trans, useTranslation} from 'react-i18next'
-import MainMenu from './MainMenu'
 import CharacterToken from './material/characters/CharacterToken'
 import DevelopmentCardsTitles from './material/developments/DevelopmentCardsTitles'
-import {LightTheme} from './Theme'
 import Button from './util/Button'
-import {gameOverDelay, headerHeight, textColor} from './util/Styles'
+import {gameOverDelay} from './util/Styles'
 
 type Props = {
   game?: GameView
@@ -33,13 +31,12 @@ type Props = {
   validate: () => void
 }
 
-export default function Header({game, loading, validate}: Props) {
+export default function HeaderText({game, loading, validate}: Props) {
   const empire = usePlayerId<EmpireName>()
   const play = usePlay<Move>()
   const players = usePlayers<EmpireName>()
   const animation = useAnimation<Move>(animation => [MoveType.RevealChosenCards, MoveType.PassCards].includes(animation.move.type))
   const {t} = useTranslation()
-  const theme = useTheme()
   const actions = useActions()
   const gameOver = game !== undefined && isOver(game) && !!actions && actions.every(action => !action.pending)
   const [scoreSuspense, setScoreSuspense] = useState(false)
@@ -54,13 +51,7 @@ export default function Header({game, loading, validate}: Props) {
     gameOver ? scoreSuspense ? t('Score calculation… Who will be the Supreme Leader?') :
       getEndOfGameText(t, players, game!, empire) :
       getText(t, validate, play, players, game!, empire, animation)
-  return (
-    <header css={headerStyle(theme)}>
-      <div css={bufferArea}/>
-      <h1 css={[textStyle, textColor(theme)]}>{text}</h1>
-      <MainMenu/>
-    </header>
-  )
+  return <>{text}</>
 }
 
 function getText(t: TFunction, validate: () => void, play: (move: Move) => void, playersInfo: PlayerInfo<EmpireName>[], game: GameView, empire?: EmpireName, animation?: Animation<Move>) {
@@ -304,35 +295,6 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
       })
   }
 }
-
-const headerStyle = (theme: Theme) => css`
-  position: absolute;
-  display: flex;
-  width: 100%;
-  height: ${headerHeight}em;
-  padding: 0 30em 0 0;
-  text-align: center;
-  background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 30, 0.5)'};
-  transition: background-color 1s ease-in;
-`
-
-const bufferArea = css`
-  width: 30em;
-  flex-shrink: 1;
-`
-
-const textStyle = css`
-  flex-grow: 1;
-  flex-shrink: 0;
-  transition: color 1s ease-in;
-  padding: 0.25em;
-  margin: 0;
-  line-height: 1.25;
-  font-size: 4em;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-`
 
 const characterTokenStyle = css`
   width: 1.25em;

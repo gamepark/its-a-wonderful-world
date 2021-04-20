@@ -9,7 +9,7 @@ import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYou
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
-import {LoadingScreen} from '@gamepark/react-components'
+import {Header, LoadingScreen} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
 import fscreen from 'fscreen'
 import {useEffect, useState} from 'react'
@@ -19,7 +19,8 @@ import {useTranslation} from 'react-i18next'
 import ConfirmPopup from './ConfirmPopup'
 import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
-import Header from './Header'
+import HeaderText from './HeaderText'
+import MainMenu from './MainMenu'
 import Images from './material/Images'
 import IWWBox from './material/IWW_BOX_3D.png'
 import {Color, DarkTheme, LightTheme} from './Theme'
@@ -79,7 +80,8 @@ export default function App() {
           <br/>
           <Button onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>{t('Go to full screen')}</Button>
         </p>
-        <Header game={game} loading={loading} validate={validate}/>
+        <Header css={[theme.color === LightTheme && lightHeader]}><HeaderText game={game} loading={loading} validate={validate}/></Header>
+        <MainMenu/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
         {confirmPopup && <ConfirmPopup cancel={() => setConfirmPopup(false)} confirm={confirm}/>}
       </ThemeProvider>
@@ -166,5 +168,11 @@ const portraitInfo = css`
 
 const loadingScreenStyle = css`
   background-image: url(${Images.coverArtwork});
+`
 
+const lightHeader = css`
+  background-color: rgba(255, 255, 255, 0.5);
+  h1 {
+    color: #333;
+  }
 `

@@ -1353,10 +1353,10 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@gamepark/react-client@~4.14.0":
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-4.14.0.tgz#5ba30212d4aad6283f99c460caed0beebd01e3cd"
-  integrity sha512-AH7YT/Bzo7ZIA4eoht8y8FqUi7fKb6y5Dis5PH2G7NY2GFeHIbZ+Na+7HINqmqhWO0GV1ORF9RdA7to/lKdlhg==
+"@gamepark/react-client@~4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-4.14.2.tgz#b6f0a8a31a006664dcf69cbc1377ef5a7e87b671"
+  integrity sha512-qZ4O6AIZcqjbzLHRkfYfo49EMpAV8MBe1UnqDzfTwee2rF5UBaiFEn9jOFkfJ0uKBwepOS0BFln7FTChmnCCkg==
   dependencies:
     "@apollo/client" "^3.1.3"
     "@datadog/browser-logs" "^1.11.4"
@@ -1379,10 +1379,10 @@
     pusher-js "^7.0.0"
     redux ">=4.0.5"
 
-"@gamepark/react-components@~4.13.4":
-  version "4.13.4"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-4.13.4.tgz#5fc8f9fdac321fcef7480140bd8e893f4c306a1c"
-  integrity sha512-uL0TDx0GusYHU1syZX95mgKjNQz4Wuc0f36gguogOfmXyOqD2r30gV8YiB5Vg3suRjmBIPqAm6Ej7fZF/rqq4g==
+"@gamepark/react-components@~4.14.1":
+  version "4.14.1"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-4.14.1.tgz#253a202dc6607a3f43a7e828315aa0d6e77d4bea"
+  integrity sha512-vtLqoPKg8R9+IP7RFfpRTxp1xjXx996Xli/8dzERyptPRZxkAEHZ0QPKZkgt3X1/4NYGQgBqlz15TRZxvS7myw==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.34"
     "@fortawesome/free-solid-svg-icons" "^5.15.2"
