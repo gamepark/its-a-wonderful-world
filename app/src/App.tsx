@@ -80,7 +80,7 @@ export default function App() {
           <br/>
           <Button onClick={() => fscreen.requestFullscreen(document.getElementById('root')!)}>{t('Go to full screen')}</Button>
         </p>
-        <Header css={[theme.color === LightTheme && lightHeader]}><HeaderText game={game} loading={loading} validate={validate}/></Header>
+        <Header css={[headerStyle, theme.color === LightTheme && lightHeader]}><HeaderText game={game} loading={loading} validate={validate}/></Header>
         <MainMenu/>
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
         {confirmPopup && <ConfirmPopup cancel={() => setConfirmPopup(false)} confirm={confirm}/>}
@@ -168,6 +168,12 @@ const portraitInfo = css`
 
 const loadingScreenStyle = css`
   background-image: url(${Images.coverArtwork});
+`
+
+const headerStyle = css`
+  > h1 > button {
+    font-size: 0.8em;
+  }
 `
 
 const lightHeader = css`

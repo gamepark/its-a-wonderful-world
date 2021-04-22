@@ -301,8 +301,8 @@ function getEndOfGameText(t: TFunction, playersInfo: PlayerInfo<EmpireName>[], g
 }
 
 const characterTokenStyle = css`
-  width: 1.25em;
-  height: 1.25em;
+  width: 1.15em;
+  height: 1.15em;
   vertical-align: bottom;
   cursor: pointer;
 
