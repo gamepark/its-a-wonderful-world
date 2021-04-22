@@ -1,6 +1,6 @@
 import {css, keyframes, Theme} from '@emotion/react'
-import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {numberOfCardsToDraft} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
+import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Images from '../material/Images'
 import {LightTheme} from '../Theme'
 
@@ -41,7 +41,7 @@ export const financiersPileX = empireCardLeftMargin
 export const generalsPileX = 6
 export const gameOverDelay = 10
 
-export const platformUri = process.env.REACT_APP_PLATFORM_URI || 'http://localhost:3000'
+export const platformUri = process.env.REACT_APP_PLATFORM_URI ?? 'https://game-park.com'
 export const discordUri = 'https://discord.gg/nMSDRag'
 
 export const cardStyle = css`
