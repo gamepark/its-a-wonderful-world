@@ -38,6 +38,7 @@ export default function App() {
   const [imagesLoading, setImagesLoading] = useState(true)
   const play = usePlay<Move>()
   const playerId = usePlayerId<EmpireName>()
+  const displayedPlayer = game?.displayedPlayer ?? playerId ?? game?.players[0].empire
   const theme: Theme = {
     color: themeColor,
     switchThemeColor: () => {
@@ -71,7 +72,7 @@ export default function App() {
   return (
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
-        <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(game?.displayedPlayer)]}/>
+        <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedPlayer)]}/>
         <LoadingScreen gameBox={IWWBox} author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} display={loading}
                        css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
         {!loading && <GameDisplay game={game!} validate={validate}/>}
