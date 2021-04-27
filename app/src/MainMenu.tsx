@@ -110,7 +110,7 @@ export default function MainMenu() {
         )
         }
         {fscreen.fullscreenEnabled && (fullScreen ?
-            <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Sortir du plein écran')} aria-label={t('Sortir du plein écran')}
+            <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Leave full screen')} aria-label={t('Leave full screen')}
                         onClick={() => toggle.play() && fscreen.exitFullscreen()}>
               <FontAwesomeIcon icon={faCompress}/>
             </IconButton>

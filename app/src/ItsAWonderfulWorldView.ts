@@ -78,4 +78,8 @@ export default class ItsAWonderfulWorldView implements Game<GameView, LocalMove>
   canUndo(action: Action<MoveView, EmpireName>, consecutiveActions: Action<MoveView, EmpireName>[]): boolean {
     return canUndo(this.state, action, consecutiveActions)
   }
+
+  restoreLocalMoves(localState: GameView) {
+    this.state.displayedPlayer = localState.displayedPlayer
+  }
 }
