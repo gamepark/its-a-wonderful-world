@@ -36,7 +36,7 @@ export default function FailurePopup({failures, clearFailures}: Props) {
 
 const failuresDescription = {
   [Failure.NETWORK]: {
-    title: (t: TFunction) => t('Whoops…'),
+    title: (t: TFunction) => t('Whoops...'),
     text: (t: TFunction) => t('failure.dialog.network')
   },
   [Failure.MOVE_FORBIDDEN]: {

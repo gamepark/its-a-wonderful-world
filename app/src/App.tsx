@@ -73,8 +73,8 @@ export default function App() {
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedPlayer)]}/>
-        <LoadingScreen gameBox={IWWBox} author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} display={loading}
-                       css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
+        <LoadingScreen gameBox={IWWBox} author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} developer="Game Park"
+                       display={loading} css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
         {!loading && <GameDisplay game={game!} validate={validate}/>}
         <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
           {t('The ideal resolution for playing is in landscape mode, in 16:9.')}

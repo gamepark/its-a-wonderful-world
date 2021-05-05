@@ -24,9 +24,9 @@ export default function EjectButton({subMenu, openEjectPopup, ...props}: Props) 
   }
   return (
     <>
-      <IconButton css={ejectButtonStyle} title={t('Eject a player')} aria-label={t('Eject a player')}
+      <IconButton css={ejectButtonStyle} title={t('Eject player')} aria-label={t('Eject player')}
                   onClick={() => toggle.play() && openEjectPopup()} {...props}>
-        {subMenu && <span css={subMenuTitle}>{t('Eject a player')}</span>}
+        {subMenu && <span css={subMenuTitle}>{t('Eject player')}</span>}
         <FontAwesomeIcon icon={faUserSlash}/>
       </IconButton>
     </>

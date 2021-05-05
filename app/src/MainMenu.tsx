@@ -166,12 +166,12 @@ export default function MainMenu() {
         <IconButton css={[menuButtonStyle, themeButtonStyle]} onClick={() => toggle.play() && theme.switchThemeColor()}>
           {theme.color === LightTheme ?
             <>
-              <span css={subMenuTitle}>{t('Enable dark mode')}</span>
+              <span css={subMenuTitle}>{t('Dark mode')}</span>
               <FontAwesomeIcon icon={faMoon}/>
             </>
             :
             <>
-              <span css={subMenuTitle}>{t('Enable light mode')}</span>
+              <span css={subMenuTitle}>{t('Light mode')}</span>
               <FontAwesomeIcon icon={faSun}/>
             </>
           }
