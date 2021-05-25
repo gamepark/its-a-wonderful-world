@@ -33,7 +33,7 @@ export default function PlayerHand({player, players, round}: Props) {
   const choosingCard = animation && isChooseDevelopmentCard(animation.move) ? animation.move : undefined
   const passingCard = animation && isPassCards(animation.move) ? animation.move : undefined
   const position = players > 2 ? handPosition : handPosition2Players
-  const canChooseCard = !player.chosenCard && player.hand.length >= 1 && animation?.move.type !== MoveType.RevealChosenCards
+  const canChooseCard = player.chosenCard === undefined && player.hand.length >= 1 && animation?.move.type !== MoveType.RevealChosenCards
 
   const getItemProps = (index: number) => {
     const card = player.hand[index]
@@ -47,7 +47,7 @@ export default function PlayerHand({player, players, round}: Props) {
       drag: {
         type: DragItemType.DEVELOPMENT_FROM_HAND,
         item: {card},
-        disabled: !canChooseCard,
+        canDrag: canChooseCard,
         animation: {seconds: animation?.duration ?? 0.2},
         drop: () => play(chooseDevelopmentCardMove(player.empire, card))
       },
