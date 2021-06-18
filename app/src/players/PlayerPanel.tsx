@@ -7,9 +7,9 @@ import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {useOptions, usePlayer} from '@gamepark/react-client'
+import {Avatar, useOptions, usePlayer} from '@gamepark/react-client'
+import {SpeechBubbleDirection} from '@gamepark/react-client/dist/Avatar'
 import {GameSpeed} from '@gamepark/rules-api'
-import Avatar from 'avataaars'
 import {HTMLAttributes, useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {empireAvatar} from '../material/empires/EmpireCard'
@@ -39,9 +39,8 @@ export default function PlayerPanel({player, position, ...props}: Props) {
   return (
     <div css={style(player.empire, position)} {...props}>
       {playerInfo?.avatar ?
-        <Avatar style={{position: 'absolute', width: '16%', height: '34%', top: '0%', left: '3%', filter: 'drop-shadow(0px 0.2em 0.4em black)'}}
-                avatarStyle="Circle" {...playerInfo?.avatar}/> :
-        <img alt={t('Player avatar')} src={empireAvatar[player.empire]} css={avatarStyle} draggable="false"/>
+        <Avatar playerId={player.empire} css={avatarStyle} speechBubbleProps={{direction: SpeechBubbleDirection.BOTTOM_LEFT}}/> :
+        <img alt={t('Player avatar')} src={empireAvatar[player.empire]} css={fallbackAvatarStyle} draggable="false"/>
       }
       <h3 css={titleStyle}>
         <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getPlayerName(player.empire, t)}</span>
@@ -86,6 +85,14 @@ const style = (empire: EmpireName, position: number) => css`
 `
 
 const avatarStyle = css`
+  position: absolute;
+  width: 14%;
+  height: 29.5%;
+  top: 4%;
+  left: 4%;
+`
+
+const fallbackAvatarStyle = css`
   position: absolute;
   height: 30%;
   top: 4%;

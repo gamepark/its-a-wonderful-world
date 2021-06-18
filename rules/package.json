@@ -13,7 +13,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@gamepark/rules-api": "~4.14.8"
+    "@gamepark/rules-api": "~4.15.0"
   },
   "scripts": {
     "build": "tsc",

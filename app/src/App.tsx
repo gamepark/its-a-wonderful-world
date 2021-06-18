@@ -8,7 +8,9 @@ import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
+import {Chat, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
+import GameMode from '@gamepark/react-client/dist/Types/GameMode'
+import GamePageState from '@gamepark/react-client/dist/Types/GamePageState'
 import {Header, LoadingScreen} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
 import fscreen from 'fscreen'
@@ -16,6 +18,7 @@ import {useEffect, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import {useTranslation} from 'react-i18next'
+import {useSelector} from 'react-redux'
 import ConfirmPopup from './ConfirmPopup'
 import FailurePopup from './FailurePopup'
 import GameDisplay from './GameDisplay'
@@ -69,6 +72,10 @@ export default function App() {
     setConfirmPopup(false)
     play(tellYouAreReadyMove(playerId))
   }
+  const query = new URLSearchParams(window.location.search)
+  const gameId = query.get('game')
+  const gameMode = useSelector((state: GamePageState) => state.gameMode)
+  const chatEnable = gameMode === GameMode.FRIENDLY || gameMode === GameMode.TOURNAMENT
   return (
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
@@ -83,6 +90,7 @@ export default function App() {
         </p>
         <Header css={[headerStyle, theme.color === LightTheme && lightHeader]}><HeaderText game={game} loading={loading} validate={validate}/></Header>
         <MainMenu/>
+        {chatEnable && gameId && <Chat gameId={gameId}/>}
         {failures.length > 0 && <FailurePopup failures={failures} clearFailures={clearFailures}/>}
         {confirmPopup && <ConfirmPopup cancel={() => setConfirmPopup(false)} confirm={confirm}/>}
       </ThemeProvider>
