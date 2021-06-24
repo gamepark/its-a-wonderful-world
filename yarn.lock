@@ -1400,10 +1400,10 @@
   resolved "https://registry.yarnpkg.com/@gamepark/avataaars/-/avataaars-2.1.3.tgz#bf5540ce7ade3da03c81cbbf1651b5042ad4b08c"
   integrity sha512-ZPa78YaO95lwozQB/67QM9axbQtBeS3pMl9fd6R5hBDLsmDdQiuemGzL2Ie8X3FYBHvXlesaPFcII5sltdWkJw==
 
-"@gamepark/react-client@~4.16.0":
-  version "4.16.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-4.16.0.tgz#fab5ddc6b37aaa3e817142bf9509266086583270"
-  integrity sha512-4x9a3tCC8ms3aAqzgp2Y0MV72esxyYZbOU9b8P+iYNo4GOef+dw0PqAuG44gMZyGt6LjLV46K0FmjBPe7M7z3g==
+"@gamepark/react-client@~4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-4.17.0.tgz#1e8bc66e3874324632056c5e118ff4efc2046a76"
+  integrity sha512-9Ppa9DTgh/Duw/wodWu3gxQsovkU8XCUoUDpmsfjxEzq4P5R312IDXPIdexky8vdK0qLyAL288QlqmTrYuYncg==
   dependencies:
     "@apollo/client" "^3.1.3"
     "@datadog/browser-logs" "^2.8.1"
@@ -1411,7 +1411,7 @@
     "@fortawesome/free-solid-svg-icons" "^5.15.3"
     "@fortawesome/react-fontawesome" "^0.1.14"
     "@gamepark/avataaars" "^2.1.3"
-    "@gamepark/rules-api" "^4.15.0"
+    "@gamepark/rules-api" "^4.17.0"
     "@harelpls/use-pusher" "^7.2.1"
     "@types/lodash.shuffle" "^4.2.6"
     "@types/react" "^17.0.3"
@@ -1440,10 +1440,10 @@
     "@fortawesome/react-fontawesome" "^0.1.14"
     "@react-dnd/shallowequal" "^2.0.0"
 
-"@gamepark/rules-api@^4.15.0", "@gamepark/rules-api@~4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-4.15.0.tgz#1b8ad13f03a2faf1e1ccf1fa91bc82d9e9c9edc4"
-  integrity sha512-n4zSuIJ404scm0OodoAGTO+vrK91kFHQ2stPIHipULW1A6fV1pFM8hQh68cgzrH82dC9i+CNGxThQ7JQjLw6nQ==
+"@gamepark/rules-api@^4.17.0", "@gamepark/rules-api@~4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-4.17.0.tgz#70ba45a7cba44f638806db9673b4ced002d29451"
+  integrity sha512-BSerehIS9CYPj12dwHnZsFjERwzKrE8Hd7xmdq/KC/lXvHMwejGA92UagmQrRvTylT5srjxnZnU/OAtiWpI3gQ==
   dependencies:
     fast-deep-equal "^3.1.3"
 

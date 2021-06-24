@@ -1,5 +1,5 @@
+import {ItsAWonderfulWorldOptionsSpec} from '@gamepark/its-a-wonderful-world'
 import Rules from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
-import {ItsAWonderfulWorldOptionsDescription} from '@gamepark/its-a-wonderful-world/Options'
 import {GameProvider, setupTranslation} from '@gamepark/react-client'
 import {StrictMode} from 'react'
 import ReactDOM from 'react-dom'
@@ -17,7 +17,7 @@ setupTranslation(translations)
 ReactDOM.render(
   <StrictMode>
     <GameProvider game="its-a-wonderful-world" Rules={Rules} RulesView={ItsAWonderfulWorldView}
-                  optionsDescription={ItsAWonderfulWorldOptionsDescription}
+                  optionsSpec={ItsAWonderfulWorldOptionsSpec}
                   animations={ItsAWonderfulAnimations} tutorial={ItsAWonderfulTutorial} ai={ai}>
       <App/>
     </GameProvider>

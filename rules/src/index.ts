@@ -1,2 +1,2 @@
 export {default} from './ItsAWonderfulWorld'
-export {ItsAWonderfulWorldOptionsDescription} from './Options'
+export {ItsAWonderfulWorldOptionsSpec} from './Options'

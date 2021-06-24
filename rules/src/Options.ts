@@ -1,44 +1,38 @@
-import {GameOptions, OptionsDescription, OptionType} from '@gamepark/rules-api'
+import OptionsSpec from '@gamepark/rules-api/dist/options/OptionsSpec'
 import {TFunction} from 'i18next'
 import GameState from './GameState'
 import EmpireName from './material/EmpireName'
 import EmpireSide from './material/EmpireSide'
 
-type ItsAWonderfulWorldGameOptions = {
+export type ItsAWonderfulWorldOptions = {
+  players: { id: EmpireName }[],
   empiresSide: EmpireSide,
   corruptionAndAscension: boolean
 }
-
-type ItsAWonderfulWorldPlayerOptions = { id: EmpireName }
-
-export type ItsAWonderfulWorldOptions = GameOptions<ItsAWonderfulWorldGameOptions, ItsAWonderfulWorldPlayerOptions>
 
 export function isGameOptions(arg: GameState | ItsAWonderfulWorldOptions): arg is ItsAWonderfulWorldOptions {
   return typeof (arg as GameState).round === 'undefined'
 }
 
-export const ItsAWonderfulWorldOptionsDescription: OptionsDescription<ItsAWonderfulWorldGameOptions, ItsAWonderfulWorldPlayerOptions> = {
-  empiresSide: {
-    type: OptionType.LIST,
-    getLabel: (t: TFunction) => t('Empire cards side'),
-    values: Object.values(EmpireSide),
-    getValueLabel: (side: EmpireSide, t: TFunction) => t('Side {side}', {side})
-  },
-  corruptionAndAscension: {
-    type: OptionType.BOOLEAN,
-    getLabel: (t: TFunction) => t('Corruption & Ascension')
-  },
+export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOptions> = {
   players: {
     id: {
-      type: OptionType.LIST,
-      getLabel: (t: TFunction) => t('Empire'),
+      label: (t: TFunction) => t('Empire'),
       values: Object.values(EmpireName),
-      getValueLabel: getPlayerName
+      valueLabel: getPlayerName
     }
+  },
+  empiresSide: {
+    label: (t: TFunction) => t('Empire cards side'),
+    values: Object.values(EmpireSide),
+    valueLabel: (side: EmpireSide, t: TFunction) => t('Side {side}', {side})
+  },
+  corruptionAndAscension: {
+    label: (t: TFunction) => t('Corruption & Ascension')
   }
 }
 
-export function getPlayerName(empire: EmpireName, t: (name: string) => string): string {
+export function getPlayerName(empire: EmpireName, t: TFunction): string {
   switch (empire) {
     case EmpireName.AztecEmpire:
       return t('Aztec Empire')
