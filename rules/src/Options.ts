@@ -7,7 +7,7 @@ import EmpireSide from './material/EmpireSide'
 export type ItsAWonderfulWorldOptions = {
   players: { id: EmpireName }[],
   empiresSide: EmpireSide,
-  corruptionAndAscension: boolean
+  //corruptionAndAscension: boolean
 }
 
 export function isGameOptions(arg: GameState | ItsAWonderfulWorldOptions): arg is ItsAWonderfulWorldOptions {
@@ -17,19 +17,24 @@ export function isGameOptions(arg: GameState | ItsAWonderfulWorldOptions): arg i
 export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOptions> = {
   players: {
     id: {
-      label: (t: TFunction) => t('Empire'),
+      label: t => t('Empire'),
       values: Object.values(EmpireName),
-      valueLabel: getPlayerName
+      valueSpec: empire => ({label: t => getPlayerName(empire, t)})
     }
   },
   empiresSide: {
-    label: (t: TFunction) => t('Empire cards side'),
+    label: t => t('Empire cards side'),
     values: Object.values(EmpireSide),
-    valueLabel: (side: EmpireSide, t: TFunction) => t('Side {side}', {side})
-  },
-  corruptionAndAscension: {
-    label: (t: TFunction) => t('Corruption & Ascension')
+    valueSpec: side => ({
+      label: t => t('Side {side}', {side}),
+      help: t => getEmpireSideHelp(side, t),
+      warn: t => side === EmpireSide.A ? t('Side A is advised for beginners') : '',
+      subscriberRequired: side !== EmpireSide.A && side !== EmpireSide.B
+    })
   }
+  /*corruptionAndAscension: {
+    label: (t: TFunction) => t('Corruption & Ascension')
+  }*/
 }
 
 export function getPlayerName(empire: EmpireName, t: TFunction): string {
@@ -44,5 +49,18 @@ export function getPlayerName(empire: EmpireName, t: TFunction): string {
       return t('Panafrican Union')
     case EmpireName.RepublicOfEurope:
       return t('Republic of Europe')
+  }
+}
+
+function getEmpireSideHelp(side: EmpireSide, t: TFunction) {
+  switch (side) {
+    case EmpireSide.A:
+      return t('sideA.help')
+    case EmpireSide.B:
+      return t('sideB.help')
+    case EmpireSide.C:
+      return t('sideC.help')
+    case EmpireSide.D:
+      return t('sideD.help')
   }
 }

@@ -104,22 +104,32 @@ import aztecEmpireA from './empires/aztec-empire-A.jpg'
 import aztecEmpireArtwork from './empires/aztec-empire-artwork.jpg'
 import aztecEmpireAvatar from './empires/aztec-empire-avatar.png'
 import aztecEmpireB from './empires/aztec-empire-B.jpg'
+import aztecEmpireC from './empires/aztec-empire-C.jpg'
+import aztecEmpireD from './empires/aztec-empire-D.jpg'
 import federationOfAsiaA from './empires/federation-of-asia-A.jpg'
 import federationOfAsiaArtwork from './empires/federation-of-asia-artwork.jpg'
 import federationOfAsiaAvatar from './empires/federation-of-asia-avatar.png'
 import federationOfAsiaB from './empires/federation-of-asia-B.jpg'
+import federationOfAsiaC from './empires/federation-of-asia-C.jpg'
+import federationOfAsiaD from './empires/federation-of-asia-D.jpg'
 import noramStatesA from './empires/noram-states-A.jpg'
 import noramStatesArtwork from './empires/noram-states-artwork.jpg'
 import noramStatesAvatar from './empires/noram-states-avatar.png'
 import noramStatesB from './empires/noram-states-B.jpg'
+import noramStatesC from './empires/noram-states-C.jpg'
+import noramStatesD from './empires/noram-states-D.jpg'
 import panafricanUnionA from './empires/panafrican-union-A.jpg'
 import panafricanUnionArtwork from './empires/panafrican-union-artwork.jpg'
 import panafricanUnionAvatar from './empires/panafrican-union-avatar.png'
 import panafricanUnionB from './empires/panafrican-union-B.jpg'
+import panafricanUnionC from './empires/panafrican-union-C.jpg'
+import panafricanUnionD from './empires/panafrican-union-D.jpg'
 import republicOfEuropeA from './empires/republic-of-europe-A.jpg'
 import republicOfEuropeArtwork from './empires/republic-of-europe-artwork.jpg'
 import republicOfEuropeAvatar from './empires/republic-of-europe-avatar.png'
 import republicOfEuropeB from './empires/republic-of-europe-B.jpg'
+import republicOfEuropeC from './empires/republic-of-europe-C.jpg'
+import republicOfEuropeD from './empires/republic-of-europe-D.jpg'
 import coverArtwork from './its-cover-artwork.jpg'
 import arrowGreen from './menus/arrow-green.png'
 import arrowOrange from './menus/arrow-orange.png'
@@ -169,11 +179,11 @@ const Images = {
   universalVaccine, unknownTechnology, virtualReality,
   financialCenter, industrialComplex, militaryBase, nuclearPlant, offshoreOilRig, recyclingPlant, researchCenter, transportationNetwork, windTurbines,
   airborneLaboratory, aircraftCarrier, icebreaker, juggernaut, megaDrill, saucerSquadron, submarine, tankDivision, zeppelin,
-  aztecEmpireA, aztecEmpireArtwork, aztecEmpireAvatar, aztecEmpireB,
-  federationOfAsiaA, federationOfAsiaArtwork, federationOfAsiaAvatar, federationOfAsiaB,
-  noramStatesA, noramStatesArtwork, noramStatesAvatar, noramStatesB,
-  panafricanUnionA, panafricanUnionArtwork, panafricanUnionAvatar, panafricanUnionB,
-  republicOfEuropeA, republicOfEuropeArtwork, republicOfEuropeAvatar, republicOfEuropeB,
+  aztecEmpireA, aztecEmpireArtwork, aztecEmpireAvatar, aztecEmpireB, aztecEmpireC, aztecEmpireD,
+  federationOfAsiaA, federationOfAsiaArtwork, federationOfAsiaAvatar, federationOfAsiaB, federationOfAsiaC, federationOfAsiaD,
+  noramStatesA, noramStatesArtwork, noramStatesAvatar, noramStatesB, noramStatesC, noramStatesD,
+  panafricanUnionA, panafricanUnionArtwork, panafricanUnionAvatar, panafricanUnionB, panafricanUnionC, panafricanUnionD,
+  republicOfEuropeA, republicOfEuropeArtwork, republicOfEuropeAvatar, republicOfEuropeB, republicOfEuropeC, republicOfEuropeD,
   arrowGreen, arrowOrange, arrowWhite, buttonArrow,
   buttonBlack, buttonBlue, buttonGreen, buttonGrey, buttonRed, buttonYellow, textureGrey,
   circleMetal, titleBlack, titleBlue, titleGreen, titleGrey, titleOrange, titleWhite, titleYellow,

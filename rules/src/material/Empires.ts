@@ -13,6 +13,11 @@ const EmpireSideB = {
   }
 }
 
+const EmpireSideC = {
+  production: {},
+  krystallium: 5
+}
+
 const AztecEmpire: Empire = {
   [EmpireSide.A]: {
     victoryPoints: {[DevelopmentType.Discovery]: 3},
@@ -21,7 +26,14 @@ const AztecEmpire: Empire = {
       [Resource.Exploration]: 1
     }
   },
-  [EmpireSide.B]: EmpireSideB
+  [EmpireSide.B]: EmpireSideB,
+  [EmpireSide.C]: EmpireSideC,
+  [EmpireSide.D]: {
+    production: {
+      [Resource.Materials]: 2,
+      [Resource.Energy]: 2
+    }
+  }
 }
 
 const FederationOfAsia: Empire = {
@@ -32,7 +44,14 @@ const FederationOfAsia: Empire = {
       [Resource.Gold]: 2
     }
   },
-  [EmpireSide.B]: EmpireSideB
+  [EmpireSide.B]: EmpireSideB,
+  [EmpireSide.C]: EmpireSideC,
+  [EmpireSide.D]: {
+    production: {
+      [Resource.Materials]: 2,
+      [Resource.Science]: 2
+    }
+  }
 }
 
 const NoramStates: Empire = {
@@ -43,7 +62,14 @@ const NoramStates: Empire = {
       [Resource.Gold]: 1
     }
   },
-  [EmpireSide.B]: EmpireSideB
+  [EmpireSide.B]: EmpireSideB,
+  [EmpireSide.C]: EmpireSideC,
+  [EmpireSide.D]: {
+    production: {
+      [Resource.Materials]: 3,
+      [Resource.Gold]: 1
+    }
+  }
 }
 
 const PanafricanUnion: Empire = {
@@ -54,7 +80,14 @@ const PanafricanUnion: Empire = {
       [Resource.Science]: 2
     }
   },
-  [EmpireSide.B]: EmpireSideB
+  [EmpireSide.B]: EmpireSideB,
+  [EmpireSide.C]: EmpireSideC,
+  [EmpireSide.D]: {
+    production: {
+      [Resource.Materials]: 1,
+      [Resource.Gold]: 2
+    }
+  }
 }
 
 const RepublicOfEurope: Empire = {
@@ -66,7 +99,14 @@ const RepublicOfEurope: Empire = {
       [Resource.Science]: 1
     }
   },
-  [EmpireSide.B]: EmpireSideB
+  [EmpireSide.B]: EmpireSideB,
+  [EmpireSide.C]: EmpireSideC,
+  [EmpireSide.D]: {
+    production: {
+      [Resource.Materials]: 3,
+      [Resource.Exploration]: 1
+    }
+  }
 }
 
 export default {

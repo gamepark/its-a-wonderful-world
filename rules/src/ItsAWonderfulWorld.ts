@@ -281,9 +281,10 @@ export function setupPlayers(options: ItsAWonderfulWorldOptions) {
   return players.map<Player>(player => setupPlayer(player.id || empiresLeft.pop()!, empireSide))
 }
 
-function setupPlayer(empire: EmpireName, empireSide?: EmpireSide): Player {
+function setupPlayer(empire: EmpireName, empireSide: EmpireSide = defaultEmpireCardsSide): Player {
   return {
-    empire, empireSide: empireSide || defaultEmpireCardsSide, hand: [], draftArea: [], constructionArea: [], availableResources: [], empireCardResources: [],
+    empire, empireSide, hand: [], draftArea: [], constructionArea: [], availableResources: [],
+    empireCardResources: Array(Empires[empire][empireSide].krystallium ?? 0).fill(Resource.Krystallium),
     constructedDevelopments: [], ready: false, characters: {[Character.Financier]: 0, [Character.General]: 0}, bonuses: []
   }
 }

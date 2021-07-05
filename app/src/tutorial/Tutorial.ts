@@ -55,8 +55,7 @@ const initialCards = [
 const ItsAWonderfulTutorial: TutorialDescription<GameState, Move, EmpireName> = {
   setupTutorial: () => [{
     players: setupPlayers({
-      players: [{id: EmpireName.NoramStates}, {id: EmpireName.RepublicOfEurope}, {id: EmpireName.FederationOfAsia}], empiresSide: EmpireSide.A,
-      corruptionAndAscension: false
+      players: [{id: EmpireName.NoramStates}, {id: EmpireName.RepublicOfEurope}, {id: EmpireName.FederationOfAsia}], empiresSide: EmpireSide.A
     }),
     deck: [...initialCards, ...shuffle(Array.from(developmentCards.keys()).filter(card => !initialCards.includes(card)))],
     discard: [],

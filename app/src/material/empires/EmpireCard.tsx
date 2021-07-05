@@ -49,23 +49,33 @@ export default function EmpireCard({player, gameOver = false, withResourceDrop =
 const empiresImages = {
   [EmpireName.AztecEmpire]: {
     [EmpireSide.A]: Images.aztecEmpireA,
-    [EmpireSide.B]: Images.aztecEmpireB
+    [EmpireSide.B]: Images.aztecEmpireB,
+    [EmpireSide.C]: Images.aztecEmpireC,
+    [EmpireSide.D]: Images.aztecEmpireD
   },
   [EmpireName.FederationOfAsia]: {
     [EmpireSide.A]: Images.federationOfAsiaA,
-    [EmpireSide.B]: Images.federationOfAsiaB
+    [EmpireSide.B]: Images.federationOfAsiaB,
+    [EmpireSide.C]: Images.federationOfAsiaC,
+    [EmpireSide.D]: Images.federationOfAsiaD
   },
   [EmpireName.NoramStates]: {
     [EmpireSide.A]: Images.noramStatesA,
-    [EmpireSide.B]: Images.noramStatesB
+    [EmpireSide.B]: Images.noramStatesB,
+    [EmpireSide.C]: Images.noramStatesC,
+    [EmpireSide.D]: Images.noramStatesD
   },
   [EmpireName.PanafricanUnion]: {
     [EmpireSide.A]: Images.panafricanUnionA,
-    [EmpireSide.B]: Images.panafricanUnionB
+    [EmpireSide.B]: Images.panafricanUnionB,
+    [EmpireSide.C]: Images.panafricanUnionC,
+    [EmpireSide.D]: Images.panafricanUnionD
   },
   [EmpireName.RepublicOfEurope]: {
     [EmpireSide.A]: Images.republicOfEuropeA,
-    [EmpireSide.B]: Images.republicOfEuropeB
+    [EmpireSide.B]: Images.republicOfEuropeB,
+    [EmpireSide.C]: Images.republicOfEuropeC,
+    [EmpireSide.D]: Images.republicOfEuropeD
   }
 }
 
