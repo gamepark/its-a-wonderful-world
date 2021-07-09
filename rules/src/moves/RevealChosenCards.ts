@@ -1,7 +1,9 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
 import {numberOfCardsToDraft} from '../ItsAWonderfulWorld'
+import {getCardDetails} from '../material/Developments'
 import EmpireName from '../material/EmpireName'
+import {isPlayer, isPlayerView} from '../typeguards'
 import Move from './Move'
 import MoveType from './MoveType'
 
@@ -10,7 +12,7 @@ type RevealChosenCards = { type: typeof MoveType.RevealChosenCards }
 export default RevealChosenCards
 
 export type RevealChosenCardsView = RevealChosenCards & {
-  revealedCards: { [key in EmpireName]?: number }
+  revealedCards: { [key in EmpireName]?: {card: number, index: number} }
 }
 
 export const revealChosenCardsMove: RevealChosenCards = {type: MoveType.RevealChosenCards}
@@ -18,6 +20,7 @@ export const revealChosenCardsMove: RevealChosenCards = {type: MoveType.RevealCh
 export function revealChosenCards(state: GameState) {
   state.players.forEach(player => {
     if (player.chosenCard !== undefined) {
+      player.hand = player.hand.filter(card => card !== player.chosenCard)
       player.draftArea.push(player.chosenCard)
       delete player.chosenCard
       if (player.draftArea.length < numberOfCardsToDraft) {
@@ -29,8 +32,18 @@ export function revealChosenCards(state: GameState) {
 
 export function revealChosenCardsInView(state: GameView, move: RevealChosenCardsView) {
   state.players.forEach(player => {
-    player.draftArea.push(move.revealedCards[player.empire]!)
-    delete player.chosenCard
+    const chosenCard = move.revealedCards[player.empire]!.card
+    player.draftArea.push(chosenCard)
+    if (isPlayer(player)) {
+      player.hand = player.hand.filter(card => card !== chosenCard)
+      delete player.chosenCard
+    } else {
+      player.hiddenHand.splice(player.hiddenHand.indexOf(getCardDetails(chosenCard).deck), 1)
+      player.ready = false
+    }
+    if (player.draftArea.length < numberOfCardsToDraft) {
+      player.cardsToPass = isPlayerView(player) ? player.hiddenHand : player.hand
+    }
   })
 }
 
@@ -43,8 +56,8 @@ export function isRevealChosenCardsView(move: RevealChosenCards | RevealChosenCa
 }
 
 export function getRevealChosenCardsView(state: GameState): RevealChosenCardsView {
-  const revealedCards = state.players.reduce<{ [key in EmpireName]?: number }>((revealedCards, player) => {
-    revealedCards[player.empire] = player.chosenCard
+  const revealedCards = state.players.reduce<{ [key in EmpireName]?: { card: number, index: number } }>((revealedCards, player) => {
+    revealedCards[player.empire] = {card: player.chosenCard!, index: player.hand.indexOf(player.chosenCard!)}
     return revealedCards
   }, {})
   return {type: MoveType.RevealChosenCards, revealedCards}

@@ -1,13 +1,14 @@
+import {OptionsValidationError} from '@gamepark/rules-api'
 import OptionsSpec from '@gamepark/rules-api/dist/options/OptionsSpec'
 import {TFunction} from 'i18next'
 import GameState from './GameState'
-import EmpireName from './material/EmpireName'
-import EmpireSide from './material/EmpireSide'
+import EmpireName, {empireNames} from './material/EmpireName'
+import EmpireSide, {empireSides} from './material/EmpireSide'
 
 export type ItsAWonderfulWorldOptions = {
   players: { id: EmpireName }[],
   empiresSide: EmpireSide,
-  //corruptionAndAscension: boolean
+  corruptionAndAscension: boolean
 }
 
 export function isGameOptions(arg: GameState | ItsAWonderfulWorldOptions): arg is ItsAWonderfulWorldOptions {
@@ -18,23 +19,39 @@ export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOption
   players: {
     id: {
       label: t => t('Empire'),
-      values: Object.values(EmpireName),
-      valueSpec: empire => ({label: t => getPlayerName(empire, t)})
+      values: empireNames,
+      valueSpec: empire => ({
+        label: t => getPlayerName(empire, t),
+        subscriberRequired: empire === EmpireName.NationsOfOceania || empire === EmpireName.NorthHegemony
+      })
     }
   },
   empiresSide: {
     label: t => t('Empire cards side'),
-    values: Object.values(EmpireSide),
+    values: empireSides,
     valueSpec: side => ({
-      label: t => t('Side {side}', {side}),
+      label: t => t('Side {side}', {side: String.fromCharCode(64 + side)}),
       help: t => getEmpireSideHelp(side, t),
       warn: t => side === EmpireSide.A ? t('Side A is advised for beginners') : '',
       subscriberRequired: side !== EmpireSide.A && side !== EmpireSide.B
     })
+  },
+  corruptionAndAscension: {
+    label: t => t('Corruption & Ascension'),
+    help: t => t('c&a.help'),
+    subscriberRequired: true,
+    competitiveDisabled: true
+  },
+  validate: (options, t) => {
+    if (!options.corruptionAndAscension) {
+      if (options.players.length > 5) {
+        throw new OptionsValidationError(t('6.players.requires.c&a'), ['corruptionAndAscension', 'players'])
+      }
+      if (options.empiresSide === EmpireSide.E || options.empiresSide === EmpireSide.F) {
+        throw new OptionsValidationError(t('face.e.f.requires.c&a'), ['corruptionAndAscension', 'empiresSide'])
+      }
+    }
   }
-  /*corruptionAndAscension: {
-    label: (t: TFunction) => t('Corruption & Ascension')
-  }*/
 }
 
 export function getPlayerName(empire: EmpireName, t: TFunction): string {
@@ -49,6 +66,10 @@ export function getPlayerName(empire: EmpireName, t: TFunction): string {
       return t('Panafrican Union')
     case EmpireName.RepublicOfEurope:
       return t('Republic of Europe')
+    case EmpireName.NationsOfOceania:
+      return t('Nations of Oceania')
+    case EmpireName.NorthHegemony:
+      return t('North Hegemony')
   }
 }
 
@@ -62,5 +83,9 @@ function getEmpireSideHelp(side: EmpireSide, t: TFunction) {
       return t('sideC.help')
     case EmpireSide.D:
       return t('sideD.help')
+    case EmpireSide.E:
+      return t('sideE.help')
+    case EmpireSide.F:
+      return t('sideF.help')
   }
 }

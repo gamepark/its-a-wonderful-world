@@ -2,13 +2,13 @@
 import {css} from '@emotion/react'
 import {faQuestion, faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import Development from '@gamepark/its-a-wonderful-world/material/Development'
+import DevelopmentDetails from '@gamepark/its-a-wonderful-world/material/DevelopmentDetails'
 import {useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {cardWidth} from '../../util/Styles'
 
 type Props = {
-  development: Development
+  development: DevelopmentDetails
   onClose: () => void
 }
 

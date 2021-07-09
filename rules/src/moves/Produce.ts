@@ -1,10 +1,10 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
-import {getProduction} from '../ItsAWonderfulWorld'
 import Character, {ChooseCharacter} from '../material/Character'
 import Resource from '../material/Resource'
 import Player from '../Player'
 import PlayerView from '../PlayerView'
+import {getProduction} from '../Production'
 import Move from './Move'
 import MoveType from './MoveType'
 import MoveView from './MoveView'
@@ -18,30 +18,47 @@ export const produceMove = (resource: Resource): Produce => ({type: MoveType.Pro
 
 export function produce(state: GameState | GameView, move: Produce) {
   state.productionStep = move.resource
-  let highestProduction = 0
-  let singleMostPlayer: Player | PlayerView | undefined
+  const rankPlayersProduction: { production: number, players: (Player | PlayerView)[] }[] = []
   for (const player of state.players) {
-    player.availableResources = new Array(getProduction(player, move.resource)).fill(move.resource)
+    const production = getProduction(player, move.resource)
+    player.availableResources = new Array(production).fill(move.resource)
     player.ready = false
-    if (player.availableResources.length > highestProduction) {
-      singleMostPlayer = player
-      highestProduction = player.availableResources.length
-    } else if (player.availableResources.length === highestProduction) {
-      singleMostPlayer = undefined
+    if (production > 0) {
+      for (let i = 0; i <= rankPlayersProduction.length; i++) {
+        if (i === rankPlayersProduction.length) {
+          rankPlayersProduction.push({production, players: [player]})
+          break
+        }
+        const rank = rankPlayersProduction[i]
+        if (rank.production === production) {
+          rank.players.push(player)
+          break
+        }
+        if (rank.production < production) {
+          rankPlayersProduction.splice(i, 0, {production, players: [player]})
+          break
+        }
+      }
     }
   }
-  if (singleMostPlayer) {
+  const supremacySeats = state.players.length >= 6 ? 2 : 1
+  const supremacyPlayers: (Player | PlayerView)[] = []
+  for (const rank of rankPlayersProduction) {
+    if (supremacyPlayers.length + rank.players.length > supremacySeats) break
+    supremacyPlayers.push(...rank.players)
+  }
+  for (const player of supremacyPlayers) {
     switch (move.resource) {
       case Resource.Materials:
       case Resource.Gold:
-        singleMostPlayer.bonuses.push(Character.Financier)
+        player.bonuses.push(Character.Financier)
         break
       case Resource.Energy:
       case Resource.Exploration:
-        singleMostPlayer.bonuses.push(Character.General)
+        player.bonuses.push(Character.General)
         break
       default:
-        singleMostPlayer.bonuses.push(ChooseCharacter)
+        player.bonuses.push(ChooseCharacter)
         break
     }
   }

@@ -12,6 +12,7 @@ import MoveView from './moves/MoveView'
 import {isPlaceResourceOnConstruction} from './moves/PlaceResource'
 import {isRecycle} from './moves/Recycle'
 import {isTellYouAreReady} from './moves/TellYouAreReady'
+import {isPlayer} from './typeguards'
 
 type ItsAWonderfulWorldAction = Action<Move | MoveView, EmpireName>
 
@@ -21,7 +22,7 @@ export default function canUndo(state: GameState | GameView, action: ItsAWonderf
   switch (move.type) {
     case MoveType.ChooseDevelopmentCard:
       const player = state.players.find(player => player.empire === playerId)!
-      return isChosenDevelopmentCardVisible(move) && player.chosenCard === move.card
+      return isChosenDevelopmentCardVisible(move) && isPlayer(player) && player.chosenCard === move.card
     case MoveType.Recycle:
     case MoveType.ReceiveCharacter:
       return !consecutiveActions.some(action => action.playerId === playerId)

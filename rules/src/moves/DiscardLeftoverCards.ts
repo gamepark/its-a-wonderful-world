@@ -18,7 +18,7 @@ export function discardLeftOverCards(state: GameState) {
 export function discardLeftOverCardsInView(state: GameView, move: DiscardLeftoverCardsView) {
   state.players.forEach(player => {
     if (isPlayerView(player)) {
-      player.hand = 0
+      player.hiddenHand = []
     } else {
       player.hand = []
     }

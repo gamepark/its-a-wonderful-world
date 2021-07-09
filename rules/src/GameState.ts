@@ -9,6 +9,7 @@ type GameState = {
   round: number
   phase: Phase
   productionStep?: Resource
+  ascensionDeck?: number[]
 }
 
 export default GameState

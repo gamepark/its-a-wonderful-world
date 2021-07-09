@@ -28,7 +28,7 @@ export default function WelcomePopup({player, close}: Props) {
         <div css={closePopupStyle} onClick={close}><FontAwesomeIcon icon={faTimes}/></div>
         <h2>{t('Welcome {playerName}', {playerName: playerInfo?.name})}</h2>
         <EmpireCard player={player} css={empireCardStyle}/>
-        <p>{t('You play {empire}, face {letter}. Have fun!', {empire: getPlayerName(player.empire, t), letter: player.empireSide})}</p>
+        <p>{t('You play {empire}, face {letter}. Have fun!', {empire: getPlayerName(player.empire, t), letter: String.fromCharCode(64 + player.empireSide)})}</p>
         <Button onClick={close}>{t('OK')}</Button>
       </div>
     </div>

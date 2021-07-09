@@ -37,7 +37,7 @@ export default function EmpireCard({player, gameOver = false, withResourceDrop =
   })
   return (
     <div ref={ref} {...props} css={[style, getBackgroundImage(player.empire, player.empireSide), isValidTarget && validTargetStyle, isOver && overStyle]}>
-      <div css={empireCardTitle}>({player.empireSide}) {getPlayerName(player.empire, t)}</div>
+      <div css={empireCardTitle}>({String.fromCharCode(64 + player.empireSide)}) {getPlayerName(player.empire, t)}</div>
       {player.empireCardResources.filter(resource => resource !== Resource.Krystallium).map((resource, index) =>
         <ResourceCube key={index} resource={resource} css={getResourceStyle(index)}/>)}
       {player.empireCardResources.filter(resource => resource === Resource.Krystallium).map((resource, index) =>
@@ -46,45 +46,73 @@ export default function EmpireCard({player, gameOver = false, withResourceDrop =
   )
 }
 
-const empiresImages = {
+const empiresImages: {[key in EmpireName]: {[key in EmpireSide]: string}} = {
   [EmpireName.AztecEmpire]: {
     [EmpireSide.A]: Images.aztecEmpireA,
     [EmpireSide.B]: Images.aztecEmpireB,
     [EmpireSide.C]: Images.aztecEmpireC,
-    [EmpireSide.D]: Images.aztecEmpireD
+    [EmpireSide.D]: Images.aztecEmpireD,
+    [EmpireSide.E]: Images.aztecEmpireE,
+    [EmpireSide.F]: Images.aztecEmpireF
   },
   [EmpireName.FederationOfAsia]: {
     [EmpireSide.A]: Images.federationOfAsiaA,
     [EmpireSide.B]: Images.federationOfAsiaB,
     [EmpireSide.C]: Images.federationOfAsiaC,
-    [EmpireSide.D]: Images.federationOfAsiaD
+    [EmpireSide.D]: Images.federationOfAsiaD,
+    [EmpireSide.E]: Images.federationOfAsiaE,
+    [EmpireSide.F]: Images.federationOfAsiaF
   },
   [EmpireName.NoramStates]: {
     [EmpireSide.A]: Images.noramStatesA,
     [EmpireSide.B]: Images.noramStatesB,
     [EmpireSide.C]: Images.noramStatesC,
-    [EmpireSide.D]: Images.noramStatesD
+    [EmpireSide.D]: Images.noramStatesD,
+    [EmpireSide.E]: Images.noramStatesE,
+    [EmpireSide.F]: Images.noramStatesF
   },
   [EmpireName.PanafricanUnion]: {
     [EmpireSide.A]: Images.panafricanUnionA,
     [EmpireSide.B]: Images.panafricanUnionB,
     [EmpireSide.C]: Images.panafricanUnionC,
-    [EmpireSide.D]: Images.panafricanUnionD
+    [EmpireSide.D]: Images.panafricanUnionD,
+    [EmpireSide.E]: Images.panafricanUnionE,
+    [EmpireSide.F]: Images.panafricanUnionF
   },
   [EmpireName.RepublicOfEurope]: {
     [EmpireSide.A]: Images.republicOfEuropeA,
     [EmpireSide.B]: Images.republicOfEuropeB,
     [EmpireSide.C]: Images.republicOfEuropeC,
-    [EmpireSide.D]: Images.republicOfEuropeD
+    [EmpireSide.D]: Images.republicOfEuropeD,
+    [EmpireSide.E]: Images.republicOfEuropeE,
+    [EmpireSide.F]: Images.republicOfEuropeF
+  },
+  [EmpireName.NationsOfOceania]: {
+    [EmpireSide.A]: Images.nationsOfOceaniaA,
+    [EmpireSide.B]: Images.nationsOfOceaniaB,
+    [EmpireSide.C]: Images.nationsOfOceaniaC,
+    [EmpireSide.D]: Images.nationsOfOceaniaD,
+    [EmpireSide.E]: Images.nationsOfOceaniaE,
+    [EmpireSide.F]: Images.nationsOfOceaniaF
+  },
+  [EmpireName.NorthHegemony]: {
+    [EmpireSide.A]: Images.northHegemonyA,
+    [EmpireSide.B]: Images.northHegemonyB,
+    [EmpireSide.C]: Images.northHegemonyC,
+    [EmpireSide.D]: Images.northHegemonyD,
+    [EmpireSide.E]: Images.northHegemonyE,
+    [EmpireSide.F]: Images.northHegemonyF
   }
 }
 
-export const empireAvatar = {
+export const empireAvatar: {[key in EmpireName]: string} = {
   [EmpireName.AztecEmpire]: Images.aztecEmpireAvatar,
   [EmpireName.FederationOfAsia]: Images.federationOfAsiaAvatar,
   [EmpireName.NoramStates]: Images.noramStatesAvatar,
   [EmpireName.PanafricanUnion]: Images.panafricanUnionAvatar,
-  [EmpireName.RepublicOfEurope]: Images.republicOfEuropeAvatar
+  [EmpireName.RepublicOfEurope]: Images.republicOfEuropeAvatar,
+  [EmpireName.NationsOfOceania]: Images.nationsOfOceaniaAvatar,
+  [EmpireName.NorthHegemony]: Images.northHegemonyAvatar
 }
 
 const style = css`

@@ -1,46 +1,45 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react'
-import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {css, Interpolation, Theme} from '@emotion/react'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import {useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import {cardHeight, cardStyle, cardWidth} from '../../util/Styles'
+import {cardHeight, cardStyle, cardWidth, headerHeight, topMargin} from '../../util/Styles'
 import DevelopmentCard from './DevelopmentCard'
 import DevelopmentCardsCatalog, {swipeableScale} from './DevelopmentCardsCatalog'
-import {drawPileCardX, drawPileCardY, drawPileMaxSize, drawPileScale} from './DrawPile'
+import {drawPileMaxSize, drawPileScale} from './DrawPile'
 
-type Props = { game: GameView }
+type Props = {
+  discard: number[]
+  position?: Interpolation<Theme>
+}
 
-export default function DiscardPile({game}: Props) {
+export default function DiscardPile({discard, position}: Props) {
   const [displayCatalog, setDisplayCatalog] = useState(false)
-  const discardLength = game.discard.length
+  const discardLength = discard.length
   const {t} = useTranslation()
   return (
     <>
       {displayCatalog &&
       <>
-        <DevelopmentCardsCatalog developments={game.discard.map(card => developmentCards[card])} onClose={() => setDisplayCatalog(false)}/>
+        <DevelopmentCardsCatalog developments={discard.map(card => developmentCards[card])} onClose={() => setDisplayCatalog(false)}/>
         <h2 css={discardLengthStyle}>{t('There is {discardLength} cards in the discard pile.', {discardLength})}</h2>
       </>
       }
-      {game.discard.slice(-discardPileMaxSize).map((card, index) =>
+      {discard.slice(-discardPileMaxSize).map((card, index) =>
         <DevelopmentCard key={index} development={developmentCards[card]} onClick={() => setDisplayCatalog(true)}
-                         css={[cardStyle, getCardStyle(index)]}/>)}
+                         css={[position, cardStyle, getCardStyle(index)]}/>)}
     </>
   )
 }
 
 export const discardPileMaxSize = drawPileMaxSize
 export const discardPileScale = drawPileScale
-export const discardPileCardX = (index: number) => drawPileCardX(index) + cardWidth * drawPileScale + 1
-export const discardPileCardY = drawPileCardY
+export const discardPileCardX = (index: number) => 10 + index * 0.05 + cardWidth * drawPileScale + 1
+export const discardPileCardY = (index: number) => headerHeight + topMargin + cardHeight * (drawPileScale - 1) / 2 + index * 0.05
 const discardTitle = 51 + cardHeight * swipeableScale / 2
 
 const getCardStyle = (index: number) => css`
-  position: absolute;
-  left: ${discardPileCardX(index)}%;
-  top: ${discardPileCardY(index)}%;
-  transform: scale(${discardPileScale});
+  transform: scale(${discardPileScale}) translate(${index * 2}%, ${index}%);
 
   & > img {
     box-shadow: 0 0 3px black;

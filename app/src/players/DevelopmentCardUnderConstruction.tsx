@@ -4,6 +4,7 @@ import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character, {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
 import Construction from '@gamepark/its-a-wonderful-world/material/Construction'
+import Development from '@gamepark/its-a-wonderful-world/material/Development'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource, {isResource} from '@gamepark/its-a-wonderful-world/material/Resource'
@@ -143,11 +144,11 @@ export default function DevelopmentCardUnderConstruction({game, gameOver, player
         {[...construction.costSpaces].reverse().map((item, index) => {
           const space = construction.costSpaces.length - index
           if (isResource(item)) {
-            return <ResourceCube key={index} resource={item} css={getResourceStyle(space - 1)}/>
+            return <ResourceCube key={index} resource={item} css={getResourceStyle(construction, space - 1)}/>
           } else if (isCharacter(item)) {
-            return <CharacterToken key={index} character={item} css={getCharacterTokenStyle(space - 1)}/>
+            return <CharacterToken key={index} character={item} css={getCharacterTokenStyle(construction, space - 1)}/>
           } else if (animations.find(animation => animation.move.space === space)) {
-            return <ResourceCube key={index} resource={item} css={[getResourceStyle(space - 1), css`opacity: 0;`]}/>
+            return <ResourceCube key={index} resource={item} css={[getResourceStyle(construction, space - 1), css`opacity: 0;`]}/>
           } else {
             return null
           }
@@ -183,19 +184,67 @@ const overStyle = css`
 `
 
 export const costSpaceDeltaX = 0.22
-export const costSpaceDeltaY = (index: number) => index * 2.12 + 0.4
+export const costSpaceDeltaX2 = 1.8
+export const costSpaceDeltaY = (column: number, index: number) => index * 2.12 + (column === 1 ? 0.4 : 3.6)
 
-const getResourceStyle = (index: number) => css`
-  position: absolute;
-  width: ${cubeWidth * 100 / cardWidth};
-  height: ${cubeHeight * 100 / cardHeight}%;
-  left: ${costSpaceDeltaX * 100 / cardWidth}%;
-  top: ${costSpaceDeltaY(index) * 100 / cardHeight}%;
-`
+const getResourceStyle = (construction: Construction, space: number) => {
+  const {column, index} = getConstructionSpaceLocation(construction, space)
+  return css`
+    position: absolute;
+    width: ${cubeWidth * 100 / cardWidth};
+    height: ${cubeHeight * 100 / cardHeight}%;
+    left: ${(column === 1 ? costSpaceDeltaX : costSpaceDeltaX2) * 100 / cardWidth}%;
+    top: ${costSpaceDeltaY(column, index) * 100 / cardHeight}%;
+  `
+}
 
-const getCharacterTokenStyle = (index: number) => css`
-  position: absolute;
-  height: 10%;
-  left: 2.5%;
-  top: ${index * 9 + 3}%;
-`
+const getCharacterTokenStyle = (construction: Construction, space: number) => {
+  const {column, index} = getConstructionSpaceLocation(construction, space)
+  return css`
+    position: absolute;
+    height: 10%;
+    left: ${(column === 1 ? costSpaceDeltaX : costSpaceDeltaX2) * 100 / cardWidth}%;
+    top: ${costSpaceDeltaY(column, index) * 100 / cardHeight}%;
+  `
+}
+
+export function getConstructionSpaceLocation(construction: Construction, space: number): { column: number, index: number } {
+  const column2Pattern = getDevelopmentColumn2Pattern(construction)
+  if (column2Pattern.length) {
+    return getSpaceLocation(space, column2Pattern)
+  } else {
+    return {column: 1, index: space}
+  }
+}
+
+export function getDevelopmentColumn2Pattern(construction: Construction): number[] {
+  switch (developmentCards[construction.card]) {
+    case Development.AlphaCentauri:
+      return [4, 5, 11, 12, 13]
+    case Development.Hyperborea:
+      return [7, 8]
+    case Development.CelestialCathedral:
+      return [3, 8]
+    case Development.TheWall:
+      return [6, 7, 8, 11, 12, 14]
+    case Development.WorldBank:
+      return [5, 6, 10, 11]
+    case Development.ArtificialSun:
+      return [3, 8, 9, 10, 12]
+    case Development.DarkMatter:
+      return [4, 8, 9]
+    case Development.Immortality:
+      return [7, 8, 9, 10]
+    case Development.Utopia:
+      return [3, 5, 7]
+    case Development.GiantRobot:
+      return [6, 7]
+    default:
+      return []
+  }
+}
+
+function getSpaceLocation(space: number, column2Pattern: number[]) {
+  const column = column2Pattern.includes(space) ? 2 : 1
+  return {column, index: column === 1 ? space - column2Pattern.filter(s => s < space).length : column2Pattern.indexOf(space)}
+}

@@ -1,22 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
-import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
-import {usePlayerId} from '@gamepark/react-client'
-import {HTMLAttributes, useMemo, useState} from 'react'
-import {getPlayersStartingWith} from '../PlayerPanels'
+import {HTMLAttributes, useState} from 'react'
+import usePlayersStartingWithMe from '../usePlayersStartingWithMe'
 import PlayerScore from './PlayerScore'
 
 type Props = { game: GameView, animation: boolean } & HTMLAttributes<HTMLDivElement>
 
 export default function ScorePanel({game, animation}: Props) {
-  const playerId = usePlayerId<EmpireName>()
-  const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
+  const players = usePlayersStartingWithMe(game)
   const [displayScore, setDisplayScore] = useState(true)
   return (
     <div css={scorePanelStyle}>
       {players.map((player, index) =>
-        <PlayerScore key={player.empire} position={index} player={player} displayScore={displayScore} setDisplayScore={setDisplayScore} animation={animation}/>
+        <PlayerScore key={player.empire} css={playerScorePosition(index, game.players.length > 5)}
+                     player={player} displayScore={displayScore} setDisplayScore={setDisplayScore} animation={animation}/>
       )}
     </div>
   )
@@ -33,4 +31,10 @@ const scorePanelStyle = css`
   z-index: 5;
   pointer-events: none;
   overflow: hidden;
+`
+
+const playerScorePosition = (index: number, small: boolean) => css`
+  position: absolute;
+  height: ${small ? 12 : 17}%;
+  top: ${small ? index * 14.45 + 0.5 : index * 20.2 + 1}%;
 `

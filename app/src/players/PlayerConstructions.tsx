@@ -21,7 +21,7 @@ const extraInfoPosition = css`
   justify-content: center;
   align-items: center;
   left: 2%;
-  top: 64%;
+  bottom: 1em;
   width: 24%;
   height: 30%;
   transition: width 0.5s ease-out, height 0.5s ease-in;

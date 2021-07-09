@@ -17,7 +17,7 @@ export default function RoundTracker({round}: Props) {
   )
 }
 
-export const roundTrackerX = areasX + 2 * cardWidth * drawPileScale + 3
+export const roundTrackerX = areasX + 3 * cardWidth * drawPileScale + 5
 
 const roundTrackerStyle = css`
   position: absolute;

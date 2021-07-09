@@ -25,7 +25,7 @@ export const developmentCardVerticalShift = 2.6
 export const constructedCardLeftMargin = 1.3
 export const constructedCardBottomMargin = empireCardBottomMargin + 12.4
 export const playerPanelWidth = 19.5
-export const playerPanelHeight = 16.7
+export const playerPanelHeight = (players: number) => players > 5 ? 11.5 : 16.7
 export const playerPanelMargin = 1.5
 export const areasBorders = 0.3
 export const areasCardMargin = 1
@@ -34,7 +34,7 @@ export const marginBetweenCardRows = 4
 export const areasCardX = constructedCardLeftMargin + cardHeight * cardRatio / screenRatio + bottomMargin
 export const areasX = areasCardX - areasBorders * 5 / screenRatio
 export const constructedCardY = (index: number) => 100 - cardHeight - constructedCardBottomMargin - index * developmentCardVerticalShift
-export const playerPanelY = (index: number) => headerHeight + playerPanelMargin + index * (playerPanelHeight + playerPanelMargin)
+export const playerPanelY = (index: number, players: number) => headerHeight + playerPanelMargin + index * (playerPanelHeight(players) + playerPanelMargin)
 export const playerPanelRightMargin = 1
 export const charactersPilesY = 91.7
 export const financiersPileX = empireCardLeftMargin
@@ -114,7 +114,9 @@ export const empireBackground: Record<EmpireName, string> = {
   [EmpireName.FederationOfAsia]: Images.federationOfAsiaArtwork,
   [EmpireName.NoramStates]: Images.noramStatesArtwork,
   [EmpireName.PanafricanUnion]: Images.panafricanUnionArtwork,
-  [EmpireName.RepublicOfEurope]: Images.republicOfEuropeArtwork
+  [EmpireName.RepublicOfEurope]: Images.republicOfEuropeArtwork,
+  [EmpireName.NationsOfOceania]: Images.nationsOfOceaniaArtwork,
+  [EmpireName.NorthHegemony]: Images.northHegemonyArtwork
 }
 
 export const textColor = (theme: Theme) => css`

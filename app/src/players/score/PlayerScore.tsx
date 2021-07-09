@@ -1,11 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes, Theme, useTheme} from '@emotion/react'
-import {getScore} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
-import {characters} from '@gamepark/its-a-wonderful-world/material/Character'
-import {developmentTypes} from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {HTMLAttributes} from 'react'
+import {getScoreFromScoringDetails, getScoringDetails} from '@gamepark/its-a-wonderful-world/Scoring'
+import {HTMLAttributes, useMemo} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../../material/Images'
 import {LightTheme} from '../../Theme'
@@ -14,25 +12,28 @@ import ScorePart from './ScorePart'
 
 type Props = {
   player: Player | PlayerView
-  position: number
   displayScore: boolean
   setDisplayScore: (displayScore: boolean) => void
   animation: boolean
 } & HTMLAttributes<HTMLDivElement>
 
-export default function PlayerScore({player, position, displayScore, setDisplayScore, animation}: Props) {
+export default function PlayerScore({player, displayScore, setDisplayScore, animation, ...props}: Props) {
   const {t} = useTranslation()
-  const score = getScore(player)
+  const scoringDetails = useMemo(() => {
+    const scoringDetails = getScoringDetails(player)
+    scoringDetails.comboVictoryPoints.sort((comboA, comboB) => Array.isArray(comboA.per) ? 1 : Array.isArray(comboB.per) ? -1 : comboA.per - comboB.per)
+    return scoringDetails
+  }, [player])
+  const score = useMemo(() => getScoreFromScoringDetails(scoringDetails), [scoringDetails])
   const theme = useTheme()
   return (
-    <div css={[style, topPosition(position), backgroundStyle(theme), animation && growAnimation, displayScore ? displayPlayerScore : hidePlayerScore]}>
+    <div css={[style, backgroundStyle(theme), animation && growAnimation, displayScore ? displayPlayerScore : hidePlayerScore]} {...props}>
       <button css={[arrowStyle(theme), animation && fadeInAnimation, displayScore ? arrowStandardStyle : arrowReverseStyle]}
               onClick={() => setDisplayScore(!displayScore)}
               title={displayScore ? t('Hide Scores') : t('Display Scores')}/>
       <div css={scorePartStyle}>
-        {developmentTypes.map(developmentType => <ScorePart key={developmentType} player={player} item={developmentType}/>)}
-        {characters.map(character => <ScorePart key={character} player={player} item={character}/>)}
-        <ScorePart player={player}/>
+        {scoringDetails.comboVictoryPoints.map((combo, index) => <ScorePart key={index} combo={combo} scoreMultipliers={scoringDetails.scoreMultipliers}/>)}
+        <ScorePart score={scoringDetails.flatVictoryPoints}/>
       </div>
       <div
         css={[scoreStyle, animation && fadeInAnimation, displayScore ? displayScoreStyle : hideScoreStyle, score !== 0 && displayScore && equalSign]}>{score}</div>
@@ -41,21 +42,15 @@ export default function PlayerScore({player, position, displayScore, setDisplayS
 }
 
 const style = css`
-  position: absolute;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
   border-radius: 2em 0 0 2em;
   width: auto;
-  height: 17%;
   overflow: hidden;
   pointer-events: auto;
   transition: max-width 0.5s linear, background-color 1s ease-in;
-`
-
-const topPosition = (index: number) => css`
-  top: ${(1 + index * 20.2)}%;
 `
 
 const backgroundStyle = (theme: Theme) => css`
@@ -111,7 +106,7 @@ const fadeInAnimation = css`
 `
 
 const arrowStandardStyle = css`
-  width: 8em;
+  width: 7.5em;
   height: 10em;
 `
 

@@ -36,5 +36,5 @@ const style = css`
 `
 
 const reducedSizeStyle = css`
-  transform: translate(15%, -81%) scale(0.5);
+  transform: translate(24%, -83%) scale(0.5);
 `

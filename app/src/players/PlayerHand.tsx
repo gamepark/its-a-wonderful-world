@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
-import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
+import GameView from '@gamepark/its-a-wonderful-world/GameView'
+import {developmentCards, getCardDetails} from '@gamepark/its-a-wonderful-world/material/Developments'
 import ChooseDevelopmentCard, {chooseDevelopmentCardMove, isChooseDevelopmentCard} from '@gamepark/its-a-wonderful-world/moves/ChooseDevelopmentCard'
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
 import {isPassCards, PassCardsView} from '@gamepark/its-a-wonderful-world/moves/PassCards'
@@ -20,19 +21,26 @@ import {
   playerPanelY, popupBackgroundStyle
 } from '../util/Styles'
 import {textButton, textButtonLeft} from './DraftArea'
+import usePlayersStartingWithMe from './usePlayersStartingWithMe'
 
-type Props = { player: Player, players: number, round: number }
+type Props = {
+  player: Player
+  game: GameView
+}
 
-export default function PlayerHand({player, players, round}: Props) {
+export default function PlayerHand({player, game}: Props) {
   const {t} = useTranslation()
   const play = usePlay<ChooseDevelopmentCard>()
   const [focusedCard, setFocusedCard] = useState<number>()
+  const players = usePlayersStartingWithMe(game)
   const animation = useAnimation<ChooseDevelopmentCard | RevealChosenCardsView | PassCardsView>(animation =>
     (isChooseDevelopmentCard(animation.move) && animation.move.playerId === player.empire) || isRevealChosenCards(animation.move) || isPassCards(animation.move)
   )
   const choosingCard = animation && isChooseDevelopmentCard(animation.move) ? animation.move : undefined
   const passingCard = animation && isPassCards(animation.move) ? animation.move : undefined
-  const position = players > 2 ? handPosition : handPosition2Players
+  const receivingCardsFrom = passingCard && getPlayerReceivingCardsFrom(game, player)
+  const passingCardsTo = passingCard && getPlayerPassingCardsTo(game, player)
+  const position = players.length > 2 ? handPosition : handPosition2Players
   const canChooseCard = player.chosenCard === undefined && player.hand.length >= 1 && animation?.move.type !== MoveType.RevealChosenCards
 
   const getItemProps = (index: number) => {
@@ -75,7 +83,7 @@ export default function PlayerHand({player, players, round}: Props) {
       `
       return css`
         z-index: 10;
-        animation: ${keyframe} ${duration}s ease-in-out
+        animation: ${keyframe} ${duration}s ease-in-out both;
       `
     } else {
       const delay = (animation?.duration ?? 0) * 7 / 10
@@ -89,12 +97,12 @@ export default function PlayerHand({player, players, round}: Props) {
       `
       return css`
         z-index: 10;
-        animation: ${keyframe} ${duration}s ${delay}s ease-in-out
+        animation: ${keyframe} ${duration}s ${delay}s ease-in-out both;
       `
     }
   }
 
-  const hand = [...player.hand]
+  const hand = player.hand.filter(card => card !== player.chosenCard)
   if (passingCard) {
     hand.push(...passingCard.receivedCards)
   }
@@ -115,16 +123,16 @@ export default function PlayerHand({player, players, round}: Props) {
         <button css={[textButton, textButtonLeft, chooseCardButton]} onClick={() => play(chooseDevelopmentCardMove(player.empire, focusedCard))}>
           {t('Choose')}
         </button>}
-        <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>
+        <FocusedDevelopmentOptions development={getCardDetails(focusedCard)} onClose={() => setFocusedCard(undefined)}/>
       </>
       }
-      <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players > 2 ? 5 : 10} sizeRatio={cardRatio}
+      <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players.length > 2 ? 5 : 10} sizeRatio={cardRatio}
             getItemProps={getItemProps}>
         {hand.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]} css={[playerHandCardStyle,
-          choosingCard?.card === card && animation && getChosenCardAnimation(player, animation, players),
+          choosingCard?.card === card && animation && getChosenCardAnimation(player, animation, players.length),
           animation && passingCard && (index < player.hand.length ?
-            passCardAnimation(round % 2 === 1 ? 1 : players - 1, animation, players) :
-            receiveCardAnimation(round % 2 === 1 ? players - 1 : 1, animation, players))]}/>)}
+            passCardAnimation(players.indexOf(passingCardsTo!), animation, players.length) :
+            receiveCardAnimation(players.indexOf(receivingCardsFrom!), animation, players.length))]}/>)}
       </Hand>
     </>
   )
@@ -202,10 +210,10 @@ const passCardAnimation = (destination: number, animation: Animation, players: n
       transform: perspective(100vh) rotateY(180deg)
     }
     70% {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination) + playerPanelHeight / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
+      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
     }
     to {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination) + playerPanelHeight / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
+      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
     }
   `
   return css`animation: ${keyframe} ${animation.duration}s ease-in-out;`
@@ -214,10 +222,10 @@ const passCardAnimation = (destination: number, animation: Animation, players: n
 const receiveCardAnimation = (origin: number, animation: Animation, players: number) => {
   const keyframe = keyframes`
     from {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin) + playerPanelHeight / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
+      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
     }
     30% {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin) + playerPanelHeight / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
+      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
     }
     70% {
       transform: perspective(100vh) rotateY(180deg)
@@ -251,3 +259,15 @@ const chooseCardButton = css`
     background-image: url(${Images.titleOrange});
   }
 `
+
+export function getPlayerReceivingCardsFrom(game: GameView, player: Player | PlayerView) {
+  const players = game.players.filter(player => player.cardsToPass)
+  const index = players.indexOf(player)
+  return players[(game.round % 2 === 0 ? index + 1 : index + players.length - 1) % players.length]
+}
+
+export function getPlayerPassingCardsTo(game: GameView, player: Player | PlayerView) {
+  const players = game.players.filter(player => player.cardsToPass)
+  const index = players.indexOf(player)
+  return players[(game.round % 2 === 1 ? index + 1 : index + players.length - 1) % players.length]
+}

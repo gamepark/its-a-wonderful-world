@@ -22,6 +22,7 @@ import {
 import useKeyDown from '../util/useKeyDown'
 import PlayerPanel from './PlayerPanel'
 import ScorePanel from './score/ScorePanel'
+import usePlayersStartingWithMe from './usePlayersStartingWithMe'
 
 type Props = {
   game: GameView
@@ -32,7 +33,7 @@ export default function PlayerPanels({game}: Props) {
   const canDisplayOtherPlayers = !tutorial || game.round > 1
   const play = usePlay()
   const playerId = usePlayerId<EmpireName>()
-  const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
+  const players = usePlayersStartingWithMe(game)
   const displayedPlayerId = game.displayedPlayer ?? playerId ?? game.players[0].empire
 
   const displayPlayer = useCallback((player: EmpireName) => {
@@ -57,41 +58,38 @@ export default function PlayerPanels({game}: Props) {
     || (isReceiveCharacter(animation.move) && animation.move.playerId !== displayedPlayerId))
   const revealingCards = animation && isRevealChosenCards(animation.move) ? animation.move : undefined
   const supremacyBonus = animation && isReceiveCharacter(animation.move) ? animation.move : undefined
-  const sortByPanel = (entries: [EmpireName, number][]) => {
-    entries.sort((a, b) => players.findIndex(p => p.empire === a[0]) - players.findIndex(p => p.empire === b[0]))
-    return entries
-  }
   const actions = useActions()
   const gameOver = isOver(game) && !!actions && actions.every(action => !action.pending)
   const gameWasLive = useRef(!gameOver)
-  const revealedCards = revealingCards && sortByPanel(Object.entries(revealingCards.revealedCards) as [EmpireName, number][])
-    .filter((_, index) => !playerId || index !== 0).map<number>(entry => entry[1])
+  const revealedCards = useMemo(() => revealingCards && players.filter(player => player.empire !== playerId)
+      .map(player => ({empireName: player.empire, card: revealingCards.revealedCards[player.empire]!.card})),
+    [revealingCards, players, playerId])
   return (
     <>
       {game.players.length > 2 && game.phase === Phase.Draft && <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players.length}/>}
       {players.map((player, index) =>
-        <PlayerPanel key={player.empire} player={player} position={index} onClick={() => displayPlayer(player.empire)}
-                     css={[player.empire === displayedPlayerId ? activePanel : (canDisplayOtherPlayers && clickablePanel)]}/>
+        <PlayerPanel key={player.empire} player={player} onClick={() => displayPlayer(player.empire)} small={players.length > 5}
+                     css={[panelPosition(index, players.length), player.empire === displayedPlayerId ? activePanel : (canDisplayOtherPlayers && clickablePanel)]}/>
       )}
       {gameOver && <ScorePanel game={game} animation={gameWasLive.current}/>}
-      {revealedCards && revealedCards.map((card, index) =>
-        <DevelopmentCard key={card} development={developmentCards[card]}
-                         css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index),
-                           revealedCardAnimation(index, animation!.duration / (playerId ? game.players.length - 1 : game.players.length))]}/>)}
+      {revealedCards && revealedCards.map((revealedCard, index) => {
+        if (revealedCard.empireName === displayedPlayerId) return null
+        return <DevelopmentCard key={revealedCard.card} development={developmentCards[revealedCard.card]}
+                                css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index, players.length),
+                                  revealedCardAnimation(index, animation!.duration / (playerId ? game.players.length - 1 : game.players.length))]}/>
+      })}
       {supremacyBonus && <CharacterToken character={supremacyBonus.character}
-                                         css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration)}/>}
+                                         css={supremacyBonusAnimation(game.productionStep!, players.findIndex(player => player.empire === supremacyBonus.playerId), animation!.duration, players.length)}/>}
     </>
   )
 }
 
-export const getPlayersStartingWith = (game: GameView, playerId?: EmpireName) => {
-  if (playerId) {
-    const playerIndex = game.players.findIndex(player => player.empire === playerId)
-    return [...game.players.slice(playerIndex, game.players.length), ...game.players.slice(0, playerIndex)]
-  } else {
-    return game.players
-  }
-}
+const panelPosition = (position: number, players: number) => css`
+  top: ${playerPanelY(position, players)}%;
+  right: ${playerPanelRightMargin}%;
+  width: ${playerPanelWidth}%;
+  height: ${playerPanelHeight(players)}%;
+`
 
 const activePanel = css`
   border: 0.2em solid gold;
@@ -115,8 +113,8 @@ const revealedCardStyle = css`
   right: ${playerPanelWidth + 2}%;
 `
 
-const revealedCardPosition = (index: number) => css`
-  top: ${playerPanelY(index) + playerPanelHeight / 2 - cardHeight / 2}%;
+const revealedCardPosition = (index: number, player: number) => css`
+  top: ${playerPanelY(index, player) + playerPanelHeight(player) / 2 - cardHeight / 2}%;
 `
 
 const revealCardKeyframe = keyframes`
@@ -132,11 +130,11 @@ const revealedCardAnimation = (order: number, duration: number) => {
   return css`animation: ${revealCardKeyframe} ${duration}s ${order * duration * 7 / 10}s ease-in-out both`
 }
 
-const supremacyBonusAnimation = (resource: Resource, panelIndex: number, duration: number) => {
+const supremacyBonusAnimation = (resource: Resource, panelIndex: number, duration: number, players: number) => {
   const xFrom = (areasX + (getCircleCharacterLeftPosition(resource) + 1) * boardWidth / 100) * 100 / tokenWidth
   const yFrom = (boardTop + (circleCharacterTopPosition + 2) * boardHeight / 100) * 100 / tokenHeight
   const xTo = (100 - playerPanelRightMargin - playerPanelWidth) * 100 / tokenWidth
-  const yTo = (playerPanelY(panelIndex) + playerPanelHeight) * 100 / tokenHeight
+  const yTo = (playerPanelY(panelIndex, players) + playerPanelHeight(players)) * 100 / tokenHeight
   const keyframe = keyframes`
     from {
       transform: translate(${xFrom - 50}%, ${yFrom - 50}%) scale(0.5) translate(50%, 50%);

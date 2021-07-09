@@ -1,11 +1,8 @@
 import GameState from '@gamepark/its-a-wonderful-world/GameState'
 import {setupPlayers} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
-import {
-  AirborneLaboratory, ArkOfTheCovenant, CenterOfTheEarth, CityOfAgartha, developmentCards, FinancialCenter, HarborZone, HumanCloning, IndustrialComplex,
-  Juggernaut, LunarBase, MilitaryBase, OffshoreOilRig, PropagandaCenter, RecyclingPlant, ResearchCenter, SecretSociety, TransportationNetwork,
-  UniversalExposition, WindTurbines, WorldCongress, Zeppelin
-} from '@gamepark/its-a-wonderful-world/material/Developments'
+import Development from '@gamepark/its-a-wonderful-world/material/Development'
+import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import EmpireSide from '@gamepark/its-a-wonderful-world/material/EmpireSide'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
@@ -20,27 +17,27 @@ import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {TutorialDescription} from '@gamepark/react-client'
 import shuffle from 'lodash.shuffle'
 
-const harborZone = developmentCards.findIndex(development => development === HarborZone)
-const centerOfEarth = developmentCards.findIndex(development => development === CenterOfTheEarth)
-const militaryBase = developmentCards.findIndex(development => development === MilitaryBase)
-const humanCloning = developmentCards.findIndex(development => development === HumanCloning)
-const propagandaCenter = developmentCards.findIndex(development => development === PropagandaCenter)
-const cityOfAgartha = developmentCards.findIndex(development => development === CityOfAgartha)
-const arkOfTheCovenant = developmentCards.findIndex(development => development === ArkOfTheCovenant)
-const industrialComplex = developmentCards.findIndex(development => development === IndustrialComplex)
-const recyclingPlant = developmentCards.findIndex(development => development === RecyclingPlant)
-const lunarBase = developmentCards.findIndex(development => development === LunarBase)
-const secretSociety = developmentCards.findIndex(development => development === SecretSociety)
-const transportationNetwork = developmentCards.findIndex(development => development === TransportationNetwork)
-const windTurbine = developmentCards.findIndex(development => development === WindTurbines)
-const researchCenter = developmentCards.findIndex(development => development === ResearchCenter)
-const offshoreOilRig = developmentCards.findIndex(development => development === OffshoreOilRig)
-const universalExposition = developmentCards.findIndex(development => development === UniversalExposition)
-const zeppelin = developmentCards.findIndex(development => development === Zeppelin)
-const airborneLaboratory = developmentCards.findIndex(development => development === AirborneLaboratory)
-const juggernaut = developmentCards.findIndex(development => development === Juggernaut)
-const worldCongress = developmentCards.findIndex(development => development === WorldCongress)
-const financialCenter = developmentCards.findIndex(development => development === FinancialCenter)
+const harborZone = developmentCards.findIndex(development => development === Development.HarborZone)
+const centerOfEarth = developmentCards.findIndex(development => development === Development.CenterOfTheEarth)
+const militaryBase = developmentCards.findIndex(development => development === Development.MilitaryBase)
+const humanCloning = developmentCards.findIndex(development => development === Development.HumanCloning)
+const propagandaCenter = developmentCards.findIndex(development => development === Development.PropagandaCenter)
+const cityOfAgartha = developmentCards.findIndex(development => development === Development.CityOfAgartha)
+const arkOfTheCovenant = developmentCards.findIndex(development => development === Development.ArkOfTheCovenant)
+const industrialComplex = developmentCards.findIndex(development => development === Development.IndustrialComplex)
+const recyclingPlant = developmentCards.findIndex(development => development === Development.RecyclingPlant)
+const lunarBase = developmentCards.findIndex(development => development === Development.LunarBase)
+const secretSociety = developmentCards.findIndex(development => development === Development.SecretSociety)
+const transportationNetwork = developmentCards.findIndex(development => development === Development.TransportationNetwork)
+const windTurbine = developmentCards.findIndex(development => development === Development.WindTurbines)
+const researchCenter = developmentCards.findIndex(development => development === Development.ResearchCenter)
+const offshoreOilRig = developmentCards.findIndex(development => development === Development.OffshoreOilRig)
+const universalExposition = developmentCards.findIndex(development => development === Development.UniversalExposition)
+const zeppelin = developmentCards.findIndex(development => development === Development.Zeppelin)
+const airborneLaboratory = developmentCards.findIndex(development => development === Development.AirborneLaboratory)
+const juggernaut = developmentCards.findIndex(development => development === Development.Juggernaut)
+const worldCongress = developmentCards.findIndex(development => development === Development.WorldCongress)
+const financialCenter = developmentCards.findIndex(development => development === Development.FinancialCenter)
 
 
 const initialCards = [
@@ -55,7 +52,8 @@ const initialCards = [
 const ItsAWonderfulTutorial: TutorialDescription<GameState, Move, EmpireName> = {
   setupTutorial: () => [{
     players: setupPlayers({
-      players: [{id: EmpireName.NoramStates}, {id: EmpireName.RepublicOfEurope}, {id: EmpireName.FederationOfAsia}], empiresSide: EmpireSide.A
+      players: [{id: EmpireName.NoramStates}, {id: EmpireName.RepublicOfEurope}, {id: EmpireName.FederationOfAsia}], empiresSide: EmpireSide.A,
+      corruptionAndAscension: false
     }),
     deck: [...initialCards, ...shuffle(Array.from(developmentCards.keys()).filter(card => !initialCards.includes(card)))],
     discard: [],

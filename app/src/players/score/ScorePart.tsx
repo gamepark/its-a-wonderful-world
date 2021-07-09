@@ -1,29 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import {getComboVictoryPoints, getFlatVictoryPoints, getItemQuantity, getVictoryPointsMultiplier} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
-import Character from '@gamepark/its-a-wonderful-world/material/Character'
-import DevelopmentType from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
-import Player from '@gamepark/its-a-wonderful-world/Player'
-import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
+import {ComboVictoryPoints, getComboMultiplier, getComboValue, ScoreMultiplier} from '@gamepark/its-a-wonderful-world/Scoring'
 import {HTMLAttributes} from 'react'
 import Images from '../../material/Images'
 import VictoryPointsMultiplier from '../VictoryPointsMultiplier'
 
 type Props = {
-  player: Player | PlayerView
-  item?: DevelopmentType | Character
+  combo?: ComboVictoryPoints
+  scoreMultipliers?: { [key in ScoreMultiplier]: number }
+  score?: number
 } & HTMLAttributes<HTMLDivElement>
 
-export default function ScorePart({player, item}: Props) {
-  const score = item ? getComboVictoryPoints(player, item) : getFlatVictoryPoints(player)
-  if (!score) {
-    return null
-  }
+export default function ScorePart({combo, scoreMultipliers, score}: Props) {
+  const isMultiCombo = combo && Array.isArray(combo.per) && combo.per.length > 1
   return (
     <div css={style}>
-      {item && <VictoryPointsMultiplier css={multiplierStyle} item={item} multiplier={getVictoryPointsMultiplier(player, item)}
-                                        quantity={getItemQuantity(player, item)}/>}
-      <div css={scoreStyle}>{score}</div>
+      {combo && scoreMultipliers &&
+      <VictoryPointsMultiplier css={[multiplierStyle, isMultiCombo && comboStyle]} combo={combo} quantity={getComboMultiplier(combo, scoreMultipliers!)}/>}
+      <div css={scoreStyle}>{score ?? getComboValue(combo!, scoreMultipliers!)}</div>
     </div>
   )
 }
@@ -67,11 +61,17 @@ const scoreStyle = css`
 
 const multiplierStyle = css`
   height: 40%;
-  width: 0;
-  margin-right: 15%;
+  width: 100%;
+  justify-content: center;
   filter: drop-shadow(0 0 1px black);
 
   & img {
     filter: none;
+  }
+`
+
+const comboStyle = css`
+  & img {
+    height: 70%
   }
 `

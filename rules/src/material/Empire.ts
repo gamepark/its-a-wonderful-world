@@ -1,12 +1,11 @@
-import Character from './Character'
-import DevelopmentType from './DevelopmentType'
+import Production from '../Production'
+import {ComboVictoryPoints} from '../Scoring'
 import EmpireSide from './EmpireSide'
-import Resource from './Resource'
 
 type Empire = {
   [key in EmpireSide]: {
-    victoryPoints?: { [key in DevelopmentType | Character]?: number }
-    production: { [key in Resource]?: number }
+    victoryPoints?: ComboVictoryPoints
+    production: Production
     krystallium?: number
   }
 }

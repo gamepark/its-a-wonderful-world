@@ -8,9 +8,9 @@ export function isGameView(game: GameState | GameView): game is GameView {
 }
 
 export function isPlayer(player: Player | PlayerView): player is Player {
-  return Array.isArray(player.hand)
+  return (player as Player).hand !== undefined
 }
 
 export function isPlayerView(player: Player | PlayerView): player is PlayerView {
-  return typeof player.hand === 'number'
+  return (player as PlayerView).hiddenHand !== undefined
 }

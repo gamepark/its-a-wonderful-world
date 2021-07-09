@@ -1,19 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes, Theme} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
-import {getProduction} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Resource'
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
 import PlaceResource, {isPlaceResourceOnConstruction} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
+import {getProduction} from '@gamepark/its-a-wonderful-world/Production'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimations} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
+import {useMemo} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
-import {costSpaceDeltaX, costSpaceDeltaY} from '../../players/DevelopmentCardUnderConstruction'
+import {costSpaceDeltaX, costSpaceDeltaX2, costSpaceDeltaY, getConstructionSpaceLocation} from '../../players/DevelopmentCardUnderConstruction'
 import {LightTheme} from '../../Theme'
 import {
   areasX, boardHeight, boardTop, boardWidth, empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, getAreaCardX, getAreaCardY, glow
@@ -56,8 +57,9 @@ export default function ResourceArea({game, player, resource, quantity, validate
     let translateY = -(boardResourceTopPosition + cubeDeltaY + cubePosition.y * resourceHeight) * boardHeight / 100 - boardTop
     if (isPlaceResourceOnConstruction(move)) {
       const constructionIndex = player.constructionArea.findIndex(construction => construction.card === move.card)
-      translateX += getAreaCardX(constructionIndex, player.constructionArea.length, game.players.length === 2) + costSpaceDeltaX
-      translateY += getAreaCardY(1) + costSpaceDeltaY(move.space)
+      const {column, index} = getConstructionSpaceLocation(player.constructionArea[constructionIndex], move.space)
+      translateX += getAreaCardX(constructionIndex, player.constructionArea.length, game.players.length === 2) + (column === 1 ? costSpaceDeltaX : costSpaceDeltaX2)
+      translateY += getAreaCardY(1) + costSpaceDeltaY(column, index)
     } else {
       const resourcePosition = player.empireCardResources.filter(resource => resource !== Krystallium).length
       const destination = empireCardResourcePosition[resourcePosition % 5]
@@ -77,6 +79,7 @@ export default function ResourceArea({game, player, resource, quantity, validate
       animation: ${keyframe} ${animation.duration}s ease-in-out forwards;
     `
   }
+  const helpText = useMemo(() => getResourceHelpText(resource, t), [resource, t])
   const playerProduction = getProduction(player, resource)
   const hasMostProduction = !game.players.some(p => p.empire !== player.empire && getProduction(p, resource) >= playerProduction)
   const canPlayerValidate = isPlayer(player) && game.phase === Phase.Production && player.availableResources.length === 0 && !player.ready && game.productionStep === resource && player.bonuses.length === 0
@@ -86,8 +89,8 @@ export default function ResourceArea({game, player, resource, quantity, validate
            css={[circleStyle, circleStylePosition(resource), game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle, isPlayer(player) && quantity > 0 && canDragStyle]}/>
       <button disabled={!canPlayerValidate} css={(theme: Theme) => [arrowStyle, arrowTheme(theme), arrowPosition(resource)]}
               onClick={validate} title={t('Validate')}/>
-      <img src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]} alt={resourceCharacterText[resource](t)}
-           title={resourceCharacterText[resource](t)} draggable="false"
+      <img src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]} alt={helpText}
+           title={helpText} draggable="false"
            css={[characterStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
       {quantity > 0 &&
       <>
@@ -151,12 +154,21 @@ const resourceCharacterOff = {
   [Exploration]: Images.generalOff
 }
 
-const resourceCharacterText = {
-  [Materials]: (t: TFunction) => t('The player producing the single most Materials receives a Financier token'),
-  [Energy]: (t: TFunction) => t('The player producing the single most Energy receives a General token'),
-  [Science]: (t: TFunction) => t('The player producing the single most Science receives a Financier or General token'),
-  [Gold]: (t: TFunction) => t('The player producing the single most Gold receives a Financier token'),
-  [Exploration]: (t: TFunction) => t('The player producing the single most Exploration receives a General token')
+function getResourceHelpText(resource: Resource, t: TFunction) {
+  switch (resource) {
+    case Resource.Materials:
+      return t('The player producing the single most Materials receives a Financier token')
+    case Resource.Energy:
+      return t('The player producing the single most Energy receives a General token')
+    case Resource.Science:
+      return t('The player producing the single most Science receives a Financier or General token')
+    case Resource.Gold:
+      return t('The player producing the single most Gold receives a Financier token')
+    case Resource.Exploration:
+      return t('The player producing the single most Exploration receives a General token')
+    default:
+      return ''
+  }
 }
 
 const areaHighlight = css`

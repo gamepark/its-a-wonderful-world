@@ -1400,10 +1400,10 @@
   resolved "https://registry.yarnpkg.com/@gamepark/avataaars/-/avataaars-2.1.3.tgz#bf5540ce7ade3da03c81cbbf1651b5042ad4b08c"
   integrity sha512-ZPa78YaO95lwozQB/67QM9axbQtBeS3pMl9fd6R5hBDLsmDdQiuemGzL2Ie8X3FYBHvXlesaPFcII5sltdWkJw==
 
-"@gamepark/react-client@~5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.0.0.tgz#ad4ee2acb3dc8a1ac3d2f26e2c04b177dee595d3"
-  integrity sha512-Gi5p0kZqn9ijob1LXeh0CzHBgL/W5RNePyZK9hO4KSKGqtUmKiJ7zh11g8C91ZXNbx3IOwPuQSkAzpRYPYTo5Q==
+"@gamepark/react-client@~5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.1.0.tgz#3be50187521ee6c3e3e471c6090f7b86af0a365b"
+  integrity sha512-IbA+pdCygzakr8wrM/w1f9bHapHaJ23jorUkHhz7SDH8V+mLSZaEy+2voUXdgpDvSh8vXtYa/kgoEVMQcvYQQA==
   dependencies:
     "@apollo/client" "^3.1.3"
     "@datadog/browser-logs" "^2.8.1"
@@ -1411,7 +1411,7 @@
     "@fortawesome/free-solid-svg-icons" "^5.15.3"
     "@fortawesome/react-fontawesome" "^0.1.14"
     "@gamepark/avataaars" "^2.1.3"
-    "@gamepark/rules-api" "^5.0.0"
+    "@gamepark/rules-api" "^5.1.0"
     "@harelpls/use-pusher" "^7.2.1"
     "@types/lodash.shuffle" "^4.2.6"
     "@types/react" "^17.0.3"
@@ -1440,10 +1440,10 @@
     "@fortawesome/react-fontawesome" "^0.1.14"
     "@react-dnd/shallowequal" "^2.0.0"
 
-"@gamepark/rules-api@^5.0.0", "@gamepark/rules-api@~5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-5.0.0.tgz#934234720a4bb083f4006fda0e94bf5049654bcc"
-  integrity sha512-6imyet1ajcKkd+cjVtPUzo+GKnYjrovqqCgeAnpGLg8Z+gH0xiq9lNxMcnfgorIB2807e8csZcYTLa7FZ1PBew==
+"@gamepark/rules-api@^5.1.0", "@gamepark/rules-api@~5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-5.1.0.tgz#f8cb11c24428c48220267d88358e7c8e09463fa5"
+  integrity sha512-dH+LB0qPzUjLAXhSxmoi6KtvDVLT4JfsN5FpmU8nKCju/l9HYoqDC7xG6NaAKa9RlbZSI98+3nLT4b8mLK7aOg==
   dependencies:
     fast-deep-equal "^3.1.3"
 

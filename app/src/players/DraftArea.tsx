@@ -2,7 +2,7 @@
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {getMovesToBuild} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
-import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
+import {developmentCards, getCardDetails} from '@gamepark/its-a-wonderful-world/material/Developments'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
 import ChooseDevelopmentCard, {
@@ -51,7 +51,7 @@ export default function DraftArea({game, player}: Props) {
   const undoingSlateForConstruction = animation && animation.action.cancelled && isSlateForConstruction(animation.move) ? animation.move : undefined
   const recycling = animation && isRecycle(animation.move) ? animation.move : undefined
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
-  const chosenCard = choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : player.chosenCard
+  const chosenCard = isPlayer(player) ? choosingDevelopment && isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : player.chosenCard : undefined
   const canDrop = (monitor: DropTargetMonitor<DropItem>, card = monitor.getItem().card) => monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_HAND
     || (canUndo(slateForConstructionMove(playerId!, card)))
   const [{dragItemType, isValidTarget, isOver}, ref] = useDrop({
@@ -67,7 +67,7 @@ export default function DraftArea({game, player}: Props) {
       slateForConstructionMove(player.empire, item.card)
   })
   useEffect(() => {
-    if (!animation && focusedCard !== player.chosenCard && !player.draftArea.some(card => card === focusedCard)) {
+    if (!animation && focusedCard !== chosenCard && !player.draftArea.some(card => card === focusedCard)) {
       setFocusedCard(undefined)
     }
   }, [player, focusedCard, animation])
@@ -131,13 +131,13 @@ export default function DraftArea({game, player}: Props) {
           <button css={[textButton, textButtonLeft, draftConstructionButton]} onClick={() => play(slateForConstructionMove(player.empire, focusedCard))}>
             {t('Build')}
           </button>
-          <button css={[textButton, textButtonRight, recyclingButton(developmentCards[focusedCard].recyclingBonus)]}
+          <button css={[textButton, textButtonRight, recyclingButton(getCardDetails(focusedCard).recyclingBonus)]}
                   onClick={() => play(recycleMove(player.empire, focusedCard))}>
             {t('Recycle')}
           </button>
         </>
         }
-        <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>
+        <FocusedDevelopmentOptions development={getCardDetails(focusedCard)} onClose={() => setFocusedCard(undefined)}/>
       </>
       }
       <div ref={ref} css={getDraftAreaStyle(row, game.players.length === 2, isValidTarget, isOver)}>
@@ -155,7 +155,7 @@ export default function DraftArea({game, player}: Props) {
           <DevelopmentCard development={developmentCards[card]} css={css`height: 100%;`} onClick={() => setFocusedCard(card)}/>
         </Draggable>
       ))}
-      {chosenCard !== undefined && <DevelopmentCard development={typeof chosenCard == 'number' ? developmentCards[chosenCard] : undefined}
+      {chosenCard !== undefined && <DevelopmentCard development={developmentCards[chosenCard]}
                                                     css={[getAreaCardTransform(row, player.draftArea.length),
                                                       cardStyle, areaCardStyle, focusedCard === chosenCard && getCardFocusTransform,
                                                       choosingDevelopment && css`opacity: 0;`]}
@@ -282,7 +282,7 @@ buttonImages.set(Resource.Exploration, Images.titleBlue)
 const buttonsArea = css`
   position: absolute;
   top: 11%;
-  left: 38%;
+  left: 43%;
   font-size: 4em;
   right: ${playerPanelWidth + playerPanelMargin * 2}%;
   display: flex;

@@ -1,9 +1,9 @@
+import {isEnumValue} from '@gamepark/rules-api'
+
 enum EmpireName {
-  AztecEmpire = 'AztecEmpire',
-  FederationOfAsia = 'FederationOfAsia',
-  NoramStates = 'NoramStates',
-  PanafricanUnion = 'PanafricanUnion',
-  RepublicOfEurope = 'RepublicOfEurope'
+  AztecEmpire = 1, FederationOfAsia, NoramStates, PanafricanUnion, RepublicOfEurope, NationsOfOceania, NorthHegemony
 }
 
 export default EmpireName
+
+export const empireNames = Object.values(EmpireName).filter(isEnumValue)

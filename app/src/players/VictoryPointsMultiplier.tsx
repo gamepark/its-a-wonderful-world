@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import Character, {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
+import {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
 import DevelopmentType from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
+import {ComboVictoryPoints} from '@gamepark/its-a-wonderful-world/Scoring'
 import {TFunction} from 'i18next'
 import {HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -9,20 +10,20 @@ import CharacterToken from '../material/characters/CharacterToken'
 import Images from '../material/Images'
 
 type Props = {
-  item: DevelopmentType | Character
-  multiplier: number
+  combo: ComboVictoryPoints
   quantity?: number
 } & HTMLAttributes<HTMLDivElement>
 
-export default function VictoryPointsMultiplier({item, multiplier, quantity, ...props}: Props) {
+export default function VictoryPointsMultiplier({combo, quantity, ...props}: Props) {
   const {t} = useTranslation()
+  const items = Array.isArray(combo.per) ? combo.per : [combo.per]
   return (
     <div {...props} css={[style, quantity === undefined ? backgroundStyle : '']}>
-      <span css={numberStyle}>{multiplier}</span><span css={multiplierStyle}>x</span>
+      <span css={numberStyle}>{combo.quantity}</span><span css={multiplierStyle}>x</span>
       {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
-      {isCharacter(item) ?
-        <CharacterToken character={item} css={characterTokenImageStyle}/> :
-        <img src={developmentTypeImage[item]} css={developmentTypeImageStyle} alt={getDevelopmentTypeDescription(t, item)}/>}
+      {items.map(item => isCharacter(item) ?
+        <CharacterToken key={item} character={item} css={characterTokenImageStyle}/> :
+        <img key={item} src={developmentTypeImage[item]} css={developmentTypeImageStyle} alt={getDevelopmentTypeDescription(t, item)}/>)}
     </div>
   )
 }
