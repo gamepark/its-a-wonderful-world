@@ -135,9 +135,9 @@ export default function DraftArea({game, player}: Props) {
                   onClick={() => play(recycleMove(player.empire, focusedCard))}>
             {t('Recycle')}
           </button>
-          <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>
         </>
         }
+        <FocusedDevelopmentOptions development={developmentCards[focusedCard]} onClose={() => setFocusedCard(undefined)}/>
       </>
       }
       <div ref={ref} css={getDraftAreaStyle(row, game.players.length === 2, isValidTarget, isOver)}>
