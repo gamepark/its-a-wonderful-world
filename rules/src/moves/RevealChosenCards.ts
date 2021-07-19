@@ -1,7 +1,7 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
-import EmpireName from '../material/EmpireName'
 import {numberOfCardsToDraft} from '../ItsAWonderfulWorld'
+import EmpireName from '../material/EmpireName'
 import Move from './Move'
 import MoveType from './MoveType'
 
@@ -40,4 +40,12 @@ export function isRevealChosenCards(move: Move): move is (RevealChosenCards | Re
 
 export function isRevealChosenCardsView(move: RevealChosenCards | RevealChosenCardsView): move is RevealChosenCardsView {
   return (move as RevealChosenCardsView).revealedCards !== undefined
+}
+
+export function getRevealChosenCardsView(state: GameState): RevealChosenCardsView {
+  const revealedCards = state.players.reduce<{ [key in EmpireName]?: number }>((revealedCards, player) => {
+    revealedCards[player.empire] = player.chosenCard
+    return revealedCards
+  }, {})
+  return {type: MoveType.RevealChosenCards, revealedCards}
 }

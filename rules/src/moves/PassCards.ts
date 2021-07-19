@@ -1,5 +1,6 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
+import EmpireName from '../material/EmpireName'
 import {isPlayer} from '../typeguards'
 import Move from './Move'
 import MoveType from './MoveType'
@@ -36,4 +37,12 @@ export function isPassCards(move: Move | MoveView): move is (PassCards | PassCar
 
 export function isPassCardsView(move: PassCards | PassCardsView): move is PassCardsView {
   return (move as PassCardsView).receivedCards !== undefined
+}
+
+export function getPassCardsView(state: GameState, playerId: EmpireName): PassCardsView {
+  const players = state.players.filter(player => player.cardsToPass)
+  const playerIndex = players.findIndex(player => player.empire === playerId)
+  const draftDirection = state.round % 2 ? -1 : 1
+  const playerPassingCards = players[(playerIndex + players.length + draftDirection) % players.length]
+  return {type: MoveType.PassCards, receivedCards: playerPassingCards.cardsToPass!}
 }

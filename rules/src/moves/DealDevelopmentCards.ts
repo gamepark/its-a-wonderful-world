@@ -1,6 +1,7 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
 import {numberOfCardsToDraft} from '../ItsAWonderfulWorld'
+import EmpireName from '../material/EmpireName'
 import {isPlayer} from '../typeguards'
 import MoveType from './MoveType'
 
@@ -45,4 +46,11 @@ export function revealDealtDevelopmentCards(state: GameView, move: DealDevelopme
 
 export function isDealDevelopmentCardsView(move: DealDevelopmentCards | DealDevelopmentCardsView): move is DealDevelopmentCardsView {
   return (move as DealDevelopmentCardsView).playerCards !== undefined
+}
+
+export function getDealDevelopmentCardsView(state: GameState, playerId: EmpireName): DealDevelopmentCardsView {
+  const players = getRemainingPlayersToDealCardsTo(state)
+  const playerIndex = players.findIndex(player => player.empire === playerId)
+  const cardsToDeal = players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft
+  return {type: MoveType.DealDevelopmentCards, playerCards: state.deck.slice(playerIndex * cardsToDeal, (playerIndex + 1) * cardsToDeal)}
 }

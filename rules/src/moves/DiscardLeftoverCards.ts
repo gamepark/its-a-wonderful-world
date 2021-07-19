@@ -29,3 +29,7 @@ export function discardLeftOverCardsInView(state: GameView, move: DiscardLeftove
 export function isDiscardLeftoverCardsView(move: DiscardLeftoverCards | DiscardLeftoverCardsView): move is DiscardLeftoverCardsView {
   return (move as DiscardLeftoverCardsView).discardedCards !== undefined
 }
+
+export function getDiscardLeftoverCardsView(state: GameState): DiscardLeftoverCardsView {
+  return {type: MoveType.DiscardLeftoverCards, discardedCards: state.players.flatMap(player => player.hand)}
+}

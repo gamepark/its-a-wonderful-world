@@ -15,12 +15,12 @@ import Resource, {isResource, resources} from './material/Resource'
 import {chooseDevelopmentCard, chooseDevelopmentCardMove} from './moves/ChooseDevelopmentCard'
 import {completeConstruction, completeConstructionMove} from './moves/CompleteConstruction'
 import {concede, concedeMove} from './moves/Concede'
-import {dealDevelopmentCards, dealDevelopmentCardsMove} from './moves/DealDevelopmentCards'
-import {discardLeftOverCards, discardLeftOverCardsMove} from './moves/DiscardLeftoverCards'
+import {dealDevelopmentCards, dealDevelopmentCardsMove, getDealDevelopmentCardsView} from './moves/DealDevelopmentCards'
+import {discardLeftOverCards, discardLeftOverCardsMove, getDiscardLeftoverCardsView} from './moves/DiscardLeftoverCards'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
-import {passCards, passCardsMove} from './moves/PassCards'
+import {getPassCardsView, passCards, passCardsMove} from './moves/PassCards'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter, placeCharacterMove} from './moves/PlaceCharacter'
 import PlaceResource, {
   isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction, placeResourceOnConstructionMove, placeResourceOnEmpireMove
@@ -28,7 +28,7 @@ import PlaceResource, {
 import {produce, produceMove} from './moves/Produce'
 import {receiveCharacter, receiveCharacterMove} from './moves/ReceiveCharacter'
 import {recycle, recycleMove} from './moves/Recycle'
-import {revealChosenCards, revealChosenCardsMove} from './moves/RevealChosenCards'
+import {getRevealChosenCardsView, revealChosenCards, revealChosenCardsMove} from './moves/RevealChosenCards'
 import {slateForConstruction, slateForConstructionMove} from './moves/SlateForConstruction'
 import {startPhase, startPhaseMove} from './moves/StartPhase'
 import {tellYouAreReady, tellYouAreReadyMove} from './moves/TellYouAreReady'
@@ -39,7 +39,6 @@ import Player from './Player'
 import PlayerView from './PlayerView'
 
 export const numberOfCardsToDraft = 7
-const numberOfCardsDeal2Players = 10
 export const numberOfRounds = 4
 
 const defaultEmpireCardsSide = EmpireSide.A
@@ -228,7 +227,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   getMoveView(move: Move, playerId?: EmpireName): MoveView {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
-        return playerId ? {...move, playerCards: this.state.players.find(player => player.empire === playerId)!.hand} : move
+        return playerId ? getDealDevelopmentCardsView(this.state, playerId) : move
       case MoveType.ChooseDevelopmentCard:
         if (playerId !== move.playerId) {
           const {card, ...moveView} = move
@@ -236,16 +235,11 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
         }
         break
       case MoveType.RevealChosenCards:
-        return {
-          ...move, revealedCards: this.state.players.reduce<{ [key in EmpireName]?: number }>((revealedCards, player) => {
-            revealedCards[player.empire] = player.draftArea[player.draftArea.length - 1]
-            return revealedCards
-          }, {})
-        }
+        return getRevealChosenCardsView(this.state)
       case MoveType.PassCards:
-        return {...move, receivedCards: playerId ? this.state.players.find(player => player.empire === playerId)!.hand : undefined}
+        return playerId ? getPassCardsView(this.state, playerId) : move
       case MoveType.DiscardLeftoverCards:
-        return {...move, discardedCards: this.state.discard.slice((numberOfCardsToDraft - numberOfCardsDeal2Players) * this.state.players.length)}
+        return getDiscardLeftoverCardsView(this.state)
     }
     return move
   }
