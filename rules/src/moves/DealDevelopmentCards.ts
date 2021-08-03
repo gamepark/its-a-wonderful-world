@@ -18,9 +18,6 @@ export const dealDevelopmentCardsMove: DealDevelopmentCards = {type: MoveType.De
 
 const numberOfCardsDeal2Players = 10
 
-const ascensionCardsToDealByDefault = 2
-const ascensionCardsToDeal2Players = 3
-
 function getRemainingPlayersToDealCardsTo<T extends Player | PlayerView>(players: T[]): T[] {
   const result = players.filter(player => !player.eliminated)
   if (result.length === 1) {
@@ -32,7 +29,7 @@ function getRemainingPlayersToDealCardsTo<T extends Player | PlayerView>(players
 export function dealDevelopmentCards(state: GameState) {
   const players = getRemainingPlayersToDealCardsTo(state.players)
   const ascensionCardsToDeal = getAscensionCardsToDeal(state, players.length)
-  const cardsToDeal = (players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft) - ascensionCardsToDeal
+  const cardsToDeal = getIWWCardsToDeal(state, players.length)
   for (const player of players) {
     player.hand = state.deck.splice(0, cardsToDeal)
     if (state.ascensionDeck) {
@@ -44,7 +41,7 @@ export function dealDevelopmentCards(state: GameState) {
 export function revealDealtDevelopmentCards(state: GameView, move: DealDevelopmentCards | DealDevelopmentCardsView) {
   const players = getRemainingPlayersToDealCardsTo(state.players)
   const ascensionCardsToDeal = getAscensionCardsToDeal(state, players.length)
-  const cardsToDeal = (players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft) - ascensionCardsToDeal
+  const cardsToDeal = getIWWCardsToDeal(state, players.length)
   for (const player of players) {
     state.deck -= cardsToDeal
     if (state.ascensionDeck) {
@@ -64,7 +61,29 @@ export function revealDealtDevelopmentCards(state: GameView, move: DealDevelopme
 
 function getAscensionCardsToDeal(state: GameState | GameView, players: number) {
   if (!state.ascensionDeck) return 0
-  return players === 2 ? ascensionCardsToDeal2Players : ascensionCardsToDealByDefault
+  switch (players) {
+    case 2:
+      return 4
+    case 3:
+    case 4:
+      return 3
+    default:
+      return 2
+  }
+}
+
+function getIWWCardsToDeal(state: GameState | GameView, players: number) {
+  if (!state.ascensionDeck) {
+    return players === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft
+  }
+  switch (players) {
+    case 2:
+      return 8
+    case 7:
+      return 5
+    default:
+      return 6
+  }
 }
 
 export function isDealDevelopmentCardsView(move: DealDevelopmentCards | DealDevelopmentCardsView): move is DealDevelopmentCardsView {
@@ -75,7 +94,7 @@ export function getDealDevelopmentCardsView(state: GameState, playerId: EmpireNa
   const players = getRemainingPlayersToDealCardsTo(state.players)
   const playerIndex = players.findIndex(player => player.empire === playerId)
   const ascensionCardsToDeal = getAscensionCardsToDeal(state, players.length)
-  const cardsToDeal = (players.length === 2 ? numberOfCardsDeal2Players : numberOfCardsToDraft) - ascensionCardsToDeal
+  const cardsToDeal = getIWWCardsToDeal(state, players.length)
   const playerCards = state.deck.slice(playerIndex * cardsToDeal, (playerIndex + 1) * cardsToDeal)
   if (state.ascensionDeck) {
     playerCards.push(...state.ascensionDeck.slice(playerIndex * ascensionCardsToDeal, (playerIndex + 1) * ascensionCardsToDeal))

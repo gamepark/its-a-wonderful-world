@@ -126,7 +126,7 @@ export default function PlayerHand({player, game}: Props) {
         <FocusedDevelopmentOptions development={getCardDetails(focusedCard)} onClose={() => setFocusedCard(undefined)}/>
       </>
       }
-      <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players.length > 2 ? 5 : 10} sizeRatio={cardRatio}
+      <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players.length > 2 ? 5 : 6.9} sizeRatio={cardRatio}
             getItemProps={getItemProps}>
         {hand.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]} css={[playerHandCardStyle,
           choosingCard?.card === card && animation && getChosenCardAnimation(player, animation, players.length),
