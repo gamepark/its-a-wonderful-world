@@ -26,7 +26,7 @@ const DevelopmentCard = forwardRef<HTMLDivElement, Props>(({deckType, developmen
 const style = css`
   height: 100%;
   border-radius: 6% / ${65 / 100 * 6}%;
-  box-shadow: 0 0 5px black;
+  box-shadow: 0 0 0.1em black;
   transform-style: preserve-3d;
   transform: translateZ(0);
   -webkit-font-smoothing: subpixel-antialiased;

@@ -36,7 +36,12 @@ export function getScoringDetails(player: Player | PlayerView, ignoreBaseCharact
   }
   const empireScoring = Empires[player.empire][player.empireSide].victoryPoints
   if (empireScoring) {
-    scoringDetails.comboVictoryPoints.push(empireScoring)
+    const existingCombo = scoringDetails.comboVictoryPoints.find(combo => isSameCombo(combo, empireScoring))
+    if (existingCombo) {
+      existingCombo.quantity += empireScoring.quantity
+    } else {
+      scoringDetails.comboVictoryPoints.push({...empireScoring})
+    }
   }
   for (const constructedDevelopment of player.constructedDevelopments) {
     const development = getCardDetails(constructedDevelopment)
@@ -49,7 +54,7 @@ export function getScoringDetails(player: Player | PlayerView, ignoreBaseCharact
       if (existingCombo) {
         existingCombo.quantity += newCombo.quantity
       } else {
-        scoringDetails.comboVictoryPoints.push(development.victoryPoints)
+        scoringDetails.comboVictoryPoints.push({...newCombo})
       }
     }
   }
@@ -61,8 +66,8 @@ export function getScoreFromScoringDetails(scoringDetails: ScoringDetails) {
 }
 
 function isSameCombo(combo: ComboVictoryPoints, newCombo: ComboVictoryPoints) {
-  if (combo === newCombo) return true
-  return Array.isArray(combo) && Array.isArray(newCombo) && combo.length === newCombo.length && newCombo.every(combo.includes)
+  if (combo.per === newCombo.per) return true
+  return Array.isArray(combo.per) && Array.isArray(newCombo.per) && combo.per.length === newCombo.per.length && newCombo.per.every(combo.per.includes)
 }
 
 export function getComboValue(combo: ComboVictoryPoints, scoreMultipliers: { [key in ScoreMultiplier]: number }) {

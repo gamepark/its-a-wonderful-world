@@ -15,7 +15,7 @@ export default function CharacterToken({character, ...props}: Props) {
 
 const style = css`
   border-radius: 100%;
-  box-shadow: 0 0 5px black;
+  box-shadow: 0 0 0.1em black;
 `
 
 export const images = {

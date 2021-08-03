@@ -19,7 +19,6 @@ export default function EjectPopup({onClose}: Props) {
   const {t} = useTranslation()
   const maxExceedTime = useSelector((state: GamePageState) => state.options?.maxExceedTime ?? 60000)
   const opponentWithNegativeTime = useOpponentWithMaxTime(0)
-  console.log(opponentWithNegativeTime)
   const opponentThatCanBeEjected = useOpponentWithMaxTime()
   const dispatch = useDispatch()
   const theme = useTheme()

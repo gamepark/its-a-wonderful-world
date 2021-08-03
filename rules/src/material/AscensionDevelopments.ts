@@ -88,7 +88,7 @@ export const FloatingPalace: DevelopmentDetails = {
   type: Vehicle,
   constructionCost: {[Energy]: 2, [Science]: 1, [Gold]: 2, [General]: 1},
   production: {[Energy]: 2},
-  victoryPoints: {quantity: 2, per: [Vehicle]},
+  victoryPoints: {quantity: 2, per: Vehicle},
   recyclingBonus: Energy
 }
 
@@ -312,7 +312,7 @@ export const Pandemonium: DevelopmentDetails = {
   deck: DeckType.Ascension,
   type: Discovery,
   constructionCost: {[Exploration]: 4, [Financier]: 2},
-  victoryPoints: {quantity: 2, per: [Structure]},
+  victoryPoints: {quantity: 2, per: Structure},
   recyclingBonus: Energy
 }
 
