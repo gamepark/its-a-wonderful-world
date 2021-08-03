@@ -233,7 +233,7 @@ export const HighSecurityPrison: DevelopmentDetails = {
 export const OrbitalStation: DevelopmentDetails = {
   deck: DeckType.Ascension,
   type: Project,
-  constructionCost: {[Energy]: 3, [Science]: 3, [Gold]: 5},
+  constructionCost: {[Energy]: 3, [Science]: 5, [Gold]: 3},
   victoryPoints: {quantity: 6, per: [Financier, General]},
   recyclingBonus: Science
 }

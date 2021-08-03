@@ -50,7 +50,7 @@ export default function OtherPlayerHand({player, game}: Props) {
   const hand = cardsBeingReceived ? [...player.cardsToPass!, ...cardsBeingReceived] : player.hiddenHand
 
   return (
-    <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players.length > 2 ? 5 : 10} sizeRatio={cardRatio}
+    <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players.length > 2 ? 5 : 6.9} sizeRatio={cardRatio}
           getItemProps={getItemProps}>
       {hand.map((deckType, index) =>
         <DevelopmentCard key={'#' + index} deckType={deckType} development={index === cardBeingRevealed?.index ? developmentCards[cardBeingRevealed!.card] : undefined}
