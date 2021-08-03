@@ -131,7 +131,7 @@ export function getDevelopmentDisplay(development: Development): DevelopmentDisp
       }
     case Development.HumanCloning:
       return {
-        title: t => t('Gravity Inverter'),
+        title: t => t('Human Cloning'),
         image: Images.humanCloning
       }
     case Development.MegaBomb:
