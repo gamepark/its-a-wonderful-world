@@ -239,6 +239,8 @@ export function getDevelopmentColumn2Pattern(construction: Construction): number
       return [3, 5, 7]
     case Development.GiantRobot:
       return [6, 7]
+    case Development.OrbitalStation:
+      return [4, 5]
     default:
       return []
   }
