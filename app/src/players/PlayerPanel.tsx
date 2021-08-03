@@ -128,6 +128,10 @@ const victoryPointsMultiplierStyle = css`
   top: 38%;
   left: 2%;
   height: 20%;
+  & img {
+    width: 2.4em;
+    height: 2.4em;
+  }
 `
 
 function getBestVictoryPointsCombo(player: Player | PlayerView): ComboVictoryPoints | undefined {

@@ -22,7 +22,7 @@ export default function VictoryPointsMultiplier({combo, quantity, ...props}: Pro
       <span css={numberStyle}>{combo.quantity}</span><span css={multiplierStyle}>x</span>
       {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
       {items.map(item => isCharacter(item) ?
-        <CharacterToken key={item} character={item} css={characterTokenImageStyle}/> :
+        <CharacterToken key={item} character={item}/> :
         <img key={item} src={developmentTypeImage[item]} css={developmentTypeImageStyle} alt={getDevelopmentTypeDescription(t, item)}/>)}
     </div>
   )
@@ -76,13 +76,8 @@ const multiplierStyle = css`
   width: 0;
 `
 
-const characterTokenImageStyle = css`
-  height: 80%;
-`
-
 const developmentTypeImageStyle = css`
   box-shadow: 0 0 0.1em black;
-  height: 80%;
   border-radius: 0.5em;
 `
 

@@ -67,7 +67,12 @@ export function getScoreFromScoringDetails(scoringDetails: ScoringDetails) {
 
 function isSameCombo(combo: ComboVictoryPoints, newCombo: ComboVictoryPoints) {
   if (combo.per === newCombo.per) return true
-  return Array.isArray(combo.per) && Array.isArray(newCombo.per) && combo.per.length === newCombo.per.length && newCombo.per.every(combo.per.includes)
+  if (Array.isArray(combo.per) && Array.isArray(newCombo.per)) {
+    const combos = combo.per
+    const newCombos = newCombo.per
+    return combos.length === newCombos.length && newCombos.every(v => combos.includes(v))
+  }
+  return false
 }
 
 export function getComboValue(combo: ComboVictoryPoints, scoreMultipliers: { [key in ScoreMultiplier]: number }) {
