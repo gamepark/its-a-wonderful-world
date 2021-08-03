@@ -33,7 +33,8 @@ export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOption
       label: t => t('Side {side}', {side: String.fromCharCode(64 + side)}),
       help: t => getEmpireSideHelp(side, t),
       warn: t => side === EmpireSide.A ? t('Side A is advised for beginners') : '',
-      subscriberRequired: side !== EmpireSide.A && side !== EmpireSide.B
+      subscriberRequired: side !== EmpireSide.A && side !== EmpireSide.B,
+      competitiveDisabled: side === EmpireSide.E || side === EmpireSide.F
     })
   },
   corruptionAndAscension: {
