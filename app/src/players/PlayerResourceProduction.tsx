@@ -121,7 +121,7 @@ const productionMultiplierStyle = (index: number) => {
     return css`
       position: absolute;
       text-align: center;
-      top: 60%;
+      top: 3.05em;
       left: ${32 + (index - 6) * 12}%;
       width: 11%;
     `
