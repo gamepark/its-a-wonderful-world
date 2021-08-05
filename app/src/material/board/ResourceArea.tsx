@@ -7,7 +7,7 @@ import PlaceResource, {isPlaceResourceOnConstruction} from '@gamepark/its-a-wond
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getProduction} from '@gamepark/its-a-wonderful-world/Production'
+import {getProductionAndCorruption} from '@gamepark/its-a-wonderful-world/Production'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimations} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
@@ -80,8 +80,8 @@ export default function ResourceArea({game, player, resource, quantity, validate
     `
   }
   const helpText = useMemo(() => getResourceHelpText(resource, t), [resource, t])
-  const playerProduction = getProduction(player, resource)
-  const hasMostProduction = !game.players.some(p => p.empire !== player.empire && getProduction(p, resource) >= playerProduction)
+  const playerProduction = getProductionAndCorruption(player, resource)
+  const hasMostProduction = playerProduction > 0 && !game.players.some(p => p.empire !== player.empire && getProductionAndCorruption(p, resource) >= playerProduction)
   const canPlayerValidate = isPlayer(player) && game.phase === Phase.Production && player.availableResources.length === 0 && !player.ready && game.productionStep === resource && player.bonuses.length === 0
   return (
     <>

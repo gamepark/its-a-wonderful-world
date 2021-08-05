@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
+import {EmotionJSX} from '@emotion/react/types/jsx-namespace'
 import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Resource'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
-import {getProduction} from '@gamepark/its-a-wonderful-world/Production'
+import {getProductionAndCorruption} from '@gamepark/its-a-wonderful-world/Production'
 import {FC, HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'
@@ -18,19 +19,19 @@ type Props = {
 export default function PlayerResourceProduction({player, small}: Props) {
   const {t} = useTranslation()
   const production = resources.reduce((map, resource) => {
-    map.set(resource, getProduction(player, resource))
+    map.set(resource, getProductionAndCorruption(player, resource))
     return map
   }, new Map<Resource, number>())
   let productionDisplay = new Map<Resource, ProductionDisplay>()
   let productionDisplaySize = 0
-  for (const entry of production.entries()) {
-    const size = entry[1]
-    productionDisplay.set(entry[0], {size})
-    productionDisplaySize += size
+  for (const [resource, prod] of production.entries()) {
+    productionDisplay.set(resource, {size: Math.abs(prod), corruption: prod < 0})
+    productionDisplaySize += Math.abs(prod)
   }
   const displayMultiplierForHighProduction = (resource: Resource, production: number) => {
-    if (productionDisplay.get(resource)?.size === production) {
-      productionDisplay.set(resource, {size: 1, multiplier: production})
+    const prodDisplay = productionDisplay.get(resource)
+    if (prodDisplay?.size === production) {
+      productionDisplay.set(resource, {...prodDisplay, size: 1, multiplier: prodDisplay.corruption ? -production : production})
       productionDisplaySize -= production - 1
     }
   }
@@ -52,18 +53,27 @@ export default function PlayerResourceProduction({player, small}: Props) {
   return (
     <>
       {Array.from(productionDisplay.entries()).flatMap(([resource, productionDisplay]) => {
+        const children: EmotionJSX.Element[] = []
         if (productionDisplay.multiplier) {
-          return [
-            <img key={resource + 'Multiplied'} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index!)} draggable="false"
-                 alt={getDescription(t, resource)}/>,
-            <ProductionMultiplier key={resource + 'Multiplier'} quantity={productionDisplay.multiplier}
-                                  css={productionMultiplierStyle(productionDisplay.index!)}/>
-          ]
+          children.push(<img key={resource + 'Multiplied'} src={resourceIcon[resource]} draggable="false" alt={getDescription(t, resource)}
+                             css={productionStyle(productionDisplay.index!)}/>)
+          if (productionDisplay.corruption) {
+            children.push(<img key={resource + 'Corruption'} src={Images.corruption} draggable="false" alt={getDescription(t, resource)}
+                               css={[productionStyle(productionDisplay.index!), corruptionStyle]}/>)
+          }
+          children.push(<ProductionMultiplier key={resource + 'Multiplier'} quantity={productionDisplay.multiplier}
+                                              css={productionMultiplierStyle(productionDisplay.index!)}/>)
         } else {
-          return [...Array(productionDisplay.size).keys()].map((_, index) =>
-            <img key={resource + '_' + index} src={resourceIcon[resource]} css={productionStyle(productionDisplay.index! + index)} draggable="false"
-                 alt={getDescription(t, resource)}/>)
+          for (let index = 0; index < productionDisplay.size; index++) {
+            children.push(<img key={resource + '_' + index} src={resourceIcon[resource]} draggable="false" alt={getDescription(t, resource)}
+                               css={productionStyle(productionDisplay.index! + index)}/>)
+            if (productionDisplay.corruption) {
+              children.push(<img key={resource + 'Corruption_' + index} src={Images.corruption} draggable="false" alt={getDescription(t, resource)}
+                                 css={[productionStyle(productionDisplay.index! + index), corruptionStyle]}/>)
+            }
+          }
         }
+        return children
       })}
     </>
   )
@@ -71,6 +81,7 @@ export default function PlayerResourceProduction({player, small}: Props) {
 
 type ProductionDisplay = {
   size: number
+  corruption: boolean
   index?: number
   multiplier?: number
 }
@@ -103,6 +114,10 @@ const productionStyle = (index: number) => {
     `
   }
 }
+
+const corruptionStyle = css`
+  opacity: 0.8;
+`
 
 const ProductionMultiplier: FC<{ quantity: number } & HTMLAttributes<HTMLDivElement>> = ({quantity, ...props}) => (
   <div {...props} css={productionMultiplierQuantityStyle}>{quantity}</div>

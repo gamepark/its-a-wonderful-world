@@ -215,6 +215,7 @@ import titleGrey from './menus/title-grey.png'
 import titleOrange from './menus/title-orange.png'
 import titleWhite from './menus/title-white.png'
 import titleYellow from './menus/title-yellow.png'
+import corruption from './resources/corruption.png'
 import energyCube from './resources/energy-cube.png'
 import energy from './resources/energy.png'
 import explorationCube from './resources/exploration-cube.png'
@@ -262,7 +263,7 @@ const Images = {
   arrowGreen, arrowOrange, arrowWhite, buttonArrow,
   buttonBlack, buttonBlue, buttonGreen, buttonGrey, buttonRed, buttonYellow, textureGrey,
   circleMetal, titleBlack, titleBlue, titleGreen, titleGrey, titleOrange, titleWhite, titleYellow,
-  energy, energyCube, exploration, explorationCube, gold, goldCube, krystallium, krystalliumCube, materials, materialsCube, science, scienceCube,
+  energy, energyCube, exploration, explorationCube, gold, goldCube, krystallium, krystalliumCube, materials, materialsCube, science, scienceCube, corruption,
   coverArtwork, scoreBackground, scoreIcon
 }
 

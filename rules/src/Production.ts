@@ -19,11 +19,15 @@ export function isProductionFactor(production: Production): production is Produc
   return productionFactor.resource !== undefined && productionFactor.factor !== undefined
 }
 
-export function getProduction(player: Player | PlayerView, resource: Resource): number {
+export function getProductionAndCorruption(player: Player | PlayerView, resource: Resource): number {
   const developmentsProduction = player.constructedDevelopments.reduce((sum, card) =>
     sum + getResourceProduction(player, resource, getCardDetails(card).production), 0
   )
-  return Math.max(0, getEmpireProduction(player, resource) + developmentsProduction)
+  return getEmpireProduction(player, resource) + developmentsProduction
+}
+
+export function getProduction(player: Player | PlayerView, resource: Resource): number {
+  return Math.max(0, getProductionAndCorruption(player, resource))
 }
 
 function getEmpireProduction(player: Player | PlayerView, resource: Resource): number {
