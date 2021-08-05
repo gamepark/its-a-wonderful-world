@@ -18,9 +18,12 @@ import {
 } from '../util/Styles'
 
 type DropItem = { card: number }
-type Props = { player: Player | PlayerView }
+type Props = {
+  player: Player | PlayerView
+  moveUp: boolean
+}
 
-export default function ConstructedCardsArea({player}: Props) {
+export default function ConstructedCardsArea({player, moveUp = false}: Props) {
   const {t} = useTranslation()
   const [focusedCardIndex, setFocusedCardIndex] = useState<number>()
 
@@ -53,7 +56,7 @@ export default function ConstructedCardsArea({player}: Props) {
       }
       {player.constructedDevelopments.map((card, index) =>
         <DevelopmentCard key={card} development={developmentCards[card]} onClick={() => setFocusedCardIndex(index)}
-                         css={[style, cardStyle, transform(index)]}/>
+                         css={[style, cardStyle, transform(index, moveUp)]}/>
       )}
       {dragging &&
       <div ref={ref} css={[buildDropArea, isValidTarget ? validDropAreaColor(isOver) : invalidDropAreaColor]}>
@@ -68,10 +71,11 @@ export default function ConstructedCardsArea({player}: Props) {
 
 const style = css`
   position: absolute;
+  transition: transform 0.2s ease-in-out;
 `
 
-const transform = (index: number) => css`
-  transform: translate(${constructedCardLeftMargin * 100 / cardWidth}%, ${constructedCardY(index) * 100 / cardHeight}%);
+const transform = (index: number, moveUp = false) => css`
+  transform: translate(${constructedCardLeftMargin * 100 / cardWidth}%, ${constructedCardY(index) * 100 / cardHeight}%) ${moveUp ? 'translateY(-27em)': ''};
 `
 
 const buildDropArea = css`

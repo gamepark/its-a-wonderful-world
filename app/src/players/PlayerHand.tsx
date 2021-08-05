@@ -17,8 +17,8 @@ import FocusedDevelopmentOptions from '../material/developments/FocusedDevelopme
 import DragItemType from '../material/DragItemType'
 import Images from '../material/Images'
 import {
-  bottomMargin, cardHeight, cardRatio, cardStyle, cardWidth, constructedCardLeftMargin, getAreaCardX, getAreaCardY, playerPanelHeight, playerPanelWidth,
-  playerPanelY, popupBackgroundStyle
+  areasX, bottomMargin, cardHeight, cardRatio, cardStyle, cardWidth, getAreaCardX, getAreaCardY, playerPanelHeight, playerPanelWidth, playerPanelY,
+  popupBackgroundStyle
 } from '../util/Styles'
 import {textButton, textButtonLeft} from './DraftArea'
 import usePlayersStartingWithMe from './usePlayersStartingWithMe'
@@ -40,7 +40,6 @@ export default function PlayerHand({player, game}: Props) {
   const passingCard = animation && isPassCards(animation.move) ? animation.move : undefined
   const receivingCardsFrom = passingCard && getPlayerReceivingCardsFrom(game, player)
   const passingCardsTo = passingCard && getPlayerPassingCardsTo(game, player)
-  const position = players.length > 2 ? handPosition : handPosition2Players
   const canChooseCard = player.chosenCard === undefined && player.hand.length >= 1 && animation?.move.type !== MoveType.RevealChosenCards
 
   const getItemProps = (index: number) => {
@@ -126,29 +125,49 @@ export default function PlayerHand({player, game}: Props) {
         <FocusedDevelopmentOptions development={getCardDetails(focusedCard)} onClose={() => setFocusedCard(undefined)}/>
       </>
       }
-      <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players.length > 2 ? 5 : 6.9} sizeRatio={cardRatio}
+      <Hand css={[cardStyle, handTop, handLeft(game)]} rotationOrigin={50} gapMaxAngle={0.72}
+            maxAngle={handMaxAngle(game)} sizeRatio={cardRatio}
             getItemProps={getItemProps}>
         {hand.map((card, index) => <DevelopmentCard key={card} development={developmentCards[card]} css={[playerHandCardStyle,
-          choosingCard?.card === card && animation && getChosenCardAnimation(player, animation, players.length),
+          choosingCard?.card === card && animation && getChosenCardAnimation(game, player, animation),
           animation && passingCard && (index < player.hand.length ?
-            passCardAnimation(players.indexOf(passingCardsTo!), animation, players.length) :
-            receiveCardAnimation(players.indexOf(receivingCardsFrom!), animation, players.length))]}/>)}
+            passCardAnimation(game, players.indexOf(passingCardsTo!), animation) :
+            receiveCardAnimation(game, players.indexOf(receivingCardsFrom!), animation))]}/>)}
       </Hand>
     </>
   )
 }
 
-export const hand2PlayersX = 50 + (constructedCardLeftMargin + 1) / 2
-export const handX = hand2PlayersX - (playerPanelWidth + 1) / 2
-export const handY = 100 - cardHeight - bottomMargin
+function handMaxAngle(game: GameView) {
+  if ((game.ascensionDeck === undefined && game.players.length > 2) || game.players.length === 7) {
+    return 5
+  } else if ((game.ascensionDeck === undefined && game.players.length === 2) || game.players.length === 3) {
+    return 6.9
+  } else if (game.players.length === 2) {
+    return 7.9
+  } else {
+    return 6
+  }
+}
 
-export const handPosition2Players = css`
-  left: ${hand2PlayersX}%;
-  top: ${handY}%;
+function handX(game: GameView) {
+  if ((game.ascensionDeck === undefined && game.players.length > 2) || game.players.length > 4) {
+    return 50 + (areasX - playerPanelWidth - 2 - cardWidth) / 2
+  } else if ((game.ascensionDeck === undefined && game.players.length === 2) || game.players.length === 3) {
+    return 50 + (areasX - 1 - cardWidth) / 2
+  } else if (game.players.length === 2) {
+    return 50 - cardWidth / 2
+  } else {
+    return 50 - (playerPanelWidth + 1 + cardWidth) / 2
+  }
+}
+
+const handLeft = (state: GameView) => css`
+  left: ${handX(state)}%;
 `
 
-export const handPosition = css`
-  left: ${handX}%;
+export const handY = 100 - cardHeight - bottomMargin - 1
+export const handTop = css`
   top: ${handY}%;
 `
 
@@ -158,23 +177,23 @@ export const playerHandCardStyle = css`
   will-change: transform;
 `
 
-export const getChosenCardAnimation = (player: Player | PlayerView, animation: Animation, players: number) => {
+export const getChosenCardAnimation = (game: GameView, player: Player | PlayerView, animation: Animation) => {
   if (animation.action.cancelled) {
-    return translateFromDraftArea(player.draftArea.length, animation.duration, players)
+    return translateFromDraftArea(game, player.draftArea.length, animation.duration)
   } else if (animation.action.move !== animation.move) {
-    return animateToDraftArea(player.draftArea.length, animation.duration, players)
+    return animateToDraftArea(game, player.draftArea.length, animation.duration)
   } else {
-    return translateToDraftArea(player.draftArea.length, animation.duration, players)
+    return translateToDraftArea(game, player.draftArea.length, animation.duration)
   }
 }
 
-const animateToDraftArea = (index: number, transitionDuration: number, players: number) => {
+const animateToDraftArea = (game: GameView, index: number, transitionDuration: number) => {
   const keyframe = keyframes`
     from {
       transform: none;
     }
     to {
-      transform: translate(${(getAreaCardX(index) - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%,
+      transform: translate(${(getAreaCardX(index) - handX(game)) * 100 / cardWidth}%,
       ${(getAreaCardY(1) - handY) * 100 / cardHeight}%);
     }
   `
@@ -183,16 +202,16 @@ const animateToDraftArea = (index: number, transitionDuration: number, players: 
   `
 }
 
-const translateToDraftArea = (index: number, transitionDuration: number, players: number) => css`
-  transform: translate(${(getAreaCardX(index) - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%,
+const translateToDraftArea = (game: GameView, index: number, transitionDuration: number) => css`
+  transform: translate(${(getAreaCardX(index) - handX(game)) * 100 / cardWidth}%,
   ${(getAreaCardY(1) - handY) * 100 / cardHeight}%);
   transition: transform ${transitionDuration}s ease-in-out;
 `
 
-const translateFromDraftArea = (index: number, transitionDuration: number, players: number) => {
+const translateFromDraftArea = (game: GameView, index: number, transitionDuration: number) => {
   const keyframe = keyframes`
     from {
-      transform: translate(${(getAreaCardX(index) - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%,
+      transform: translate(${(getAreaCardX(index) - handX(game)) * 100 / cardWidth}%,
       ${(getAreaCardY(1) - handY) * 100 / cardHeight}%);
     }
   `
@@ -201,7 +220,8 @@ const translateFromDraftArea = (index: number, transitionDuration: number, playe
   `
 }
 
-const passCardAnimation = (destination: number, animation: Animation, players: number) => {
+const passCardAnimation = (game: GameView, destination: number, animation: Animation) => {
+  const players = game.players.length
   const keyframe = keyframes`
     from {
       transform: perspective(100vh);
@@ -210,22 +230,23 @@ const passCardAnimation = (destination: number, animation: Animation, players: n
       transform: perspective(100vh) rotateY(180deg)
     }
     70% {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
+      transform: translateX(${(100 - playerPanelWidth - 1 - handX(game)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
     }
     to {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
+      transform: translateX(${(100 - playerPanelWidth - 1 - handX(game)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
     }
   `
   return css`animation: ${keyframe} ${animation.duration}s ease-in-out;`
 }
 
-const receiveCardAnimation = (origin: number, animation: Animation, players: number) => {
+const receiveCardAnimation = (game: GameView, origin: number, animation: Animation) => {
+  const players = game.players.length
   const keyframe = keyframes`
     from {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
+      transform: translateX(${(100 - playerPanelWidth - 1 - handX(game)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
     }
     30% {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
+      transform: translateX(${(100 - playerPanelWidth - 1 - handX(game)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
     }
     70% {
       transform: perspective(100vh) rotateY(180deg)

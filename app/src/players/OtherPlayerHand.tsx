@@ -10,10 +10,10 @@ import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {Animation, useAnimation} from '@gamepark/react-client'
 import {Hand} from '@gamepark/react-components'
 import DevelopmentCard from '../material/developments/DevelopmentCard'
-import {cardHeight, cardRatio, cardStyle, cardWidth, getAreaCardX, getAreaCardY, playerPanelHeight, playerPanelWidth, playerPanelY} from '../util/Styles'
 import {
-  getPlayerPassingCardsTo, getPlayerReceivingCardsFrom, hand2PlayersX, handPosition, handPosition2Players, handX, handY, playerHandCardStyle
-} from './PlayerHand'
+  areasX, cardHeight, cardRatio, cardStyle, cardWidth, getAreaCardX, getAreaCardY, playerPanelHeight, playerPanelWidth, playerPanelY
+} from '../util/Styles'
+import {getPlayerPassingCardsTo, getPlayerReceivingCardsFrom, handTop, handY, playerHandCardStyle} from './PlayerHand'
 import usePlayersStartingWithMe from './usePlayersStartingWithMe'
 
 type Props = {
@@ -32,8 +32,6 @@ export default function OtherPlayerHand({player, game}: Props) {
   const passingCardsTo = passingCard && getPlayerPassingCardsTo(game, player)
   const cardsBeingReceived = receivingCardsFrom && (isPlayer(receivingCardsFrom) ? receivingCardsFrom.cardsToPass!.map(getCardType) : receivingCardsFrom.cardsToPass)
 
-  const position = players.length > 2 ? handPosition : handPosition2Players
-
   const getItemProps = (index: number) => {
     const chosen = index === cardBeingRevealed?.index
     const ignore = chosen || passingCard !== undefined
@@ -50,10 +48,12 @@ export default function OtherPlayerHand({player, game}: Props) {
   const hand = cardsBeingReceived ? [...player.cardsToPass!, ...cardsBeingReceived] : player.hiddenHand
 
   return (
-    <Hand css={[position, cardStyle]} rotationOrigin={50} gapMaxAngle={0.72} maxAngle={players.length > 2 ? 5 : 6.9} sizeRatio={cardRatio}
+    <Hand css={[cardStyle, handTop, handLeft(players.length)]} rotationOrigin={50} gapMaxAngle={0.72}
+          maxAngle={players.length > 3 ? 5 : 6.9} sizeRatio={cardRatio}
           getItemProps={getItemProps}>
       {hand.map((deckType, index) =>
-        <DevelopmentCard key={'#' + index} deckType={deckType} development={index === cardBeingRevealed?.index ? developmentCards[cardBeingRevealed!.card] : undefined}
+        <DevelopmentCard key={'#' + index} deckType={deckType}
+                         development={index === cardBeingRevealed?.index ? developmentCards[cardBeingRevealed!.card] : undefined}
                          css={[playerHandCardStyle,
                            animation && index === cardBeingRevealed?.index && getRevealingCardAnimation(player, animation, players),
                            animation && passingCard && (index < player.hiddenHand.length ?
@@ -64,13 +64,25 @@ export default function OtherPlayerHand({player, game}: Props) {
   )
 }
 
+function handX(players: number) {
+  if (players > 3) {
+    return 50 + (areasX - playerPanelWidth - 2 - cardWidth) / 2
+  } else {
+    return 50 + (areasX - cardWidth - 1) / 2
+  }
+}
+
+const handLeft = (players: number) => css`
+  left: ${handX(players)}%;
+`
+
 const getRevealingCardAnimation = (player: Player | PlayerView, animation: Animation, players: (Player | PlayerView)[]) => {
   const keyframe = keyframes`
     from {
       transform: rotateY(180deg);
     }
     to {
-      transform: translate(${(getAreaCardX(player.draftArea.length) - (players.length > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%,
+      transform: translate(${(getAreaCardX(player.draftArea.length) - handX(players.length)) * 100 / cardWidth}%,
       ${(getAreaCardY(1) - handY) * 100 / cardHeight}%);
     }
   `
@@ -97,10 +109,10 @@ const passCardAnimation = (destination: number, animation: Animation, players: n
       transform: rotateY(180deg);
     }
     70% {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
+      transform: translateX(${(100 - playerPanelWidth - 1 - handX(players)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
     }
     to {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
+      transform: translateX(${(100 - playerPanelWidth - 1 - handX(players)) * 100 / cardWidth}%) translateY(${(playerPanelY(destination, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
     }
   `
   return css`
@@ -111,10 +123,10 @@ const passCardAnimation = (destination: number, animation: Animation, players: n
 const receiveCardAnimation = (origin: number, animation: Animation, players: number) => {
   const keyframe = keyframes`
     from, 30% {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
+      transform: translateX(${(100 - playerPanelWidth - 1 - handX(players)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0);
     }
     60% {
-      transform: translateX(${(100 - playerPanelWidth - 1 - (players > 2 ? handX : hand2PlayersX)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
+      transform: translateX(${(100 - playerPanelWidth - 1 - handX(players)) * 100 / cardWidth}%) translateY(${(playerPanelY(origin, players) + playerPanelHeight(players) / 2 - cardHeight / 2 - handY) * 100 / cardHeight}%) rotateY(180deg) scale(0.5);
     }
     to {
       transform: rotateY(180deg);
