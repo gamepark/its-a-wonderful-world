@@ -62,7 +62,7 @@ export default function PlayerPanels({game}: Props) {
   const gameOver = isOver(game) && !!actions && actions.every(action => !action.pending)
   const gameWasLive = useRef(!gameOver)
   const revealedCards = useMemo(() => revealingCards && players.filter(player => player.empire !== playerId)
-      .map(player => ({empireName: player.empire, card: revealingCards.revealedCards[player.empire]!.card})),
+      .map(player => ({empireName: player.empire, card: revealingCards.revealedCards[player.empire]?.card})),
     [revealingCards, players, playerId])
   return (
     <>
@@ -73,7 +73,7 @@ export default function PlayerPanels({game}: Props) {
       )}
       {gameOver && <ScorePanel game={game} animation={gameWasLive.current}/>}
       {revealedCards && revealedCards.map((revealedCard, index) => {
-        if (revealedCard.empireName === displayedPlayerId) return null
+        if (revealedCard.empireName === displayedPlayerId || revealedCard.card === undefined) return null
         return <DevelopmentCard key={revealedCard.card} development={developmentCards[revealedCard.card]}
                                 css={[cardStyle, revealedCardStyle, revealedCardPosition(playerId ? index + 1 : index, players.length),
                                   revealedCardAnimation(index, animation!.duration / (playerId ? game.players.length - 1 : game.players.length))]}/>
