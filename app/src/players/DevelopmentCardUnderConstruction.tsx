@@ -103,7 +103,7 @@ export default function DevelopmentCardUnderConstruction({game, gameOver, player
           }
           break
         case DragItemType.CHARACTER_TOKEN_FROM_EMPIRE:
-          play(placeCharacterMove(playerId!, item.character, construction.card, Math.min(...placeCharacterMoves.map(move => move.space))))
+          play(placeCharacterMoves.find(move => move.character === item.character))
           break
       }
     }

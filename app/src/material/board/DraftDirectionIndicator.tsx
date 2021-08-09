@@ -22,7 +22,7 @@ export default function DraftDirectionIndicator({clockwise, players}: Props) {
       {[...Array(players - 1)].map((_, index) => clockwise ?
         <DescendingArrows key={index} color={greenColor} css={css`top: ${headerHeight + (index + 1) * (playerPanelHeight(players) + playerPanelMargin)}%;`}
                           title={t('Draft direction')}/> :
-        <AscendingArrows key={index} color={purpleColor} css={css`top: ${25.2 + index * 18}%;`}
+        <AscendingArrows key={index} color={purpleColor} css={css`top: ${headerHeight + (index + 1) * (playerPanelHeight(players) + playerPanelMargin)}%;`}
                          title={t('Draft direction')}/>
       )}
     </>
