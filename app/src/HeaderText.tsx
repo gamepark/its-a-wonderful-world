@@ -96,7 +96,7 @@ function getText(t: TFunction, validate: () => void, play: (move: Move) => void,
       } else if (player && player.availableResources.length) {
         return t('Place your resources on your developments under construction or your Empire card')
       } else if (player && !player.ready) {
-        return <Trans values={{resource: Resource.Materials}}
+        return <Trans values={{resource: Resource[Resource.Materials]}}
                       defaults="Click on <0>Validate</0> if you are ready to proceed to {resource, select, Materials{materials} Energy{energy} Science{science} Gold{gold} other{exploration}} production"
                       components={[<Button onClick={validate}/>]}/>
       } else {
