@@ -16,13 +16,17 @@ export function isGameOptions(arg: GameState | ItsAWonderfulWorldOptions): arg i
 }
 
 export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOptions> = {
+  corruptionAndAscension: {
+    label: t => t('Corruption & Ascension'),
+    help: t => t('c&a.help'),
+    subscriberRequired: true
+  },
   players: {
     id: {
       label: t => t('Empire'),
       values: empireNames,
       valueSpec: empire => ({
-        label: t => getPlayerName(empire, t),
-        subscriberRequired: empire === EmpireName.NationsOfOceania || empire === EmpireName.NorthHegemony
+        label: t => getPlayerName(empire, t)
       })
     }
   },
@@ -33,19 +37,12 @@ export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOption
       label: t => t('Side {side}', {side: String.fromCharCode(64 + side)}),
       help: t => getEmpireSideHelp(side, t),
       warn: t => side === EmpireSide.A ? t('Side A is advised for beginners') : '',
-      subscriberRequired: side !== EmpireSide.A && side !== EmpireSide.B,
-      competitiveDisabled: side === EmpireSide.E || side === EmpireSide.F
+      subscriberRequired: side !== EmpireSide.A && side !== EmpireSide.B
     })
   },
-  corruptionAndAscension: {
-    label: t => t('Corruption & Ascension'),
-    help: t => t('c&a.help'),
-    subscriberRequired: true,
-    competitiveDisabled: true
-  },
   validate: (options, t) => {
-    if (!options.corruptionAndAscension) {
-      if (options.players.length > 5) {
+    if (options.corruptionAndAscension === false) {
+      if (options.players && options.players.length > 5) {
         throw new OptionsValidationError(t('6.players.requires.c&a'), ['corruptionAndAscension', 'players'])
       }
       if (options.empiresSide === EmpireSide.E || options.empiresSide === EmpireSide.F) {
