@@ -104,40 +104,61 @@ export default function MainMenu() {
               {displayRematchTooltip && <span css={tooltipStyle}>{t('Offer a friendly rematch')}</span>}
             </IconButton> :
             <IconButton css={[menuButtonStyle, undoButtonStyle]} title={t('Undo my last move')} aria-label={t('Undo my last move')}
-                        onClick={() => toggle.play() && undo({delayed: !isPlaying})} disabled={!canUndo()}>
+                        onClick={() => {
+                          toggle.play()
+                          undo({delayed: !isPlaying})
+                        }} disabled={!canUndo()}>
               {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
             </IconButton>
         )
         }
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Leave full screen')} aria-label={t('Leave full screen')}
-                        onClick={() => toggle.play() && fscreen.exitFullscreen()}>
+                        onClick={() => {
+                          toggle.play()
+                          fscreen.exitFullscreen()
+                        }}>
               <FontAwesomeIcon icon={faCompress}/>
             </IconButton>
             :
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]} title={t('Go to full screen')} aria-label={t('Go to full screen')}
-                        onClick={() => toggle.play() && fscreen.requestFullscreen(document.getElementById('root')!)}>
+                        onClick={() => {
+                          toggle.play()
+                          fscreen.requestFullscreen(document.getElementById('root')!)
+                        }}>
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
         )}
         <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} title={t('Menu')} aria-label={t('Menu')}
-                    onClick={() => toggle.play() && setDisplayMenu(true)}>
+                    onClick={() => {
+                      toggle.play()
+                      setDisplayMenu(true)
+                    }}>
           <FontAwesomeIcon icon={faChevronDown}/>
         </IconButton>
       </div>
       <div css={[menuStyle, openMenuStyle, !displayMenu && hidden]}>
-        <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} onClick={() => toggle.play() && setDisplayMenu(false)}>
+        <IconButton css={[menuButtonStyle, mainMenuButtonStyle]} onClick={() => {
+          toggle.play()
+          setDisplayMenu(false)
+        }}>
           <span css={subMenuTitle}>{t('Close')}</span>
           <FontAwesomeIcon icon={faChevronUp}/>
         </IconButton>
         {fscreen.fullscreenEnabled && (fullScreen ?
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]}
-                        onClick={() => toggle.play() && fscreen.exitFullscreen()}>
+                        onClick={() => {
+                          toggle.play()
+                          fscreen.exitFullscreen()
+                        }}>
               <span css={subMenuTitle}>{t('Leave full screen')}</span>
               <FontAwesomeIcon icon={faCompress}/>
             </IconButton> :
             <IconButton css={[menuButtonStyle, fullScreenButtonStyle]}
-                        onClick={() => toggle.play() && fscreen.requestFullscreen(document.getElementById('root')!)}>
+                        onClick={() => {
+                          toggle.play()
+                          fscreen.requestFullscreen(document.getElementById('root')!)
+                        }}>
               <span css={subMenuTitle}>{t('Go to full screen')}</span>
               <FontAwesomeIcon icon={faExpand}/>
             </IconButton>
@@ -150,7 +171,10 @@ export default function MainMenu() {
         }
         {game && player && !quit && !isOver(game) &&
         <IconButton css={[menuButtonStyle, undoButtonStyle]}
-                    onClick={() => toggle.play() && undo({delayed: !isPlaying})} disabled={!canUndo()}>
+                    onClick={() => {
+                      toggle.play()
+                      undo({delayed: !isPlaying})
+                    }} disabled={!canUndo()}>
           <span css={subMenuTitle}>{t('Undo my last move')}</span>
           {!actions || nonGuaranteedUndoPending ? <LoadingSpinner css={loadingSpinnerStyle}/> : <FontAwesomeIcon icon={faUndoAlt}/>}
         </IconButton>
@@ -163,7 +187,10 @@ export default function MainMenu() {
           <span css={subMenuTitle}>{muted ? t('Enable sound') : t('Mute sound')}</span>
           <FontAwesomeIcon icon={muted ? faVolumeMute : faVolumeUp}/>
         </IconButton>
-        <IconButton css={[menuButtonStyle, themeButtonStyle]} onClick={() => toggle.play() && theme.switchThemeColor()}>
+        <IconButton css={[menuButtonStyle, themeButtonStyle]} onClick={() => {
+          toggle.play()
+          theme.switchThemeColor()
+        }}>
           {theme.color === LightTheme ?
             <>
               <span css={subMenuTitle}>{t('Dark mode')}</span>
@@ -177,7 +204,10 @@ export default function MainMenu() {
           }
         </IconButton>
         {game && !tutorial &&
-        <IconButton css={[menuButtonStyle, clockButtonStyle]} onClick={() => toggle.play() && setTimePopupOpen(true)}>
+        <IconButton css={[menuButtonStyle, clockButtonStyle]} onClick={() => {
+          toggle.play()
+          setTimePopupOpen(true)
+        }}>
           <span css={subMenuTitle}>{t('Thinking time')}</span>
           <FontAwesomeIcon icon={faClock}/>
         </IconButton>

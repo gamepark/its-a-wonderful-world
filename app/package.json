@@ -12,7 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@gamepark/its-a-wonderful-world": "^2.3.0",
     "@gamepark/react-client": "~5.3.0",
-    "@gamepark/react-components": "~5.3.0",
+    "@gamepark/react-components": "~5.4.0",
     "@gamepark/rules-api": "^5.3.0",
     "@types/fscreen": "^1.0.1",
     "@types/nosleep.js": "^0.10.0",

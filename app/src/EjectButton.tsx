@@ -22,10 +22,14 @@ export default function EjectButton({subMenu, openEjectPopup, ...props}: Props) 
   if (!opponentWithNegativeTime) {
     return null
   }
+  const onClick = () => {
+    toggle.play().catch(console.error)
+    openEjectPopup()
+  }
   return (
     <>
       <IconButton css={ejectButtonStyle} title={t('Eject player')} aria-label={t('Eject player')}
-                  onClick={() => toggle.play() && openEjectPopup()} {...props}>
+                  onClick={onClick} {...props}>
         {subMenu && <span css={subMenuTitle}>{t('Eject player')}</span>}
         <FontAwesomeIcon icon={faUserSlash}/>
       </IconButton>
