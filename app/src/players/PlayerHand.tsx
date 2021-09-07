@@ -42,8 +42,13 @@ export default function PlayerHand({player, game}: Props) {
   const passingCardsTo = passingCard && getPlayerPassingCardsTo(game, player)
   const canChooseCard = player.chosenCard === undefined && player.hand.length >= 1 && animation?.move.type !== MoveType.RevealChosenCards
 
+  const hand = player.hand.filter(card => card !== player.chosenCard)
+  if (passingCard) {
+    hand.push(...passingCard.receivedCards)
+  }
+
   const getItemProps = (index: number) => {
-    const card = player.hand[index]
+    const card = hand[index]
     const chosen = index < player.hand.length && card === choosingCard?.card
     const undo = choosingCard && animation?.action.cancelled
     const received = passingCard && index >= player.hand.length
@@ -99,11 +104,6 @@ export default function PlayerHand({player, game}: Props) {
         animation: ${keyframe} ${duration}s ${delay}s ease-in-out both;
       `
     }
-  }
-
-  const hand = player.hand.filter(card => card !== player.chosenCard)
-  if (passingCard) {
-    hand.push(...passingCard.receivedCards)
   }
 
   useEffect(() => {
