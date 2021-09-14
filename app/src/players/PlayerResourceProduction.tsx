@@ -5,6 +5,7 @@ import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Reso
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {getProductionAndCorruption} from '@gamepark/its-a-wonderful-world/Production'
+import {Picture} from '@gamepark/react-components'
 import {FC, HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'
@@ -55,21 +56,21 @@ export default function PlayerResourceProduction({player, small}: Props) {
       {Array.from(productionDisplay.entries()).flatMap(([resource, productionDisplay]) => {
         const children: EmotionJSX.Element[] = []
         if (productionDisplay.multiplier) {
-          children.push(<img key={resource + 'Multiplied'} src={resourceIcon[resource]} draggable="false" alt={getDescription(t, resource)}
-                             css={productionStyle(productionDisplay.index!)}/>)
+          children.push(<Picture key={resource + 'Multiplied'} src={resourceIcon[resource]} draggable="false" alt={getDescription(t, resource)}
+                                 css={productionStyle(productionDisplay.index!)}/>)
           if (productionDisplay.corruption) {
-            children.push(<img key={resource + 'Corruption'} src={Images.corruption} draggable="false" alt={getDescription(t, resource)}
-                               css={[productionStyle(productionDisplay.index!), corruptionStyle]}/>)
+            children.push(<Picture key={resource + 'Corruption'} src={Images.corruption} draggable="false" alt={getDescription(t, resource)}
+                                   css={[productionStyle(productionDisplay.index!), corruptionStyle]}/>)
           }
           children.push(<ProductionMultiplier key={resource + 'Multiplier'} quantity={productionDisplay.multiplier}
                                               css={productionMultiplierStyle(productionDisplay.index!)}/>)
         } else {
           for (let index = 0; index < productionDisplay.size; index++) {
-            children.push(<img key={resource + '_' + index} src={resourceIcon[resource]} draggable="false" alt={getDescription(t, resource)}
-                               css={productionStyle(productionDisplay.index! + index)}/>)
+            children.push(<Picture key={resource + '_' + index} src={resourceIcon[resource]} draggable="false" alt={getDescription(t, resource)}
+                                   css={productionStyle(productionDisplay.index! + index)}/>)
             if (productionDisplay.corruption) {
-              children.push(<img key={resource + 'Corruption_' + index} src={Images.corruption} draggable="false" alt={getDescription(t, resource)}
-                                 css={[productionStyle(productionDisplay.index! + index), corruptionStyle]}/>)
+              children.push(<Picture key={resource + 'Corruption_' + index} src={Images.corruption} draggable="false" alt={getDescription(t, resource)}
+                                     css={[productionStyle(productionDisplay.index! + index), corruptionStyle]}/>)
             }
           }
         }

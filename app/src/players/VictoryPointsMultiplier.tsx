@@ -3,6 +3,7 @@ import {css} from '@emotion/react'
 import {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
 import DevelopmentType from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import {ComboVictoryPoints} from '@gamepark/its-a-wonderful-world/Scoring'
+import {Picture} from '@gamepark/react-components'
 import {TFunction} from 'i18next'
 import {HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -23,7 +24,7 @@ export default function VictoryPointsMultiplier({combo, quantity, ...props}: Pro
       {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
       {items.map(item => isCharacter(item) ?
         <CharacterToken key={item} character={item}/> :
-        <img key={item} src={developmentTypeImage[item]} css={developmentTypeImageStyle} alt={getDevelopmentTypeDescription(t, item)}/>)}
+        <Picture key={item} src={developmentTypeImage[item]} css={developmentTypeImageStyle} alt={getDevelopmentTypeDescription(t, item)}/>)}
     </div>
   )
 }

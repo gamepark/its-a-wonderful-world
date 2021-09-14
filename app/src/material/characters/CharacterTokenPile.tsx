@@ -10,6 +10,7 @@ import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimation} from '@gamepark/react-client'
+import {Picture} from '@gamepark/react-components'
 import {HTMLAttributes} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
@@ -62,7 +63,7 @@ export default function CharacterTokenPile({player, character, quantity, gameOve
   }
   return (
     <div ref={ref} {...props}>
-      {quantity === 0 && <img alt={getDescription(t, character)} src={emptySpaceImages[character]} draggable={false} css={tokenStyle(0)}/>}
+      {quantity === 0 && <Picture alt={getDescription(t, character)} src={emptySpaceImages[character]} css={tokenStyle(0)}/>}
       {tokens}
       <div css={tokenQuantityStyle}>{quantity}</div>
       <DragPreviewImage connect={preview} src={characterTokenImages[character]}/>

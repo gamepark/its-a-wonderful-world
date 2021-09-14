@@ -9,6 +9,7 @@ import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {isReceiveCharacter} from '@gamepark/its-a-wonderful-world/moves/ReceiveCharacter'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {Tutorial, useActions, useAnimation, useFailures, usePlayerId} from '@gamepark/react-client'
+import {Picture} from '@gamepark/react-components'
 import {TFunction} from 'i18next'
 import {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -93,8 +94,8 @@ export default function TutorialPopup({game, tutorial}: Props) {
       }
       {
         currentMessage && currentMessage.arrow &&
-        <img alt="Arrow pointing toward current tutorial interest" src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark} draggable="false"
-             css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
+        <Picture alt="Arrow pointing toward current tutorial interest" src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark}
+                 css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
       }
       {
         game.round === 3 && game.phase === Phase.Draft && !hideThirdTurnInfo &&

@@ -11,7 +11,7 @@ import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {Chat, useFailures, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import GameMode from '@gamepark/react-client/dist/Types/GameMode'
 import GamePageState from '@gamepark/react-client/dist/Types/GamePageState'
-import {Header, LoadingScreen} from '@gamepark/react-components'
+import {Header, ImagesLoader, LoadingScreen} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
 import fscreen from 'fscreen'
 import {useEffect, useState} from 'react'
@@ -25,10 +25,8 @@ import GameDisplay from './GameDisplay'
 import HeaderText from './HeaderText'
 import MainMenu from './MainMenu'
 import Images from './material/Images'
-import IWWBox from './material/IWW_BOX_3D.png'
 import {Color, DarkTheme, LightTheme} from './Theme'
 import Button from './util/Button'
-import ImagesLoader from './util/ImagesLoader'
 import {backgroundColor, empireBackground, textColor} from './util/Styles'
 
 const userTheme = 'userTheme'
@@ -80,7 +78,7 @@ export default function App() {
     <DndProvider options={HTML5ToTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedPlayer)]}/>
-        <LoadingScreen gameBox={IWWBox} author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} developer="Game Park"
+        <LoadingScreen author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} developer="Game Park"
                        display={loading} css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
         {!loading && <GameDisplay game={game!} validate={validate}/>}
         <p css={(theme: Theme) => [portraitInfo, textColor(theme)]}>
@@ -101,7 +99,7 @@ export default function App() {
 
 const backgroundImage = (empire?: EmpireName) => css`
   #root {
-    background-image: url(${empire ? empireBackground[empire] : Images.coverArtwork});
+    background-image: url(${empire ? empireBackground[empire] : process.env.PUBLIC_URL + '/cover-1920.jpg'});
   }
 `
 
@@ -176,7 +174,7 @@ const portraitInfo = css`
 `
 
 const loadingScreenStyle = css`
-  background-image: url(${Images.coverArtwork});
+  background-image: url(${process.env.PUBLIC_URL + '/cover-1920.jpg'});
 `
 
 const headerStyle = css`

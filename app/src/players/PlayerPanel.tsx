@@ -7,6 +7,7 @@ import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {ComboVictoryPoints, getComboValue, getScoringDetails} from '@gamepark/its-a-wonderful-world/Scoring'
 import {Avatar, useOptions, usePlayer} from '@gamepark/react-client'
 import {SpeechBubbleDirection} from '@gamepark/react-client/dist/Avatar'
+import {Picture} from '@gamepark/react-components'
 import {GameSpeed} from '@gamepark/rules-api'
 import {HTMLAttributes, useEffect, useMemo, useState} from 'react'
 import {useTranslation} from 'react-i18next'
@@ -38,14 +39,14 @@ export default function PlayerPanel({player, small, ...props}: Props) {
     <div css={style(player.empire)} {...props}>
       {playerInfo?.avatar ?
         <Avatar playerId={player.empire} css={avatarStyle} speechBubbleProps={{direction: SpeechBubbleDirection.BOTTOM_LEFT}}/> :
-        <img alt={t('Player avatar')} src={empireAvatar[player.empire]} css={fallbackAvatarStyle} draggable="false"/>
+        <Picture alt={t('Player avatar')} src={empireAvatar[player.empire]} css={fallbackAvatarStyle}/>
       }
       <h3 css={titleStyle}>
         <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getPlayerName(player.empire, t)}</span>
         {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
         {typeof gamePoints === 'number' &&
         <span css={css`flex-shrink: 0`}>
-          <img src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
+          <Picture src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
           {gamePoints > 0 && '+'}{playerInfo?.gamePointsDelta}
         </span>
         }

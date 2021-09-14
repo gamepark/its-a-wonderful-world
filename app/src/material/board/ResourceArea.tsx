@@ -10,6 +10,7 @@ import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {getProductionAndCorruption} from '@gamepark/its-a-wonderful-world/Production'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {useAnimations} from '@gamepark/react-client'
+import {Picture} from '@gamepark/react-components'
 import {TFunction} from 'i18next'
 import {useMemo} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
@@ -89,8 +90,8 @@ export default function ResourceArea({game, player, resource, quantity, validate
            css={[circleStyle, circleStylePosition(resource), game.phase !== Phase.Draft && quantity === 0 && circleShadowedStyle, isPlayer(player) && quantity > 0 && canDragStyle]}/>
       <button disabled={!canPlayerValidate} css={(theme: Theme) => [arrowStyle, arrowTheme(theme), arrowPosition(resource)]}
               onClick={validate} title={t('Validate')}/>
-      <img src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]} alt={helpText}
-           title={helpText} draggable="false"
+      <Picture src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]} alt={helpText}
+           title={helpText}
            css={[characterStyle, css`left: ${getCircleCharacterLeftPosition(resource)}%`]}/>
       {quantity > 0 &&
       <>

@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
+import {Picture, PictureAttributes} from '@gamepark/react-components'
 import {TFunction} from 'i18next'
-import {HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../Images'
 
-type Props = { character: Character } & HTMLAttributes<HTMLImageElement>
+type Props = { character: Character } & PictureAttributes
 
 export default function CharacterToken({character, ...props}: Props) {
   const {t} = useTranslation()
-  return <img alt={getDescription(t, character)} src={images[character]} css={style} draggable={false} {...props}/>
+  return <Picture alt={getDescription(t, character)} src={images[character]} css={style} {...props}/>
 }
 
 const style = css`

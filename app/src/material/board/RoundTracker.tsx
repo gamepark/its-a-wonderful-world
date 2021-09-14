@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
+import {Picture} from '@gamepark/react-components'
 import {useTranslation} from 'react-i18next'
 import {areasX, cardWidth, headerHeight} from '../../util/Styles'
 import {drawPileScale} from '../developments/DrawPile'
@@ -11,7 +12,7 @@ export default function RoundTracker({round}: Props) {
   const {t} = useTranslation()
   return (
     <>
-      <img alt={t('Round-tracker token')} src={round % 2 ? Images.roundTrackerRecto : Images.roundTrackerVerso} draggable="false" css={roundTrackerStyle}/>
+      <Picture alt={t('Round-tracker token')} src={round % 2 ? Images.roundTrackerRecto : Images.roundTrackerVerso} css={roundTrackerStyle}/>
       <span css={roundTextStyle}>{round}</span>
     </>
   )

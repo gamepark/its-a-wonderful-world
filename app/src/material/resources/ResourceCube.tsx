@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
-import {Draggable} from '@gamepark/react-components'
+import {Draggable, Picture} from '@gamepark/react-components'
 import {DraggableProps} from '@gamepark/react-components/dist/Draggable/Draggable'
 import {TFunction} from 'i18next'
 import {useTranslation} from 'react-i18next'
@@ -18,11 +18,11 @@ export default function ResourceCube({resource, draggable = false, ...props}: Pr
   if (draggable) {
     return (
       <Draggable type={DragItemType.KRYSTALLIUM_FROM_EMPIRE} css={style} {...props}>
-        <img src={images[resource]} css={css`width: 100%;`} draggable={false} alt={getDescription(t, resource)}/>
+        <Picture src={images[resource]} css={css`width: 100%;`} alt={getDescription(t, resource)}/>
       </Draggable>
     )
   } else {
-    return <img src={images[resource]} css={style} {...props} draggable={false} alt={getDescription(t, resource)}/>
+    return <Picture src={images[resource]} css={style} {...props} alt={getDescription(t, resource)}/>
   }
 }
 

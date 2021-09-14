@@ -1,4 +1,3 @@
-import {isSafari} from 'react-device-detect'
 import boardCircleBlack from './board/board-circle-black.png'
 import boardCircleBlue from './board/board-circle-blue.png'
 import boardCircleGreen from './board/board-circle-green.png'
@@ -195,7 +194,6 @@ import republicOfEuropeC from './empires/republic-of-europe-C.jpg'
 import republicOfEuropeD from './empires/republic-of-europe-D.jpg'
 import republicOfEuropeE from './empires/republic-of-europe-E.jpg'
 import republicOfEuropeF from './empires/republic-of-europe-F.jpg'
-import coverArtwork from './its-cover-artwork.jpg'
 import arrowGreen from './menus/arrow-green.png'
 import arrowOrange from './menus/arrow-orange.png'
 import arrowWhite from './menus/arrow-white.png'
@@ -264,16 +262,7 @@ const Images = {
   buttonBlack, buttonBlue, buttonGreen, buttonGrey, buttonRed, buttonYellow, textureGrey,
   circleMetal, titleBlack, titleBlue, titleGreen, titleGrey, titleOrange, titleWhite, titleYellow,
   energy, energyCube, exploration, explorationCube, gold, goldCube, krystallium, krystalliumCube, materials, materialsCube, science, scienceCube, corruption,
-  coverArtwork, scoreBackground, scoreIcon
-}
-
-if (!isSafari) {
-  for (const image in Images) {
-    const match = Images[image].match(/(.*)\.(jpg|png)$/)
-    if (match) {
-      Images[image] = match[1] + '.webp'
-    }
-  }
+  scoreBackground, scoreIcon
 }
 
 export default Images
