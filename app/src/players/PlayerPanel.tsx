@@ -5,14 +5,13 @@ import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {ComboVictoryPoints, getComboValue, getScoringDetails} from '@gamepark/its-a-wonderful-world/Scoring'
-import {Avatar, useOptions, usePlayer} from '@gamepark/react-client'
+import {Avatar, GamePoints, useOptions, usePlayer} from '@gamepark/react-client'
 import {SpeechBubbleDirection} from '@gamepark/react-client/dist/Avatar'
 import {Picture} from '@gamepark/react-components'
 import {GameSpeed} from '@gamepark/rules-api'
-import {HTMLAttributes, useEffect, useMemo, useState} from 'react'
+import {HTMLAttributes, useMemo} from 'react'
 import {useTranslation} from 'react-i18next'
 import {empireAvatar} from '../material/empires/EmpireCard'
-import gamePointIcon from '../util/game-point.svg'
 import {empireBackground, gameOverDelay} from '../util/Styles'
 import PlayerConstructions from './PlayerConstructions'
 import PlayerResourceProduction from './PlayerResourceProduction'
@@ -29,12 +28,6 @@ export default function PlayerPanel({player, small, ...props}: Props) {
   const options = useOptions()
   const playerInfo = usePlayer<EmpireName>(player.empire)
   const bestCombo = useMemo(() => !small && getBestVictoryPointsCombo(player), [player])
-  const [gamePoints, setGamePoints] = useState(playerInfo?.gamePointsDelta)
-  useEffect(() => {
-    if (typeof playerInfo?.gamePointsDelta === 'number' && typeof gamePoints !== 'number') {
-      setTimeout(() => setGamePoints(playerInfo?.gamePointsDelta), gameOverDelay * 1000)
-    }
-  }, [playerInfo, gamePoints])
   return (
     <div css={style(player.empire)} {...props}>
       {playerInfo?.avatar ?
@@ -44,12 +37,7 @@ export default function PlayerPanel({player, small, ...props}: Props) {
       <h3 css={titleStyle}>
         <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getPlayerName(player.empire, t)}</span>
         {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
-        {typeof gamePoints === 'number' &&
-        <span css={css`flex-shrink: 0`}>
-          <Picture src={gamePointIcon} alt="Game point icon" css={gamePointIconStyle}/>
-          {gamePoints > 0 && '+'}{playerInfo?.gamePointsDelta}
-        </span>
-        }
+        <GamePoints playerId={player.empire} suspense={gameOverDelay} css={css`flex-shrink: 0`}/>
       </h3>
       <PlayerResourceProduction player={player} small={small}/>
       {bestCombo && <VictoryPointsMultiplier combo={bestCombo} css={victoryPointsMultiplierStyle}/>}
@@ -118,10 +106,6 @@ const nameStyle = css`
 
 const eliminatedStyle = css`
   text-decoration: line-through;
-`
-
-const gamePointIconStyle = css`
-  height: 1em;
 `
 
 const victoryPointsMultiplierStyle = css`

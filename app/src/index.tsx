@@ -16,8 +16,7 @@ setupTranslation(translations)
 
 ReactDOM.render(
   <StrictMode>
-    <GameProvider game="its-a-wonderful-world" Rules={Rules} RulesView={ItsAWonderfulWorldView}
-                  optionsSpec={ItsAWonderfulWorldOptionsSpec}
+    <GameProvider game="its-a-wonderful-world" Rules={Rules} RulesView={ItsAWonderfulWorldView} optionsSpec={ItsAWonderfulWorldOptionsSpec}
                   animations={ItsAWonderfulAnimations} tutorial={ItsAWonderfulTutorial} ai={ai}>
       <App/>
     </GameProvider>
