@@ -43,7 +43,7 @@ export default function HeaderText({game, loading, validate}: Props) {
   useEffect(() => {
     if (gameOver) {
       setTimeout(() => setScoreSuspense(false), gameOverDelay * 1000)
-    } else if (game) {
+    } else if (game && actions) {
       setScoreSuspense(true)
     }
   }, [game, gameOver, setScoreSuspense])
