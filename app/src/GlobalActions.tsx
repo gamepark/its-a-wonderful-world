@@ -29,7 +29,7 @@ export default function GlobalActions({game, player, validate}: Props) {
     {canValidate && <Button onClick={validate} css={validateButtonStyle}>{t('Validate')}</Button>}
     {chooseCharacter && <>
       <CharacterToken character={Character.Financier} onClick={() => play(receiveCharacterMove(player.empire, Character.Financier))}
-                      css={[characterTokenStyle, financierTokenPosition]}/>,
+                      css={[characterTokenStyle, financierTokenPosition]}/>
       <CharacterToken character={Character.General} onClick={() => play(receiveCharacterMove(player.empire, Character.General))}
                       css={[characterTokenStyle, generalTokenPosition]}/>
     </>}
