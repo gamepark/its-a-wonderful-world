@@ -2,7 +2,7 @@ import GameState from '@gamepark/its-a-wonderful-world/GameState'
 import {setupPlayers} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
-import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
+import {baseDevelopmentCardIds, developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import EmpireSide from '@gamepark/its-a-wonderful-world/material/EmpireSide'
 import Resource from '@gamepark/its-a-wonderful-world/material/Resource'
@@ -55,7 +55,7 @@ const ItsAWonderfulTutorial: TutorialDescription<GameState, Move, EmpireName> = 
       players: [{id: EmpireName.NoramStates}, {id: EmpireName.RepublicOfEurope}, {id: EmpireName.FederationOfAsia}], empiresSide: EmpireSide.A,
       corruptionAndAscension: false
     }),
-    deck: [...initialCards, ...shuffle(Array.from(developmentCards.keys()).filter(card => !initialCards.includes(card)))],
+    deck: [...initialCards, ...shuffle(Array.from(baseDevelopmentCardIds).filter(card => !initialCards.includes(card)))],
     discard: [],
     round: 1,
     phase: Phase.Draft
