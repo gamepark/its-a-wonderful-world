@@ -5,8 +5,11 @@ import Character from '@gamepark/its-a-wonderful-world/material/Character'
 import Construction from '@gamepark/its-a-wonderful-world/material/Construction'
 import {getCardDetails} from '@gamepark/its-a-wonderful-world/material/Developments'
 import Resource, {isResource} from '@gamepark/its-a-wonderful-world/material/Resource'
-import PlaceCharacter, {placeCharacterMove} from '@gamepark/its-a-wonderful-world/moves/PlaceCharacter'
-import {isPlaceResource, PlaceResourceOnConstruction, placeResourceOnConstructionMove} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
+import MoveView from '@gamepark/its-a-wonderful-world/moves/MoveView'
+import PlaceCharacter, {isPlaceCharacter, placeCharacterMove} from '@gamepark/its-a-wonderful-world/moves/PlaceCharacter'
+import {
+  isPlaceResource, isPlaceResourceOnConstruction, PlaceResourceOnConstruction, placeResourceOnConstructionMove
+} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
 import {recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import {usePlay, useUndo} from '@gamepark/react-client'
@@ -16,7 +19,7 @@ import constructionCost from '../material/developments/ConstructionCost'
 import Images from '../material/Images'
 import ResourceCube from '../material/resources/ResourceCube'
 import {cardWidth} from '../util/Styles'
-import {getConstructionSpaceLocation, getDevelopmentColumn2Pattern} from './DevelopmentCardUnderConstruction'
+import {getConstructionSpaceLocation, getDevelopmentColumn2Pattern, undoConstructionMoves} from './DevelopmentCardUnderConstruction'
 import {recyclingButton, textButton, textButtonFontStyle, textButtonLeft, textButtonRight} from './DraftArea'
 
 type Props = {
@@ -30,7 +33,7 @@ export default function ConstructionButtons({player, construction, removeFocus}:
 
   const maxSpendableResources = construction ? maxResourcesToPlace(player, construction) : []
   const play = usePlay()
-  const [undo, canUndo] = useUndo()
+  const [undo, canUndo] = useUndo<MoveView>()
 
   const build = (construction: Construction) => {
     getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
@@ -39,6 +42,11 @@ export default function ConstructionButtons({player, construction, removeFocus}:
   function placeAvailableCubes(construction: Construction) {
     placeAvailableCubesMoves(player, construction).forEach(move => play(move))
     removeFocus()
+  }
+
+  function onRecycle() {
+    undoConstructionMoves(construction, canUndo, undo)
+    play(recycleMove(player.empire, construction.card))
   }
 
   return <>
@@ -52,13 +60,14 @@ export default function ConstructionButtons({player, construction, removeFocus}:
     )}
     {construction.costSpaces.map((item, index) => {
       if (!item) return null
-      const move: PlaceResourceOnConstruction | PlaceCharacter = isResource(item) ?
-        placeResourceOnConstructionMove(player.empire, item, construction.card, index) :
-        placeCharacterMove(player.empire, item, construction.card, index)
-      if (!canUndo(move)) return null
+      const placeItemMove = (move: MoveView) => {
+        if (!isPlaceResourceOnConstruction(move) && !isPlaceCharacter(move)) return false
+        return move.card === construction.card && move.space === index
+      }
+      if (!canUndo(placeItemMove)) return null
       return (
         <button key={index} css={[itemButtonStyle, placeItemButton(construction, index, true)]}
-                onClick={() => undo(move)}>
+                onClick={() => undo(placeItemMove)}>
           {isResource(item) ? <ResourceCube resource={item} css={buttonItemStyle}/> : <CharacterToken character={item} css={buttonItemStyle}/>}
         </button>
       )
@@ -75,8 +84,7 @@ export default function ConstructionButtons({player, construction, removeFocus}:
       css={[textButton, textButtonLeft, getPlaceConstructionButton(getTotalConstructionCost(construction.card) - getDevelopmentColumn2Pattern(construction).length + (maxSpendableResources.length > 1 ? 2 : 1))]}
       onClick={() => build(construction)}>{t('Build')}</button>
     }
-    <button css={[textButton, textButtonRight, recyclingButton(getCardDetails(construction.card).recyclingBonus)]}
-            onClick={() => play(recycleMove(player.empire, construction.card))}>
+    <button css={[textButton, textButtonRight, recyclingButton(getCardDetails(construction.card).recyclingBonus)]} onClick={onRecycle}>
       {t('Recycle')}
     </button>
   </>

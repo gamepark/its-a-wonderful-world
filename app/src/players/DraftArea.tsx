@@ -9,6 +9,7 @@ import ChooseDevelopmentCard, {
   chooseDevelopmentCardMove, ChooseDevelopmentCardView, isChooseDevelopmentCard, isChosenDevelopmentCardVisible
 } from '@gamepark/its-a-wonderful-world/moves/ChooseDevelopmentCard'
 import CompleteConstruction, {isCompleteConstruction} from '@gamepark/its-a-wonderful-world/moves/CompleteConstruction'
+import MoveView from '@gamepark/its-a-wonderful-world/moves/MoveView'
 import Recycle, {isRecycle, recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
@@ -40,7 +41,7 @@ export default function DraftArea({game, player}: Props) {
   const row = game.phase === Phase.Draft ? 1 : 0
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
-  const [, canUndo] = useUndo()
+  const [, canUndo] = useUndo<MoveView>()
   const [focusedCard, setFocusedCard] = useState<number>()
   const animation = useAnimation<ChooseDevelopmentCard | ChooseDevelopmentCardView | SlateForConstruction | Recycle>(animation =>
     (isChooseDevelopmentCard(animation.move) || isSlateForConstruction(animation.move) || isRecycle(animation.move))
@@ -53,7 +54,7 @@ export default function DraftArea({game, player}: Props) {
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
   const chosenCard = isPlayer(player) ? choosingDevelopment && isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : player.chosenCard : undefined
   const canDrop = (monitor: DropTargetMonitor<DropItem>, card = monitor.getItem().card) => monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_HAND
-    || (canUndo(slateForConstructionMove(playerId!, card)))
+    || (canUndo(move => isSlateForConstruction(move) && move.card === card))
   const [{dragItemType, isValidTarget, isOver}, ref] = useDrop({
     accept: [DragItemType.DEVELOPMENT_FROM_HAND, DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
     canDrop: (item: DropItem, monitor) => canDrop(monitor, item.card),
@@ -62,9 +63,7 @@ export default function DraftArea({game, player}: Props) {
       isValidTarget: monitor.canDrop() && canDrop(monitor),
       isOver: monitor.isOver()
     }),
-    drop: (item: DropItem, monitor) => monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_HAND ?
-      chooseDevelopmentCardMove(player.empire, item.card) :
-      slateForConstructionMove(player.empire, item.card)
+    drop: (item: DropItem) => chooseDevelopmentCardMove(player.empire, item.card)
   })
   useEffect(() => {
     if (!animation && focusedCard !== chosenCard && !player.draftArea.some(card => card === focusedCard)) {

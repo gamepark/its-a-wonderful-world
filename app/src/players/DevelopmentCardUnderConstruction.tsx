@@ -1,26 +1,25 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
-import {getLegalMoves, getMovesToBuild, getRemainingCost, isPlaceItemOnCard, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
+import {getLegalMoves, getMovesToBuild, getRemainingCost, placeAvailableCubesMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import Character, {isCharacter} from '@gamepark/its-a-wonderful-world/material/Character'
 import Construction from '@gamepark/its-a-wonderful-world/material/Construction'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource, {isResource} from '@gamepark/its-a-wonderful-world/material/Resource'
+import ChooseDevelopmentCard from '@gamepark/its-a-wonderful-world/moves/ChooseDevelopmentCard'
 import CompleteConstruction, {isCompleteConstruction} from '@gamepark/its-a-wonderful-world/moves/CompleteConstruction'
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
 import MoveView from '@gamepark/its-a-wonderful-world/moves/MoveView'
-import PlaceCharacter, {isPlaceCharacter, placeCharacterMove} from '@gamepark/its-a-wonderful-world/moves/PlaceCharacter'
-import PlaceResource, {
-  isPlaceResourceOnConstruction, PlaceResourceOnConstruction, placeResourceOnConstructionMove
-} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
+import PlaceCharacter, {isPlaceCharacter} from '@gamepark/its-a-wonderful-world/moves/PlaceCharacter'
+import {isPlaceResourceOnConstruction, PlaceResourceOnConstruction, placeResourceOnConstructionMove} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
 import Recycle, {isRecycle} from '@gamepark/its-a-wonderful-world/moves/Recycle'
-import SlateForConstruction, {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
+import {isSlateForConstruction} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {useActions, useAnimations, usePlay, usePlayerId, useUndo} from '@gamepark/react-client'
+import {CanUndo, UndoFunction, useAnimations, usePlay, usePlayerId, useUndo} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import {DragAroundProps} from '@gamepark/react-components/dist/Draggable/DragAround'
 import {DropTargetMonitor, useDrop} from 'react-dnd'
@@ -47,7 +46,7 @@ export default function DevelopmentCardUnderConstruction({game, gameOver, player
   const playerId = usePlayerId<EmpireName>()
   const play = usePlay()
   const legalMoves = isPlayer(player) ? getLegalMoves(player, game.phase) : []
-  const [undo, canUndo] = useUndo()
+  const [undo, canUndo] = useUndo<MoveView>()
   const longPress = useLongPress({
     onClick: () => setFocus(),
     onLongPress: () => {
@@ -60,7 +59,6 @@ export default function DevelopmentCardUnderConstruction({game, gameOver, player
       }
     }
   })
-  const actions = useActions<MoveView, EmpireName>()
   const placeResourceMoves: PlaceResourceOnConstruction[] = legalMoves.filter(isPlaceResourceOnConstruction)
     .filter(move => move.card === construction.card)
   const placeCharacterMoves: PlaceCharacter[] = legalMoves.filter(isPlaceCharacter).filter(move => move.card === construction.card)
@@ -111,28 +109,14 @@ export default function DevelopmentCardUnderConstruction({game, gameOver, player
   const animations = useAnimations<PlaceResourceOnConstruction>(animation => animation.move.type === MoveType.PlaceResource && animation.move.playerId === player.empire
     && isPlaceResourceOnConstruction(animation.move) && animation.move.card === construction.card)
 
-  const drop = (move: Recycle | CompleteConstruction | SlateForConstruction) => {
-    if (isRecycle(move)) {
-      construction.costSpaces.forEach((item, index) => {
-        if (!item) return
-        const move: PlaceResource | PlaceCharacter = isResource(item) ?
-          placeResourceOnConstructionMove(player.empire, item, construction.card, index) :
-          placeCharacterMove(player.empire, item, construction.card, index)
-        if (canUndo(move)) {
-          undo(move)
-        }
-      })
-      if (canUndo(slateForConstructionMove(player.empire, construction.card))) {
-        undo(slateForConstructionMove(player.empire, construction.card))
-      }
-      play(move)
-    } else if (isCompleteConstruction(move)) {
+  const drop = (move: CompleteConstruction | Recycle | ChooseDevelopmentCard) => {
+    if (isCompleteConstruction(move)) {
       getMovesToBuild(player as Player, construction.card).forEach(move => play(move))
     } else {
-      // First undo the item placed on the card if any
-      const placeItemsOnCard = actions!.filter(action => action.playerId === player.empire && isPlaceItemOnCard(action.move, construction.card))
-      placeItemsOnCard.map(action => action.move).reverse().forEach(move => undo(move))
-      undo(move)
+      undoConstructionMoves(construction, canUndo, undo)
+      if (isRecycle(move)) {
+        play(move)
+      }
     }
   }
 
@@ -249,4 +233,21 @@ export function getDevelopmentColumn2Pattern(construction: Construction): number
 function getSpaceLocation(space: number, column2Pattern: number[]) {
   const column = column2Pattern.includes(space) ? 2 : 1
   return {column, index: column === 1 ? space - column2Pattern.filter(s => s < space).length : column2Pattern.indexOf(space)}
+}
+
+export function undoConstructionMoves(construction: Construction, canUndo: CanUndo<MoveView>, undo: UndoFunction<MoveView>) {
+  construction.costSpaces.forEach((item, index) => {
+    if (!item) return
+    const placeItemMove = (move: MoveView) => {
+      if (!isPlaceResourceOnConstruction(move) && !isPlaceCharacter(move)) return false
+      return move.card === construction.card && move.space === index
+    }
+    if (canUndo(placeItemMove)) {
+      undo(placeItemMove)
+    }
+  })
+  const slateMove = (move: MoveView) => isSlateForConstruction(move) && move.card === construction.card
+  if (canUndo(slateMove)) {
+    undo(slateMove)
+  }
 }

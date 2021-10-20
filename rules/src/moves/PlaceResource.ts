@@ -38,7 +38,7 @@ export function placeResource(state: GameState | GameView, move: PlaceResource) 
     if (construction) {
       construction.costSpaces[move.space] = move.resource
     } else {
-      console.error('Could not find the construction to place a resource on!')
+      console.error(`Expected ${move.card} to be in construction, but player is in unexpected state: ${JSON.stringify(player)}`)
     }
   } else {
     player.empireCardResources.push(move.resource)
