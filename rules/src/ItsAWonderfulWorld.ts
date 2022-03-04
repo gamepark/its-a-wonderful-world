@@ -72,7 +72,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
     }
   }
 
-  isActive(playerId: EmpireName): boolean {
+  isTurnToPlay(playerId: EmpireName): boolean {
     const player = this.state.players.find(player => player.empire === playerId)
     if (!player) return false
     switch (this.state.phase) {
