@@ -1238,19 +1238,19 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@datadog/browser-core@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-2.12.0.tgz#7ad884025c4c3642e36985433cda3286681afec8"
-  integrity sha512-nkrDcklC/LruCoiiaErkDNVuTNI7JRJhzq8gxQguVDpaizjkosVXpk54YqQxpIf0v9hjoncElnOrf0CNtYdq7Q==
+"@datadog/browser-core@3.11.0":
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-3.11.0.tgz#84b9168e35bdb0fdc42c376bb33d79357791bf61"
+  integrity sha512-NfvEE+mImWYKVcN9BkfNSYVwRCL4SFUrZrpKX8zDdtwGPa7E9+L1l0nwC35b4CCGwS1dPoTDzWKkAsC7f2VmPg==
   dependencies:
     tslib "^1.10.0"
 
-"@datadog/browser-logs@^2.8.1":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-logs/-/browser-logs-2.12.0.tgz#fc1dd4c3b62bff533cdbe8ba487722a1f663d0c9"
-  integrity sha512-K5rzAlnDFZacQOyeqXSfeu2Atb16JBLGcq8D4AltKM4afCV+/IQBdioNcfDEXjw468OrtDUm/iZ9cch4tAWz9g==
+"@datadog/browser-logs@^3.6.11":
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-logs/-/browser-logs-3.11.0.tgz#687372316b78dee9760bfe9d44006bc4ecb2c5a7"
+  integrity sha512-9XWaRU3Yo4lcCcz5wUpY/QhoCN8XxbHWT7aPFhk+7Hm1GqEOVMVMvAYs4U9TAvffHxKi3PP5cfvfsa1QpDAjkQ==
   dependencies:
-    "@datadog/browser-core" "2.12.0"
+    "@datadog/browser-core" "3.11.0"
     tslib "^1.10.0"
 
 "@emotion/cache@^11.4.0":
@@ -1367,51 +1367,77 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.35.tgz#01dd3d054da07a00b764d78748df20daf2b317e9"
   integrity sha512-IHUfxSEDS9dDGqYwIW7wTN6tn/O8E0n5PcAHz9cAaBoZw6UpG20IG/YM3NNLaGPwPqgjBAFjIURzqoQs3rrtuw==
 
-"@fortawesome/fontawesome-svg-core@^1.2.29", "@fortawesome/fontawesome-svg-core@^1.2.34":
+"@fortawesome/fontawesome-common-types@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.3.0.tgz#949995a05c0d8801be7e0a594f775f1dbaa0d893"
+  integrity sha512-CA3MAZBTxVsF6SkfkHXDerkhcQs0QPofy43eFdbWJJkZiq3SfiaH1msOkac59rQaqto5EqWnASboY1dBuKen5w==
+
+"@fortawesome/fontawesome-svg-core@^1.2.29":
   version "1.2.35"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.35.tgz#85aea8c25645fcec88d35f2eb1045c38d3e65cff"
   integrity sha512-uLEXifXIL7hnh2sNZQrIJWNol7cTVIzwI+4qcBIq9QWaZqUblm0IDrtSqbNg+3SQf8SMGHkiSigD++rHmCHjBg==
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.35"
 
-"@fortawesome/free-regular-svg-icons@^5.15.3":
-  version "5.15.3"
-  resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-5.15.3.tgz#1ec4f2410ff638db549c5c5484fc60b66407dbe6"
-  integrity sha512-q4/p8Xehy9qiVTdDWHL4Z+o5PCLRChePGZRTXkl+/Z7erDVL8VcZUuqzJjs6gUz6czss4VIPBRdCz6wP37/zMQ==
+"@fortawesome/fontawesome-svg-core@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.3.0.tgz#343fac91fa87daa630d26420bfedfba560f85885"
+  integrity sha512-UIL6crBWhjTNQcONt96ExjUnKt1D68foe3xjEensLDclqQ6YagwCRYVQdrp/hW0ALRp/5Fv/VKw+MqTUWYYvPg==
   dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.35"
+    "@fortawesome/fontawesome-common-types" "^0.3.0"
 
-"@fortawesome/free-solid-svg-icons@^5.13.1", "@fortawesome/free-solid-svg-icons@^5.15.2", "@fortawesome/free-solid-svg-icons@^5.15.3":
+"@fortawesome/free-regular-svg-icons@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-6.0.0.tgz#f3cb91dac643472fe8138024b93fbfbdf05675cc"
+  integrity sha512-lYK6oyQL8HwZUAVWGqF7TGuwQBVfphNBVTdvPSD3h4gmQfGazm/xcwg3kmtcRycu3y6QspOC7hPXSoJbVqSYCw==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.3.0"
+
+"@fortawesome/free-solid-svg-icons@^5.13.1":
   version "5.15.3"
   resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.15.3.tgz#52eebe354f60dc77e0bde934ffc5c75ffd04f9d8"
   integrity sha512-XPeeu1IlGYqz4VWGRAT5ukNMd4VHUEEJ7ysZ7pSSgaEtNvSo+FLurybGJVmiqkQdK50OkSja2bfZXOeyMGRD8Q==
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.35"
 
-"@fortawesome/react-fontawesome@^0.1.11", "@fortawesome/react-fontawesome@^0.1.14":
+"@fortawesome/free-solid-svg-icons@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-6.0.0.tgz#bed4a501b631c6cfa35c09830f7cb63ffca1589d"
+  integrity sha512-o4FZ1XbndcgeWNb8Wh0y+Hgf73CjmyOQowUSaqQCtgIIdS+XliSBSOwCl330wER+I6CGYE96hT27bHBPmzX2Gg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.3.0"
+
+"@fortawesome/react-fontawesome@^0.1.11":
   version "0.1.14"
   resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-0.1.14.tgz#bf28875c3935b69ce2dc620e1060b217a47f64ca"
   integrity sha512-4wqNb0gRLVaBm/h+lGe8UfPPivcbuJ6ecI4hIgW0LjI7kzpYB9FkN0L9apbVzg+lsBdcTf0AlBtODjcSX5mmKA==
   dependencies:
     prop-types "^15.7.2"
 
+"@fortawesome/react-fontawesome@^0.1.17":
+  version "0.1.17"
+  resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-0.1.17.tgz#06fc06cb1a721e38e5b50b4a1cb851e9b9c77d7a"
+  integrity sha512-dX43Z5IvMaW7fwzU8farosYjKNGfRb2HB/DgjVBHeJZ/NSnuuaujPPx0YOdcAq+n3mqn70tyCde2HM1mqbhiuw==
+  dependencies:
+    prop-types "^15.8.1"
+
 "@gamepark/avataaars@^2.1.3":
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/@gamepark/avataaars/-/avataaars-2.1.3.tgz#bf5540ce7ade3da03c81cbbf1651b5042ad4b08c"
   integrity sha512-ZPa78YaO95lwozQB/67QM9axbQtBeS3pMl9fd6R5hBDLsmDdQiuemGzL2Ie8X3FYBHvXlesaPFcII5sltdWkJw==
 
-"@gamepark/react-client@~5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.0.0.tgz#ad4ee2acb3dc8a1ac3d2f26e2c04b177dee595d3"
-  integrity sha512-Gi5p0kZqn9ijob1LXeh0CzHBgL/W5RNePyZK9hO4KSKGqtUmKiJ7zh11g8C91ZXNbx3IOwPuQSkAzpRYPYTo5Q==
+"@gamepark/react-client@~5.10.0":
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.10.0.tgz#22e34d88f39f08cbc436588096159aa2f69936c2"
+  integrity sha512-5FsjaqZDrlxw4VDeN/4CfkYWvw4sYhFNkVQ16teXYUWTm8XKZhykYLiYoo3Ww7C5zpEvFNI44X4OtU7DcJh50Q==
   dependencies:
     "@apollo/client" "^3.1.3"
-    "@datadog/browser-logs" "^2.8.1"
-    "@fortawesome/free-regular-svg-icons" "^5.15.3"
-    "@fortawesome/free-solid-svg-icons" "^5.15.3"
-    "@fortawesome/react-fontawesome" "^0.1.14"
+    "@datadog/browser-logs" "^3.6.11"
+    "@fortawesome/free-regular-svg-icons" "^6.0.0"
+    "@fortawesome/free-solid-svg-icons" "^6.0.0"
+    "@fortawesome/react-fontawesome" "^0.1.17"
     "@gamepark/avataaars" "^2.1.3"
-    "@gamepark/rules-api" "^5.0.0"
+    "@gamepark/rules-api" "^5.10.0"
     "@harelpls/use-pusher" "^7.2.1"
     "@types/lodash.shuffle" "^4.2.6"
     "@types/react" "^17.0.3"
@@ -1430,20 +1456,21 @@
     react-infinite-scroller "^1.2.4"
     redux ">=4.0.5"
 
-"@gamepark/react-components@~5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-5.0.0.tgz#5a1a1c1796d09287a839127773f4a31805a6c9bc"
-  integrity sha512-RDG8IgKJakfiMmQZMvSMpnhkqk5FK0MKN+MMMpIPi163pwinpxCAjtvWBas3l1fHJfHs2PG94xVa9oxCXAp7kw==
+"@gamepark/react-components@~5.9.0":
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-5.9.0.tgz#f91d9b284e8b71b68f46e134b6c04f850ecb4778"
+  integrity sha512-A76EiV8yw1mOzB4Ha3QjAdicyV16B6GRiSwvAKxQAhrfMr3dPdUDSoZP/89ZQBp0DZvyj9zS8QYFskBL0dqauA==
   dependencies:
-    "@fortawesome/fontawesome-svg-core" "^1.2.34"
-    "@fortawesome/free-solid-svg-icons" "^5.15.2"
-    "@fortawesome/react-fontawesome" "^0.1.14"
+    "@fortawesome/fontawesome-svg-core" "^1.3.0"
+    "@fortawesome/free-solid-svg-icons" "^6.0.0"
+    "@fortawesome/react-fontawesome" "^0.1.17"
     "@react-dnd/shallowequal" "^2.0.0"
+    supports-webp "^2.0.1"
 
-"@gamepark/rules-api@^5.0.0", "@gamepark/rules-api@~5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-5.0.0.tgz#934234720a4bb083f4006fda0e94bf5049654bcc"
-  integrity sha512-6imyet1ajcKkd+cjVtPUzo+GKnYjrovqqCgeAnpGLg8Z+gH0xiq9lNxMcnfgorIB2807e8csZcYTLa7FZ1PBew==
+"@gamepark/rules-api@^5.10.0", "@gamepark/rules-api@~5.10.0":
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-5.10.0.tgz#4f6a97ca3657d96e3ee75512f2af6cb3c0b3a287"
+  integrity sha512-yZhKRIPRcoxvtFQRB1XcJpgkSGKwvv6ifhOO7z1xriSkbe83WrBJ36vJ4GaqWSuE98KotJ1n90L5l+77VAxzeg==
   dependencies:
     fast-deep-equal "^3.1.3"
 
@@ -12292,6 +12319,15 @@ prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
+prop-types@^15.8.1:
+  version "15.8.1"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
+  integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.13.1"
+
 proto-list@~1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
@@ -14304,6 +14340,11 @@ supports-hyperlinks@^2.0.0:
   dependencies:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
+
+supports-webp@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/supports-webp/-/supports-webp-2.0.1.tgz#c0b22d9cfe6ea9b9ac7f56363a0aaf9ed9d9e18e"
+  integrity sha512-dSnAw44W4hqeIBb6GwbETzEZoYOjNNmcROUsZWqMjdJd1mpSKxiVMKh59Py/DI2fH/RlojjS1wCYjFBT68Q9zA==
 
 svg-parser@^2.0.2:
   version "2.0.4"
