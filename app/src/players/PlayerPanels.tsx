@@ -68,7 +68,7 @@ export default function PlayerPanels({game}: Props) {
     <>
       {game.players.length > 2 && game.phase === Phase.Draft && <DraftDirectionIndicator clockwise={game.round % 2 === 1} players={players.length}/>}
       {players.map((player, index) =>
-        <PlayerPanel key={player.empire} player={player} onClick={() => displayPlayer(player.empire)} small={players.length > 5}
+        <PlayerPanel key={player.empire} player={player} onClick={() => displayPlayer(player.empire)} small={players.length > 5} gameOver={gameOver}
                      css={[panelPosition(index, players.length), player.empire === displayedPlayerId ? activePanel : (canDisplayOtherPlayers && clickablePanel)]}/>
       )}
       {gameOver && <ScorePanel game={game} animation={gameWasLive.current}/>}

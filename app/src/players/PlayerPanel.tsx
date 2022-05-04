@@ -19,9 +19,10 @@ import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 type Props = {
   player: Player | PlayerView
   small: boolean
+  gameOver: boolean
 } & HTMLAttributes<HTMLDivElement>
 
-export default function PlayerPanel({player, small, ...props}: Props) {
+export default function PlayerPanel({player, small, gameOver, ...props}: Props) {
   const {t} = useTranslation()
   const playerInfo = usePlayer<EmpireName>(player.empire)
   const bestCombo = useMemo(() => !small && getBestVictoryPointsCombo(player), [player])
@@ -33,7 +34,7 @@ export default function PlayerPanel({player, small, ...props}: Props) {
       }
       <h3 css={titleStyle}>
         <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getPlayerName(player.empire, t)}</span>
-        <PlayerTimer playerId={player.empire}/>
+        {!gameOver && <PlayerTimer playerId={player.empire}/>}
         <GamePoints playerId={player.empire} suspense={gameOverDelay} css={css`flex-shrink: 0`}/>
       </h3>
       <PlayerResourceProduction player={player} small={small}/>

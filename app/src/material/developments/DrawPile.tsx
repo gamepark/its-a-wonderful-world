@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import {css, Interpolation, Theme} from '@emotion/react'
 import DeckType from '@gamepark/its-a-wonderful-world/material/DeckType'
-import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
+import {useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import ReactTooltip from 'react-tooltip'
-import {cardHeight, cardStyle, cardWidth} from '../../util/Styles'
+import {cardStyle} from '../../util/Styles'
 import DevelopmentCard from './DevelopmentCard'
 
 type Props = {
@@ -15,15 +14,19 @@ type Props = {
 
 export default function DrawPile({size, deckType = DeckType.Default, position}: Props) {
   const {t} = useTranslation()
-  const nbCards = developmentCards.length
+  const [showTooltip, setShowTooltip] = useState(false)
+  useEffect(() => {
+    if (showTooltip) {
+      setTimeout(() => setShowTooltip(false), 3000)
+    }
+  }, [showTooltip])
   return <>
     {[...Array(Math.min(size, drawPileMaxSize))].map((_, index) =>
-      <DevelopmentCard key={index} deckType={deckType} css={[position, cardStyle, cardCss(index)]}/>
+      <DevelopmentCard key={index} deckType={deckType} css={[position, cardStyle, cardCss(index)]} onClick={() => setShowTooltip(true)}/>
     )}
-    <div css={[position, drawPileTooltip]} data-tip/>
-    <ReactTooltip type="warning" effect="solid" place="left">
-      <span>{t('Number of cards: {nbDeck}/{nbCards}', {nbDeck: size, nbCards})}  </span>
-    </ReactTooltip>
+    <span css={[tooltip, deckType === DeckType.Default ? deckTooltip : ascensionDeckTooltip, !showTooltip && invisible]}>
+      {t('cards.count', {cards: size})}
+    </span>
   </>
 }
 
@@ -38,8 +41,29 @@ const cardCss = (index: number) => css`
   }
 `
 
-const drawPileTooltip = css`
-  width: ${cardWidth + drawPileMaxSize * 0.05}%;
-  height: ${cardHeight}%;
-  transform: scale(${drawPileScale});
+const tooltip = css`
+  position: absolute;
+  font-size: 3em;
+  color: white;
+  text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
+  top: 3.2em;
+  z-index: 1;
+  width: 2em;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+`
+
+const deckTooltip = css`
+  left: 7.5em;
+`
+
+const ascensionDeckTooltip = css`
+  left: 13.4em;
+`
+
+const invisible = css`
+  opacity: 0;
 `

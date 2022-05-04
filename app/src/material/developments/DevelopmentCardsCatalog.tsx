@@ -3,7 +3,7 @@ import {css} from '@emotion/react'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
 import {useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import {Swipeable} from 'react-swipeable'
+import {useSwipeable} from 'react-swipeable'
 import {cardHeight, cardWidth, popupBackgroundStyle} from '../../util/Styles'
 import Images from '../Images'
 import DevelopmentCard, {cardTitleFontSize} from './DevelopmentCard'
@@ -17,35 +17,39 @@ type Props = {
 export default function DevelopmentCardsCatalog({initialIndex = 0, onClose, developments}: Props) {
   const {t} = useTranslation()
   const [focusedIndex, setFocusedIndex] = useState(initialIndex)
-  const [deltaX, setDeltaX] = useState(0)
-  const slide = (deltaX: number, velocity: number) => {
-    const diff = Math.round(deltaX * (1 + velocity) / 180)
-    setFocusedIndex(Math.max(0, Math.min(focusedIndex + diff, developments.length - 1)))
-    setDeltaX(0)
-  }
   const discardLength = developments.length
   const disableLeftArrow = focusedIndex === 0
   const disableRightArrow = focusedIndex >= (developments.length - 1)
+  const swipeable = useSwipeable({
+    trackMouse: true,
+    preventDefaultTouchmoveEvent: true,
+    onSwipedLeft: () => setFocusedIndex(index => Math.min(index + 3, developments.length - 1)),
+    onSwipedRight: () => setFocusedIndex(index => Math.max(index - 3, 0)),
+  })
   return (
     <>
       <div css={popupBackgroundStyle} onClick={onClose}/>
       {discardLength > 3 &&
-      <button disabled={disableLeftArrow} css={[arrowStyle, leftArrowStyle]} onClick={() => slide(-manualShift, 3)} title={t('Swipe cards')}/>}
-      <Swipeable css={swipeZoneStyle} trackMouse={true} preventDefaultTouchmoveEvent={true} delta={3}
-                 onSwiping={event => setDeltaX(event.deltaX)}
-                 onSwiped={event => slide(event.deltaX, event.velocity)}>
-        {developments.map((development, index) =>
-          <DevelopmentCard key={index} development={development} css={[cardStyle, cardPosition(index, focusedIndex, deltaX), deltaX === 0 && cardTransition]}/>
-        )}
-      </Swipeable>
+      <button disabled={disableLeftArrow} css={[arrowStyle, leftArrowStyle]}
+              onClick={() => setFocusedIndex(index => Math.max(index - 3, 0))}
+              title={t('Swipe cards')}/>}
+      <div css={swipeZoneStyle}>
+        <div {...swipeable}>
+          {developments.map((development, index) =>
+            <DevelopmentCard key={index} development={development}
+                             css={[cardStyle, cardPosition(index, focusedIndex), cardTransition]}/>
+          )}
+        </div>
+      </div>
       {discardLength > 3 &&
-      <button disabled={disableRightArrow} css={[arrowStyle, rightArrowStyle]} onClick={() => slide(manualShift, 3)} title={t('Swipe cards')}/>}
+      <button disabled={disableRightArrow} css={[arrowStyle, rightArrowStyle]}
+              onClick={() => setFocusedIndex(index => Math.min(index + 3, developments.length - 1))}
+              title={t('Swipe cards')}/>}
     </>
   )
 }
 
 export const swipeableScale = 2.5
-const manualShift = cardWidth * swipeableScale * 6
 
 const swipeZoneStyle = css`
   position: absolute;
@@ -108,9 +112,9 @@ const rightArrowStyle = css`
   }
 `
 
-const cardPosition = (index: number, focusedIndex: number, deltaX: number) => css`
-  transform: translateX(${(index - focusedIndex) * 110}%) translateX(${-deltaX}px);
+const cardPosition = (index: number, focusedIndex: number) => css`
+  transform: translateX(${(index - focusedIndex) * 110}%);
 `
 const cardTransition = css`
-  transition: transform 1s ease-in-out;
+  transition: transform 0.5s ease-in-out;
 `
