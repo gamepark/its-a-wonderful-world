@@ -431,6 +431,7 @@
       "give-up.dialog.p1": "You will be eliminated and replaced by a robot playing at random.",
       "give-up.dialog.p2": "The game will count as an overall loss.",
       "give-up.dialog.p3": "Your friends will be able to finish the game without you.",
+      "give-up.dialog.p4": "You will also abandon the tournament.",
       "Restart the tutorial": "Restart the tutorial",
       "Eject player": "Eject player",
       "eject.dialog.p1": "{player} has exceeded their thinking time",
@@ -445,7 +446,28 @@
       "Light mode": "Light mode",
       "Dark mode": "Dark mode",
       "Back to Game Park": "Back to Game Park",
-      "Play again": "Play again"
+      "Play again": "Play again",
+      "Ranking": "Ranking",
+      "result.button": "Podium",
+      "result.equality": "Draw game!",
+      "result.victory": "You win the game!",
+      "result.victory.other": "{player} wins the game",
+      "result.over": "Game is over",
+      "result.tournament.link": "Back to the tournament",
+      "rematch.button": "Offer a rematch",
+      "rematch.mine": "You offered a rematch",
+      "rematch.offer": "{player} offers a rematch",
+      "rematch.offered": "{player} started a rematch",
+      "rematch.go": "Voir la revanche",
+      "rematch.accept": "Accept",
+      "rematch.decline": "Decline",
+      "time.button": "Thinking time",
+      "time.title": "Players thinking time",
+      "time.think.total": "Total thinking time",
+      "time.think.max": "Maximum thinking time",
+      "time.wait.total": "Total down time",
+      "time.wait.max": "Maximum down time",
+      "time.awaited": "Made others wait (average)"
     }
   },
   "fr": {
@@ -880,6 +902,7 @@
       "give-up.dialog.p1": "Vous serez éliminé et remplacé par un robot jouant au hasard.",
       "give-up.dialog.p2": "La partie comptera comme une défaite au classement général.",
       "give-up.dialog.p3": "Vos amis pourront terminer la partie sans vous.",
+      "give-up.dialog.p4": "Vous allez également abandonner le tournoi.",
       "Restart the tutorial": "Recommencer le tutoriel",
       "Eject player": "Expulser le joueur",
       "eject.dialog.p1": "{player} a dépassé son temps de réflexion",
@@ -894,7 +917,28 @@
       "Light mode": "Mode clair",
       "Dark mode": "Mode sombre",
       "Back to Game Park": "Retour à Game Park",
-      "Play again": "Rejouer"
+      "Play again": "Rejouer",
+      "Ranking": "Classement",
+      "result.button": "Podium",
+      "result.equality": "Égalité !",
+      "result.victory": "Vous avez gagné !",
+      "result.victory.other": "{player} a gagné",
+      "result.over": "La partie est terminée",
+      "result.tournament.link": "Retour au tournoi",
+      "rematch.button": "Proposer une revanche",
+      "rematch.mine": "Vous avez proposé une revanche",
+      "rematch.offer": "{player} propose une revanche",
+      "rematch.offered": "{player} a lancé une revanche",
+      "rematch.go": "Voir la revanche",
+      "rematch.accept": "Accepter",
+      "rematch.decline": "Refuser",
+      "time.button": "Temps de réflexion",
+      "time.title": "Temps de réflexion des joueurs",
+      "time.think.total": "Temps de réflexion total",
+      "time.think.max": "Temps de réflexion maximum",
+      "time.wait.total": "Temps d’attente total",
+      "time.wait.max": "Temps d’attente maximum",
+      "time.awaited": "A fait attendre les autres (moyenne)"
     }
   },
   "de": {
@@ -1338,7 +1382,12 @@
       "Light mode": "Tagmodus",
       "Dark mode": "Nachtmodus",
       "Back to Game Park": "Zurück zu Game Park",
-      "Play again": "Nochmal spielen"
+      "Play again": "Nochmal spielen",
+      "Ranking": "Rangliste",
+      "rematch.button": "Um Revanche bitten",
+      "time.button": "Bedenkzeit",
+      "time.title": "Bedenkzeit der Spieler",
+      "time.awaited": "Hat andere warten lassen (mittel)"
     }
   },
   "ru": {
@@ -1787,7 +1836,10 @@
       "Light mode": "Светлый режим",
       "Dark mode": "Тёмный режим",
       "Back to Game Park": "Вернуться на Game Park",
-      "Play again": "Начать новую партию"
+      "Play again": "Начать новую партию",
+      "Ranking": "Рейтинг",
+      "rematch.button": "Предложить реванш",
+      "time.button": "Время на обдумывание"
     }
   }
 }

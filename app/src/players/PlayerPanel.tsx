@@ -5,17 +5,15 @@ import {getPlayerName} from '@gamepark/its-a-wonderful-world/Options'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {ComboVictoryPoints, getComboValue, getScoringDetails} from '@gamepark/its-a-wonderful-world/Scoring'
-import {Avatar, GamePoints, useOptions, usePlayer} from '@gamepark/react-client'
+import {Avatar, GamePoints, PlayerTimer, usePlayer} from '@gamepark/react-client'
 import {SpeechBubbleDirection} from '@gamepark/react-client/dist/Avatar'
 import {Picture} from '@gamepark/react-components'
-import {GameSpeed} from '@gamepark/rules-api'
 import {HTMLAttributes, useMemo} from 'react'
 import {useTranslation} from 'react-i18next'
 import {empireAvatar} from '../material/empires/EmpireCard'
 import {empireBackground, gameOverDelay} from '../util/Styles'
 import PlayerConstructions from './PlayerConstructions'
 import PlayerResourceProduction from './PlayerResourceProduction'
-import Timer from './Timer'
 import VictoryPointsMultiplier from './VictoryPointsMultiplier'
 
 type Props = {
@@ -25,7 +23,6 @@ type Props = {
 
 export default function PlayerPanel({player, small, ...props}: Props) {
   const {t} = useTranslation()
-  const options = useOptions()
   const playerInfo = usePlayer<EmpireName>(player.empire)
   const bestCombo = useMemo(() => !small && getBestVictoryPointsCombo(player), [player])
   return (
@@ -36,7 +33,7 @@ export default function PlayerPanel({player, small, ...props}: Props) {
       }
       <h3 css={titleStyle}>
         <span css={[nameStyle, player.eliminated && eliminatedStyle]}>{playerInfo?.name || getPlayerName(player.empire, t)}</span>
-        {options?.speed === GameSpeed.RealTime && playerInfo?.time?.playing && !player.eliminated && <Timer time={playerInfo.time}/>}
+        <PlayerTimer playerId={player.empire}/>
         <GamePoints playerId={player.empire} suspense={gameOverDelay} css={css`flex-shrink: 0`}/>
       </h3>
       <PlayerResourceProduction player={player} small={small}/>
