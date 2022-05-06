@@ -8,7 +8,7 @@ import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {FailuresDialog, FullscreenDialog, Menu, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
+import {FailuresDialog, FullscreenDialog, Menu, useContrastTheme, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import {Header, ImagesLoader, LoadingScreen} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
 import {useEffect, useState} from 'react'
@@ -18,27 +18,16 @@ import ConfirmPopup from './ConfirmPopup'
 import GameDisplay from './GameDisplay'
 import HeaderText from './HeaderText'
 import Images from './material/Images'
-import {Color, DarkTheme, LightTheme} from './Theme'
 import {backgroundColor, empireBackground, textColor} from './util/Styles'
 
-const userTheme = 'userTheme'
-
 export default function App() {
-  const [themeColor, setThemeColor] = useState<Color>(() => (localStorage.getItem(userTheme) || DarkTheme) as Color)
+  const theme = useContrastTheme()
   const game = useGame<GameView>()
   const [imagesLoading, setImagesLoading] = useState(true)
   const play = usePlay<Move>()
   const playerId = usePlayerId<EmpireName>()
   const displayedPlayer = game?.displayedPlayer ?? playerId ?? game?.players[0].empire
-  const theme: Theme = {
-    color: themeColor,
-    switchThemeColor: () => {
-      const newThemeColor: Color = themeColor === LightTheme ? DarkTheme : LightTheme
-      setThemeColor(newThemeColor)
-      localStorage.setItem(userTheme, newThemeColor)
-    }
-  }
-  const [isJustDisplayed, setJustDisplayed] = useState(true)
+    const [isJustDisplayed, setJustDisplayed] = useState(true)
   useEffect(() => {
     setTimeout(() => setJustDisplayed(false), 2000)
   }, [])
@@ -67,7 +56,7 @@ export default function App() {
         <LoadingScreen author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} developer="Game Park"
                        display={loading} css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
         {!loading && <GameDisplay game={game!} validate={validate}/>}
-        <Header css={[headerStyle, theme.color === LightTheme && lightHeader]}><HeaderText game={game} loading={loading} validate={validate}/></Header>
+        <Header css={[headerStyle, theme.light && lightHeader]}><HeaderText game={game} loading={loading} validate={validate}/></Header>
         <Menu/>
         <FailuresDialog/>
         <FullscreenDialog/>

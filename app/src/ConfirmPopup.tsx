@@ -3,7 +3,6 @@ import {css, useTheme} from '@emotion/react'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useTranslation} from 'react-i18next'
-import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
@@ -14,7 +13,7 @@ export default function ConfirmPopup({cancel, confirm}: Props) {
   const theme = useTheme()
   return (
     <div css={[popupOverlayStyle, showPopupOverlayStyle]}>
-      <div css={[popupStyle, popupPosition, css`width: 50%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
+      <div css={[popupStyle, popupPosition, css`width: 50%`, theme.light ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={cancel}><FontAwesomeIcon icon={faTimes}/></div>
         <p>{t('You can still build a card. Are you sure you want to finish the game without building it?')}</p>

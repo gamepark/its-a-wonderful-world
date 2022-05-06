@@ -6,7 +6,6 @@ import {getScoreFromScoringDetails, getScoringDetails} from '@gamepark/its-a-won
 import {HTMLAttributes, useMemo} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../../material/Images'
-import {LightTheme} from '../../Theme'
 import {fadeIn, gameOverDelay} from '../../util/Styles'
 import ScorePart from './ScorePart'
 
@@ -54,7 +53,7 @@ const style = css`
 `
 
 const backgroundStyle = (theme: Theme) => css`
-  background-color: ${theme.color === LightTheme ? 'rgba(0, 0, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
+  background-color: ${theme.light ? 'rgba(0, 0, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
 `
 
 const revealScore = keyframes`
@@ -82,7 +81,7 @@ const arrowStyle = (theme: Theme) => css`
   flex-shrink: 0;
   position: relative;
   max-height: 100%;
-  background-image: url(${theme.color === LightTheme ? Images.arrowWhite : Images.arrowOrange});
+  background-image: url(${theme.light ? Images.arrowWhite : Images.arrowOrange});
   background-size: cover;
   background-repeat: no-repeat;
   background-color: transparent;

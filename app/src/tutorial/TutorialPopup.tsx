@@ -13,7 +13,6 @@ import {Picture} from '@gamepark/react-components'
 import {TFunction} from 'i18next'
 import {useEffect, useRef, useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import {LightTheme} from '../Theme'
 import Button from '../util/Button'
 import {
   closePopupStyle, discordUri, hidePopupOverlayStyle, platformUri, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupStyle, showPopupOverlayStyle
@@ -79,7 +78,7 @@ export default function TutorialPopup({game, tutorial}: Props) {
     <>
       <div css={[popupOverlayStyle, displayPopup ? showPopupOverlayStyle : hidePopupOverlayStyle(85, 90), style]}
            onClick={() => setTutorialDisplay(false)}>
-        <div css={[popupStyle, theme.color === LightTheme ? popupLightStyle : popupDarkStyle, displayPopup ? popupPosition(currentMessage) : hidePopupStyle]}
+        <div css={[popupStyle, theme.light ? popupLightStyle : popupDarkStyle, displayPopup ? popupPosition(currentMessage) : hidePopupStyle]}
              onClick={event => event.stopPropagation()}>
           <div css={closePopupStyle} onClick={() => setTutorialDisplay(false)}><FontAwesomeIcon icon={faTimes}/></div>
           {currentMessage && <h2>{currentMessage.title(t)}</h2>}
@@ -94,12 +93,12 @@ export default function TutorialPopup({game, tutorial}: Props) {
       }
       {
         currentMessage && currentMessage.arrow &&
-        <Picture alt="Arrow pointing toward current tutorial interest" src={theme.color === LightTheme ? tutorialArrowLight : tutorialArrowDark}
+        <Picture alt="Arrow pointing toward current tutorial interest" src={theme.light ? tutorialArrowLight : tutorialArrowDark}
                  css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
       }
       {
         game.round === 3 && game.phase === Phase.Draft && !hideThirdTurnInfo &&
-        <div css={[popupStyle, popupPosition(thirdTurnInfo), theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+        <div css={[popupStyle, popupPosition(thirdTurnInfo), theme.light ? popupLightStyle : popupDarkStyle]}>
           <div css={closePopupStyle} onClick={() => setHideThirdTurnInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
           <h2>{thirdTurnInfo.title(t)}</h2>
           <p>{thirdTurnInfo.text(t)}</p>
@@ -108,7 +107,7 @@ export default function TutorialPopup({game, tutorial}: Props) {
       }
       {
         game.round === 4 && game.phase === Phase.Draft && !hideLastTurnInfo &&
-        <div css={[popupStyle, popupPosition(lastTurnInfo), theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+        <div css={[popupStyle, popupPosition(lastTurnInfo), theme.light ? popupLightStyle : popupDarkStyle]}>
           <div css={closePopupStyle} onClick={() => setHideLastTurnInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
           <h2>{lastTurnInfo.title(t)}</h2>
           <p>{lastTurnInfo.text(t)}</p>
@@ -117,7 +116,7 @@ export default function TutorialPopup({game, tutorial}: Props) {
       }
       {
         isOver(game) &&
-        <div css={[popupStyle, popupPosition(tutorialEndGame), tutorialEnd && buttonsPosition, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}>
+        <div css={[popupStyle, popupPosition(tutorialEndGame), tutorialEnd && buttonsPosition, theme.light ? popupLightStyle : popupDarkStyle]}>
           <div css={closePopupStyle} onClick={() => toggleTutorialEnd()}><FontAwesomeIcon icon={tutorialEnd ? faPlusSquare : faMinusSquare}/></div>
           {!tutorialEnd &&
           <>

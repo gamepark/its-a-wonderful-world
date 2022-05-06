@@ -16,7 +16,6 @@ import {useMemo} from 'react'
 import {DragPreviewImage, useDrag} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
 import {costSpaceDeltaX, costSpaceDeltaX2, costSpaceDeltaY, getConstructionSpaceLocation} from '../../players/DevelopmentCardUnderConstruction'
-import {LightTheme} from '../../Theme'
 import {
   areasX, boardHeight, boardTop, boardWidth, empireCardBottomMargin, empireCardHeight, empireCardLeftMargin, empireCardWidth, getAreaCardX, getAreaCardY, glow
 } from '../../util/Styles'
@@ -300,7 +299,7 @@ const arrowStyle = css`
 
 const arrowTheme = (theme: Theme) => css`
   &:enabled {
-    filter: drop-shadow(0 0 0 ${theme.color === LightTheme ? 'white' : 'black'});
+    filter: drop-shadow(0 0 0 ${theme.light ? 'white' : 'black'});
   }
 `
 
