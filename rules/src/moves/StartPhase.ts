@@ -13,7 +13,9 @@ export const startPhaseMove = (phase: Phase): StartPhase => ({
 
 export function startPhase(state: GameState | GameView, move: StartPhase) {
   state.phase = move.phase
-  state.players.forEach(player => player.ready = false)
+  for (const player of state.players) {
+    player.ready = false
+  }
   if (move.phase === Phase.Draft) {
     delete state.productionStep
     state.round++
