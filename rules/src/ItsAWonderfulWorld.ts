@@ -307,7 +307,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameView): Move 
     }
     for (const resource of [...new Set(player.availableResources)]) {
       if (!player.draftArea.some(card => getCardDetails(card).constructionCost[resource])
-        && !player.constructionArea.some(construction => getSpacesMissingItem(construction, item => item === resource).length > 0)) {
+        && !player.constructionArea.some(construction => couldPlaceResource(construction, resource))) {
         // Automatically place resources on the Empire card if there is 0 chance to place it on a development
         return placeResourceOnEmpireMove(player.empire, resource)
       }
@@ -372,15 +372,18 @@ export function getCost(card: number): (Resource | Character)[] {
 }
 
 export function getRemainingCost(construction: Construction): { item: Resource | Character, space: number }[] {
-  const development = getCardDetails(construction.card)
-  return Array.of<Resource | Character>(...resources, ...characters)
-    .flatMap(item => Array(development.constructionCost[item] || 0).fill(item))
+  return getCost(construction.card)
     .map((item, index) => ({item, space: index}))
     .filter(item => !construction.costSpaces[item.space])
 }
 
 export function getSpacesMissingItem(construction: Construction, predicate: (item: Resource | Character) => boolean) {
   return getRemainingCost(construction).filter(cost => predicate(cost.item)).map(cost => cost.space)
+}
+
+export function couldPlaceResource(construction: Construction, resource: Resource) {
+  return Array.from(getCost(construction.card).entries())
+    .some(([space, item]) => resource === item && (!construction.costSpaces[space] || construction.costSpaces[space] === Resource.Krystallium))
 }
 
 export function getNextProductionStep(game: GameState | GameView) {
