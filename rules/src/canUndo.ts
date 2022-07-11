@@ -9,7 +9,7 @@ import {isCompleteConstruction} from './moves/CompleteConstruction'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
-import {isPlaceResourceOnConstruction} from './moves/PlaceResource'
+import {isPlaceResource, isPlaceResourceOnConstruction} from './moves/PlaceResource'
 import {isRecycle} from './moves/Recycle'
 import {isTellYouAreReady} from './moves/TellYouAreReady'
 import {isPlayer} from './typeguards'
@@ -30,6 +30,10 @@ export default function canUndo(state: GameState | GameView, action: ItsAWonderf
       return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move, move.card)))
     case MoveType.PlaceResource:
       if (isPlaceResourceOnConstruction(move)) {
+        if (action.consequences.some(consequence => isPlaceResource(consequence))
+          && consecutiveActions.some(action => action.playerId === playerId && isPlaceResourceOnConstruction(action.move) && action.move.resource === Resource.Krystallium)) {
+          return false
+        }
         if (actionCompletedCardConstruction(action, move.card)) {
           return !consecutiveActions.some(action => action.playerId === playerId && (isTellYouAreReady(action.move) || isPlaceItemOnCard(action.move)))
         } else {
