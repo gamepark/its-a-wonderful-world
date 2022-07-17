@@ -32,8 +32,9 @@ export default class ItsAWonderfulWorldView implements Game<GameView, LocalMove>
     this.state = state
   }
 
-  getAutomaticMove(): MoveView | void {
-    return getPredictableAutomaticMoves(this.state)
+  getAutomaticMoves(): MoveView[] {
+    const move = getPredictableAutomaticMoves(this.state)
+    return move ? [move] : []
   }
 
   play(move: LocalMove): void {

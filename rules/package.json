@@ -12,12 +12,18 @@
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {
-    "@gamepark/rules-api": "~5.11.2",
-    "lodash.shuffle": "^4.2.0"
-  },
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "tsc"
-  }
+  },
+  "peerDependencies": {
+    "@gamepark/rules-api": "~5.14.0",
+    "lodash.shuffle": "^4.2.0"
+  },
+  "devDependencies": {
+    "@gamepark/rules-api": "~5.14.0",
+    "lodash.shuffle": "^4.2.0",
+    "@types/lodash.shuffle": "^4.2.7",
+    "i18next": "^21.3.2"
+    }
 }

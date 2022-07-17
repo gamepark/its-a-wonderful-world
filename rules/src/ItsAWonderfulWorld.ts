@@ -88,7 +88,12 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
     return isOver(this.state)
   }
 
-  getAutomaticMove(): Move | void {
+  getAutomaticMoves(): Move[] {
+    const move = this.getAutomaticMove()
+    return move ? [move] : []
+  }
+
+  getAutomaticMove(): Move | undefined {
     switch (this.state.phase) {
       case Phase.Draft:
         const anyPlayer = this.state.players.filter(player => !player.eliminated)[0]
@@ -289,7 +294,7 @@ function setupPlayer(empire: EmpireName, empireSide: EmpireSide = defaultEmpireC
   }
 }
 
-export function getPredictableAutomaticMoves(state: GameState | GameView): Move & MoveView | void {
+export function getPredictableAutomaticMoves(state: GameState | GameView): Move & MoveView | undefined {
   for (const player of state.players) {
     for (const construction of player.constructionArea) {
       if (construction.costSpaces.every(space => space !== null)) {
@@ -313,6 +318,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameView): Move 
       }
     }
   }
+  return
 }
 
 export function getLegalMoves(player: Player, phase: Phase) {
