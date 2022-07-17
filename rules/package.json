@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/its-a-wonderful-world",
-  "version": "2.4.2",
+  "version": "2.5.0",
   "description": "It's a Wonderful World rules for Game Park",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@gamepark/rules-api": "~5.14.0",
-    "lodash.shuffle": "^4.2.0",
     "@types/lodash.shuffle": "^4.2.7",
-    "i18next": "^21.3.2"
-    }
+    "i18next": "^21.3.2",
+    "lodash.shuffle": "^4.2.0"
+  }
 }
