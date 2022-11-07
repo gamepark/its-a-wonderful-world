@@ -1,6 +1,6 @@
 import canUndo from '@gamepark/its-a-wonderful-world/canUndo'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
-import {getPredictableAutomaticMoves} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
+import {getPredictableAutomaticMoves, isTurnToPlay} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import {chooseDevelopmentCardInView} from '@gamepark/its-a-wonderful-world/moves/ChooseDevelopmentCard'
 import {completeConstruction} from '@gamepark/its-a-wonderful-world/moves/CompleteConstruction'
@@ -20,16 +20,14 @@ import {slateForConstruction} from '@gamepark/its-a-wonderful-world/moves/SlateF
 import {startPhase} from '@gamepark/its-a-wonderful-world/moves/StartPhase'
 import {tellYouAreReady} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import {transformIntoKrystallium} from '@gamepark/its-a-wonderful-world/moves/TransformIntoKrystallium'
-import {Action, Game, Undo} from '@gamepark/rules-api'
+import {Action, Rules, Undo} from '@gamepark/rules-api'
 import DisplayPlayer, {displayPlayer} from './moves/DisplayPlayer'
 
 type LocalMove = MoveView | DisplayPlayer
 
-export default class ItsAWonderfulWorldView implements Game<GameView, LocalMove>, Undo<GameView, MoveView, EmpireName> {
-  state: GameView
-
-  constructor(state: GameView) {
-    this.state = state
+export default class ItsAWonderfulWorldView extends Rules<GameView, LocalMove, EmpireName> implements Undo<GameView, MoveView, EmpireName> {
+  isTurnToPlay(playerId: EmpireName): boolean {
+    return isTurnToPlay(this.state, playerId)
   }
 
   getAutomaticMoves(): MoveView[] {

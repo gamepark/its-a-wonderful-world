@@ -6,10 +6,10 @@ import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
 import MoveView from '@gamepark/its-a-wonderful-world/moves/MoveView'
 import {isPlaceResourceOnConstruction} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
 import {Animations} from '@gamepark/react-client'
+import AnimationContext from '@gamepark/react-client/dist/animations/AnimationContext'
 
-// noinspection JSUnusedGlobalSymbols
-const ItsAWonderfulAnimations: Animations<GameView, MoveView, EmpireName> = {
-  getAnimationDuration(move: MoveView, {action, state, playerId: currentPlayerId}) {
+export default class ItsAWonderfulAnimations extends Animations<GameView, MoveView, EmpireName> {
+  override getPreDuration(move: MoveView, {action, state, playerId: currentPlayerId}: AnimationContext<GameView, MoveView, EmpireName>) {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard: {
         const displayedPlayer = state.displayedPlayer ?? currentPlayerId ?? state.players[0].empire
@@ -47,9 +47,9 @@ const ItsAWonderfulAnimations: Animations<GameView, MoveView, EmpireName> = {
       default:
         return 0
     }
-  },
+  }
 
-  getUndoAnimationDuration(move: MoveView) {
+  override getUndoPostDuration(move: MoveView): number {
     switch (move.type) {
       case MoveType.ChooseDevelopmentCard:
       case MoveType.SlateForConstruction:
@@ -59,5 +59,3 @@ const ItsAWonderfulAnimations: Animations<GameView, MoveView, EmpireName> = {
     }
   }
 }
-
-export default ItsAWonderfulAnimations

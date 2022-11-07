@@ -1,4 +1,4 @@
-import {Action, Competitive, Eliminations, SecretInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
+import {Action, Competitive, Eliminations, Rules, SecretInformation, TimeLimit, Undo} from '@gamepark/rules-api'
 import shuffle from 'lodash.shuffle'
 import canUndo from './canUndo'
 import GameState from './GameState'
@@ -22,7 +22,11 @@ import MoveView from './moves/MoveView'
 import {getPassCardsView, passCards, passCardsMove} from './moves/PassCards'
 import PlaceCharacter, {isPlaceCharacter, placeCharacter, placeCharacterMove} from './moves/PlaceCharacter'
 import PlaceResource, {
-  isPlaceResourceOnConstruction, placeResource, PlaceResourceOnConstruction, placeResourceOnConstructionMove, placeResourceOnEmpireMove
+  isPlaceResourceOnConstruction,
+  placeResource,
+  PlaceResourceOnConstruction,
+  placeResourceOnConstructionMove,
+  placeResourceOnEmpireMove
 } from './moves/PlaceResource'
 import {produce, produceMove} from './moves/Produce'
 import {receiveCharacter, receiveCharacterMove} from './moves/ReceiveCharacter'
@@ -45,11 +49,11 @@ export const numberOfRounds = 4
 const defaultEmpireCardsSide = EmpireSide.A
 
 // noinspection JSUnusedGlobalSymbols
-export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move, EmpireName>
-  implements SecretInformation<GameState, GameView, Move, MoveView, EmpireName>,
+export default class ItsAWonderfulWorld extends Rules<GameState, Move, EmpireName>
+  implements SecretInformation<GameView, Move, MoveView, EmpireName>,
     Undo<GameState, Move, EmpireName>,
     Competitive<GameState, Move, EmpireName>,
-    Eliminations<GameState, Move, EmpireName>,
+    Eliminations<Move, EmpireName>,
     TimeLimit<GameState, Move, EmpireName> {
 
   constructor(state: GameState)
@@ -73,15 +77,7 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
   }
 
   isTurnToPlay(playerId: EmpireName): boolean {
-    const player = this.state.players.find(player => player.empire === playerId)
-    if (!player) return false
-    switch (this.state.phase) {
-      case Phase.Draft:
-        return player.chosenCard === undefined && player.hand.length > 0
-      case Phase.Planning:
-      case Phase.Production:
-        return !player.ready
-    }
+    return isTurnToPlay(this.state, playerId)
   }
 
   isOver(): boolean {
@@ -504,4 +500,20 @@ export function placeAvailableCubesMoves(player: Player | PlayerView, constructi
     }
   })
   return moves
+}
+
+export function isTurnToPlay(state: GameState | GameView, playerId: EmpireName) {
+  const player = state.players.find(player => player.empire === playerId)
+  if (!player) return false
+  switch (state.phase) {
+    case Phase.Draft:
+      if (isPlayerView(player)) {
+        return !player.ready
+      } else {
+        return player.chosenCard === undefined && player.hand.length > 0
+      }
+    case Phase.Planning:
+    case Phase.Production:
+      return !player.ready
+  }
 }
