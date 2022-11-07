@@ -13,7 +13,7 @@ Then, run:
 rclone config
 > n (For "New remote)
 name> its-a-wonderful-world
-Storage> 4 (Amazon S3 Compliant Storage Provider)
+Storage> s3 (Amazon S3 Compliant Storage Provider)
 provider> Other
 env_auth> false
 access_key_id> [Enter your access key id here - Never commit that on Git!]
@@ -30,7 +30,7 @@ Now, to deploy a new version of It’s a Wonderful World, you have 2 command lin
 
 ```
 yarn build
-rclone sync app/build its-a-wonderful-world-v2:its-a-wonderful-world.v2.game-park.com --progress --s3-acl=public-read
+rclone sync app/build its-a-wonderful-world:its-a-wonderful-world.v2.game-park.com --progress --s3-acl=public-read
 ```
 
 More details about this deployment method here: https://www.clever-cloud.com/blog/engineering/2020/06/24/deploy-cellar-s3-static-site/
