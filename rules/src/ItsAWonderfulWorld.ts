@@ -142,41 +142,58 @@ export default class ItsAWonderfulWorld extends Rules<GameState, Move, EmpireNam
     return getLegalMoves(player, this.state.phase)
   }
 
-  play(move: Move) {
+  play(move: Move): Move[] {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
-        return dealDevelopmentCards(this.state)
+        dealDevelopmentCards(this.state)
+        break
       case MoveType.ChooseDevelopmentCard:
-        return chooseDevelopmentCard(this.state, move)
+        chooseDevelopmentCard(this.state, move)
+        break
       case MoveType.RevealChosenCards:
-        return revealChosenCards(this.state)
+        revealChosenCards(this.state)
+        break
       case MoveType.PassCards:
-        return passCards(this.state)
+        passCards(this.state)
+        break
       case MoveType.DiscardLeftoverCards:
-        return discardLeftOverCards(this.state)
+        discardLeftOverCards(this.state)
+        break
       case MoveType.StartPhase:
-        return startPhase(this.state, move)
+        startPhase(this.state, move)
+        break
       case MoveType.SlateForConstruction:
-        return slateForConstruction(this.state, move)
+        slateForConstruction(this.state, move)
+        break
       case MoveType.Recycle:
-        return recycle(this.state, move)
+        recycle(this.state, move)
+        break
       case MoveType.PlaceResource:
-        return placeResource(this.state, move)
+        placeResource(this.state, move)
+        break
       case MoveType.CompleteConstruction:
-        return completeConstruction(this.state, move)
+        completeConstruction(this.state, move)
+        break
       case MoveType.TransformIntoKrystallium:
-        return transformIntoKrystallium(this.state, move)
+        transformIntoKrystallium(this.state, move)
+        break
       case MoveType.TellYouAreReady:
-        return tellYouAreReady(this.state, move)
+        tellYouAreReady(this.state, move)
+        break
       case MoveType.Produce:
-        return produce(this.state, move)
+        produce(this.state, move)
+        break
       case MoveType.ReceiveCharacter:
-        return receiveCharacter(this.state, move)
+        receiveCharacter(this.state, move)
+        break
       case MoveType.PlaceCharacter:
-        return placeCharacter(this.state, move)
+        placeCharacter(this.state, move)
+        break
       case MoveType.Concede:
-        return concede(this.state, move)
+        concede(this.state, move)
+        break
     }
+    return []
   }
 
   getScore(empire: EmpireName): number {
