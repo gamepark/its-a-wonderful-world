@@ -158,6 +158,11 @@
     resolve "^1.14.2"
     semver "^6.1.2"
 
+"@babel/helper-environment-visitor@^7.22.5":
+  version "7.22.5"
+  resolved "https://registry.yarnpkg.com/@babel/helper-environment-visitor/-/helper-environment-visitor-7.22.5.tgz#f06dd41b7c1f44e1f8da6c4055b41ab3a09a7e98"
+  integrity sha512-XGmhECfVA/5sAt+H+xpSg0mfrHq6FzNr9Oxh7PSEBBRUb/mL7Kz3NICXb194rCqAEdxkhPT1a88teizAFyvk8Q==
+
 "@babel/helper-explode-assignable-expression@^7.16.0":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/helper-explode-assignable-expression/-/helper-explode-assignable-expression-7.16.0.tgz#753017337a15f46f9c09f674cff10cee9b9d7778"
@@ -272,6 +277,11 @@
   integrity sha512-0YMMRpuDFNGTHNRiiqJX19GjNXA4H0E8jZ2ibccfSxaCogbm3am5WN/2nQNj0YnQwGWM1J06GOcQ2qnh3+0paw==
   dependencies:
     "@babel/types" "^7.16.0"
+
+"@babel/helper-string-parser@^7.22.5":
+  version "7.22.5"
+  resolved "https://registry.yarnpkg.com/@babel/helper-string-parser/-/helper-string-parser-7.22.5.tgz#533f36457a25814cf1df6488523ad547d784a99f"
+  integrity sha512-mM4COjgZox8U+JcXQwPijIZLElkgEpO5rsERVDJTc2qfCDfERyob6k5WegS14SX18IIjv+XD+GrqNumY5JRCDw==
 
 "@babel/helper-validator-identifier@^7.15.7":
   version "7.15.7"

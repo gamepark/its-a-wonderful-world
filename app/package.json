@@ -6,6 +6,8 @@
   "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
   "license": "ISC",
   "dependencies": {
+    "@babel/helper-environment-visitor": "^7.22.5",
+    "@babel/helper-string-parser": "^7.22.5",
     "@emotion/react": "^11.9.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
@@ -42,8 +44,8 @@
     "webpack": "^5.27.1"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "react-app-rewired --openssl-legacy-provider start",
+    "build": "react-app-rewired --openssl-legacy-provider build",
     "eject": "react-app-rewired eject"
   },
   "eslintConfig": {
