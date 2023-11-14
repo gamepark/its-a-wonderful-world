@@ -283,11 +283,11 @@ export default class ItsAWonderfulWorld extends Rules<GameState, Move, EmpireNam
   giveTime(playerId: EmpireName): number {
     switch (this.state.phase) {
       case Phase.Draft:
-        return (numberOfCardsToDraft - this.getPlayer(playerId).draftArea.length - 1) * 8
+        return (numberOfCardsToDraft - this.getPlayer(playerId).draftArea.length - 1) * 10
       case Phase.Planning:
-        return this.state.round * 60
+        return 20 + this.state.round * 40
       case Phase.Production:
-        return 15
+        return 10
     }
   }
 }
