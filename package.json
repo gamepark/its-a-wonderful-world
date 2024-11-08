@@ -7,15 +7,12 @@
   "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
   "license": "ISC",
   "devDependencies": {
-    "@gamepark/rules-api": "~5.11.2",
-    "@types/lodash.shuffle": "^4.2.7",
-    "i18next": "^21.0.1",
     "lerna": "^4.0.0",
-    "lodash.shuffle": "^4.2.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.9.5"
   },
   "scripts": {
     "start": "yarn workspace @gamepark/its-a-wonderful-world-app run start",
     "build": "yarn workspace @gamepark/its-a-wonderful-world-app run build"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
