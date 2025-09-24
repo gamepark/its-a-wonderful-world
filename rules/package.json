@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/its-a-wonderful-world",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "It's a Wonderful World rules for Game Park",
   "type": "module",
   "main": "dist/index.js",
