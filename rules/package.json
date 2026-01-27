@@ -1,7 +1,8 @@
 {
   "name": "@gamepark/its-a-wonderful-world",
-  "version": "2.9.0",
-  "description": "It's a Wonderful World rules for Game Park",
+  "version": "3.0.0",
+  "description": "The rules of It's a Wonderful World adapted for Game Park",
+  "sideEffects": false,
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,17 +15,19 @@
     "access": "public"
   },
   "scripts": {
+    "test": "vitest",
     "build": "tsc",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc",
+    "publish": "lerna publish",
+    "lint": "eslint --fix"
   },
   "peerDependencies": {
-    "@gamepark/rules-api": ">=5.23",
-    "lodash": ">=4.17"
+    "@gamepark/rules-api": ">=7",
+    "es-toolkit": "^1.43.0"
   },
   "devDependencies": {
-    "@gamepark/rules-api": "~5.23.0",
-    "@types/lodash": "^4.17.7",
-    "i18next": "^21.3.2",
-    "lodash": "^4.17.21"
+    "@gamepark/rules-api": "~7.2.0",
+    "es-toolkit": "^1.44.0",
+    "vitest": "^4.0.18"
   }
 }

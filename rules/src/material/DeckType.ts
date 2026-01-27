@@ -1,5 +1,4 @@
-enum DeckType {
-  Default, Ascension
+export enum DeckType {
+  Default,
+  Ascension
 }
-
-export default DeckType

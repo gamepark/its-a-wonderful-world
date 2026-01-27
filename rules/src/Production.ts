@@ -1,51 +1,100 @@
-import {getCardDetails} from './material/Developments'
-import DevelopmentType from './material/DevelopmentType'
-import Empires from './material/Empires'
-import Resource, {isResource} from './material/Resource'
-import Player from './Player'
-import PlayerView from './PlayerView'
+/**
+ * Production system for calculating resource production from empire cards and constructed developments.
+ * Reimplemented for Material approach.
+ */
+
+import { MaterialGame } from '@gamepark/rules-api'
+import { Empire } from './Empire'
+import { Memory } from './ItsAWonderfulWorldMemory'
+import { getDevelopmentDetails } from './material/Development'
+import { DevelopmentType } from './material/DevelopmentType'
+import { Empires } from './material/Empires'
+import { EmpireSide } from './material/EmpireSide'
+import { LocationType } from './material/LocationType'
+import { MaterialType } from './material/MaterialType'
+import { isResource, Resource } from './material/Resource'
 
 type ProductionFactor = {
   resource: Resource
   factor: DevelopmentType
 }
 
-type Production = Resource | { [key in Resource]?: number } | ProductionFactor
-
-export default Production
+export type Production = Resource | { [key in Resource]?: number } | ProductionFactor
 
 export function isProductionFactor(production: Production): production is ProductionFactor {
   const productionFactor = production as ProductionFactor
   return productionFactor.resource !== undefined && productionFactor.factor !== undefined
 }
 
-export function getProductionAndCorruption(player: Player | PlayerView, resource: Resource): number {
-  const developmentsProduction = player.constructedDevelopments.reduce((sum, card) =>
-    sum + getResourceProduction(player, resource, getCardDetails(card).production), 0
-  )
-  return getEmpireProduction(player, resource) + developmentsProduction
+/**
+ * Get the empire side from game memory
+ */
+export function getEmpireSide(game: MaterialGame): EmpireSide {
+  return game.memory[Memory.EmpireSide] ?? EmpireSide.A
 }
 
-export function getProduction(player: Player | PlayerView, resource: Resource): number {
-  return Math.max(0, getProductionAndCorruption(player, resource))
+/**
+ * Get total production (including negative corruption) for a resource
+ */
+export function getProductionAndCorruption(game: MaterialGame, empire: Empire, resource: Resource): number {
+  // Get empire production from memory (empire cards are static)
+  const empireSide = getEmpireSide(game)
+  const empireDetails = Empires[empire]?.[empireSide]
+  if (!empireDetails) return 0
+
+  let total = getResourceProduction(game, empire, resource, empireDetails.production)
+
+  // Get production from constructed developments
+  const constructedDevelopments = game.items[MaterialType.DevelopmentCard]?.filter(
+    (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
+  ) ?? []
+
+  for (const card of constructedDevelopments) {
+    const development = card.id.front
+    const details = getDevelopmentDetails(development)
+    total += getResourceProduction(game, empire, resource, details.production)
+  }
+
+  return total
 }
 
-function getEmpireProduction(player: Player | PlayerView, resource: Resource): number {
-  return getResourceProduction(player, resource, Empires[player.empire][player.empireSide].production)
+/**
+ * Get actual production (minimum 0) for a resource
+ */
+export function getProduction(game: MaterialGame, empire: Empire, resource: Resource): number {
+  return Math.max(0, getProductionAndCorruption(game, empire, resource))
 }
 
-function getResourceProduction(player: Player | PlayerView, resource: Resource, production?: Production) {
+/**
+ * Calculate production for a specific resource from a Production definition
+ */
+function getResourceProduction(game: MaterialGame, empire: Empire, resource: Resource, production?: Production): number {
   if (!production) {
     return 0
   }
+
+  // Simple resource production (produces 1 of that resource)
   if (isResource(production)) {
     return production === resource ? 1 : 0
   }
-  if (!isProductionFactor(production)) {
-    return production[resource] ?? 0
+
+  // Production factor (produces based on count of certain development types)
+  if (isProductionFactor(production)) {
+    if (production.resource === resource) {
+      // Count constructed developments of the specified type
+      const constructedDevelopments = game.items[MaterialType.DevelopmentCard]?.filter(
+        (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
+      ) ?? []
+
+      return constructedDevelopments.reduce((sum, card) => {
+        const development = card.id.front
+        const details = getDevelopmentDetails(development)
+        return details.type === production.factor ? sum + 1 : sum
+      }, 0)
+    }
+    return 0
   }
-  if (production.resource === resource) {
-    return player.constructedDevelopments.reduce((sum, card) => getCardDetails(card).type === production.factor ? sum + 1 : sum, 0)
-  }
-  return 0
+
+  // Object mapping {[Resource]: number}
+  return production[resource] ?? 0
 }

@@ -1,9 +1,9 @@
-import Character from './Character'
-import DevelopmentType from './DevelopmentType'
-import Empire from './Empire'
-import EmpireName from './EmpireName'
-import EmpireSide from './EmpireSide'
-import Resource from './Resource'
+import { Empire } from '../Empire'
+import { Character } from './Character'
+import { DevelopmentType } from './DevelopmentType'
+import { EmpireDetails } from './EmpireDetails'
+import { EmpireSide } from './EmpireSide'
+import { Resource } from './Resource'
 
 const EmpireSideB = {
   production: {
@@ -28,9 +28,9 @@ const EmpireSideE = {
   }
 }
 
-const AztecEmpire: Empire = {
+const AztecEmpire: EmpireDetails = {
   [EmpireSide.A]: {
-    victoryPoints: {quantity: 3, per: DevelopmentType.Discovery},
+    victoryPoints: { quantity: 3, per: DevelopmentType.Discovery },
     production: {
       [Resource.Energy]: 2,
       [Resource.Exploration]: 1
@@ -55,9 +55,9 @@ const AztecEmpire: Empire = {
   }
 }
 
-const FederationOfAsia: Empire = {
+const FederationOfAsia: EmpireDetails = {
   [EmpireSide.A]: {
-    victoryPoints: {quantity: 2, per: DevelopmentType.Project},
+    victoryPoints: { quantity: 2, per: DevelopmentType.Project },
     production: {
       [Resource.Materials]: 1,
       [Resource.Gold]: 2
@@ -81,9 +81,9 @@ const FederationOfAsia: Empire = {
   }
 }
 
-const NoramStates: Empire = {
+const NoramStates: EmpireDetails = {
   [EmpireSide.A]: {
-    victoryPoints: {quantity: 1, per: Character.Financier},
+    victoryPoints: { quantity: 1, per: Character.Financier },
     production: {
       [Resource.Materials]: 3,
       [Resource.Gold]: 1
@@ -107,9 +107,9 @@ const NoramStates: Empire = {
   }
 }
 
-const PanafricanUnion: Empire = {
+const PanafricanUnion: EmpireDetails = {
   [EmpireSide.A]: {
-    victoryPoints: {quantity: 2, per: DevelopmentType.Research},
+    victoryPoints: { quantity: 2, per: DevelopmentType.Research },
     production: {
       [Resource.Materials]: 2,
       [Resource.Science]: 2
@@ -133,9 +133,9 @@ const PanafricanUnion: Empire = {
   }
 }
 
-const RepublicOfEurope: Empire = {
+const RepublicOfEurope: EmpireDetails = {
   [EmpireSide.A]: {
-    victoryPoints: {quantity: 1, per: Character.General},
+    victoryPoints: { quantity: 1, per: Character.General },
     production: {
       [Resource.Materials]: 2,
       [Resource.Energy]: 1,
@@ -160,9 +160,9 @@ const RepublicOfEurope: Empire = {
   }
 }
 
-const NationsOfOceania: Empire = {
+const NationsOfOceania: EmpireDetails = {
   [EmpireSide.A]: {
-    victoryPoints: {quantity: 1, per: DevelopmentType.Structure},
+    victoryPoints: { quantity: 1, per: DevelopmentType.Structure },
     production: {
       [Resource.Materials]: 3,
       [Resource.Energy]: 1
@@ -187,9 +187,9 @@ const NationsOfOceania: Empire = {
   }
 }
 
-const NorthHegemony: Empire = {
+const NorthHegemony: EmpireDetails = {
   [EmpireSide.A]: {
-    victoryPoints: {quantity: 2, per: DevelopmentType.Vehicle},
+    victoryPoints: { quantity: 2, per: DevelopmentType.Vehicle },
     production: {
       [Resource.Energy]: 3
     }
@@ -212,12 +212,12 @@ const NorthHegemony: Empire = {
   }
 }
 
-export default {
-  [EmpireName.AztecEmpire]: AztecEmpire,
-  [EmpireName.FederationOfAsia]: FederationOfAsia,
-  [EmpireName.NoramStates]: NoramStates,
-  [EmpireName.PanafricanUnion]: PanafricanUnion,
-  [EmpireName.RepublicOfEurope]: RepublicOfEurope,
-  [EmpireName.NationsOfOceania]: NationsOfOceania,
-  [EmpireName.NorthHegemony]: NorthHegemony
+export const Empires = {
+  [Empire.AztecEmpire]: AztecEmpire,
+  [Empire.FederationOfAsia]: FederationOfAsia,
+  [Empire.NoramStates]: NoramStates,
+  [Empire.PanafricanUnion]: PanafricanUnion,
+  [Empire.RepublicOfEurope]: RepublicOfEurope,
+  [Empire.NationsOfOceania]: NationsOfOceania,
+  [Empire.NorthHegemony]: NorthHegemony
 }

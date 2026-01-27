@@ -9,8 +9,8 @@ node_modules/
 /coverage
 
 # production
-build/
-dist/
+/app/dist/
+/rules/dist/
 
 # misc
 .DS_Store
@@ -19,9 +19,17 @@ dist/
 .env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# local settings
+settings.local.json
+.claude/settings.local.json
+
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # IntelliJ IDEA
 /.idea

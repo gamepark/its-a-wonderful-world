@@ -1,22 +1,129 @@
+import { range } from 'es-toolkit'
 import {
-  AlphaCentauri, ArmoredConvoy, ArtificialIntelligence, ArtificialSun, BorderPatrol, CelestialCathedral, Consortium, DarkMatter, FloatingPalace, GiantRobot,
-  GoldMine, HighSecurityPrison, Hyperborea, Immortality, Inquisitors, IntercontinentalNetwork, KrystalliumPowerPlant, LawlessZone, LuxuryClinic, MiningAsteroid,
-  MobileBase, MysteriousVessel, OccultDistrict, OffshoreLaboratory, OrbitalStation, Pandemonium, PandoraBox, PlanetaryArchives, Raiders, RobotFactory,
-  SecretBase, Shambhala, TaxHaven, Telekinesis, TheWall, Utopia, Valhalla, WorldBank
+  AlphaCentauri,
+  ArmoredConvoy,
+  ArtificialIntelligence,
+  ArtificialSun,
+  BorderPatrol,
+  CelestialCathedral,
+  Consortium,
+  DarkMatter,
+  FloatingPalace,
+  GiantRobot,
+  GoldMine,
+  HighSecurityPrison,
+  Hyperborea,
+  Immortality,
+  Inquisitors,
+  IntercontinentalNetwork,
+  KrystalliumPowerPlant,
+  LawlessZone,
+  LuxuryClinic,
+  MiningAsteroid,
+  MobileBase,
+  MysteriousVessel,
+  OccultDistrict,
+  OffshoreLaboratory,
+  OrbitalStation,
+  Pandemonium,
+  PandoraBox,
+  PlanetaryArchives,
+  Raiders,
+  RobotFactory,
+  SecretBase,
+  Shambhala,
+  TaxHaven,
+  Telekinesis,
+  TheWall,
+  Utopia,
+  Valhalla,
+  WorldBank
 } from './AscensionDevelopments'
-import DevelopmentDetails from './DevelopmentDetails'
+import { Character } from './Character'
+import { DevelopmentDetails } from './DevelopmentDetails'
 import {
-  AirborneLaboratory, AircraftCarrier, AlexandersTomb, AncientAstronauts, Aquaculture, ArkOfTheCovenant, Atlantis, BermudaTriangle, BionicGrafts,
-  BlackBeardsTreasure, CasinoCity, CenterOfTheEarth, CitiesOfGold, CityOfAgartha, ClimateControl, Cryopreservation, EspionageAgency, FinancialCenter,
-  FountainOfYouth, GardensOfTheHesperides, GeneticUpgrades, GiantDam, GiantTower, GravityInverter, HarborZone, HumanCloning, Icebreaker, IndustrialComplex,
-  IslandOfAvalon, Juggernaut, KingSolomonsMines, LostContinentOfMu, LunarBase, MagneticTrain, MegaBomb, MegaDrill, MilitaryBase, Museum, NationalMonument,
-  Neuroscience, NuclearPlant, OffshoreOilRig, ParallelDimension, PolarBase, PropagandaCenter, QuantumGenerator, RecyclingPlant, ResearchCenter, RobotAssistants,
-  RoboticAnimals, Roswell, Satellites, SaucerSquadron, SecretLaboratory, SecretSociety, SecurityAutomatons, SolarCannon, SpaceElevator, Submarine,
-  Supercomputer, SuperSoldiers, SuperSonar, TankDivision, Teleportation, TimeTravel, Transmutation, TransportationNetwork, TreasureOfTheTemplars,
-  UndergroundCity, UnderwaterCity, UniversalExposition, UniversalVaccine, University, UnknownTechnology, VirtualReality, WindTurbines, WorldCongress, Zeppelin
+  AirborneLaboratory,
+  AircraftCarrier,
+  AlexandersTomb,
+  AncientAstronauts,
+  Aquaculture,
+  ArkOfTheCovenant,
+  Atlantis,
+  BermudaTriangle,
+  BionicGrafts,
+  BlackBeardsTreasure,
+  CasinoCity,
+  CenterOfTheEarth,
+  CitiesOfGold,
+  CityOfAgartha,
+  ClimateControl,
+  Cryopreservation,
+  EspionageAgency,
+  FinancialCenter,
+  FountainOfYouth,
+  GardensOfTheHesperides,
+  GeneticUpgrades,
+  GiantDam,
+  GiantTower,
+  GravityInverter,
+  HarborZone,
+  HumanCloning,
+  Icebreaker,
+  IndustrialComplex,
+  IslandOfAvalon,
+  Juggernaut,
+  KingSolomonsMines,
+  LostContinentOfMu,
+  LunarBase,
+  MagneticTrain,
+  MegaBomb,
+  MegaDrill,
+  MilitaryBase,
+  Museum,
+  NationalMonument,
+  Neuroscience,
+  NuclearPlant,
+  OffshoreOilRig,
+  ParallelDimension,
+  PolarBase,
+  PropagandaCenter,
+  QuantumGenerator,
+  RecyclingPlant,
+  ResearchCenter,
+  RobotAssistants,
+  RoboticAnimals,
+  Roswell,
+  Satellites,
+  SaucerSquadron,
+  SecretLaboratory,
+  SecretSociety,
+  SecurityAutomatons,
+  SolarCannon,
+  SpaceElevator,
+  Submarine,
+  Supercomputer,
+  SuperSoldiers,
+  SuperSonar,
+  TankDivision,
+  Teleportation,
+  TimeTravel,
+  Transmutation,
+  TransportationNetwork,
+  TreasureOfTheTemplars,
+  UndergroundCity,
+  UnderwaterCity,
+  UniversalExposition,
+  UniversalVaccine,
+  University,
+  UnknownTechnology,
+  VirtualReality,
+  WindTurbines,
+  WorldCongress,
+  Zeppelin
 } from './Developments'
+import { Resource } from './Resource'
 
-enum Development {
+export enum Development {
   FinancialCenter = 1,
   IndustrialComplex,
   MilitaryBase,
@@ -134,8 +241,6 @@ enum Development {
   AlphaCentauri,
   Shambhala
 }
-
-export default Development
 
 export const developments = Object.values(Development).filter(isDevelopment)
 
@@ -377,5 +482,89 @@ export function getDevelopmentDetails(development: Development): DevelopmentDeta
       return AlphaCentauri
     case Development.Shambhala:
       return Shambhala
+  }
+}
+
+export const baseDevelopmentCardIds = range(Development.FinancialCenter, Development.BorderPatrol)
+export const ascensionDevelopmentCardIds = range(Development.BorderPatrol, Development.Shambhala + 1)
+
+/**
+ * Get the construction cost of a development card as an array of resources/characters.
+ * The order is: Materials, Energy, Science, Gold, Exploration, Krystallium, Financier, General
+ */
+export function getCost(development: Development): (Resource | Character)[] {
+  const details = getDevelopmentDetails(development)
+  const costOrder: (Resource | Character)[] = [
+    Resource.Materials,
+    Resource.Energy,
+    Resource.Science,
+    Resource.Gold,
+    Resource.Exploration,
+    Resource.Krystallium,
+    Character.Financier,
+    Character.General
+  ]
+  return costOrder.flatMap((item) => Array(details.constructionCost[item] || 0).fill(item))
+}
+
+/**
+ * Get the remaining cost spaces that have not been filled yet.
+ * Returns an array of {item, space} where item is the required resource/character and space is the index.
+ */
+export function getRemainingCost(
+  development: Development,
+  filledSpaces: (Resource | Character | undefined)[]
+): { item: Resource | Character; space: number }[] {
+  return getCost(development)
+    .map((item, index) => ({ item, space: index }))
+    .filter(({ space }) => !filledSpaces[space])
+}
+
+/**
+ * Get column 2 pattern for specific developments that have two-column cost layouts.
+ * Returns an array of space indices that should be in column 2.
+ */
+export function getDevelopmentColumn2Pattern(development: Development): number[] {
+  switch (development) {
+    case Development.AlphaCentauri:
+      return [4, 5, 11, 12, 13]
+    case Development.Hyperborea:
+      return [7, 8]
+    case Development.CelestialCathedral:
+      return [3, 8]
+    case Development.TheWall:
+      return [6, 7, 8, 11, 12, 14]
+    case Development.WorldBank:
+      return [5, 6, 10, 11]
+    case Development.ArtificialSun:
+      return [3, 8, 9, 10, 12]
+    case Development.DarkMatter:
+      return [4, 8, 9]
+    case Development.Immortality:
+      return [7, 8, 9, 10]
+    case Development.Utopia:
+      return [3, 5, 7]
+    case Development.GiantRobot:
+      return [6, 7]
+    case Development.OrbitalStation:
+      return [4, 5]
+    default:
+      return []
+  }
+}
+
+/**
+ * Get the column and index for a specific cost space on a development card.
+ */
+export function getConstructionSpaceLocation(development: Development, space: number): { column: number; index: number } {
+  const column2Pattern = getDevelopmentColumn2Pattern(development)
+  if (column2Pattern.length) {
+    const column = column2Pattern.includes(space) ? 2 : 1
+    return {
+      column,
+      index: column === 1 ? space - column2Pattern.filter((s) => s < space).length : column2Pattern.indexOf(space)
+    }
+  } else {
+    return { column: 1, index: space }
   }
 }
