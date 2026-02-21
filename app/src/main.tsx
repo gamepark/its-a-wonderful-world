@@ -10,6 +10,7 @@ import { App } from './App'
 import { Locators } from './locators/Locators'
 import { Material, materialI18n } from './material/Material'
 import { Tutorial } from './tutorial/Tutorial'
+import { ai } from './tutorial/TutorialAI'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')!).render(
       locators={Locators}
       animations={gameAnimations}
       tutorial={new Tutorial()}
+      ai={ai}
     >
       <App />
     </GameProvider>
