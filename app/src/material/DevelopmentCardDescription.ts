@@ -156,12 +156,33 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
   }
 
   getLongClickMoves(context: ItemContext<Empire, MaterialType, LocationType>, legalMoves: MaterialMove<Empire, MaterialType, LocationType>[]): MaterialMove<Empire, MaterialType, LocationType>[] {
-    const { index } = context
-    return legalMoves.filter(move =>
+    const { index, rules } = context
+    const moves = legalMoves.filter(move =>
       isMoveItemType(MaterialType.ResourceCube)(move) &&
       move.location.type === LocationType.ConstructionCardCost &&
       move.location.parent === index
     )
+    // A cube item can have quantity > 1 (e.g. production creates 3 Materials at once).
+    // Greedily assign: each cube used up to its quantity, each space (x) filled once.
+    const itemUsage = new Map<number, number>()
+    const usedSpaces = new Set<number>()
+    const result: MaterialMove<Empire, MaterialType, LocationType>[] = []
+    const sorted = [...moves].sort((a, b) => {
+      if (!isMoveItemType(MaterialType.ResourceCube)(a) || !isMoveItemType(MaterialType.ResourceCube)(b)) return 0
+      return (a.location.x ?? 0) - (b.location.x ?? 0)
+    })
+    for (const move of sorted) {
+      if (!isMoveItemType(MaterialType.ResourceCube)(move)) continue
+      const space = move.location.x ?? 0
+      if (usedSpaces.has(space)) continue
+      const used = itemUsage.get(move.itemIndex) ?? 0
+      const available = rules.material(MaterialType.ResourceCube).getItem(move.itemIndex).quantity ?? 1
+      if (used >= available) continue
+      itemUsage.set(move.itemIndex, used + 1)
+      usedSpaces.add(space)
+      result.push(move)
+    }
+    return result
   }
 
   backImages = {
