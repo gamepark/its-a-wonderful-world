@@ -1,4 +1,4 @@
-import { isCreateItem, isMoveItemType, isMoveItemTypeAtOnce, ItemMove, MaterialMove, MoveItemsAtOnce, SimultaneousRule } from '@gamepark/rules-api'
+import { isCreateItem, isDeleteItem, isMoveItemType, isMoveItemTypeAtOnce, ItemMove, MaterialMove, MoveItemsAtOnce, SimultaneousRule } from '@gamepark/rules-api'
 import { Empire } from '../Empire'
 import { Memory } from '../ItsAWonderfulWorldMemory'
 import { Character, isCharacter } from '../material/Character'
@@ -190,7 +190,8 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         // If card is already complete, it was triggered by afterItemMove which handles everything
         if (this.getRemainingCostForCard(move.itemIndex).length > 0) {
           // Pay the remaining cost
-          consequences.push(...this.payRemainingCost(player, move.itemIndex))
+          const paymentMoves = this.payRemainingCost(player, move.itemIndex)
+          consequences.push(...paymentMoves)
 
           // Delete cubes and character tokens already on the card
           if (cubesOnCard.length > 0) {
@@ -224,6 +225,30 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
                       type: LocationType.KrystalliumStock,
                       player
                     }
+                  })
+                )
+              }
+            }
+          }
+
+          // After payment, move remaining available resources that can no longer be placed
+          const consumed = new Map<number, number>()
+          for (const pm of paymentMoves) {
+            if (isDeleteItem(pm) && pm.itemType === MaterialType.ResourceCube) {
+              consumed.set(pm.itemIndex, (consumed.get(pm.itemIndex) ?? 0) + (pm.quantity ?? 1))
+            }
+          }
+          const availableResources = this.material(MaterialType.ResourceCube).location(LocationType.AvailableResources).player(player)
+          for (const resourceIndex of availableResources.getIndexes()) {
+            const resourceItem = availableResources.getItem(resourceIndex)
+            const resource = resourceItem.id as Resource
+            const remaining = (resourceItem.quantity ?? 1) - (consumed.get(resourceIndex) ?? 0)
+            if (remaining > 0 && !this.canResourceBePlacedExcludingCard(player, resource, move.itemIndex)) {
+              for (let i = 0; i < remaining; i++) {
+                consequences.push(
+                  this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
+                    type: LocationType.EmpireCardResources,
+                    player
                   })
                 )
               }
@@ -535,7 +560,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     }
 
     // After a card move, check if any available resources can no longer be placed
-    // Skip for cards moved to ConstructedDevelopments: beforeItemMove already handles cost payment
+    // Skip for cards moved to ConstructedDevelopments: beforeItemMove already handles cost payment and unplaceable resources
     if (isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type !== LocationType.ConstructedDevelopments) {
       const card = this.material(MaterialType.DevelopmentCard).getItem(move.itemIndex)
       const player = card.location.player as Empire | undefined
