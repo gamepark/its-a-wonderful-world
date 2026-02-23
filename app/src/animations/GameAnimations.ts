@@ -168,5 +168,6 @@ gameAnimations
 // Viewed player animations (other-player skip rules above take priority)
 gameAnimations.configure(isCreateItemType(MaterialType.ResourceCube)).duration(200)
 gameAnimations.configure(isDeleteItemType(MaterialType.ResourceCube)).duration(200)
-gameAnimations.configure(isMoveItemType(MaterialType.ResourceCube)).duration(300)
+gameAnimations.configure(isMoveItemType(MaterialType.ResourceCube)).duration(200)
 gameAnimations.configure(isMoveItemType(MaterialType.DevelopmentCard)).duration(500)
+gameAnimations.configure(isCreateItemType(MaterialType.CharacterToken)).duration(500)
