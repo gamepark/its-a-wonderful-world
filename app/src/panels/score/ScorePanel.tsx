@@ -22,7 +22,6 @@ const playerPanelY = (index: number, players: number) =>
 export const ScorePanel = ({ animation, playerCount }: Props) => {
   const players = usePlayers<Empire>({ sortFromMe: true })
   const [displayScore, setDisplayScore] = useState(true)
-  const isSmall = playerCount > 5
 
   return (
     <div css={scorePanelStyle}>
