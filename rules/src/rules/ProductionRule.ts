@@ -151,7 +151,7 @@ export abstract class ProductionRule extends ConstructionRule {
   /**
    * Called after the last production phase (Exploration) to either start a new round or end the game
    */
-  private endRound(): MaterialMove[] {
+  protected endRound(): MaterialMove[] {
     const moves: MaterialMove[] = []
     const round = this.remind<number>(Memory.Round)
 

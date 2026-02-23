@@ -130,5 +130,7 @@ const getDevelopmentTypeDescription = (t: TFunction, developmentType: Developmen
       return t('Project')
     case DevelopmentType.Discovery:
       return t('Discovery')
+    case DevelopmentType.Memorial:
+      return 'Memorial'
   }
 }

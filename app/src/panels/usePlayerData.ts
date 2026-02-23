@@ -19,9 +19,7 @@ export function usePlayerProduction(playerId: Empire): Map<Resource, number> {
     if (!rules?.game) return production
 
     for (const resource of resources) {
-      if (resource !== Resource.Krystallium) {
-        production.set(resource, getProductionAndCorruption(rules.game, playerId, resource))
-      }
+      production.set(resource, getProductionAndCorruption(rules.game, playerId, resource))
     }
     return production
   }, [rules?.game, playerId])

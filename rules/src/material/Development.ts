@@ -40,6 +40,21 @@ import {
   WorldBank
 } from './AscensionDevelopments'
 import { Character } from './Character'
+import {
+  AnalysisCenter,
+  CargoFleet,
+  GaussianWeapons,
+  Headquarters,
+  MemorialForTheBuilder,
+  MemorialForTheDictator,
+  MemorialForTheExplorer,
+  MemorialForTheFinancier,
+  MemorialForTheScientist,
+  Pax10,
+  SecretForces,
+  SecurityShips,
+  TowerOfBabel
+} from './WarAndPeaceDevelopments'
 import { DevelopmentDetails } from './DevelopmentDetails'
 import {
   AirborneLaboratory,
@@ -239,7 +254,21 @@ export enum Development {
   Pandemonium,
   PandoraBox,
   AlphaCentauri,
-  Shambhala
+  Shambhala,
+  // Corruption & Ascension expansion - new cards
+  MemorialForTheBuilder,
+  MemorialForTheDictator,
+  MemorialForTheScientist,
+  MemorialForTheFinancier,
+  MemorialForTheExplorer,
+  AnalysisCenter,
+  SecurityShips,
+  TowerOfBabel,
+  GaussianWeapons,
+  CargoFleet,
+  Pax10,
+  Headquarters,
+  SecretForces
 }
 
 export const developments = Object.values(Development).filter(isDevelopment)
@@ -482,11 +511,38 @@ export function getDevelopmentDetails(development: Development): DevelopmentDeta
       return AlphaCentauri
     case Development.Shambhala:
       return Shambhala
+    case Development.MemorialForTheBuilder:
+      return MemorialForTheBuilder
+    case Development.MemorialForTheDictator:
+      return MemorialForTheDictator
+    case Development.MemorialForTheScientist:
+      return MemorialForTheScientist
+    case Development.MemorialForTheFinancier:
+      return MemorialForTheFinancier
+    case Development.MemorialForTheExplorer:
+      return MemorialForTheExplorer
+    case Development.AnalysisCenter:
+      return AnalysisCenter
+    case Development.SecurityShips:
+      return SecurityShips
+    case Development.TowerOfBabel:
+      return TowerOfBabel
+    case Development.GaussianWeapons:
+      return GaussianWeapons
+    case Development.CargoFleet:
+      return CargoFleet
+    case Development.Pax10:
+      return Pax10
+    case Development.Headquarters:
+      return Headquarters
+    case Development.SecretForces:
+      return SecretForces
   }
 }
 
 export const baseDevelopmentCardIds = range(Development.FinancialCenter, Development.BorderPatrol)
 export const ascensionDevelopmentCardIds = range(Development.BorderPatrol, Development.Shambhala + 1)
+export const warAndPeaceDevelopmentCardIds = range(Development.MemorialForTheBuilder, Development.SecretForces + 1)
 
 /**
  * Get the construction cost of a development card as an array of resources/characters.

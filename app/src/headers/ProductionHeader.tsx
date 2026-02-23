@@ -6,6 +6,7 @@ import { Character } from '@gamepark/its-a-wonderful-world/material/Character'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
+import { hasKrystalliumOrCharacterProduction } from '@gamepark/its-a-wonderful-world/Production'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
 import { HeaderText, MaterialComponent, PlayMoveButton, useLegalMove, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
 import { isCreateItem, isEndPlayerTurn, MaterialRules } from '@gamepark/rules-api'
@@ -23,7 +24,8 @@ const ruleToResource: Record<number, Resource> = {
   [RuleId.ProductionEnergy]: Resource.Energy,
   [RuleId.ProductionScience]: Resource.Science,
   [RuleId.ProductionGold]: Resource.Gold,
-  [RuleId.ProductionExploration]: Resource.Exploration
+  [RuleId.ProductionExploration]: Resource.Exploration,
+  [RuleId.ProductionKrystallium]: Resource.Krystallium
 }
 
 export const ProductionHeader = () => {
@@ -75,7 +77,9 @@ export const ProductionHeader = () => {
   const ruleId = rules.game.rule?.id as RuleId
   const resource = ruleToResource[ruleId] ?? Resource.Materials
 
-  if (resource < Resource.Exploration) {
+  const hasKrystalliumProduction = ruleId === RuleId.ProductionExploration && hasKrystalliumOrCharacterProduction(rules.game, playerId as Empire)
+
+  if (resource < Resource.Exploration || hasKrystalliumProduction) {
     return (
       <Trans
         i18nKey="header.validate.produce"

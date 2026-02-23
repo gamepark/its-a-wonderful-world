@@ -3,5 +3,6 @@ export enum DevelopmentType {
   Vehicle,
   Research,
   Project,
-  Discovery
+  Discovery,
+  Memorial
 }

@@ -4,7 +4,7 @@ import { Memory } from './ItsAWonderfulWorldMemory'
 import { ItsAWonderfulWorldOptions } from './ItsAWonderfulWorldOptions'
 import { ItsAWonderfulWorldRules } from './ItsAWonderfulWorldRules'
 import { DeckType } from './material/DeckType'
-import { Development, ascensionDevelopmentCardIds, baseDevelopmentCardIds, getDevelopmentDetails } from './material/Development'
+import { Development, ascensionDevelopmentCardIds, baseDevelopmentCardIds, getDevelopmentDetails, warAndPeaceDevelopmentCardIds } from './material/Development'
 import { Empires } from './material/Empires'
 import { EmpireSide } from './material/EmpireSide'
 import { LocationType } from './material/LocationType'
@@ -57,6 +57,22 @@ export class ItsAWonderfulWorldSetup extends MaterialGameSetup<Empire, MaterialT
 
       // Shuffle the Ascension deck
       this.material(MaterialType.DevelopmentCard).location(LocationType.AscensionDeck).shuffle()
+    }
+
+    // Add War & Peace expansion cards to the base deck if enabled
+    if (options.warAndPeace) {
+      this.material(MaterialType.DevelopmentCard).createItems(
+        warAndPeaceDevelopmentCardIds.flatMap((devId) => {
+          const copies = getDevelopmentDetails(devId as Development).numberOfCopies || 1
+          return Array.from({ length: copies }, () => ({
+            id: { front: devId, back: DeckType.Default },
+            location: { type: LocationType.Deck }
+          }))
+        })
+      )
+
+      // Re-shuffle the deck after adding new cards
+      this.material(MaterialType.DevelopmentCard).location(LocationType.Deck).shuffle()
     }
 
     // Setup each player's initial resources

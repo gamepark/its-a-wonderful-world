@@ -87,7 +87,8 @@ export const developmentTypeIcons: Record<DevelopmentType, string> = {
   [DevelopmentType.Vehicle]: vehicleIcon,
   [DevelopmentType.Research]: researchIcon,
   [DevelopmentType.Project]: projectIcon,
-  [DevelopmentType.Discovery]: discoveryIcon
+  [DevelopmentType.Discovery]: discoveryIcon,
+  [DevelopmentType.Memorial]: ''
 }
 
 export { scoreBackground, scoreIcon, arrowWhite }

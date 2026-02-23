@@ -17,5 +17,6 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.ProductionEnergy]: ProductionHeader,
   [RuleId.ProductionScience]: ProductionHeader,
   [RuleId.ProductionGold]: ProductionHeader,
-  [RuleId.ProductionExploration]: ProductionHeader
+  [RuleId.ProductionExploration]: ProductionHeader,
+  [RuleId.ProductionKrystallium]: ProductionHeader
 }

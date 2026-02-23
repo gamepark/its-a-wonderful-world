@@ -40,6 +40,7 @@ export function getScoringDetails(game: MaterialGame, playerId: Empire, ignoreBa
       [DevelopmentType.Research]: 0,
       [DevelopmentType.Project]: 0,
       [DevelopmentType.Discovery]: 0,
+      [DevelopmentType.Memorial]: 0,
       [Character.Financier]: financierCount,
       [Character.General]: generalCount
     },

@@ -10,5 +10,6 @@ export enum RuleId {
   ProductionEnergy = 22,
   ProductionScience = 23,
   ProductionGold = 24,
-  ProductionExploration = 25
+  ProductionExploration = 25,
+  ProductionKrystallium = 26
 }

@@ -137,6 +137,23 @@ import PandoraBox_FR from '../images/cards/developments/fr/Discovery_114_FR_Pand
 import AlphaCentauri_FR from '../images/cards/developments/fr/Discovery_115_FR_AlphaCentauri.jpg'
 import Shambhala_FR from '../images/cards/developments/fr/Discovery_116_FR_Shambhala.jpg'
 
+// Corruption & Ascension - Memorial
+import MemorialForTheExplorer_FR from '../images/cards/developments/fr/Memorial_117_FR_MemorialForTheExplorer.jpg'
+import MemorialForTheBuilder_FR from '../images/cards/developments/fr/Memorial_118_FR_MemorialForTheBuilder.jpg'
+import MemorialForTheDictator_FR from '../images/cards/developments/fr/Memorial_119_FR_MemorialForTheDictator.jpg'
+import MemorialForTheFinancier_FR from '../images/cards/developments/fr/Memorial_120_FR_MemorialForTheFinancier.jpg'
+import MemorialForTheScientist_FR from '../images/cards/developments/fr/Memorial_121_FR_MemorialForTheScientist.jpg'
+
+// Corruption & Ascension - Other
+import AnalysisCenter_FR from '../images/cards/developments/fr/Structure_122_FR_AnalysisCenter.jpg'
+import SecurityShips_FR from '../images/cards/developments/fr/Vehicle_123_FR_SecurityShips.jpg'
+import TowerOfBabel_FR from '../images/cards/developments/fr/Discovery_124_FR_TowerOfBabel.jpg'
+import GaussianWeapons_FR from '../images/cards/developments/fr/Research_125_FR_GaussianWeapons.jpg'
+import CargoFleet_FR from '../images/cards/developments/fr/Vehicle_126_FR_CargoFleet.jpg'
+import Pax10_FR from '../images/cards/developments/fr/Project_127_FR_Pax10.jpg'
+import Headquarters_FR from '../images/cards/developments/fr/Project_128_FR_Headquarters.jpg'
+import SecretForces_FR from '../images/cards/developments/fr/Structure_129_FR_SecretForces.jpg'
+
 class FrenchDevelopmentCardDescription extends DevelopmentCardDescription {
   images = {
     [Development.FinancialCenter]: FinancialCenter_FR,
@@ -254,7 +271,20 @@ class FrenchDevelopmentCardDescription extends DevelopmentCardDescription {
     [Development.Pandemonium]: Pandemonium_FR,
     [Development.PandoraBox]: PandoraBox_FR,
     [Development.AlphaCentauri]: AlphaCentauri_FR,
-    [Development.Shambhala]: Shambhala_FR
+    [Development.Shambhala]: Shambhala_FR,
+    [Development.MemorialForTheExplorer]: MemorialForTheExplorer_FR,
+    [Development.MemorialForTheBuilder]: MemorialForTheBuilder_FR,
+    [Development.MemorialForTheDictator]: MemorialForTheDictator_FR,
+    [Development.MemorialForTheFinancier]: MemorialForTheFinancier_FR,
+    [Development.MemorialForTheScientist]: MemorialForTheScientist_FR,
+    [Development.AnalysisCenter]: AnalysisCenter_FR,
+    [Development.SecurityShips]: SecurityShips_FR,
+    [Development.TowerOfBabel]: TowerOfBabel_FR,
+    [Development.GaussianWeapons]: GaussianWeapons_FR,
+    [Development.CargoFleet]: CargoFleet_FR,
+    [Development.Pax10]: Pax10_FR,
+    [Development.Headquarters]: Headquarters_FR,
+    [Development.SecretForces]: SecretForces_FR
   }
 }
 

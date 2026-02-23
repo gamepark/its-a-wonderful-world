@@ -5,6 +5,7 @@ import { DeckType } from '@gamepark/its-a-wonderful-world/material/DeckType'
 import { Development } from '@gamepark/its-a-wonderful-world/material/Development'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
+import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
 
 // Import card back images
 import DevelopmentBack from '../images/developments/development-back.jpg'
@@ -146,6 +147,23 @@ import PandoraBox_EN from '../images/cards/developments/en/Discovery_114_EN_Pand
 import AlphaCentauri_EN from '../images/cards/developments/en/Discovery_115_EN_AlphaCentauri.jpg'
 import Shambhala_EN from '../images/cards/developments/en/Discovery_116_EN_Shambhala.jpg'
 
+// Corruption & Ascension - Memorial
+import MemorialForTheExplorer_EN from '../images/cards/developments/en/Memorial_117_EN_MemorialForTheExplorer.jpg'
+import MemorialForTheBuilder_EN from '../images/cards/developments/en/Memorial_118_EN_MemorialForTheBuilder.jpg'
+import MemorialForTheDictator_EN from '../images/cards/developments/en/Memorial_119_EN_MemorialForTheDictator.jpg'
+import MemorialForTheFinancier_EN from '../images/cards/developments/en/Memorial_120_EN_MemorialForTheFinancier.jpg'
+import MemorialForTheScientist_EN from '../images/cards/developments/en/Memorial_121_EN_MemorialForTheScientist.jpg'
+
+// Corruption & Ascension - Other
+import AnalysisCenter_EN from '../images/cards/developments/en/Structure_122_EN_AnalysisCenter.jpg'
+import SecurityShips_EN from '../images/cards/developments/en/Vehicle_123_EN_SecurityShips.jpg'
+import TowerOfBabel_EN from '../images/cards/developments/en/Discovery_124_EN_TowerOfBabel.jpg'
+import GaussianWeapons_EN from '../images/cards/developments/en/Research_125_EN_GaussianWeapons.jpg'
+import CargoFleet_EN from '../images/cards/developments/en/Vehicle_126_EN_CargoFleet.jpg'
+import Pax10_EN from '../images/cards/developments/en/Project_127_EN_Pax10.jpg'
+import Headquarters_EN from '../images/cards/developments/en/Project_128_EN_Headquarters.jpg'
+import SecretForces_EN from '../images/cards/developments/en/Structure_129_EN_SecretForces.jpg'
+
 export class DevelopmentCardDescription extends CardDescription<Empire, MaterialType, LocationType> {
   width = 6.5
   height = 10
@@ -160,7 +178,8 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
     const moves = legalMoves.filter(move =>
       isMoveItemType(MaterialType.ResourceCube)(move) &&
       move.location.type === LocationType.ConstructionCardCost &&
-      move.location.parent === index
+      move.location.parent === index &&
+      rules.material(MaterialType.ResourceCube).getItem(move.itemIndex).id !== Resource.Krystallium
     )
     // A cube item can have quantity > 1 (e.g. production creates 3 Materials at once).
     // Greedily assign: each cube used up to its quantity, each space (x) filled once.
@@ -306,7 +325,20 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
     [Development.Pandemonium]: Pandemonium_EN,
     [Development.PandoraBox]: PandoraBox_EN,
     [Development.AlphaCentauri]: AlphaCentauri_EN,
-    [Development.Shambhala]: Shambhala_EN
+    [Development.Shambhala]: Shambhala_EN,
+    [Development.MemorialForTheExplorer]: MemorialForTheExplorer_EN,
+    [Development.MemorialForTheBuilder]: MemorialForTheBuilder_EN,
+    [Development.MemorialForTheDictator]: MemorialForTheDictator_EN,
+    [Development.MemorialForTheFinancier]: MemorialForTheFinancier_EN,
+    [Development.MemorialForTheScientist]: MemorialForTheScientist_EN,
+    [Development.AnalysisCenter]: AnalysisCenter_EN,
+    [Development.SecurityShips]: SecurityShips_EN,
+    [Development.TowerOfBabel]: TowerOfBabel_EN,
+    [Development.GaussianWeapons]: GaussianWeapons_EN,
+    [Development.CargoFleet]: CargoFleet_EN,
+    [Development.Pax10]: Pax10_EN,
+    [Development.Headquarters]: Headquarters_EN,
+    [Development.SecretForces]: SecretForces_EN
   }
 }
 

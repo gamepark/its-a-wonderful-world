@@ -17,6 +17,7 @@ import { DiscardLeftoverCardsRule } from './rules/DiscardLeftoverCardsRule'
 import { EnergyProductionRule } from './rules/EnergyProductionRule'
 import { ExplorationProductionRule } from './rules/ExplorationProductionRule'
 import { GoldProductionRule } from './rules/GoldProductionRule'
+import { KrystalliumProductionRule } from './rules/KrystalliumProductionRule'
 import { MaterialsProductionRule } from './rules/MaterialsProductionRule'
 import { PassCardsRule } from './rules/PassCardsRule'
 import { PlanningRule } from './rules/PlanningRule'
@@ -45,7 +46,8 @@ export class ItsAWonderfulWorldRules
     [RuleId.ProductionEnergy]: EnergyProductionRule,
     [RuleId.ProductionScience]: ScienceProductionRule,
     [RuleId.ProductionGold]: GoldProductionRule,
-    [RuleId.ProductionExploration]: ExplorationProductionRule
+    [RuleId.ProductionExploration]: ExplorationProductionRule,
+    [RuleId.ProductionKrystallium]: KrystalliumProductionRule
   }
 
   /**

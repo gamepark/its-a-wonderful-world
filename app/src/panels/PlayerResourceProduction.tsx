@@ -30,7 +30,6 @@ export const PlayerResourceProduction: FC<Props> = ({ playerId, small = false })
   let productionDisplaySize = 0
 
   for (const resource of resources) {
-    if (resource === Resource.Krystallium) continue
     const prod = production.get(resource) ?? 0
     productionDisplay.set(resource, { size: Math.abs(prod), corruption: prod < 0 })
     productionDisplaySize += Math.abs(prod)
@@ -54,9 +53,7 @@ export const PlayerResourceProduction: FC<Props> = ({ playerId, small = false })
         ...Array.from(productionDisplay.values()).map(d => d.size)
       )
       for (const resource of resources) {
-        if (resource !== Resource.Krystallium) {
-          displayMultiplierForHighProduction(resource, maxProduction)
-        }
+        displayMultiplierForHighProduction(resource, maxProduction)
       }
     }
   }
@@ -66,7 +63,6 @@ export const PlayerResourceProduction: FC<Props> = ({ playerId, small = false })
   // Set start index for each display
   let resourceIndex = 0
   for (const resource of resources) {
-    if (resource === Resource.Krystallium) continue
     const display = productionDisplay.get(resource)!
     display.index = resourceIndex
     resourceIndex += display.size
@@ -75,7 +71,6 @@ export const PlayerResourceProduction: FC<Props> = ({ playerId, small = false })
   const elements: ReactElement[] = []
 
   for (const resource of resources) {
-    if (resource === Resource.Krystallium) continue
     const display = productionDisplay.get(resource)!
 
     if (display.multiplier) {

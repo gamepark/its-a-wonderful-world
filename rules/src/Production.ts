@@ -6,6 +6,7 @@
 import { MaterialGame } from '@gamepark/rules-api'
 import { Empire } from './Empire'
 import { Memory } from './ItsAWonderfulWorldMemory'
+import { Character } from './material/Character'
 import { getDevelopmentDetails } from './material/Development'
 import { DevelopmentType } from './material/DevelopmentType'
 import { Empires } from './material/Empires'
@@ -19,7 +20,7 @@ type ProductionFactor = {
   factor: DevelopmentType
 }
 
-export type Production = Resource | { [key in Resource]?: number } | ProductionFactor
+export type Production = Resource | { [key in Resource | Character]?: number } | ProductionFactor
 
 export function isProductionFactor(production: Production): production is ProductionFactor {
   const productionFactor = production as ProductionFactor
@@ -97,4 +98,54 @@ function getResourceProduction(game: MaterialGame, empire: Empire, resource: Res
 
   // Object mapping {[Resource]: number}
   return production[resource] ?? 0
+}
+
+type KrystalliumAndCharacterProduction = { [key in Resource.Krystallium | Character]?: number }
+
+/**
+ * Get the total krystallium and character production for a player from constructed developments.
+ * Reads from the standard `production` field. Empire cards do NOT contribute.
+ */
+export function getKrystalliumAndCharacterProduction(game: MaterialGame, empire: Empire): KrystalliumAndCharacterProduction {
+  const result: KrystalliumAndCharacterProduction = {}
+
+  const constructedDevelopments = game.items[MaterialType.DevelopmentCard]?.filter(
+    (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
+  ) ?? []
+
+  const keys: (Resource.Krystallium | Character)[] = [Resource.Krystallium, Character.Financier, Character.General]
+
+  for (const card of constructedDevelopments) {
+    const development = card.id.front
+    const details = getDevelopmentDetails(development)
+    if (!details.production) continue
+
+    // Simple resource production: "production: Krystallium" means 1 Krystallium
+    if (isResource(details.production)) {
+      if (details.production === Resource.Krystallium) {
+        result[Resource.Krystallium] = (result[Resource.Krystallium] ?? 0) + 1
+      }
+      continue
+    }
+
+    if (isProductionFactor(details.production)) continue
+
+    // Object mapping: read Krystallium and Character keys
+    for (const key of keys) {
+      const value = details.production[key]
+      if (value) {
+        result[key] = (result[key] ?? 0) + value
+      }
+    }
+  }
+
+  return result
+}
+
+/**
+ * Check if a player has any krystallium or character production from constructed developments.
+ */
+export function hasKrystalliumOrCharacterProduction(game: MaterialGame, empire: Empire): boolean {
+  const production = getKrystalliumAndCharacterProduction(game, empire)
+  return Object.values(production).some((v) => v !== undefined && v > 0)
 }
