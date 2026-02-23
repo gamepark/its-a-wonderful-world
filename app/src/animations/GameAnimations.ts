@@ -87,12 +87,12 @@ const isOtherPlayerReveal = (move: any, context: MaterialContext) => {
 }
 gameAnimations
   .configure(isOtherPlayerReveal)
-  .duration(2500)
+  .duration(2000)
   .trajectory({
     waypoints: [
       { at: 0, locator: onPlayerPanelLocator, location: (item) => ({ player: item.location.player, rotation: true }) },
-      { at: 0.3, locator: revealedCardLocator, location: (item) => ({ player: item.location.player }) },
-      { at: 0.7, locator: revealedCardLocator, location: (item) => ({ player: item.location.player }) },
+      { at: 0.2, locator: revealedCardLocator, location: (item) => ({ player: item.location.player }) },
+      { at: 0.8, locator: revealedCardLocator, location: (item) => ({ player: item.location.player }) },
       { at: 1, locator: onPlayerPanelLocator, location: (item) => ({ player: item.location.player }) }
     ]
   })
