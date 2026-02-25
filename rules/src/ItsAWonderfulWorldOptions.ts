@@ -12,9 +12,9 @@ type PlayerOptions = { id: Empire }
  */
 export type ItsAWonderfulWorldOptions = {
   players: PlayerOptions[]
-  corruptionAndAscension?: boolean
-  warAndPeace?: boolean
-  empiresSide?: EmpireSide
+  corruptionAndAscension: boolean
+  warAndPeace: boolean
+  empiresSide: EmpireSide
 }
 
 /**
@@ -30,15 +30,13 @@ export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOption
     }
   },
   corruptionAndAscension: {
-    label: (t) => t('Corruption & Ascension'),
-    values: [false, true],
-    valueSpec: (value) => ({ label: (t) => (value ? t('Yes') : t('No')) }),
+    label: (t) => t('c&a'),
+    help: t => t('c&a.help'),
     subscriberRequired: false
   },
   warAndPeace: {
-    label: (t) => t('War & Peace'),
-    values: [false, true],
-    valueSpec: (value) => ({ label: (t) => (value ? t('Yes') : t('No')) }),
+    label: (t) => t('w&p'),
+    help: t => t('w&p.help'),
     subscriberRequired: false
   },
   empiresSide: {
