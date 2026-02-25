@@ -66,7 +66,8 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
   options: ItsAWonderfulWorldOptions = {
     players: [{ id: me }, { id: player2 }, { id: player3 }],
     empiresSide: EmpireSide.A,
-    corruptionAndAscension: false
+    corruptionAndAscension: false,
+    warAndPeace: false
   }
 
   setup = new TutorialSetup()
@@ -1071,7 +1072,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <img src={resourceIcons[Resource.Krystallium]} alt="Krystallium" style={{ width: '1.7em', verticalAlign: 'middle', marginRight: '0.2em' }} />
+            <img src={resourceIcons[Resource.Krystallium]} alt={t('Krystallium')} style={{ width: '1.7em', verticalAlign: 'middle', marginRight: '0.2em' }} />
             <strong>{t('tuto.krystallium.use.title', 'Use of Krystallium')}</strong>
             <br />
             {t('tuto.krystallium.use', 'The Krystallium can replace any cube to build a card, and can be used at any time.')}
@@ -1605,10 +1606,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
             .location(LocationType.ConstructedDevelopments)
             .player(me)
             .filter<CardId>((item) => item.id.front === Development.PropagandaCenter),
-          this.material(game, MaterialType.CharacterToken)
-            .location(LocationType.PlayerCharacters)
-            .player(me)
-            .id(Character.General)
+          this.material(game, MaterialType.CharacterToken).location(LocationType.PlayerCharacters).player(me).id(Character.General)
         ]
       })
     },
