@@ -9,6 +9,7 @@ import {
   SecretMaterialRules
 } from '@gamepark/rules-api'
 import { Empire } from './Empire'
+import { Memory } from './ItsAWonderfulWorldMemory'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { ChooseDevelopmentCardRule } from './rules/ChooseDevelopmentCardRule'
@@ -87,6 +88,21 @@ export class ItsAWonderfulWorldRules
       // Cards in draft area - face down until rotated (revealed)
       [LocationType.DraftArea]: hideFrontIfNotRotated
       // Cards in construction area and constructed developments are face-up - visible to all
+    }
+  }
+
+  giveTime(player: Empire): number {
+    const ruleId = this.game.rule?.id
+    switch (ruleId) {
+      case RuleId.ChooseDevelopmentCard: {
+        const numberOfCardsToDraft = 7
+        const draftAreaLength = this.material(MaterialType.DevelopmentCard).location(LocationType.DraftArea).player(player).length
+        return (numberOfCardsToDraft - draftAreaLength - 1) * 10
+      }
+      case RuleId.Planning:
+        return 20 + this.remind(Memory.Round) * 40
+      default:
+        return 10
     }
   }
 
