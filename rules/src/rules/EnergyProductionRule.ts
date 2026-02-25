@@ -17,6 +17,6 @@ export class EnergyProductionRule extends ProductionRule {
   }
 
   get nextRule(): RuleId {
-    return RuleId.ProductionScience
+    return RuleId.ScienceProduction
   }
 }

@@ -112,7 +112,7 @@ export class PlanningRule extends ConstructionRule {
 
   getMovesAfterPlayersDone(): MaterialMove[] {
     // All players are done planning, move to Production phase (starts with Materials)
-    return [this.startSimultaneousRule(RuleId.ProductionMaterials)]
+    return [this.startSimultaneousRule(RuleId.MaterialsProduction)]
   }
 
   onRuleEnd() {

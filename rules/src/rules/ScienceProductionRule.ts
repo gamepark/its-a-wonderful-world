@@ -23,7 +23,7 @@ export class ScienceProductionRule extends ProductionRule {
   }
 
   get nextRule(): RuleId {
-    return RuleId.ProductionGold
+    return RuleId.GoldProduction
   }
 
   /**

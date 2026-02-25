@@ -8,9 +8,9 @@ function productionHelp(resource: Resource) {
 }
 
 export const RulesHelp = {
-  [RuleId.ProductionMaterials]: productionHelp(Resource.Materials),
-  [RuleId.ProductionEnergy]: productionHelp(Resource.Energy),
-  [RuleId.ProductionScience]: productionHelp(Resource.Science),
-  [RuleId.ProductionGold]: productionHelp(Resource.Gold),
-  [RuleId.ProductionExploration]: productionHelp(Resource.Exploration)
+  [RuleId.MaterialsProduction]: productionHelp(Resource.Materials),
+  [RuleId.EnergyProduction]: productionHelp(Resource.Energy),
+  [RuleId.ScienceProduction]: productionHelp(Resource.Science),
+  [RuleId.GoldProduction]: productionHelp(Resource.Gold),
+  [RuleId.ExplorationProduction]: productionHelp(Resource.Exploration)
 }

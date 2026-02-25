@@ -45,21 +45,21 @@ const resourceCircles = [
 
 // Map RuleId to Resource for production phases
 const ruleIdToResource: Record<number, Resource> = {
-  [RuleId.ProductionMaterials]: Resource.Materials,
-  [RuleId.ProductionEnergy]: Resource.Energy,
-  [RuleId.ProductionScience]: Resource.Science,
-  [RuleId.ProductionGold]: Resource.Gold,
-  [RuleId.ProductionExploration]: Resource.Exploration
+  [RuleId.MaterialsProduction]: Resource.Materials,
+  [RuleId.EnergyProduction]: Resource.Energy,
+  [RuleId.ScienceProduction]: Resource.Science,
+  [RuleId.GoldProduction]: Resource.Gold,
+  [RuleId.ExplorationProduction]: Resource.Exploration
 }
 
 // Map resources to their production RuleId (for help dialogs)
 const resourceToRuleId: Record<Resource, RuleId> = {
-  [Resource.Materials]: RuleId.ProductionMaterials,
-  [Resource.Energy]: RuleId.ProductionEnergy,
-  [Resource.Science]: RuleId.ProductionScience,
-  [Resource.Gold]: RuleId.ProductionGold,
-  [Resource.Exploration]: RuleId.ProductionExploration,
-  [Resource.Krystallium]: RuleId.ProductionMaterials // Not used but required for type
+  [Resource.Materials]: RuleId.MaterialsProduction,
+  [Resource.Energy]: RuleId.EnergyProduction,
+  [Resource.Science]: RuleId.ScienceProduction,
+  [Resource.Gold]: RuleId.GoldProduction,
+  [Resource.Exploration]: RuleId.ExplorationProduction,
+  [Resource.Krystallium]: RuleId.MaterialsProduction // Not used but required for type
 }
 
 // Map resources to their character images

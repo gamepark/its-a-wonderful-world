@@ -17,6 +17,6 @@ export class MaterialsProductionRule extends ProductionRule {
   }
 
   get nextRule(): RuleId {
-    return RuleId.ProductionEnergy
+    return RuleId.EnergyProduction
   }
 }

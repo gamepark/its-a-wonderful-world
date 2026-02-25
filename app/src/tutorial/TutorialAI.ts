@@ -625,11 +625,11 @@ const productionOrder: Resource[] = [
 ]
 
 const ruleToResource: Partial<Record<RuleId, Resource>> = {
-  [RuleId.ProductionMaterials]: Resource.Materials,
-  [RuleId.ProductionEnergy]: Resource.Energy,
-  [RuleId.ProductionScience]: Resource.Science,
-  [RuleId.ProductionGold]: Resource.Gold,
-  [RuleId.ProductionExploration]: Resource.Exploration
+  [RuleId.MaterialsProduction]: Resource.Materials,
+  [RuleId.EnergyProduction]: Resource.Energy,
+  [RuleId.ScienceProduction]: Resource.Science,
+  [RuleId.GoldProduction]: Resource.Gold,
+  [RuleId.ExplorationProduction]: Resource.Exploration
 }
 
 function wouldIncreaseUpcomingProduction(
@@ -682,11 +682,11 @@ export const ai = (game: MaterialGame, player: Empire): Promise<MaterialMove[]> 
     case RuleId.Planning:
       return Promise.resolve([handlePlanning(legalMoves, game, player, strategy, round)])
 
-    case RuleId.ProductionMaterials:
-    case RuleId.ProductionEnergy:
-    case RuleId.ProductionScience:
-    case RuleId.ProductionGold:
-    case RuleId.ProductionExploration:
+    case RuleId.MaterialsProduction:
+    case RuleId.EnergyProduction:
+    case RuleId.ScienceProduction:
+    case RuleId.GoldProduction:
+    case RuleId.ExplorationProduction:
       return Promise.resolve([handleProduction(legalMoves, game, player, strategy, rule)])
 
     default:

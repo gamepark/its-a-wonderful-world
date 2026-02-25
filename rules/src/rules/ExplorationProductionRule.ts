@@ -32,7 +32,7 @@ export class ExplorationProductionRule extends ProductionRule {
     )
 
     if (playersWithProduction.length > 0) {
-      return [this.startSimultaneousRule(RuleId.ProductionKrystallium, playersWithProduction)]
+      return [this.startSimultaneousRule(RuleId.KrystalliumProduction, playersWithProduction)]
     }
 
     return this.endRound()

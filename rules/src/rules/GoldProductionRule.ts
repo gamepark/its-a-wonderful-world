@@ -17,6 +17,6 @@ export class GoldProductionRule extends ProductionRule {
   }
 
   get nextRule(): RuleId {
-    return RuleId.ProductionExploration
+    return RuleId.ExplorationProduction
   }
 }

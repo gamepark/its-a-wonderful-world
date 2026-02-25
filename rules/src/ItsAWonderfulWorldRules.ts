@@ -43,12 +43,12 @@ export class ItsAWonderfulWorldRules
     [RuleId.DiscardLeftoverCards]: DiscardLeftoverCardsRule,
     [RuleId.Planning]: PlanningRule,
     // Production phases - one rule per resource
-    [RuleId.ProductionMaterials]: MaterialsProductionRule,
-    [RuleId.ProductionEnergy]: EnergyProductionRule,
-    [RuleId.ProductionScience]: ScienceProductionRule,
-    [RuleId.ProductionGold]: GoldProductionRule,
-    [RuleId.ProductionExploration]: ExplorationProductionRule,
-    [RuleId.ProductionKrystallium]: KrystalliumProductionRule
+    [RuleId.MaterialsProduction]: MaterialsProductionRule,
+    [RuleId.EnergyProduction]: EnergyProductionRule,
+    [RuleId.ScienceProduction]: ScienceProductionRule,
+    [RuleId.GoldProduction]: GoldProductionRule,
+    [RuleId.ExplorationProduction]: ExplorationProductionRule,
+    [RuleId.KrystalliumProduction]: KrystalliumProductionRule
   }
 
   /**

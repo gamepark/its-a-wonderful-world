@@ -6,10 +6,10 @@ export enum RuleId {
   DiscardLeftoverCards = 5,
   Planning = 10,
   // Production phases - one for each resource in order
-  ProductionMaterials = 21,
-  ProductionEnergy = 22,
-  ProductionScience = 23,
-  ProductionGold = 24,
-  ProductionExploration = 25,
-  ProductionKrystallium = 26
+  MaterialsProduction = 21,
+  EnergyProduction = 22,
+  ScienceProduction = 23,
+  GoldProduction = 24,
+  ExplorationProduction = 25,
+  KrystalliumProduction = 26
 }

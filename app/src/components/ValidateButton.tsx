@@ -7,11 +7,11 @@ import { useTranslation } from 'react-i18next'
 
 const validateRules = [
   RuleId.Planning,
-  RuleId.ProductionMaterials,
-  RuleId.ProductionEnergy,
-  RuleId.ProductionScience,
-  RuleId.ProductionGold,
-  RuleId.ProductionExploration
+  RuleId.MaterialsProduction,
+  RuleId.EnergyProduction,
+  RuleId.ScienceProduction,
+  RuleId.GoldProduction,
+  RuleId.ExplorationProduction
 ]
 
 export const ValidateButton = () => {

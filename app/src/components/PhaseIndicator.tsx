@@ -24,7 +24,7 @@ enum Phase {
 
 const getPhaseFromRuleId = (ruleId?: RuleId): Phase => {
   if (ruleId === undefined) return Phase.Draft
-  if (ruleId >= RuleId.ProductionMaterials) return Phase.Production
+  if (ruleId >= RuleId.MaterialsProduction) return Phase.Production
   if (ruleId >= RuleId.Planning) return Phase.Planning
   return Phase.Draft
 }

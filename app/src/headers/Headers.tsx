@@ -13,10 +13,10 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.RevealChosenCards]: RevealChosenCardsHeader,
   [RuleId.PassCards]: PassCardsHeader,
   [RuleId.Planning]: PlanningHeader,
-  [RuleId.ProductionMaterials]: ProductionHeader,
-  [RuleId.ProductionEnergy]: ProductionHeader,
-  [RuleId.ProductionScience]: ProductionHeader,
-  [RuleId.ProductionGold]: ProductionHeader,
-  [RuleId.ProductionExploration]: ProductionHeader,
-  [RuleId.ProductionKrystallium]: ProductionHeader
+  [RuleId.MaterialsProduction]: ProductionHeader,
+  [RuleId.EnergyProduction]: ProductionHeader,
+  [RuleId.ScienceProduction]: ProductionHeader,
+  [RuleId.GoldProduction]: ProductionHeader,
+  [RuleId.ExplorationProduction]: ProductionHeader,
+  [RuleId.KrystalliumProduction]: ProductionHeader
 }

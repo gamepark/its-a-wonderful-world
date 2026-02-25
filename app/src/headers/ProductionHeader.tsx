@@ -20,12 +20,12 @@ const characterIconCss = css`
 `
 
 const ruleToResource: Record<number, Resource> = {
-  [RuleId.ProductionMaterials]: Resource.Materials,
-  [RuleId.ProductionEnergy]: Resource.Energy,
-  [RuleId.ProductionScience]: Resource.Science,
-  [RuleId.ProductionGold]: Resource.Gold,
-  [RuleId.ProductionExploration]: Resource.Exploration,
-  [RuleId.ProductionKrystallium]: Resource.Krystallium
+  [RuleId.MaterialsProduction]: Resource.Materials,
+  [RuleId.EnergyProduction]: Resource.Energy,
+  [RuleId.ScienceProduction]: Resource.Science,
+  [RuleId.GoldProduction]: Resource.Gold,
+  [RuleId.ExplorationProduction]: Resource.Exploration,
+  [RuleId.KrystalliumProduction]: Resource.Krystallium
 }
 
 export const ProductionHeader = () => {
@@ -77,7 +77,7 @@ export const ProductionHeader = () => {
   const ruleId = rules.game.rule?.id as RuleId
   const resource = ruleToResource[ruleId] ?? Resource.Materials
 
-  const hasKrystalliumProduction = ruleId === RuleId.ProductionExploration && hasKrystalliumOrCharacterProduction(rules.game, playerId as Empire)
+  const hasKrystalliumProduction = ruleId === RuleId.ExplorationProduction && hasKrystalliumOrCharacterProduction(rules.game, playerId as Empire)
 
   if (resource < Resource.Exploration || hasKrystalliumProduction) {
     return (
