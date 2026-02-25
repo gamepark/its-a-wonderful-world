@@ -7,6 +7,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { gameAnimations } from './animations/GameAnimations'
 import { App } from './App'
+import { RulesHelp } from './help/RulesHelp'
 import { Locators } from './locators/Locators'
 import { Material, materialI18n } from './material/Material'
 import { Tutorial } from './tutorial/Tutorial'
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GameProvider
       game="its-a-wonderful-world"
+      version={3}
       Rules={ItsAWonderfulWorldRules}
       optionsSpec={ItsAWonderfulWorldOptionsSpec}
       GameSetup={ItsAWonderfulWorldSetup}
@@ -23,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
       materialI18n={materialI18n}
       locators={Locators}
       animations={gameAnimations}
+      rulesHelp={RulesHelp}
       tutorial={new Tutorial()}
       ai={ai}
     >

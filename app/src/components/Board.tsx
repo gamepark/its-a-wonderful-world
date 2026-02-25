@@ -3,11 +3,11 @@ import { css, keyframes } from '@emotion/react'
 import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
 import { Memory } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldMemory'
 import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
-import { getProductionAndCorruption } from '@gamepark/its-a-wonderful-world/Production'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
-import { useFocusContext, useGame, useLegalMove, usePlay, usePlayerId, useRules } from '@gamepark/react-game'
-import { isEndPlayerTurn, MaterialGame, MaterialRules } from '@gamepark/rules-api'
+import { useFocusContext, useGame, useLegalMove, usePlay, usePlayerName, usePlayerId, useRules } from '@gamepark/react-game'
+import { isEndPlayerTurn, MaterialGame, MaterialMoveBuilder, MaterialRules } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
+import { getSupremacyWinners } from '../utils/getSupremacyWinners'
 import arrowGreen from '../images/arrow-green.png'
 import arrowWhite from '../images/arrow-white.png'
 import boardCircleBlack from '../images/board-circle-black.png'
@@ -52,6 +52,16 @@ const ruleIdToResource: Record<number, Resource> = {
   [RuleId.ProductionExploration]: Resource.Exploration
 }
 
+// Map resources to their production RuleId (for help dialogs)
+const resourceToRuleId: Record<Resource, RuleId> = {
+  [Resource.Materials]: RuleId.ProductionMaterials,
+  [Resource.Energy]: RuleId.ProductionEnergy,
+  [Resource.Science]: RuleId.ProductionScience,
+  [Resource.Gold]: RuleId.ProductionGold,
+  [Resource.Exploration]: RuleId.ProductionExploration,
+  [Resource.Krystallium]: RuleId.ProductionMaterials // Not used but required for type
+}
+
 // Map resources to their character images
 const resourceCharacterOn: Record<Resource, string> = {
   [Resource.Materials]: financierOn,
@@ -71,21 +81,52 @@ const resourceCharacterOff: Record<Resource, string> = {
   [Resource.Krystallium]: financierOff // Not used but required for type
 }
 
-function getResourceHelpText(resource: Resource, hasMostProduction: boolean, t: (key: string) => string): string {
-  const characterType =
-    resource === Resource.Science ? 'Financier or General' : resource === Resource.Materials || resource === Resource.Gold ? 'Financier' : 'General'
+function useSupremacyHelpText(resource: Resource): string {
+  const { t } = useTranslation()
+  const game = useGame<MaterialGame>()
+  const winners = game ? getSupremacyWinners(game, resource) : []
+  const name0 = usePlayerName(winners[0])
+  const name1 = usePlayerName(winners[1])
 
-  if (hasMostProduction) {
-    return t(`You will receive a ${characterType} token`)
+  if (winners.length === 0) {
+    return t('help.production.status.nobody', 'Actuellement, personne ne remporterait le bonus (aucune production ou égalité).')
   }
-  return t(`The player producing the single most ${Resource[resource]} receives a ${characterType} token`)
+  if (winners.length === 1) {
+    return t('help.production.status.winner', '{player} remporterait le bonus.', { player: name0 })
+  }
+  return t('help.production.status.winners', '{player1} et {player2} remporteraient le bonus.', { player1: name0, player2: name1 })
+}
+
+function ResourceCircle({ image, name, resource }: { image: string; name: string; resource: Resource }) {
+  const play = usePlay()
+  const helpText = useSupremacyHelpText(resource)
+  const game = useGame<MaterialGame>()
+  const playerId = usePlayerId<Empire>()
+  const winners = game ? getSupremacyWinners(game, resource) : []
+  const hasMostProduction = playerId !== undefined && winners.includes(playerId)
+
+  return (
+    <div css={circleContainerStyle}>
+      <img
+        src={hasMostProduction ? resourceCharacterOn[resource] : resourceCharacterOff[resource]}
+        alt={helpText}
+        title={helpText}
+        css={characterStyle}
+        onClick={() => play(MaterialMoveBuilder.displayRulesHelp(resourceToRuleId[resource]), { transient: true })}
+      />
+      <div
+        css={circleStyle}
+        style={{ backgroundImage: `url(${image})` }}
+        title={name}
+        onClick={() => play(MaterialMoveBuilder.displayRulesHelp(resourceToRuleId[resource]), { transient: true })}
+      />
+    </div>
+  )
 }
 
 export const Board = () => {
   const { t } = useTranslation()
   const rules = useRules<MaterialRules>()
-  const game = useGame<MaterialGame>()
-  const playerId = usePlayerId<Empire>()
   const ruleId = rules?.game.rule?.id as RuleId | undefined
   const round = rules?.remind(Memory.Round) ?? 1
 
@@ -104,36 +145,11 @@ export const Board = () => {
   const { focus } = useFocusContext()
   const playDown = focus?.highlight === true
 
-  // Calculate if current player has the highest production for each resource
-  const hasMostProductionForResource = (resource: Resource): boolean => {
-    if (!game || !playerId) return false
-
-    const playerProduction = getProductionAndCorruption(game, playerId, resource)
-    if (playerProduction <= 0) return false
-
-    // Check if any other player has equal or higher production
-    const players = game.players as Empire[]
-    return !players.some((empire) => empire !== playerId && getProductionAndCorruption(game, empire, resource) >= playerProduction)
-  }
-
   return (
     <div css={[containerStyle, isReducedSize && reducedSizeStyle, playDown && playDownStyle]}>
-      {resourceCircles.map((resourceData) => {
-        const hasMostProduction = hasMostProductionForResource(resourceData.resource)
-        const helpText = getResourceHelpText(resourceData.resource, hasMostProduction, t)
-
-        return (
-          <div key={resourceData.name} css={circleContainerStyle}>
-            <img
-              src={hasMostProduction ? resourceCharacterOn[resourceData.resource] : resourceCharacterOff[resourceData.resource]}
-              alt={helpText}
-              title={helpText}
-              css={characterStyle}
-            />
-            <div css={circleStyle} style={{ backgroundImage: `url(${resourceData.image})` }} title={resourceData.name} />
-          </div>
-        )
-      })}
+      {resourceCircles.map((resourceData) => (
+        <ResourceCircle key={resourceData.name} {...resourceData} />
+      ))}
       {resourceCircles.map((resourceData, index) => {
         const isActive = currentProductionResource === resourceData.resource && endTurn !== undefined
         return (
@@ -192,6 +208,7 @@ const characterStyle = css`
   width: 25%;
   pointer-events: auto;
   filter: drop-shadow(0.1em 0.1em 0.3em rgba(0, 0, 0, 0.7));
+  cursor: pointer;
 `
 
 const circleStyle = css`
@@ -201,6 +218,7 @@ const circleStyle = css`
   background-position: center;
   background-repeat: no-repeat;
   filter: drop-shadow(0.1em 0.1em 0.5em black);
+  cursor: pointer;
 `
 
 const pulse = keyframes`
