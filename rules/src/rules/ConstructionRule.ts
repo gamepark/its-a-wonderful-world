@@ -1,4 +1,4 @@
-import { isCreateItem, isDeleteItem, isMoveItemType, isMoveItemTypeAtOnce, ItemMove, MaterialMove, MoveItemsAtOnce, SimultaneousRule } from '@gamepark/rules-api'
+import { isCreateItem, isDeleteItemType, isMoveItemType, isMoveItemTypeAtOnce, ItemMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
 import { Empire } from '../Empire'
 import { Memory } from '../ItsAWonderfulWorldMemory'
 import { Character, isCharacter } from '../material/Character'
@@ -203,254 +203,38 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
           }
 
           // Award construction bonuses
-          const details = getDevelopmentDetails(development)
-          if (details.constructionBonus) {
-            for (const bonus of details.constructionBonus) {
-              if (isCharacter(bonus)) {
-                consequences.push(
-                  this.material(MaterialType.CharacterToken).createItem({
-                    id: bonus,
-                    location: {
-                      type: LocationType.PlayerCharacters,
-                      player,
-                      id: bonus
-                    }
-                  })
-                )
-              } else if (bonus === Resource.Krystallium) {
-                consequences.push(
-                  this.material(MaterialType.ResourceCube).createItem({
-                    id: Resource.Krystallium,
-                    location: {
-                      type: LocationType.KrystalliumStock,
-                      player
-                    }
-                  })
-                )
-              }
-            }
-          }
-
-          // After payment, move remaining available resources that can no longer be placed
-          const consumed = new Map<number, number>()
-          for (const pm of paymentMoves) {
-            if (isDeleteItem(pm) && pm.itemType === MaterialType.ResourceCube) {
-              consumed.set(pm.itemIndex, (consumed.get(pm.itemIndex) ?? 0) + (pm.quantity ?? 1))
-            }
-          }
-          const availableResources = this.material(MaterialType.ResourceCube).location(LocationType.AvailableResources).player(player)
-          for (const resourceIndex of availableResources.getIndexes()) {
-            const resourceItem = availableResources.getItem(resourceIndex)
-            const resource = resourceItem.id as Resource
-            const remaining = (resourceItem.quantity ?? 1) - (consumed.get(resourceIndex) ?? 0)
-            if (remaining > 0 && !this.canResourceBePlacedExcludingCard(player, resource, move.itemIndex)) {
-              for (let i = 0; i < remaining; i++) {
-                consequences.push(
-                  this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
-                    type: LocationType.EmpireCardResources,
-                    player
-                  })
-                )
-              }
-            }
-          }
+          consequences.push(...this.getConstructionBonusMoves(development, player))
         }
       }
 
       // If card is being recycled (moved to Discard), create recycling bonus resource
       if (move.location.type === LocationType.Discard && player !== undefined) {
-        const development = card.id.front as Development
-        const details = getDevelopmentDetails(development)
-
-        // Check if this card was drafted this round
-        const draftedCardsForPlayer = this.remind<Development[]>(Memory.DraftedCards, player)
-        const isDraftedThisRound = draftedCardsForPlayer?.includes(development) ?? false
-
-        if (isDraftedThisRound) {
-          // New card drafted this round: recycling bonus goes to AvailableResources
-          consequences.push(
-            this.material(MaterialType.ResourceCube).createItem({
-              id: details.recyclingBonus,
-              location: {
-                type: LocationType.AvailableResources,
-                player,
-                id: details.recyclingBonus
-              }
-            })
-          )
-
-          const cubesOnCard = this.getCubesOnCard(move.itemIndex)
-
-          // Krystallium cubes always go to the krystallium stock
-          const krystalliumCubes = cubesOnCard.filter((item) => item.id === Resource.Krystallium)
-          consequences.push(
-            ...krystalliumCubes.moveItems({
-              type: LocationType.KrystalliumStock,
-              player
-            })
-          )
-
-          // Other cubes go to AvailableResources (each with its resource type as location.id)
-          for (const cubeIndex of cubesOnCard.filter((item) => item.id !== Resource.Krystallium).getIndexes()) {
-            const cube = cubesOnCard.getItem(cubeIndex)
-            consequences.push(
-              this.material(MaterialType.ResourceCube).index(cubeIndex).moveItem({
-                type: LocationType.AvailableResources,
-                player,
-                id: cube.id as Resource
-              })
-            )
-          }
-
-          // Character tokens return to player
-          for (const tokenIndex of this.getCharactersOnCard(move.itemIndex).getIndexes()) {
-            const token = this.getCharactersOnCard(move.itemIndex).getItem(tokenIndex)
-            consequences.push(
-              this.material(MaterialType.CharacterToken).index(tokenIndex).moveItem({
-                type: LocationType.PlayerCharacters,
-                player,
-                id: token.id as Character
-              })
-            )
-          }
-        } else {
-          // Old construction from previous round: recycling bonus goes to EmpireCardResources
-          consequences.push(
-            this.material(MaterialType.ResourceCube).createItem({
-              id: details.recyclingBonus,
-              location: {
-                type: LocationType.EmpireCardResources,
-                player
-              }
-            })
-          )
-
-          const cubesOnCard = this.getCubesOnCard(move.itemIndex)
-
-          // Krystallium cubes are always recovered to the player's krystallium stock
-          const krystalliumCubes = cubesOnCard.filter((item) => item.id === Resource.Krystallium)
-          consequences.push(
-            ...krystalliumCubes.moveItems({
-              type: LocationType.KrystalliumStock,
-              player
-            })
-          )
-
-          // Other cubes are lost (deleted)
-          const otherCubes = cubesOnCard.filter((item) => item.id !== Resource.Krystallium)
-          consequences.push(...otherCubes.deleteItems())
-
-          // Character tokens return to player
-          for (const tokenIndex of this.getCharactersOnCard(move.itemIndex).getIndexes()) {
-            const token = this.getCharactersOnCard(move.itemIndex).getItem(tokenIndex)
-            consequences.push(
-              this.material(MaterialType.CharacterToken).index(tokenIndex).moveItem({
-                type: LocationType.PlayerCharacters,
-                player,
-                id: token.id as Character
-              })
-            )
-          }
-        }
+        consequences.push(...this.getRecyclingMoves(move.itemIndex))
       }
     }
 
     // Handle batch moves (MoveItemsAtOnce) for recycling
-    if (isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move)) {
-      const batchMove = move as MoveItemsAtOnce<Empire, MaterialType, LocationType>
-      if (batchMove.location.type === LocationType.Discard) {
-        for (const cardIndex of batchMove.indexes) {
-          const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
-          const player = card.location.player as Empire | undefined
-          if (player === undefined) continue
+    if (isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.Discard) {
+      for (const cardIndex of move.indexes) {
+        consequences.push(...this.getRecyclingMoves(cardIndex))
+      }
+    }
 
-          const development = card.id.front as Development
-          const details = getDevelopmentDetails(development)
-
-          // Check if this card was drafted this round
-          const draftedCardsForPlayer = this.remind<Development[]>(Memory.DraftedCards, player)
-          const isDraftedThisRound = draftedCardsForPlayer?.includes(development) ?? false
-
-          if (isDraftedThisRound) {
-            // New card drafted this round: recycling bonus goes to AvailableResources
+    // Before a cube is deleted, check if remaining cubes of the same resource will be unplaceable
+    if (isDeleteItemType(MaterialType.ResourceCube)(move)) {
+      const item = this.material(MaterialType.ResourceCube).getItem(move.itemIndex)
+      if (item.location.type === LocationType.AvailableResources) {
+        const player = item.location.player as Empire
+        const resource = item.id as Resource
+        const remaining = (item.quantity ?? 1) - (move.quantity ?? item.quantity ?? 1)
+        if (remaining > 0 && !this.canResourceBePlaced(player, resource)) {
+          for (let i = 0; i < remaining; i++) {
             consequences.push(
-              this.material(MaterialType.ResourceCube).createItem({
-                id: details.recyclingBonus,
-                location: {
-                  type: LocationType.AvailableResources,
-                  player,
-                  id: details.recyclingBonus
-                }
-              })
-            )
-
-            // Note: cubes on draft area cards are not expected, but handle just in case
-            const cubesOnCard = this.getCubesOnCard(cardIndex)
-            const krystalliumCubes = cubesOnCard.filter((item) => item.id === Resource.Krystallium)
-            consequences.push(
-              ...krystalliumCubes.moveItems({
-                type: LocationType.KrystalliumStock,
+              this.material(MaterialType.ResourceCube).index(move.itemIndex).moveItem({
+                type: LocationType.EmpireCardResources,
                 player
               })
             )
-
-            for (const cubeIndex of cubesOnCard.filter((item) => item.id !== Resource.Krystallium).getIndexes()) {
-              const cube = this.material(MaterialType.ResourceCube).getItem(cubeIndex)
-              consequences.push(
-                this.material(MaterialType.ResourceCube).index(cubeIndex).moveItem({
-                  type: LocationType.AvailableResources,
-                  player,
-                  id: cube.id as Resource
-                })
-              )
-            }
-
-            // Character tokens return to player
-            for (const tokenIndex of this.getCharactersOnCard(cardIndex).getIndexes()) {
-              const token = this.getCharactersOnCard(cardIndex).getItem(tokenIndex)
-              consequences.push(
-                this.material(MaterialType.CharacterToken).index(tokenIndex).moveItem({
-                  type: LocationType.PlayerCharacters,
-                  player,
-                  id: token.id as Character
-                })
-              )
-            }
-          } else {
-            // Old construction: recycling bonus goes to EmpireCardResources
-            consequences.push(
-              this.material(MaterialType.ResourceCube).createItem({
-                id: details.recyclingBonus,
-                location: {
-                  type: LocationType.EmpireCardResources,
-                  player
-                }
-              })
-            )
-
-            const cubesOnCard = this.getCubesOnCard(cardIndex)
-            const krystalliumCubes = cubesOnCard.filter((item) => item.id === Resource.Krystallium)
-            consequences.push(
-              ...krystalliumCubes.moveItems({
-                type: LocationType.KrystalliumStock,
-                player
-              })
-            )
-
-            const otherCubes = cubesOnCard.filter((item) => item.id !== Resource.Krystallium)
-            consequences.push(...otherCubes.deleteItems())
-
-            // Character tokens return to player
-            for (const tokenIndex of this.getCharactersOnCard(cardIndex).getIndexes()) {
-              const token = this.getCharactersOnCard(cardIndex).getItem(tokenIndex)
-              consequences.push(
-                this.material(MaterialType.CharacterToken).index(tokenIndex).moveItem({
-                  type: LocationType.PlayerCharacters,
-                  player,
-                  id: token.id as Character
-                })
-              )
-            }
           }
         }
       }
@@ -467,8 +251,10 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     const consequences: MaterialMove[] = []
 
     // Check if a resource cube or character token was placed on a construction card
-    if ((isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move))
-      && move.location.type === LocationType.ConstructionCardCost) {
+    if (
+      (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
+      move.location.type === LocationType.ConstructionCardCost
+    ) {
       const cardIndex = move.location.parent as number
       const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
       const player = card.location.player as Empire
@@ -495,33 +281,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
 
         // Award construction bonuses
         const development = card.id.front as Development
-        const details = getDevelopmentDetails(development)
-        if (details.constructionBonus) {
-          for (const bonus of details.constructionBonus) {
-            if (isCharacter(bonus)) {
-              consequences.push(
-                this.material(MaterialType.CharacterToken).createItem({
-                  id: bonus,
-                  location: {
-                    type: LocationType.PlayerCharacters,
-                    player,
-                    id: bonus
-                  }
-                })
-              )
-            } else if (bonus === Resource.Krystallium) {
-              consequences.push(
-                this.material(MaterialType.ResourceCube).createItem({
-                  id: Resource.Krystallium,
-                  location: {
-                    type: LocationType.KrystalliumStock,
-                    player
-                  }
-                })
-              )
-            }
-          }
-        }
+        consequences.push(...this.getConstructionBonusMoves(development, player))
       } else {
         // Card not complete yet - check if any available resources can no longer be placed
         consequences.push(...this.getUnplaceableResourceMoves(player))
@@ -529,20 +289,15 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     }
 
     if (isMoveItemType(MaterialType.ResourceCube)(move)) {
-
       // Check if resource was placed on empire card
       if (move.location.type === LocationType.EmpireCardResources) {
         const player = move.location.player as Empire
 
-        // Count non-krystallium cubes on empire card
         const empireResources = this.material(MaterialType.ResourceCube).location(LocationType.EmpireCardResources).player(player)
 
-        const nonKrystalliumCubes = empireResources.filter((item) => item.id !== Resource.Krystallium)
-
-        // If there are 5 or more non-krystallium cubes, transform 5 into 1 krystallium
-        if (nonKrystalliumCubes.length >= 5) {
-          // Delete 5 non-krystallium cubes at once
-          const cubesToDelete = nonKrystalliumCubes.limit(5)
+        // If there are 5 or more cubes, transform 5 into 1 krystallium
+        if (empireResources.length >= 5) {
+          const cubesToDelete = empireResources.limit(5)
           consequences.push(cubesToDelete.deleteItemsAtOnce())
 
           // Create 1 krystallium in the krystallium stock
@@ -559,8 +314,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       }
     }
 
-    // After a card move, check if any available resources can no longer be placed
-    // Skip for cards moved to ConstructedDevelopments: beforeItemMove already handles cost payment and unplaceable resources
+    // After a card move (except direct construction, which is handled via delete consequences)
     if (isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type !== LocationType.ConstructedDevelopments) {
       const card = this.material(MaterialType.DevelopmentCard).getItem(move.itemIndex)
       const player = card.location.player as Empire | undefined
@@ -594,7 +348,6 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       const resource = resourceItem.id as Resource
 
       if (!this.canResourceBePlaced(player, resource)) {
-        // Resource cannot be placed anywhere, move each unit to empire card
         const quantity = resourceItem.quantity ?? 1
         for (let i = 0; i < quantity; i++) {
           moves.push(
@@ -615,47 +368,134 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
    * or any draft card (all slots).
    */
   private canResourceBePlaced(player: Empire, resource: Resource): boolean {
-    return this.canResourceBePlacedExcludingCard(player, resource, undefined)
-  }
-
-  /**
-   * Check if a resource can be placed on any construction card (remaining slots)
-   * or any draft card (all slots), excluding a specific card (e.g., the one being recycled).
-   */
-  private canResourceBePlacedExcludingCard(player: Empire, resource: Resource, excludeCardIndex: number | undefined): boolean {
     // Check construction area cards (remaining cost only)
     const constructionArea = this.material(MaterialType.DevelopmentCard).location(LocationType.ConstructionArea).player(player)
 
     for (const cardIndex of constructionArea.getIndexes()) {
-      if (cardIndex === excludeCardIndex) continue
-
       const remainingCost = this.getRemainingCostForCard(cardIndex)
-
-      // Check if resource can be placed on any remaining slot
-      const canPlace = remainingCost.some(
-        (cost) => (isResource(cost.item) && cost.item === resource) || (resource === Resource.Krystallium && isResource(cost.item))
-      )
-
-      if (canPlace) return true
+      if (remainingCost.some((cost) => (isResource(cost.item) && cost.item === resource) || (resource === Resource.Krystallium && isResource(cost.item))))
+        return true
     }
 
     // Check draft area cards (all cost slots)
     const draftArea = this.material(MaterialType.DevelopmentCard).location(LocationType.DraftArea).player(player)
 
     for (const cardIndex of draftArea.getIndexes()) {
-      if (cardIndex === excludeCardIndex) continue
-
       const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
       const development = card.id.front as Development
       const cost = getCost(development)
-
-      // Check if resource can be placed on any slot
-      const canPlace = cost.some((item) => (isResource(item) && item === resource) || (resource === Resource.Krystallium && isResource(item)))
-
-      if (canPlace) return true
+      if (cost.some((item) => (isResource(item) && item === resource) || (resource === Resource.Krystallium && isResource(item)))) return true
     }
 
     return false
+  }
+
+  /**
+   * Get the moves to award construction bonuses for a completed development.
+   */
+  protected getConstructionBonusMoves(development: Development, player: Empire): MaterialMove[] {
+    const moves: MaterialMove[] = []
+    const details = getDevelopmentDetails(development)
+    if (details.constructionBonus) {
+      for (const bonus of details.constructionBonus) {
+        if (isCharacter(bonus)) {
+          moves.push(
+            this.material(MaterialType.CharacterToken).createItem({
+              id: bonus,
+              location: {
+                type: LocationType.PlayerCharacters,
+                player,
+                id: bonus
+              }
+            })
+          )
+        } else if (bonus === Resource.Krystallium) {
+          moves.push(
+            this.material(MaterialType.ResourceCube).createItem({
+              id: Resource.Krystallium,
+              location: {
+                type: LocationType.KrystalliumStock,
+                player
+              }
+            })
+          )
+        }
+      }
+    }
+    return moves
+  }
+
+  /**
+   * Get the moves for recycling a card (moved to Discard).
+   * Handles recycling bonus, cubes on the card, and character tokens.
+   */
+  protected getRecyclingMoves(cardIndex: number): MaterialMove[] {
+    const moves: MaterialMove[] = []
+    const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
+    const player = card.location.player! as Empire
+    const development = card.id.front as Development
+    const details = getDevelopmentDetails(development)
+
+    // Check if this card was drafted this round
+    const draftedCardsForPlayer = this.remind<Development[]>(Memory.DraftedCards, player)
+    const isDraftedThisRound = draftedCardsForPlayer?.includes(development) ?? false
+
+    const recyclingBonusDestination = isDraftedThisRound
+      ? { type: LocationType.AvailableResources, player, id: details.recyclingBonus }
+      : { type: LocationType.EmpireCardResources, player }
+    moves.push(
+      this.material(MaterialType.ResourceCube).createItem({
+        id: details.recyclingBonus,
+        location: recyclingBonusDestination
+      })
+    )
+
+    const cubesOnCard = this.getCubesOnCard(cardIndex)
+
+    // Krystallium cubes always go back to the krystallium stock
+    moves.push(
+      ...cubesOnCard
+        .filter((item) => item.id === Resource.Krystallium)
+        .moveItems({
+          type: LocationType.KrystalliumStock,
+          player
+        })
+    )
+
+    // Non-krystallium cubes: recovered if drafted this round, lost otherwise
+    const otherCubes = cubesOnCard.filter((item) => item.id !== Resource.Krystallium)
+    if (isDraftedThisRound) {
+      for (const cubeIndex of otherCubes.getIndexes()) {
+        const cube = otherCubes.getItem(cubeIndex)
+        moves.push(
+          this.material(MaterialType.ResourceCube)
+            .index(cubeIndex)
+            .moveItem({
+              type: LocationType.AvailableResources,
+              player,
+              id: cube.id as Resource
+            })
+        )
+      }
+    } else {
+      moves.push(...otherCubes.deleteItems())
+    }
+
+    // Character tokens return to player
+    for (const tokenIndex of this.getCharactersOnCard(cardIndex).getIndexes()) {
+      const token = this.getCharactersOnCard(cardIndex).getItem(tokenIndex)
+      moves.push(
+        this.material(MaterialType.CharacterToken)
+          .index(tokenIndex)
+          .moveItem({
+            type: LocationType.PlayerCharacters,
+            player,
+            id: token.id as Character
+          })
+      )
+    }
+
+    return moves
   }
 
   /**
