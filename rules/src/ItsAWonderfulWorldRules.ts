@@ -99,11 +99,15 @@ export class ItsAWonderfulWorldRules
   }
 
   /**
-   * Tie-breaker: player with the most constructed cards wins
+   * Tie-breaker 1: player with the most constructed cards wins
+   * Tie-breaker 2: player with the most character tokens wins
    */
   getTieBreaker(tieBreaker: number, playerId: Empire): number | undefined {
     if (tieBreaker === 1) {
       return this.material(MaterialType.DevelopmentCard).location(LocationType.ConstructedDevelopments).player(playerId).length
+    }
+    if (tieBreaker === 2) {
+      return this.material(MaterialType.CharacterToken).player(playerId).getQuantity()
     }
     return undefined
   }
