@@ -8,15 +8,7 @@ import { RuleId } from './RuleId'
  * Supremacy bonus: Financier
  */
 export class GoldProductionRule extends ProductionRule {
-  get resource(): Resource {
-    return Resource.Gold
-  }
-
-  get supremacyCharacter(): Character {
-    return Character.Financier
-  }
-
-  get nextRule(): RuleId {
-    return RuleId.ExplorationProduction
-  }
+  resource = Resource.Gold
+  supremacyCharacter = Character.Financier
+  nextRule = RuleId.ExplorationProduction
 }

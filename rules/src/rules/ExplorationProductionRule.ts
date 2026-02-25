@@ -13,18 +13,8 @@ import { RuleId } from './RuleId'
  * otherwise end the round.
  */
 export class ExplorationProductionRule extends ProductionRule {
-  get resource(): Resource {
-    return Resource.Exploration
-  }
-
-  get supremacyCharacter(): Character {
-    return Character.General
-  }
-
-  get nextRule(): RuleId | undefined {
-    // Handled by getMovesAfterPlayersDone override
-    return undefined
-  }
+  resource = Resource.Exploration
+  supremacyCharacter = Character.General
 
   getMovesAfterPlayersDone(): MaterialMove[] {
     const playersWithProduction = this.game.players.filter(

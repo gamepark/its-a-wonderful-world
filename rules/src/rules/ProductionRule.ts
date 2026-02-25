@@ -1,5 +1,6 @@
 import { MaterialMove } from '@gamepark/rules-api'
 import { Empire } from '../Empire'
+import { numberOfRounds } from '../ItsAWonderfulWorldConstants'
 import { Memory } from '../ItsAWonderfulWorldMemory'
 import { Character } from '../material/Character'
 import { LocationType } from '../material/LocationType'
@@ -15,22 +16,9 @@ import { RuleId } from './RuleId'
  * Production happens in order: Materials -> Energy -> Science -> Gold -> Exploration
  */
 export abstract class ProductionRule extends ConstructionRule {
-  /**
-   * The resource being produced in this phase
-   */
-  abstract get resource(): Resource
-
-  /**
-   * The character awarded for supremacy in this resource
-   * For Science, this should return undefined (player chooses)
-   */
-  abstract get supremacyCharacter(): Character | undefined
-
-  /**
-   * The next rule to start after this production phase
-   * Returns undefined if this is the last production phase (Exploration)
-   */
-  abstract get nextRule(): RuleId | undefined
+  abstract resource: Resource
+  supremacyCharacter: Character | undefined = undefined
+  nextRule: RuleId | undefined = undefined
 
   onRuleStart(): MaterialMove[] {
     const moves: MaterialMove[] = []
@@ -155,7 +143,7 @@ export abstract class ProductionRule extends ConstructionRule {
     const moves: MaterialMove[] = []
     const round = this.remind<number>(Memory.Round)
 
-    if (round < 4) {
+    if (round < numberOfRounds) {
       // Start next round
       this.memorize(Memory.Round, round + 1)
       moves.push(this.startRule(RuleId.DealDevelopmentCards))

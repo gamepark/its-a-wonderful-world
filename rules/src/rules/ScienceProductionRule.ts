@@ -13,18 +13,8 @@ import { RuleId } from './RuleId'
  * Supremacy bonus: Player chooses (Financier or General)
  */
 export class ScienceProductionRule extends ProductionRule {
-  get resource(): Resource {
-    return Resource.Science
-  }
-
-  get supremacyCharacter(): Character | undefined {
-    // Player chooses - return undefined (not used, we override awardSupremacyBonus)
-    return undefined
-  }
-
-  get nextRule(): RuleId {
-    return RuleId.GoldProduction
-  }
+  resource = Resource.Science
+  nextRule = RuleId.GoldProduction
 
   /**
    * Override to mark player as needing to choose a character instead of auto-awarding.
