@@ -211,12 +211,25 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       if (move.location.type === LocationType.Discard && player !== undefined) {
         consequences.push(...this.getRecyclingMoves(move.itemIndex))
       }
+
+      // Remember the player so afterItemMove can check unplaceable resources once the card has moved
+      if (move.location.type !== LocationType.ConstructedDevelopments && player !== undefined) {
+        this.memorize(Memory.CheckUnplaceableResources, player)
+      }
     }
 
     // Handle batch moves (MoveItemsAtOnce) for recycling
     if (isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.Discard) {
       for (const cardIndex of move.indexes) {
         consequences.push(...this.getRecyclingMoves(cardIndex))
+      }
+      // Remember the player for unplaceable resource check in afterItemMove
+      if (move.indexes.length > 0) {
+        const card = this.material(MaterialType.DevelopmentCard).getItem(move.indexes[0])
+        const player = card.location.player as Empire | undefined
+        if (player !== undefined) {
+          this.memorize(Memory.CheckUnplaceableResources, player)
+        }
       }
     }
 
@@ -314,12 +327,11 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       }
     }
 
-    // After a card move (except direct construction, which is handled via delete consequences)
-    if (isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type !== LocationType.ConstructedDevelopments) {
-      const card = this.material(MaterialType.DevelopmentCard).getItem(move.itemIndex)
-      const player = card.location.player as Empire | undefined
-
+    // After a card move, check unplaceable resources for the player who owned the card (set in beforeItemMove)
+    if (isMoveItemType(MaterialType.DevelopmentCard)(move) || isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move)) {
+      const player = this.remind<Empire | undefined>(Memory.CheckUnplaceableResources)
       if (player !== undefined) {
+        this.forget(Memory.CheckUnplaceableResources)
         consequences.push(...this.getUnplaceableResourceMoves(player))
       }
     }
