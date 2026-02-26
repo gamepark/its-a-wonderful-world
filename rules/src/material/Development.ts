@@ -217,6 +217,7 @@ export enum Development {
   ParallelDimension,
   Roswell,
   TreasureOfTheTemplars,
+  // Corruption & Ascension expansion - new cards
   BorderPatrol,
   KrystalliumPowerPlant,
   RobotFactory,
@@ -255,7 +256,7 @@ export enum Development {
   PandoraBox,
   AlphaCentauri,
   Shambhala,
-  // Corruption & Ascension expansion - new cards
+  // War or Peace expansion - new cards
   MemorialForTheBuilder,
   MemorialForTheDictator,
   MemorialForTheScientist,
