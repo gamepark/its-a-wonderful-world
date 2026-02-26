@@ -138,11 +138,11 @@ import AlphaCentauri_FR from '../images/cards/developments/fr/Discovery_115_FR_A
 import Shambhala_FR from '../images/cards/developments/fr/Discovery_116_FR_Shambhala.jpg'
 
 // Corruption & Ascension - Memorial
-import MemorialForTheExplorer_FR from '../images/cards/developments/fr/Memorial_117_FR_MemorialForTheExplorer.jpg'
-import MemorialForTheBuilder_FR from '../images/cards/developments/fr/Memorial_118_FR_MemorialForTheBuilder.jpg'
-import MemorialForTheDictator_FR from '../images/cards/developments/fr/Memorial_119_FR_MemorialForTheDictator.jpg'
+import MemorialForTheBuilder_FR from '../images/cards/developments/fr/Memorial_117_FR_MemorialForTheBuilder.jpg'
+import MemorialForTheDictator_FR from '../images/cards/developments/fr/Memorial_118_FR_MemorialForTheDictator.jpg'
+import MemorialForTheScientist_FR from '../images/cards/developments/fr/Memorial_119_FR_MemorialForTheScientist.jpg'
 import MemorialForTheFinancier_FR from '../images/cards/developments/fr/Memorial_120_FR_MemorialForTheFinancier.jpg'
-import MemorialForTheScientist_FR from '../images/cards/developments/fr/Memorial_121_FR_MemorialForTheScientist.jpg'
+import MemorialForTheExplorer_FR from '../images/cards/developments/fr/Memorial_121_FR_MemorialForTheExplorer.jpg'
 
 // Corruption & Ascension - Other
 import AnalysisCenter_FR from '../images/cards/developments/fr/Structure_122_FR_AnalysisCenter.jpg'

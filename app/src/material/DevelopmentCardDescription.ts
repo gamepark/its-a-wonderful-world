@@ -6,6 +6,7 @@ import { Development } from '@gamepark/its-a-wonderful-world/material/Developmen
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
+import { DevelopmentCardHelp } from '../help/DevelopmentCardHelp'
 
 // Import card back images
 import DevelopmentBack from '../images/developments/development-back.jpg'
@@ -148,11 +149,11 @@ import AlphaCentauri_EN from '../images/cards/developments/en/Discovery_115_EN_A
 import Shambhala_EN from '../images/cards/developments/en/Discovery_116_EN_Shambhala.jpg'
 
 // Corruption & Ascension - Memorial
-import MemorialForTheExplorer_EN from '../images/cards/developments/en/Memorial_117_EN_MemorialForTheExplorer.jpg'
-import MemorialForTheBuilder_EN from '../images/cards/developments/en/Memorial_118_EN_MemorialForTheBuilder.jpg'
-import MemorialForTheDictator_EN from '../images/cards/developments/en/Memorial_119_EN_MemorialForTheDictator.jpg'
+import MemorialForTheBuilder_EN from '../images/cards/developments/en/Memorial_117_EN_MemorialForTheBuilder.jpg'
+import MemorialForTheDictator_EN from '../images/cards/developments/en/Memorial_118_EN_MemorialForTheDictator.jpg'
+import MemorialForTheScientist_EN from '../images/cards/developments/en/Memorial_119_EN_MemorialForTheScientist.jpg'
 import MemorialForTheFinancier_EN from '../images/cards/developments/en/Memorial_120_EN_MemorialForTheFinancier.jpg'
-import MemorialForTheScientist_EN from '../images/cards/developments/en/Memorial_121_EN_MemorialForTheScientist.jpg'
+import MemorialForTheExplorer_EN from '../images/cards/developments/en/Memorial_121_EN_MemorialForTheExplorer.jpg'
 
 // Corruption & Ascension - Other
 import AnalysisCenter_EN from '../images/cards/developments/en/Structure_122_EN_AnalysisCenter.jpg'
@@ -168,6 +169,8 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
   width = 6.5
   height = 10
   borderRadius = 0.3
+
+  help = DevelopmentCardHelp
 
   canLongClick() {
     return false
