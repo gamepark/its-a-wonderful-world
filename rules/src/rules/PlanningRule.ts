@@ -107,7 +107,7 @@ export class PlanningRule extends ConstructionRule {
       ]
     }
 
-    return []
+    return super.onCustomMove(move)
   }
 
   getMovesAfterPlayersDone(): MaterialMove[] {

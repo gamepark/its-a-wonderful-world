@@ -1,13 +1,14 @@
 import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
 import { ItsAWonderfulWorldOptions } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldOptions'
 import { Character } from '@gamepark/its-a-wonderful-world/material/Character'
+import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
 import { Development } from '@gamepark/its-a-wonderful-world/material/Development'
 import { EmpireSide } from '@gamepark/its-a-wonderful-world/material/EmpireSide'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
 import { MaterialTutorial, TutorialStep } from '@gamepark/react-game'
-import { isCreateItem, isEndPlayerTurn, isMoveItemType, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { isCreateItem, isCustomMoveType, isEndPlayerTurn, isMoveItemType, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { characterTokenDescription } from '../material/CharacterTokenDescription.tsx'
 import { resourceIcons } from '../panels/Images'
 import { TutorialSetup } from './TutorialSetup'
@@ -52,6 +53,15 @@ const placeResource =
     move.location.type === LocationType.ConstructionCardCost &&
     cardFront(game, MaterialType.DevelopmentCard, move.location.parent!) === dev &&
     (space === undefined || move.location.x === space)
+
+const buildCard =
+  (dev: Development): Filter =>
+  (move, game) =>
+    (isCustomMoveType(CustomMoveType.PlaceResources)(move) &&
+      cardFront(game, MaterialType.DevelopmentCard, move.data as number) === dev) ||
+    (isMoveItemType(MaterialType.DevelopmentCard)(move) &&
+      move.location.type === LocationType.ConstructedDevelopments &&
+      cardFront(game, MaterialType.DevelopmentCard, move.itemIndex) === dev)
 
 const chooseCharacter =
   (character: Character): Filter =>
@@ -1242,7 +1252,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
             <br />
             {t(
               'tuto.build.ic.2',
-              'Several options are available to you: drag the card to the left, click and hold on the card, move the cubes one by one, or click on the card to zoom in and see all the available actions.'
+              'Several options are available to you: drag the card to the left, click and hold on the card, or click on the card to zoom in and see all the available actions.'
             )}
           </>
         ),
@@ -1258,15 +1268,9 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
         ],
         highlight: true
       }),
-      move: { player: me, filter: placeResource(Development.IndustrialComplex) }
-    },
-    {
-      move: { player: me, filter: placeResource(Development.IndustrialComplex) }
-    },
-    {
       move: {
         player: me,
-        filter: placeResource(Development.IndustrialComplex),
+        filter: buildCard(Development.IndustrialComplex),
         interrupt: (move) => isCreateItem(move) && move.itemType === MaterialType.CharacterToken
       }
     },
@@ -1555,14 +1559,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
             .filter<CardId>((item) => item.id.front === Development.PropagandaCenter)
         ]
       }),
-      move: { player: me, filter: placeResource(Development.PropagandaCenter) }
-    },
-    // Second gold placement
-    {
-      move: {
-        player: me,
-        filter: placeResource(Development.PropagandaCenter)
-      }
+      move: { player: me, filter: buildCard(Development.PropagandaCenter) }
     },
 
     // After Propaganda Center built

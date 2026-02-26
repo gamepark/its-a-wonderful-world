@@ -1,7 +1,8 @@
-import { isCreateItem, isDeleteItemType, isMoveItemType, isMoveItemTypeAtOnce, ItemMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
+import { CustomMove, isCreateItem, isCustomMoveType, isDeleteItemType, isMoveItemType, isMoveItemTypeAtOnce, ItemMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
 import { Empire } from '../Empire'
 import { Memory } from '../ItsAWonderfulWorldMemory'
 import { Character, isCharacter } from '../material/Character'
+import { CustomMoveType } from '../material/CustomMoveType'
 import { Development, getCost, getDevelopmentDetails, getRemainingCost } from '../material/Development'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -155,7 +156,67 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         })
     )
 
+    // Custom move to place all available non-krystallium resources on a card at once
+    for (const cardIndex of constructionArea.getIndexes()) {
+      if (this.getPlaceResourcesMoves(playerId, cardIndex).length > 0) {
+        moves.push(this.customMove(CustomMoveType.PlaceResources, cardIndex))
+      }
+    }
+
     return moves
+  }
+
+  /**
+   * Compute the greedy placement of available non-krystallium resources on a card.
+   * Each distinct cube item is used at most once, each cost space is filled at most once.
+   */
+  getPlaceResourcesMoves(playerId: Empire, cardIndex: number): MaterialMove[] {
+    const availableResources = this.material(MaterialType.ResourceCube).location(LocationType.AvailableResources).player(playerId)
+    const remainingCost = this.getRemainingCostForCard(cardIndex)
+
+    // Build candidate moves: resource cube -> cost space
+    const candidates: { resourceIndex: number; space: number }[] = []
+    for (const resourceIndex of availableResources.getIndexes()) {
+      const resource = availableResources.getItem(resourceIndex).id as Resource
+      if (resource === Resource.Krystallium) continue
+      for (const { space, item } of remainingCost) {
+        if (isResource(item) && item === resource) {
+          candidates.push({ resourceIndex, space })
+        }
+      }
+    }
+
+    // Sort by space to fill in order
+    candidates.sort((a, b) => a.space - b.space)
+
+    // Greedy assignment: each cube item used at most once, each space filled once
+    const usedItems = new Set<number>()
+    const usedSpaces = new Set<number>()
+    const result: MaterialMove[] = []
+    for (const { resourceIndex, space } of candidates) {
+      if (usedSpaces.has(space)) continue
+      if (usedItems.has(resourceIndex)) continue
+      usedItems.add(resourceIndex)
+      usedSpaces.add(space)
+      result.push(
+        this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
+          type: LocationType.ConstructionCardCost,
+          parent: cardIndex,
+          x: space
+        })
+      )
+    }
+    return result
+  }
+
+  onCustomMove(move: CustomMove): MaterialMove[] {
+    if (isCustomMoveType(CustomMoveType.PlaceResources)(move)) {
+      const cardIndex = move.data as number
+      const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
+      const player = card.location.player as Empire
+      return this.getPlaceResourcesMoves(player, cardIndex)
+    }
+    return []
   }
 
   /**

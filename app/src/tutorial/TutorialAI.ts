@@ -2,6 +2,7 @@ import { sample } from 'es-toolkit'
 import {
   isCreateItem,
   isCustomMoveType,
+  isEndPlayerTurn,
   isMoveItemType,
   MaterialGame,
   MaterialMove
@@ -776,7 +777,11 @@ function handlePlanning(
     if (recycleMove) return recycleMove
   }
 
-  // No draft cards left. Place available resources on constructions.
+  // No draft cards left. Place all resources at once if possible.
+  const placeAllMove = legalMoves.find(m => isCustomMoveType(CustomMoveType.PlaceResources)(m))
+  if (placeAllMove) return placeAllMove
+
+  // Place available resources on constructions individually.
   const resourcePlacementMove = findBestResourcePlacement(legalMoves, game, player, strategy, round)
   if (resourcePlacementMove) return resourcePlacementMove
 
@@ -785,15 +790,8 @@ function handlePlanning(
   if (directConstructMove) return directConstructMove
 
   // End turn
-  const remainingMoves = legalMoves.filter(m =>
-    !isMoveItemType(MaterialType.DevelopmentCard)(m) &&
-    !isMoveItemType(MaterialType.ResourceCube)(m) &&
-    !isMoveItemType(MaterialType.CharacterToken)(m) &&
-    !isCustomMoveType(CustomMoveType.SlateAllForConstruction)(m) &&
-    !isCustomMoveType(CustomMoveType.RecycleAll)(m) &&
-    !isCreateItem(m)
-  )
-  if (remainingMoves.length > 0) return remainingMoves[0]
+  const endTurnMove = legalMoves.find(m => isEndPlayerTurn(m))
+  if (endTurnMove) return endTurnMove
 
   // Fallback: pick any legal move
   return legalMoves[0]
@@ -821,6 +819,10 @@ function handleProduction(
     if (preferred) return preferred
     return characterCreates[0]
   }
+
+  // Place all resources at once if possible
+  const placeAllMove = legalMoves.find(m => isCustomMoveType(CustomMoveType.PlaceResources)(m))
+  if (placeAllMove) return placeAllMove
 
   // Place resources on constructions (with phase-aware scoring)
   const resourcePlacementMove = findBestResourcePlacement(legalMoves, game, player, strategy, round, currentResource)
@@ -851,13 +853,8 @@ function handleProduction(
   }
 
   // End turn
-  const otherMoves = legalMoves.filter(m =>
-    !isMoveItemType(MaterialType.DevelopmentCard)(m) &&
-    !isMoveItemType(MaterialType.ResourceCube)(m) &&
-    !isMoveItemType(MaterialType.CharacterToken)(m) &&
-    !isCreateItem(m)
-  )
-  if (otherMoves.length > 0) return otherMoves[0]
+  const endTurnMove = legalMoves.find(m => isEndPlayerTurn(m))
+  if (endTurnMove) return endTurnMove
 
   return legalMoves[0]
 }

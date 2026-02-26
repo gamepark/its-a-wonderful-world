@@ -1,11 +1,11 @@
 import { CardDescription, ItemContext } from '@gamepark/react-game'
-import { isMoveItemType, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
+import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
 import { DeckType } from '@gamepark/its-a-wonderful-world/material/DeckType'
 import { Development } from '@gamepark/its-a-wonderful-world/material/Development'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
-import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
 import { DevelopmentCardHelp } from '../help/DevelopmentCardHelp'
 
 // Import card back images
@@ -172,39 +172,8 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
 
   help = DevelopmentCardHelp
 
-  canLongClick() {
-    return false
-  }
-
-  getLongClickMoves(context: ItemContext<Empire, MaterialType, LocationType>, legalMoves: MaterialMove<Empire, MaterialType, LocationType>[]): MaterialMove<Empire, MaterialType, LocationType>[] {
-    const { index, rules } = context
-    const moves = legalMoves.filter(move =>
-      isMoveItemType(MaterialType.ResourceCube)(move) &&
-      move.location.type === LocationType.ConstructionCardCost &&
-      move.location.parent === index &&
-      rules.material(MaterialType.ResourceCube).getItem(move.itemIndex).id !== Resource.Krystallium
-    )
-    // A cube item can have quantity > 1 (e.g. production creates 3 Materials at once).
-    // Greedily assign: each cube used up to its quantity, each space (x) filled once.
-    const itemUsage = new Map<number, number>()
-    const usedSpaces = new Set<number>()
-    const result: MaterialMove<Empire, MaterialType, LocationType>[] = []
-    const sorted = [...moves].sort((a, b) => {
-      if (!isMoveItemType(MaterialType.ResourceCube)(a) || !isMoveItemType(MaterialType.ResourceCube)(b)) return 0
-      return (a.location.x ?? 0) - (b.location.x ?? 0)
-    })
-    for (const move of sorted) {
-      if (!isMoveItemType(MaterialType.ResourceCube)(move)) continue
-      const space = move.location.x ?? 0
-      if (usedSpaces.has(space)) continue
-      const used = itemUsage.get(move.itemIndex) ?? 0
-      const available = rules.material(MaterialType.ResourceCube).getItem(move.itemIndex).quantity ?? 1
-      if (used >= available) continue
-      itemUsage.set(move.itemIndex, used + 1)
-      usedSpaces.add(space)
-      result.push(move)
-    }
-    return result
+  canLongClick(move: MaterialMove<Empire, MaterialType, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {
+    return isCustomMoveType(CustomMoveType.PlaceResources)(move) && move.data === context.index
   }
 
   backImages = {

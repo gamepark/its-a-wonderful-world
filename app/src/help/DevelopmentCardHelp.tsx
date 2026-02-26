@@ -8,8 +8,9 @@ import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialT
 import { isResource, Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
 import { isProductionFactor, Production } from '@gamepark/its-a-wonderful-world/Production'
 import { ComboVictoryPoints, VictoryPoints } from '@gamepark/its-a-wonderful-world/Scoring'
-import { MaterialHelpProps, Picture, PlayMoveButton, useLegalMoves, usePlay, usePlayerId, useRules } from '@gamepark/react-game'
-import { isMoveItemType, MaterialMove, MaterialRules, MoveItem } from '@gamepark/rules-api'
+import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
+import { MaterialHelpProps, Picture, PlayMoveButton, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
+import { isCustomMoveType, isMoveItemType, MaterialMove, MaterialRules, MoveItem } from '@gamepark/rules-api'
 import { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { characterIcons, developmentTypeIcons, resourceIcons } from '../panels/Images'
@@ -100,7 +101,6 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
   const playerId = usePlayerId()
   const rules = useRules<MaterialRules>()!
   const legalMoves = useLegalMoves()
-  const play = usePlay()
 
   if (itemIndex === undefined || playerId === undefined) return null
 
@@ -122,10 +122,15 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
     (move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.ConstructedDevelopments
   )
 
-  // Find placeable cubes on this card (same logic as getLongClickMoves)
-  const placeCubeMoves = getPlaceableCubeMoves(legalMoves, itemIndex, rules)
+  // Find the custom move to place all resources on this card
+  const placeAllMove = legalMoves.find(move =>
+    isCustomMoveType(CustomMoveType.PlaceResources)(move) && move.data === itemIndex
+  )
 
-  const hasActions = selectMove || buildMove || recycleMove || constructMove || placeCubeMoves.length > 0
+  // Also get the individual placeable cube moves for displaying the icons
+  const placeCubeMoves = placeAllMove ? getPlaceableCubeMoves(legalMoves, itemIndex, rules) : []
+
+  const hasActions = selectMove || buildMove || recycleMove || constructMove || placeAllMove
   if (!hasActions) return null
 
   return (
@@ -145,11 +150,8 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
           {t('help.action.construct', 'Build')}
         </PlayMoveButton>
       )}
-      {!constructMove && placeCubeMoves.length > 0 && (
-        <PlayMoveButton css={placeButtonCss} move={placeCubeMoves[0]} onPlay={() => {
-          for (let i = 1; i < placeCubeMoves.length; i++) play(placeCubeMoves[i])
-          closeDialog()
-        }}>
+      {!constructMove && placeAllMove && (
+        <PlayMoveButton css={placeButtonCss} move={placeAllMove} onPlay={closeDialog}>
           {t('help.action.place', 'Place')}{' '}
           {placeCubeMoves.map((move, i) => (
             <Picture key={i} src={resourceIcons[rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource]} css={buttonIconCss} />
