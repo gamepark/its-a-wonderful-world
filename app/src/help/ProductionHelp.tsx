@@ -42,11 +42,11 @@ type ProductionHelpConfig = {
 }
 
 const productionConfigs: Record<number, ProductionHelpConfig> = {
-  [Resource.Materials]: { resource: Resource.Materials, titleKey: 'help.production.Materials.title', titleDefault: 'Production de Matériaux', resourceName: 'Matériaux', order: 1, character: 'financier' },
-  [Resource.Energy]: { resource: Resource.Energy, titleKey: 'help.production.Energy.title', titleDefault: "Production d'Énergie", resourceName: 'Énergie', order: 2, character: 'general' },
-  [Resource.Science]: { resource: Resource.Science, titleKey: 'help.production.Science.title', titleDefault: 'Production de Science', resourceName: 'Science', order: 3, character: 'choice' },
-  [Resource.Gold]: { resource: Resource.Gold, titleKey: 'help.production.Gold.title', titleDefault: "Production d'Or", resourceName: 'Or', order: 4, character: 'financier' },
-  [Resource.Exploration]: { resource: Resource.Exploration, titleKey: 'help.production.Exploration.title', titleDefault: "Production d'Exploration", resourceName: 'Exploration', order: 5, character: 'general' }
+  [Resource.Materials]: { resource: Resource.Materials, titleKey: 'help.production.Materials.title', titleDefault: 'Materials Production', resourceName: 'Materials', order: 1, character: 'financier' },
+  [Resource.Energy]: { resource: Resource.Energy, titleKey: 'help.production.Energy.title', titleDefault: 'Energy Production', resourceName: 'Energy', order: 2, character: 'general' },
+  [Resource.Science]: { resource: Resource.Science, titleKey: 'help.production.Science.title', titleDefault: 'Science Production', resourceName: 'Science', order: 3, character: 'choice' },
+  [Resource.Gold]: { resource: Resource.Gold, titleKey: 'help.production.Gold.title', titleDefault: 'Gold Production', resourceName: 'Gold', order: 4, character: 'financier' },
+  [Resource.Exploration]: { resource: Resource.Exploration, titleKey: 'help.production.Exploration.title', titleDefault: 'Exploration Production', resourceName: 'Exploration', order: 5, character: 'general' }
 }
 
 function SupremacyStatus({ resource }: { resource: Resource }) {
@@ -59,16 +59,16 @@ function SupremacyStatus({ resource }: { resource: Resource }) {
   if (!game || !rules) return null
 
   if (winners.length === 0) {
-    return <p css={statusCss}>{t('help.production.status.nobody', "Actuellement, personne ne remporterait le bonus (aucune production ou égalité).")}</p>
+    return <p css={statusCss}>{t('help.production.status.nobody', 'Currently, nobody would win the bonus (no production or tie).')}</p>
   }
 
   if (winners.length === 1) {
-    return <p css={statusCss}><strong>{t('help.production.status.winner', '{player} remporterait le bonus.', { player: name0 })}</strong></p>
+    return <p css={statusCss}><strong>{t('help.production.status.winner', '{player} would win the bonus.', { player: name0 })}</strong></p>
   }
 
   return (
     <p css={statusCss}>
-      <strong>{t('help.production.status.winners', '{player1} et {player2} remporteraient le bonus.', { player1: name0, player2: name1 })}</strong>
+      <strong>{t('help.production.status.winners', '{player1} and {player2} would win the bonus.', { player1: name0, player2: name1 })}</strong>
     </p>
   )
 }
@@ -89,18 +89,18 @@ export function ProductionHelp({ resource }: { resource: Resource }) {
         {t(config.titleKey, config.titleDefault)}
       </h2>
 
-      <p css={stepCss}>{t('help.production.step', 'Étape {step} sur 5', { step: config.order })}</p>
+      <p css={stepCss}>{t('help.production.step', 'Step {step} of 5', { step: config.order })}</p>
 
-      <h3>{t('help.production.how', 'Comment ça marche ?')}</h3>
+      <h3>{t('help.production.how', 'How does it work?')}</h3>
       <p>
         {t(
           'help.production.description',
-          'Chaque joueur produit simultanément des cubes {resource}. Comptez les symboles {resource} sur votre carte Empire et sur tous vos Développements construits. Vous recevez autant de cubes {resource}.',
+          'Each player simultaneously produces {resource} cubes. Count the {resource} symbols on your Empire card and all your built Developments. You receive that many {resource} cubes.',
           { resource: resourceName }
         )}
       </p>
 
-      <h3 css={bonusTitleCss}>{t('help.production.bonus', 'Bonus de suprématie')}</h3>
+      <h3 css={bonusTitleCss}>{t('help.production.bonus', 'Supremacy bonus')}</h3>
       <div css={bonusContainerCss}>
         {config.character === 'financier' && (
           <div css={characterCss}>
@@ -109,10 +109,10 @@ export function ProductionHelp({ resource }: { resource: Resource }) {
               {is6Plus
                 ? t(
                     'help.production.bonus.financier.6p',
-                    "Les 2 joueurs qui produisent le plus de {resource} reçoivent chacun un jeton Financier. En cas d'égalité empêchant de les départager, aucun jeton n'est attribué pour les places concernées.",
+                    'The 2 players who produce the most {resource} each receive a Financier token. In case of a tie that prevents ranking, no token is awarded for the tied places.',
                     { resource: resourceName }
                   )
-                : t('help.production.bonus.financier', 'Le joueur qui produit le plus de {resource}, seul, reçoit un jeton Financier.', {
+                : t('help.production.bonus.financier', 'The player who produces the most {resource}, alone, receives a Financier token.', {
                     resource: resourceName
                   })}
             </span>
@@ -125,10 +125,10 @@ export function ProductionHelp({ resource }: { resource: Resource }) {
               {is6Plus
                 ? t(
                     'help.production.bonus.general.6p',
-                    "Les 2 joueurs qui produisent le plus de {resource} reçoivent chacun un jeton Général. En cas d'égalité empêchant de les départager, aucun jeton n'est attribué pour les places concernées.",
+                    'The 2 players who produce the most {resource} each receive a General token. In case of a tie that prevents ranking, no token is awarded for the tied places.',
                     { resource: resourceName }
                   )
-                : t('help.production.bonus.general', 'Le joueur qui produit le plus de {resource}, seul, reçoit un jeton Général.', { resource: resourceName })}
+                : t('help.production.bonus.general', 'The player who produces the most {resource}, alone, receives a General token.', { resource: resourceName })}
             </span>
           </div>
         )}
@@ -142,10 +142,10 @@ export function ProductionHelp({ resource }: { resource: Resource }) {
               {is6Plus
                 ? t(
                     'help.production.bonus.choice.6p',
-                    "Les 2 joueurs qui produisent le plus de {resource} reçoivent chacun un jeton Financier ou Général (au choix). En cas d'égalité empêchant de les départager, aucun jeton n'est attribué pour les places concernées.",
+                    'The 2 players who produce the most {resource} each receive a Financier or General token (their choice). In case of a tie that prevents ranking, no token is awarded for the tied places.',
                     { resource: resourceName }
                   )
-                : t('help.production.bonus.choice', 'Le joueur qui produit le plus de {resource}, seul, reçoit un jeton Financier ou Général (au choix).', {
+                : t('help.production.bonus.choice', 'The player who produces the most {resource}, alone, receives a Financier or General token (their choice).', {
                     resource: resourceName
                   })}
             </span>
@@ -154,18 +154,18 @@ export function ProductionHelp({ resource }: { resource: Resource }) {
         <SupremacyStatus resource={resource} />
       </div>
 
-      <h3>{t('help.production.placement', 'Placement des ressources')}</h3>
+      <h3>{t('help.production.placement', 'Resource placement')}</h3>
       <p>
         {t(
           'help.production.placement.description',
-          'Chaque ressource produite doit être immédiatement placée sur un Développement en construction (sur un emplacement de coût vide du type correspondant) ou sur votre carte Empire. Chaque lot de 5 ressources sur votre carte Empire est immédiatement converti en 1 Krystallium.'
+          'Each produced resource must immediately be placed on a Development under construction (on an empty cost slot of the matching type) or on your Empire card. Every 5 resources on your Empire card are immediately converted into 1 Krystallium.'
         )}
       </p>
       <p>
         <Picture src={KrystalliumIcon} css={inlineIconCss} />{' '}
         {t(
           'help.krystallium',
-          'Vous pouvez utiliser 1 Krystallium pour remplacer n’importe quelle Ressource. Par contre, vous ne pouvez pas l’utiliser pour remplacer un Personnage.'
+          "You can use 1 Krystallium to replace any Resource. However, you cannot use it to replace a Character."
         )}
       </p>
     </>

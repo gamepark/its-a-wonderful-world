@@ -89,12 +89,12 @@ function useSupremacyHelpText(resource: Resource): string {
   const name1 = usePlayerName(winners[1])
 
   if (winners.length === 0) {
-    return t('help.production.status.nobody', 'Actuellement, personne ne remporterait le bonus (aucune production ou égalité).')
+    return t('help.production.status.nobody', 'Currently, nobody would win the bonus (no production or tie).')
   }
   if (winners.length === 1) {
-    return t('help.production.status.winner', '{player} remporterait le bonus.', { player: name0 })
+    return t('help.production.status.winner', '{player} would win the bonus.', { player: name0 })
   }
-  return t('help.production.status.winners', '{player1} et {player2} remporteraient le bonus.', { player1: name0, player2: name1 })
+  return t('help.production.status.winners', '{player1} and {player2} would win the bonus.', { player1: name0, player2: name1 })
 }
 
 function ResourceCircle({ image, name, resource }: { image: string; name: string; resource: Resource }) {
