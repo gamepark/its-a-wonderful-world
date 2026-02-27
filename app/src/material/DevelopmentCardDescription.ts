@@ -176,6 +176,10 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
     return isCustomMoveType(CustomMoveType.PlaceResources)(move) && move.data === context.index
   }
 
+  highlight() {
+    return false
+  }
+
   backImages = {
     [DeckType.Default]: DevelopmentBack,
     [DeckType.Ascension]: AscensionBack
