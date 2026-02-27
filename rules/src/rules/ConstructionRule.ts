@@ -189,14 +189,16 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     // Sort by space to fill in order
     candidates.sort((a, b) => a.space - b.space)
 
-    // Greedy assignment: each cube item used at most once, each space filled once
-    const usedItems = new Set<number>()
+    // Greedy assignment: each cube used at most once (respecting quantity), each space filled once
+    const usedPerItem = new Map<number, number>()
     const usedSpaces = new Set<number>()
     const result: MaterialMove[] = []
     for (const { resourceIndex, space } of candidates) {
       if (usedSpaces.has(space)) continue
-      if (usedItems.has(resourceIndex)) continue
-      usedItems.add(resourceIndex)
+      const used = usedPerItem.get(resourceIndex) ?? 0
+      const available = availableResources.getItem(resourceIndex).quantity ?? 1
+      if (used >= available) continue
+      usedPerItem.set(resourceIndex, used + 1)
       usedSpaces.add(space)
       result.push(
         this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
