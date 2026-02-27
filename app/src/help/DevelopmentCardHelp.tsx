@@ -302,20 +302,20 @@ function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints 
   )
 }
 
-function getDevelopmentTypeName(t: (key: string, defaultValue: string) => string, type: DevelopmentType): string {
+function getDevelopmentTypeName(t: (key: string) => string, type: DevelopmentType): string {
   switch (type) {
     case DevelopmentType.Structure:
-      return t('help.type.structure', 'Structure')
+      return t('Structure')
     case DevelopmentType.Vehicle:
-      return t('help.type.vehicle', 'Vehicle')
+      return t('Vehicle')
     case DevelopmentType.Research:
-      return t('help.type.research', 'Research')
+      return t('Research')
     case DevelopmentType.Project:
-      return t('help.type.project', 'Project')
+      return t('Project')
     case DevelopmentType.Discovery:
-      return t('help.type.discovery', 'Discovery')
+      return t('Discovery')
     case DevelopmentType.Memorial:
-      return t('help.type.memorial', 'Memorial')
+      return t('Memorial')
   }
 }
 
