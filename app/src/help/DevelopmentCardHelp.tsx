@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Character, isCharacter } from '@gamepark/its-a-wonderful-world/material/Character'
+import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
 import { Development, getDevelopmentDetails } from '@gamepark/its-a-wonderful-world/material/Development'
 import { DevelopmentType } from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { isResource, Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
 import { isProductionFactor, Production } from '@gamepark/its-a-wonderful-world/Production'
-import { ComboVictoryPoints, VictoryPoints } from '@gamepark/its-a-wonderful-world/Scoring'
-import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
-import { MaterialHelpProps, Picture, PlayMoveButton, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
 import { ConstructionRule } from '@gamepark/its-a-wonderful-world/rules/ConstructionRule'
+import { ComboVictoryPoints, VictoryPoints } from '@gamepark/its-a-wonderful-world/Scoring'
+import { MaterialHelpProps, Picture, PlayMoveButton, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
 import { isCustomMoveType, isMoveItemType, MaterialMove, MaterialRules, MoveItem } from '@gamepark/rules-api'
 import { ReactElement } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { characterIcons, developmentTypeIcons, resourceIcons } from '../panels/Images'
 
 const developmentTypeColors: Record<DevelopmentType, string> = {
@@ -42,9 +42,7 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
   return (
     <>
       <h2 css={titleCss(color)}>
-        {developmentTypeIcons[details.type] &&
-          <Picture src={developmentTypeIcons[details.type]} css={typeIconCss} />
-        }
+        {developmentTypeIcons[details.type] && <Picture src={developmentTypeIcons[details.type]} css={typeIconCss} />}
         {t(`card.${development}`)}
       </h2>
       <p css={subtitleCss}>
@@ -59,40 +57,44 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
         <CostIcons cost={details.constructionCost} />
       </div>
 
-      {details.constructionBonus && details.constructionBonus.length > 0 && <>
-        <h3 css={sectionTitleCss}>{t('help.development.constructionBonus', 'Construction bonus')}</h3>
-        <div css={iconRowCss}>
-          {details.constructionBonus.map((bonus, i) =>
-            bonus === Resource.Krystallium
-              ? <Picture key={i} src={resourceIcons[Resource.Krystallium]} css={inlineIconCss} />
-              : <Picture key={i} src={characterIcons[bonus as Character]} css={roundIconCss} />
-          )}
-        </div>
-        <p css={explanationCss}>
-          {t('help.development.constructionBonus.description', 'Received immediately when the Development is built.')}
-        </p>
-      </>}
+      {details.constructionBonus && details.constructionBonus.length > 0 && (
+        <>
+          <h3 css={sectionTitleCss}>{t('help.development.constructionBonus', 'Construction bonus')}</h3>
+          <div css={iconRowCss}>
+            {details.constructionBonus.map((bonus, i) =>
+              bonus === Resource.Krystallium ? (
+                <Picture key={i} src={resourceIcons[Resource.Krystallium]} css={inlineIconCss} />
+              ) : (
+                <Picture key={i} src={characterIcons[bonus as Character]} css={roundIconCss} />
+              )
+            )}
+          </div>
+          <p css={explanationCss}>{t('help.development.constructionBonus.description', 'Received immediately when the Development is built.')}</p>
+        </>
+      )}
 
-      {details.production && <>
-        <h3 css={sectionTitleCss}>{t('Production')}</h3>
-        <div css={iconRowCss}>
-          <ProductionIcons production={details.production} />
-        </div>
-        <ProductionDescription production={details.production} />
-      </>}
+      {details.production && (
+        <>
+          <h3 css={sectionTitleCss}>{t('Production')}</h3>
+          <div css={iconRowCss}>
+            <ProductionIcons production={details.production} />
+          </div>
+          <ProductionDescription production={details.production} />
+        </>
+      )}
 
-      {details.victoryPoints !== undefined && <>
-        <h3 css={sectionTitleCss}>{t('help.development.victoryPoints', 'Victory points')}</h3>
-        <VictoryPointsDisplay victoryPoints={details.victoryPoints} />
-      </>}
+      {details.victoryPoints !== undefined && (
+        <>
+          <h3 css={sectionTitleCss}>{t('help.development.victoryPoints', 'Victory points')}</h3>
+          <VictoryPointsDisplay victoryPoints={details.victoryPoints} />
+        </>
+      )}
 
       <h3 css={sectionTitleCss}>{t('help.development.recyclingBonus', 'Recycling bonus')}</h3>
       <div css={iconRowCss}>
         <Picture src={resourceIcons[details.recyclingBonus]} css={inlineIconCss} />
       </div>
-      <p css={explanationCss}>
-        {t('help.development.recyclingBonus.description', 'Received when discarding this card during the Planning phase.')}
-      </p>
+      <p css={explanationCss}>{t('help.development.recyclingBonus.description', 'Received when discarding this card during the Planning phase.')}</p>
     </>
   )
 }
@@ -105,71 +107,80 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
 
   if (itemIndex === undefined || playerId === undefined) return null
 
-  const cardMoves = legalMoves.filter(
-    (move): move is MaterialMove =>
-      isMoveItemType(MaterialType.DevelopmentCard)(move) && move.itemIndex === itemIndex
-  )
+  const cardMoves = legalMoves.filter((move): move is MaterialMove => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.itemIndex === itemIndex)
 
-  const selectMove = cardMoves.find(
-    (move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.DraftArea
-  )
-  const buildMove = cardMoves.find(
-    (move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.ConstructionArea
-  )
-  const recycleMove = cardMoves.find(
-    (move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.Discard
-  )
+  const selectMove = cardMoves.find((move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.DraftArea)
+  const buildMove = cardMoves.find((move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.ConstructionArea)
+  const recycleMove = cardMoves.find((move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.Discard)
   const constructMove = cardMoves.find(
     (move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.location.type === LocationType.ConstructedDevelopments
   )
 
   // Find the custom move to place all resources on this card
-  const placeAllMove = legalMoves.find(move =>
-    isCustomMoveType(CustomMoveType.PlaceResources)(move) && move.data === itemIndex
-  )
+  const placeAllMove = legalMoves.find((move) => isCustomMoveType(CustomMoveType.PlaceResources)(move) && move.data === itemIndex)
 
   // Compute the resources that would be placed by the PlaceResources custom move
   const constructionRule = rules.rulesStep as ConstructionRule | undefined
-  const placedResources = placeAllMove && constructionRule?.getPlaceResourcesMoves
-    ? constructionRule.getPlaceResourcesMoves(playerId, itemIndex).map(move =>
-        rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource
-      )
-    : []
+  const placedResources =
+    placeAllMove && constructionRule?.getPlaceResourcesMoves
+      ? constructionRule
+          .getPlaceResourcesMoves(playerId, itemIndex)
+          .map((move) => rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource)
+      : []
 
   const hasActions = selectMove || buildMove || recycleMove || constructMove || placeAllMove
   if (!hasActions) return null
 
   return (
-    <div css={actionsCss}>
-      {selectMove && (
-        <PlayMoveButton move={selectMove} onPlay={closeDialog}>
-          {t('help.action.select', 'Select')}
-        </PlayMoveButton>
-      )}
-      {buildMove && (
-        <PlayMoveButton move={buildMove} onPlay={closeDialog}>
-          {t('help.action.build', 'Slate for construction')}
-        </PlayMoveButton>
-      )}
-      {constructMove && (
-        <PlayMoveButton move={constructMove} onPlay={closeDialog}>
-          {t('help.action.construct', 'Build')}
-        </PlayMoveButton>
-      )}
+    <>
+      <div css={actionsCss}>
+        {selectMove && (
+          <PlayMoveButton move={selectMove} onPlay={closeDialog}>
+            {t('help.action.select', 'Select')}
+          </PlayMoveButton>
+        )}
+        {buildMove && (
+          <PlayMoveButton move={buildMove} onPlay={closeDialog}>
+            {t('help.action.build', 'Slate for construction')}
+          </PlayMoveButton>
+        )}
+        {constructMove && (
+          <PlayMoveButton move={constructMove} onPlay={closeDialog}>
+            {t('help.action.construct', 'Build')}
+          </PlayMoveButton>
+        )}
+        {placeAllMove && (
+          <PlayMoveButton css={placeButtonCss} move={placeAllMove} onPlay={closeDialog}>
+            {t('help.action.place', 'Place')}{' '}
+            {placedResources.map((resource, i) => (
+              <Picture key={i} src={resourceIcons[resource]} css={buttonIconCss} />
+            ))}
+          </PlayMoveButton>
+        )}
+        {recycleMove && (
+          <PlayMoveButton move={recycleMove} onPlay={closeDialog}>
+            {t('help.action.recycle', 'Recycle')}
+          </PlayMoveButton>
+        )}
+      </div>
       {placeAllMove && (
-        <PlayMoveButton css={placeButtonCss} move={placeAllMove} onPlay={closeDialog}>
-          {t('help.action.place', 'Place')}{' '}
-          {placedResources.map((resource, i) => (
-            <Picture key={i} src={resourceIcons[resource]} css={buttonIconCss} />
-          ))}
-        </PlayMoveButton>
+        <p css={hintCss}>
+          <Trans
+            i18nKey="help.action.place.hint"
+            defaults="You can long-click on the card to place <resources/> at once."
+            components={{
+              resources: (
+                <span css={hintResourcesCss}>
+                  {placedResources.map((resource, i) => (
+                    <Picture key={i} src={resourceIcons[resource]} css={hintIconCss} />
+                  ))}
+                </span>
+              )
+            }}
+          />
+        </p>
       )}
-      {recycleMove && (
-        <PlayMoveButton move={recycleMove} onPlay={closeDialog}>
-          {t('help.action.recycle', 'Recycle')}
-        </PlayMoveButton>
-      )}
-    </div>
+    </>
   )
 }
 
@@ -263,7 +274,11 @@ function ProductionDescription({ production }: { production: Production }) {
 function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints }) {
   const { t } = useTranslation()
   if (typeof victoryPoints === 'number') {
-    return <div><strong>{victoryPoints}</strong> {t('help.development.victoryPoints', 'Victory points')}</div>
+    return (
+      <div>
+        <strong>{victoryPoints}</strong> {t('help.development.victoryPoints', 'Victory points')}
+      </div>
+    )
   }
   const combo = victoryPoints as ComboVictoryPoints
   const items = Array.isArray(combo.per) ? combo.per : [combo.per]
@@ -272,16 +287,16 @@ function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints 
       <strong>{combo.quantity}</strong>
       <span css={factorCss}>x</span>
       {items.map((item) =>
-        isCharacter(item)
-          ? <Picture key={item} src={characterIcons[item]} css={roundIconCss} />
-          : <Picture key={item} src={developmentTypeIcons[item]} css={typeIconSmallCss} />
+        isCharacter(item) ? (
+          <Picture key={item} src={characterIcons[item]} css={roundIconCss} />
+        ) : (
+          <Picture key={item} src={developmentTypeIcons[item]} css={typeIconSmallCss} />
+        )
       )}
       <span css={factorLabelCss}>
-        {items.map((item) =>
-          isCharacter(item)
-            ? (item === Character.Financier ? t('Financier token') : t('General token'))
-            : getDevelopmentTypeName(t, item)
-        ).join(' + ')}
+        {items
+          .map((item) => (isCharacter(item) ? (item === Character.Financier ? t('Financier token') : t('General token')) : getDevelopmentTypeName(t, item)))
+          .join(' + ')}
       </span>
     </div>
   )
@@ -410,4 +425,29 @@ const buttonIconCss = css`
   height: 1.2em;
   object-fit: contain;
   vertical-align: middle;
+`
+
+const hintCss = css`
+  font-size: 0.85em;
+  color: #777;
+  font-style: italic;
+  margin: 0.3em 0 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.1em;
+`
+
+const hintResourcesCss = css`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1em;
+  vertical-align: middle;
+  margin-left: 0.2em;
+`
+
+const hintIconCss = css`
+  width: 1em;
+  height: 1.2em;
+  object-fit: contain;
 `
