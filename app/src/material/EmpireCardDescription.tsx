@@ -7,6 +7,7 @@ import { EmpireSide } from '@gamepark/its-a-wonderful-world/material/EmpireSide'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { CardDescription, MaterialContext } from '@gamepark/react-game'
+import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 // Aztec Empire
@@ -25,6 +26,14 @@ import FederationOfAsiaD from '../images/empires/federation-of-asia-D.jpg'
 import FederationOfAsiaE from '../images/empires/federation-of-asia-E.jpg'
 import FederationOfAsiaF from '../images/empires/federation-of-asia-F.jpg'
 
+// Nations of Oceania
+import NationsOfOceaniaA from '../images/empires/nations-of-oceania-A.jpg'
+import NationsOfOceaniaB from '../images/empires/nations-of-oceania-B.jpg'
+import NationsOfOceaniaC from '../images/empires/nations-of-oceania-C.jpg'
+import NationsOfOceaniaD from '../images/empires/nations-of-oceania-D.jpg'
+import NationsOfOceaniaE from '../images/empires/nations-of-oceania-E.jpg'
+import NationsOfOceaniaF from '../images/empires/nations-of-oceania-F.jpg'
+
 // Noram States
 import NoramStatesA from '../images/empires/noram-states-A.jpg'
 import NoramStatesB from '../images/empires/noram-states-B.jpg'
@@ -32,6 +41,14 @@ import NoramStatesC from '../images/empires/noram-states-C.jpg'
 import NoramStatesD from '../images/empires/noram-states-D.jpg'
 import NoramStatesE from '../images/empires/noram-states-E.jpg'
 import NoramStatesF from '../images/empires/noram-states-F.jpg'
+
+// North Hegemony
+import NorthHegemonyA from '../images/empires/north-hegemony-A.jpg'
+import NorthHegemonyB from '../images/empires/north-hegemony-B.jpg'
+import NorthHegemonyC from '../images/empires/north-hegemony-C.jpg'
+import NorthHegemonyD from '../images/empires/north-hegemony-D.jpg'
+import NorthHegemonyE from '../images/empires/north-hegemony-E.jpg'
+import NorthHegemonyF from '../images/empires/north-hegemony-F.jpg'
 
 // Panafrican Union
 import PanafricanUnionA from '../images/empires/panafrican-union-A.jpg'
@@ -48,22 +65,6 @@ import RepublicOfEuropeC from '../images/empires/republic-of-europe-C.jpg'
 import RepublicOfEuropeD from '../images/empires/republic-of-europe-D.jpg'
 import RepublicOfEuropeE from '../images/empires/republic-of-europe-E.jpg'
 import RepublicOfEuropeF from '../images/empires/republic-of-europe-F.jpg'
-
-// Nations of Oceania
-import NationsOfOceaniaA from '../images/empires/nations-of-oceania-A.jpg'
-import NationsOfOceaniaB from '../images/empires/nations-of-oceania-B.jpg'
-import NationsOfOceaniaC from '../images/empires/nations-of-oceania-C.jpg'
-import NationsOfOceaniaD from '../images/empires/nations-of-oceania-D.jpg'
-import NationsOfOceaniaE from '../images/empires/nations-of-oceania-E.jpg'
-import NationsOfOceaniaF from '../images/empires/nations-of-oceania-F.jpg'
-
-// North Hegemony
-import NorthHegemonyA from '../images/empires/north-hegemony-A.jpg'
-import NorthHegemonyB from '../images/empires/north-hegemony-B.jpg'
-import NorthHegemonyC from '../images/empires/north-hegemony-C.jpg'
-import NorthHegemonyD from '../images/empires/north-hegemony-D.jpg'
-import NorthHegemonyE from '../images/empires/north-hegemony-E.jpg'
-import NorthHegemonyF from '../images/empires/north-hegemony-F.jpg'
 
 type EmpireCardId = { empire: Empire; side: EmpireSide }
 
@@ -129,10 +130,10 @@ export class EmpireCardDescription extends CardDescription<Empire, MaterialType,
     [empireKey(Empire.NorthHegemony, EmpireSide.F)]: NorthHegemonyF
   }
 
-  content = (props: { itemId: EmpireCardId }) => {
+  content = (props: { itemId: EmpireCardId, children?: ReactNode }) => {
     return this.contentWithBackChildren({
       ...props,
-      children: <EmpireCardTitle itemId={props.itemId}/>
+      children: <>{props.children}<EmpireCardTitle itemId={props.itemId}/></>
     })
   }
 

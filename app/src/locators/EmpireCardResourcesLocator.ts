@@ -12,17 +12,13 @@ import { empireCardDescription } from '../material/EmpireCardDescription'
 class EmpireCardResourcesLocator extends Locator<Empire, MaterialType, LocationType> {
   parentItemType = MaterialType.EmpireCard
   locationDescription = new DropAreaDescription(empireCardDescription)
-  positionOnParent = { x: 28, y: 58 }
 
-  getLocations(context: MaterialContext<Empire, MaterialType, LocationType>) {
-    const currentView = context.rules.game.view ?? context.player ?? context.rules.players[0]
-    if (currentView === undefined) return []
-    return [{ type: LocationType.EmpireCardResources, player: currentView }]
-  }
-
-  getParentItem(location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>): MaterialItem<Empire, LocationType> | undefined {
+  getParentItem(
+    location: Location<Empire, LocationType>,
+    context: MaterialContext<Empire, MaterialType, LocationType>
+  ): MaterialItem<Empire, LocationType> | undefined {
     const staticItems = context.material[MaterialType.EmpireCard]?.getStaticItems(context)
-    return staticItems?.find(item => item.location.player === location.player)
+    return staticItems?.find((item) => item.location.player === location.player)
   }
 
   hide(item: MaterialItem<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {
@@ -31,10 +27,10 @@ class EmpireCardResourcesLocator extends Locator<Empire, MaterialType, LocationT
   }
 
   getCoordinates(location: Location<Empire, LocationType>): Partial<Coordinates> {
-    const index = location.x ?? 0
-    const angle = -Math.PI / 2 + index * (2 * Math.PI / 5)
+    if (location.x === undefined) return {}
+    const angle = -Math.PI / 2 + location.x * ((2 * Math.PI) / 5)
     const radius = 0.8
-    return { x: radius * Math.cos(angle), y: radius * Math.sin(angle) }
+    return { x: radius * Math.cos(angle) - 1.5, y: radius * Math.sin(angle) + 0.5 }
   }
 }
 
