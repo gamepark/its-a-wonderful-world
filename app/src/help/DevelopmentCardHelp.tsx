@@ -47,7 +47,7 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
       </h2>
       <p css={subtitleCss}>
         {typeName}
-        {copies > 1 && <> — {t('help.development.copies', '{count} copies', { count: copies })}</>}
+        {copies > 1 && <> — {t('help.development.copies', '{copies, plural, one {# copy} other {# copies}}', { copies })}</>}
       </p>
 
       <CardActions itemIndex={itemIndex} closeDialog={closeDialog} />
