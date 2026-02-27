@@ -62,6 +62,13 @@ class ConstructionCardCostLocator extends Locator<Empire, MaterialType, Location
     return transform
   }
 
+  ignore(item: MaterialItem<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {
+    if (item.location.parent === undefined) return false
+    const card = context.rules.material(MaterialType.DevelopmentCard).getItem(item.location.parent)
+    const currentView = context.rules.game.view ?? context.player ?? context.rules.players[0]
+    return card?.location?.player !== currentView
+  }
+
   getItemCoordinates(
     _item: MaterialItem<Empire, LocationType>,
     _context: ItemContext<Empire, MaterialType, LocationType>
