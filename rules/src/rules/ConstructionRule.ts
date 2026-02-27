@@ -309,7 +309,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
               this.material(MaterialType.ResourceCube).index(move.itemIndex).moveItem({
                 type: LocationType.EmpireCardResources,
                 player
-              })
+              }, 1)
             )
           }
         }
@@ -429,7 +429,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
             this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
               type: LocationType.EmpireCardResources,
               player
-            })
+            }, 1)
           )
         }
       }
