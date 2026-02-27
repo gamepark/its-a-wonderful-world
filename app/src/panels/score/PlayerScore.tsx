@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { arrowWhite, scoreIcon } from '../Images'
 import { ScorePart } from './ScorePart'
 
-const gameOverDelay = 10
+const gameOverDelay = 6
 
 type Props = {
   playerId: Empire
@@ -139,7 +139,7 @@ const arrowStyle = css`
 
 const fadeInAnimation = css`
   opacity: 0;
-  animation: ${fadeIn} ${gameOverDelay / 3}s ${gameOverDelay * 2 / 3}s ease-in forwards;
+  animation: ${fadeIn} ${gameOverDelay / 3}s ${gameOverDelay / 3}s ease-in forwards;
 `
 
 const arrowStandardStyle = css`

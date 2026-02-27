@@ -4,7 +4,7 @@ import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationT
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
 import { and, isRule, MaterialContext, MaterialGameAnimations } from '@gamepark/react-game'
-import { isCreateItemType, isDeleteItemType, isMoveItemType, isMoveItemTypeAtOnce, MaterialMove } from '@gamepark/rules-api'
+import { isCreateItemType, isDeleteItemType, isDeleteItemTypeAtOnce, isMoveItemType, isMoveItemTypeAtOnce, MaterialMove } from '@gamepark/rules-api'
 import { handFaceDownLocator } from '../locators/HandFaceDownLocator'
 import { onPlayerPanelLocator } from '../locators/OnPlayerPanelLocator'
 import { revealedCardLocator } from '../locators/RevealedCardLocator'
@@ -165,9 +165,15 @@ gameAnimations
     ]
   })
 
+// Krystallium creation (from cube transformation): 300ms
+const isCreateKrystallium = (move: MaterialMove) =>
+  isCreateItemType(MaterialType.ResourceCube)(move) && move.item?.location?.type === LocationType.KrystalliumStock
+gameAnimations.configure(isCreateKrystallium).duration(300)
+
 // Viewed player animations (other-player skip rules above take priority)
 gameAnimations.configure(isCreateItemType(MaterialType.ResourceCube)).duration(200)
 gameAnimations.configure(isDeleteItemType(MaterialType.ResourceCube)).duration(200)
+gameAnimations.configure(isDeleteItemTypeAtOnce(MaterialType.ResourceCube)).duration(300)
 gameAnimations.configure(isMoveItemType(MaterialType.ResourceCube)).duration(200)
 gameAnimations.configure(isMoveItemType(MaterialType.DevelopmentCard)).duration(500)
 gameAnimations.configure(isCreateItemType(MaterialType.CharacterToken)).duration(500)
