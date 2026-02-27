@@ -10,6 +10,7 @@ import { isProductionFactor, Production } from '@gamepark/its-a-wonderful-world/
 import { ComboVictoryPoints, VictoryPoints } from '@gamepark/its-a-wonderful-world/Scoring'
 import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
 import { MaterialHelpProps, Picture, PlayMoveButton, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
+import { ConstructionRule } from '@gamepark/its-a-wonderful-world/rules/ConstructionRule'
 import { isCustomMoveType, isMoveItemType, MaterialMove, MaterialRules, MoveItem } from '@gamepark/rules-api'
 import { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -127,8 +128,13 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
     isCustomMoveType(CustomMoveType.PlaceResources)(move) && move.data === itemIndex
   )
 
-  // Also get the individual placeable cube moves for displaying the icons
-  const placeCubeMoves = placeAllMove ? getPlaceableCubeMoves(legalMoves, itemIndex, rules) : []
+  // Compute the resources that would be placed by the PlaceResources custom move
+  const constructionRule = rules.rulesStep as ConstructionRule | undefined
+  const placedResources = placeAllMove && constructionRule?.getPlaceResourcesMoves
+    ? constructionRule.getPlaceResourcesMoves(playerId, itemIndex).map(move =>
+        rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource
+      )
+    : []
 
   const hasActions = selectMove || buildMove || recycleMove || constructMove || placeAllMove
   if (!hasActions) return null
@@ -150,11 +156,11 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
           {t('help.action.construct', 'Build')}
         </PlayMoveButton>
       )}
-      {!constructMove && placeAllMove && (
+      {placeAllMove && (
         <PlayMoveButton css={placeButtonCss} move={placeAllMove} onPlay={closeDialog}>
           {t('help.action.place', 'Place')}{' '}
-          {placeCubeMoves.map((move, i) => (
-            <Picture key={i} src={resourceIcons[rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource]} css={buttonIconCss} />
+          {placedResources.map((resource, i) => (
+            <Picture key={i} src={resourceIcons[resource]} css={buttonIconCss} />
           ))}
         </PlayMoveButton>
       )}
@@ -165,31 +171,6 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
       )}
     </div>
   )
-}
-
-function getPlaceableCubeMoves(legalMoves: MaterialMove[], cardIndex: number, rules: MaterialRules): MaterialMove[] {
-  const moves = legalMoves.filter(
-    (move): move is MoveItem =>
-      isMoveItemType(MaterialType.ResourceCube)(move) &&
-      move.location.type === LocationType.ConstructionCardCost &&
-      move.location.parent === cardIndex &&
-      rules.material(MaterialType.ResourceCube).getItem(move.itemIndex).id !== Resource.Krystallium
-  )
-  const itemUsage = new Map<number, number>()
-  const usedSpaces = new Set<number>()
-  const result: MaterialMove[] = []
-  const sorted = [...moves].sort((a, b) => (a.location.x ?? 0) - (b.location.x ?? 0))
-  for (const move of sorted) {
-    const space = move.location.x ?? 0
-    if (usedSpaces.has(space)) continue
-    const used = itemUsage.get(move.itemIndex) ?? 0
-    const available = rules.material(MaterialType.ResourceCube).getItem(move.itemIndex).quantity ?? 1
-    if (used >= available) continue
-    itemUsage.set(move.itemIndex, used + 1)
-    usedSpaces.add(space)
-    result.push(move)
-  }
-  return result
 }
 
 function CostIcons({ cost }: { cost: { [key in Resource | Character]?: number } }) {
