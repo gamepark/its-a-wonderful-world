@@ -112,9 +112,9 @@ const quantityStyle = css`
 const getCharacterDescription = (t: TFunction, character: Character) => {
   switch (character) {
     case Character.Financier:
-      return t('Financier')
+      return t('Financier token')
     case Character.General:
-      return t('General')
+      return t('General token')
   }
 }
 

@@ -298,7 +298,7 @@ function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints 
       <span css={factorLabelCss}>
         {items.map((item) =>
           isCharacter(item)
-            ? (item === Character.Financier ? t('help.character.financier', 'Financier') : t('help.character.general', 'General'))
+            ? (item === Character.Financier ? t('Financier token') : t('General token'))
             : getDevelopmentTypeName(t, item)
         ).join(' + ')}
       </span>
