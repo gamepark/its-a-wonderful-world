@@ -85,8 +85,8 @@ export class ItsAWonderfulWorldRules
       [LocationType.AscensionDeck]: hideFront,
       // Cards in player's hand - hide front from other players
       [LocationType.PlayerHand]: hideFrontToOthers,
-      // Cards in draft area - face down until rotated (revealed)
-      [LocationType.DraftArea]: hideFrontIfNotRotated
+      // Cards in draft area - visible to owner, hidden to others until rotated (revealed)
+      [LocationType.DraftArea]: hideFrontInDraftArea
       // Cards in construction area and constructed developments are face-up - visible to all
     }
   }
@@ -131,8 +131,10 @@ export class ItsAWonderfulWorldRules
 
 /**
  * Hiding strategy for cards in the draft area.
- * Cards are placed face-down (not rotated) when chosen.
- * Once all players have chosen, cards are revealed (rotated).
- * This strategy hides the front of the card when it's not rotated.
+ * Before reveal (not rotated): visible to the card's owner, hidden to everyone else.
+ * After reveal (rotated): visible to all players.
  */
-export const hideFrontIfNotRotated = (item: MaterialItem) => (!item.location.rotation ? ['id.front'] : [])
+export const hideFrontInDraftArea = (item: MaterialItem, player?: number): string[] => {
+  if (item.location.rotation) return [] // Revealed: visible to all
+  return item.location.player === player ? [] : ['id.front'] // Not revealed: visible only to owner
+}

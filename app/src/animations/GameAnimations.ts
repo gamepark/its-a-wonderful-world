@@ -126,6 +126,15 @@ const isOtherPlayerDraftCard = (move: any, context: MaterialContext) => {
 }
 gameAnimations.configure(isOtherPlayerDraftCard).skip()
 
+// Skip reveal animation for the viewing player's own drafted card (they already see it)
+const isMyReveal = (move: any, context: MaterialContext) => {
+  if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return false
+  if (move.location?.type !== LocationType.DraftArea) return false
+  if (move.location?.rotation !== true) return false
+  return move.location?.player === context.player
+}
+gameAnimations.configure(isMyReveal).skip()
+
 // Skip animations for cards moving to another player's area (construction, constructed, etc.)
 const isCardToOtherPlayerArea = (move: any, context: MaterialContext) => {
   if (!isMoveItemType(MaterialType.DevelopmentCard)(move) && !isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move)) return false
