@@ -9,7 +9,7 @@ class ConstructedDevelopmentsLocator extends ListLocator<Empire, MaterialType, L
   gap = { y: -1.1 }
   maxCount = 19
 
-  hide(item: MaterialItem<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {
+  ignore(item: MaterialItem<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {
     const currentView = context.rules.game.view ?? context.player ?? context.rules.players[0]
     return item.location.player !== currentView
   }
