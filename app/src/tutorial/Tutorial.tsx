@@ -341,7 +341,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.construction.cost.title', 'Construction cost')}</strong>
+            <strong>{t('help.development.cost', 'Construction cost')}</strong>
             <br />
             {t(
               'tuto.construction.cost',
@@ -536,7 +536,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.recycling.bonus.title', 'Recycling bonus')}</strong>
+            <strong>{t('help.development.recyclingBonus', 'Recycling bonus')}</strong>
             <br />
             {t(
               'tuto.recycling.bonus',
@@ -563,7 +563,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.recycling.bonus.title', 'Recycling bonus')}</strong>
+            <strong>{t('help.development.recyclingBonus', 'Recycling bonus')}</strong>
             <br />
             {t('tuto.recycling.bonus.energy', "It's a good thing: we lacked one Energy to build the Industrial Complex!")}
           </>
@@ -698,7 +698,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.victory.points.title', 'Victory points')}</strong>
+            <strong>{t('help.development.victoryPoints', 'Victory points')}</strong>
             <br />
             {t('tuto.victory.points', 'At this location, you can see that the Propaganda Center earns 1 victory point at the end of the game, if built.')}
           </>
@@ -874,7 +874,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.recycling.bonus.title', 'Recycling bonus')}</strong>
+            <strong>{t('help.development.recyclingBonus', 'Recycling bonus')}</strong>
             <br />
             {t(
               'tuto.recycling.bonus.gold',
@@ -1185,7 +1185,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.materials.production.title', 'Materials production')}</strong>
+            <strong>{t('production.materials', 'Materials production')}</strong>
             <br />
             {t('tuto.materials.production', 'All players start by producing Materials. You produce 3 of them, which are available here.')}
           </>
@@ -1334,7 +1334,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.construction.bonus.title', 'Construction bonus')}</strong>
+            <strong>{t('help.development.constructionBonus', 'Construction bonus')}</strong>
             <br />
             {t(
               'tuto.construction.bonus',
@@ -1395,7 +1395,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.energy.production.title', 'Energy production')}</strong>
+            <strong>{t('production.energy', 'Energy production')}</strong>
             <br />
             {t(
               'tuto.energy.production',
@@ -1458,7 +1458,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.science.production.title', 'Science production')}</strong>
+            <strong>{t('production.science', 'Science production')}</strong>
             <br />
             {t(
               'tuto.science.production',
@@ -1500,7 +1500,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.gold.production.title', 'Gold production')}</strong>
+            <strong>{t('production.gold', 'Gold production')}</strong>
             <br />
             {t('tuto.gold.production', 'You produce 2 Gold (one thanks to your Empire and one thanks to the Industrial Complex).')}
           </>
@@ -1574,7 +1574,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.gold.production.title', 'Gold production')}</strong>
+            <strong>{t('production.gold', 'Gold production')}</strong>
             <br />
             {t('tuto.gold.production.late', 'Your new Gold production comes too late for this round, but will benefit you in future rounds.')}
           </>
@@ -1594,7 +1594,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.construction.bonus.title', 'Construction bonus')}</strong>
+            <strong>{t('help.development.constructionBonus', 'Construction bonus')}</strong>
             <br />
             {t(
               'tuto.construction.bonus.general',
@@ -1657,7 +1657,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <strong>{t('tuto.exploration.production.title', 'Exploration production')}</strong>
+            <strong>{t('production.exploration', 'Exploration production')}</strong>
             <br />
             {t('tuto.exploration.production', 'You do not produce any Exploration. Validate now to proceed to the next round.')}
           </>

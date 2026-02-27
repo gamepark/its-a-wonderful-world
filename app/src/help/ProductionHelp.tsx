@@ -42,11 +42,11 @@ type ProductionHelpConfig = {
 }
 
 const productionConfigs: Record<number, ProductionHelpConfig> = {
-  [Resource.Materials]: { resource: Resource.Materials, titleKey: 'help.production.Materials.title', titleDefault: 'Materials Production', resourceName: 'Materials', order: 1, character: 'financier' },
-  [Resource.Energy]: { resource: Resource.Energy, titleKey: 'help.production.Energy.title', titleDefault: 'Energy Production', resourceName: 'Energy', order: 2, character: 'general' },
-  [Resource.Science]: { resource: Resource.Science, titleKey: 'help.production.Science.title', titleDefault: 'Science Production', resourceName: 'Science', order: 3, character: 'choice' },
-  [Resource.Gold]: { resource: Resource.Gold, titleKey: 'help.production.Gold.title', titleDefault: 'Gold Production', resourceName: 'Gold', order: 4, character: 'financier' },
-  [Resource.Exploration]: { resource: Resource.Exploration, titleKey: 'help.production.Exploration.title', titleDefault: 'Exploration Production', resourceName: 'Exploration', order: 5, character: 'general' }
+  [Resource.Materials]: { resource: Resource.Materials, titleKey: 'production.materials', titleDefault: 'Materials production', resourceName: 'Materials', order: 1, character: 'financier' },
+  [Resource.Energy]: { resource: Resource.Energy, titleKey: 'production.energy', titleDefault: 'Energy production', resourceName: 'Energy', order: 2, character: 'general' },
+  [Resource.Science]: { resource: Resource.Science, titleKey: 'production.science', titleDefault: 'Science production', resourceName: 'Science', order: 3, character: 'choice' },
+  [Resource.Gold]: { resource: Resource.Gold, titleKey: 'production.gold', titleDefault: 'Gold production', resourceName: 'Gold', order: 4, character: 'financier' },
+  [Resource.Exploration]: { resource: Resource.Exploration, titleKey: 'production.exploration', titleDefault: 'Exploration production', resourceName: 'Exploration', order: 5, character: 'general' }
 }
 
 function SupremacyStatus({ resource }: { resource: Resource }) {

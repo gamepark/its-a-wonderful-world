@@ -73,7 +73,7 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
       </>}
 
       {details.production && <>
-        <h3 css={sectionTitleCss}>{t('help.development.production', 'Production')}</h3>
+        <h3 css={sectionTitleCss}>{t('Production')}</h3>
         <div css={iconRowCss}>
           <ProductionIcons production={details.production} />
         </div>
@@ -282,7 +282,7 @@ function ProductionDescription({ production }: { production: Production }) {
 function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints }) {
   const { t } = useTranslation()
   if (typeof victoryPoints === 'number') {
-    return <div><strong>{victoryPoints}</strong> {t('help.development.vp', 'VP')}</div>
+    return <div><strong>{victoryPoints}</strong> {t('help.development.victoryPoints', 'Victory points')}</div>
   }
   const combo = victoryPoints as ComboVictoryPoints
   const items = Array.isArray(combo.per) ? combo.per : [combo.per]
@@ -323,20 +323,20 @@ function getDevelopmentTypeName(t: (key: string, defaultValue: string) => string
   }
 }
 
-function getResourceName(t: (key: string, defaultValue: string) => string, resource: Resource): string {
+function getResourceName(t: (key: string) => string, resource: Resource): string {
   switch (resource) {
     case Resource.Materials:
-      return t('help.resource.materials', 'Materials')
+      return t('Materials')
     case Resource.Energy:
-      return t('help.resource.energy', 'Energy')
+      return t('Energy')
     case Resource.Science:
-      return t('help.resource.science', 'Science')
+      return t('Science')
     case Resource.Gold:
-      return t('help.resource.gold', 'Gold')
+      return t('Gold')
     case Resource.Exploration:
-      return t('help.resource.exploration', 'Exploration')
+      return t('Exploration')
     case Resource.Krystallium:
-      return t('help.resource.krystallium', 'Krystallium')
+      return t('Krystallium')
   }
 }
 
