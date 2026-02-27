@@ -205,7 +205,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
           type: LocationType.ConstructionCardCost,
           parent: cardIndex,
           x: space
-        })
+        }, 1)
       )
     }
     return result
@@ -358,6 +358,9 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         // Award construction bonuses
         const development = card.id.front as Development
         consequences.push(...this.getConstructionBonusMoves(development, player))
+
+        // Remember to check unplaceable resources after the card has moved and bonuses are resolved
+        this.memorize(Memory.CheckUnplaceableResources, player)
       } else {
         // Card not complete yet - check if any available resources can no longer be placed
         consequences.push(...this.getUnplaceableResourceMoves(player))
