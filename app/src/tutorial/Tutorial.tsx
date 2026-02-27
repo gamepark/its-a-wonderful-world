@@ -54,6 +54,13 @@ const placeResource =
     cardFront(game, MaterialType.DevelopmentCard, move.location.parent!) === dev &&
     (space === undefined || move.location.x === space)
 
+const placeResourceOrAll =
+  (dev: Development, space?: number): Filter =>
+  (move, game) =>
+    placeResource(dev, space)(move, game) ||
+    (isCustomMoveType(CustomMoveType.PlaceResources)(move) &&
+      cardFront(game, MaterialType.DevelopmentCard, move.data as number) === dev)
+
 const buildCard =
   (dev: Development): Filter =>
   (move, game) =>
@@ -904,7 +911,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
         ],
         highlight: true
       }),
-      move: { player: me, filter: placeResource(Development.PropagandaCenter, 0) }
+      move: { player: me, filter: placeResourceOrAll(Development.PropagandaCenter, 0) }
     },
 
     // 48 - Yellow cube is there
@@ -975,7 +982,7 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
             .filter<CardId>((item) => item.id.front === Development.IndustrialComplex)
         ]
       }),
-      move: { player: me, filter: placeResource(Development.IndustrialComplex, 3) }
+      move: { player: me, filter: placeResourceOrAll(Development.IndustrialComplex, 3) }
     },
 
     // 51 - Recycle Zeppelin
