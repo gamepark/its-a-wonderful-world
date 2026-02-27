@@ -76,7 +76,7 @@ export const TowerOfBabel: DevelopmentDetails = {
   type: Discovery,
   constructionCost: { [Exploration]: 5 },
   recyclingBonus: Exploration,
-  production: { [Exploration]: 2 },
+  production: { [Krystallium]: 2 },
   victoryPoints: 2
 }
 
