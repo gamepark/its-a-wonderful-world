@@ -128,7 +128,7 @@ gameAnimations.configure(isOtherPlayerDraftCard).skip()
 
 // Skip animations for cards moving to another player's area (construction, constructed, etc.)
 const isCardToOtherPlayerArea = (move: any, context: MaterialContext) => {
-  if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return false
+  if (!isMoveItemType(MaterialType.DevelopmentCard)(move) && !isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move)) return false
   return move.location?.player !== undefined && move.location.player !== getViewPlayer(context)
 }
 gameAnimations.configure(isCardToOtherPlayerArea).skip()
