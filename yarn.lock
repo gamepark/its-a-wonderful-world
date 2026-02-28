@@ -1090,8 +1090,8 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": "npm:^7.2.0"
     "@fortawesome/free-solid-svg-icons": "npm:^7.2.0"
     "@fortawesome/react-fontawesome": "npm:^3.2.0"
-    "@gamepark/react-game": "npm:^7.4.0"
-    "@gamepark/rules-api": "npm:^7.4.0"
+    "@gamepark/react-game": "npm:^7.4.1"
+    "@gamepark/rules-api": "npm:^7.4.1"
     "@types/node": "npm:^25.3.1"
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
@@ -1118,7 +1118,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@gamepark/its-a-wonderful-world@workspace:rules"
   dependencies:
-    "@gamepark/rules-api": "npm:^7.4.0"
+    "@gamepark/rules-api": "npm:^7.4.1"
     es-toolkit: "npm:^1.44.0"
     vitest: "npm:^4.0.18"
   peerDependencies:
@@ -1154,7 +1154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gamepark/react-game@npm:^7.4.0":
+"@gamepark/react-game@npm:^7.4.1":
   version: 7.4.1
   resolution: "@gamepark/react-game@npm:7.4.1"
   dependencies:
@@ -1194,7 +1194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gamepark/rules-api@npm:^7.4.0":
+"@gamepark/rules-api@npm:^7.4.1":
   version: 7.4.1
   resolution: "@gamepark/rules-api@npm:7.4.1"
   peerDependencies:

@@ -1,7 +1,7 @@
 {
   "name": "@gamepark/its-a-wonderful-world-app",
   "private": true,
-  "version": "3.0.2",
+  "version": "3.0.3",
   "type": "module",
   "description": "The user interface of It's a Wonderful World adaptation for Game Park",
   "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
