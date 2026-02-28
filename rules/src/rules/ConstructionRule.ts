@@ -368,28 +368,9 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     }
 
     if (isMoveItemType(MaterialType.ResourceCube)(move)) {
-      // Check if resource was placed on empire card
       if (move.location.type === LocationType.EmpireCardResources) {
         const player = move.location.player as Empire
-
-        const empireResources = this.material(MaterialType.ResourceCube).location(LocationType.EmpireCardResources).player(player)
-
-        // If there are 5 or more cubes, transform 5 into 1 krystallium
-        if (empireResources.length >= 5) {
-          const cubesToDelete = empireResources.limit(5)
-          consequences.push(cubesToDelete.deleteItemsAtOnce())
-
-          // Create 1 krystallium in the krystallium stock
-          consequences.push(
-            this.material(MaterialType.ResourceCube).createItem({
-              id: Resource.Krystallium,
-              location: {
-                type: LocationType.KrystalliumStock,
-                player
-              }
-            })
-          )
-        }
+        consequences.push(...this.getKrystalliumConversionMoves(player))
       }
     }
 
@@ -402,11 +383,14 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       }
     }
 
-    // After a resource is created in AvailableResources, check if it can be placed anywhere
+    // After a resource is created, handle consequences based on destination
     if (isCreateItem(move) && move.itemType === MaterialType.ResourceCube) {
       if (move.item.location?.type === LocationType.AvailableResources) {
         const player = move.item.location.player as Empire
         consequences.push(...this.getUnplaceableResourceMoves(player))
+      } else if (move.item.location?.type === LocationType.EmpireCardResources) {
+        const player = move.item.location.player as Empire
+        consequences.push(...this.getKrystalliumConversionMoves(player))
       }
     }
 
@@ -439,6 +423,18 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     }
 
     return moves
+  }
+
+  private getKrystalliumConversionMoves(player: Empire): MaterialMove[] {
+    const empireResources = this.material(MaterialType.ResourceCube).location(LocationType.EmpireCardResources).player(player)
+    if (empireResources.length < 5) return []
+    return [
+      empireResources.limit(5).deleteItemsAtOnce(),
+      this.material(MaterialType.ResourceCube).createItem({
+        id: Resource.Krystallium,
+        location: { type: LocationType.KrystalliumStock, player }
+      })
+    ]
   }
 
   /**
