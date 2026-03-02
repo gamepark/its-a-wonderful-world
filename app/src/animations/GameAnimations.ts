@@ -44,7 +44,7 @@ const isMyPassSend = and(isRule(RuleId.PassCards), (move, context) => {
 })
 gameAnimations
   .configure(isMyPassSend)
-  .duration(1000)
+  .duration(1200)
   .trajectory((context) => {
     const { nextPlayer } = getPassNeighbors(context)
     return {
@@ -62,7 +62,7 @@ const isMyPassReceive = and(isRule(RuleId.PassCards), (move, context) => {
 })
 gameAnimations
   .configure(isMyPassReceive)
-  .duration(1000)
+  .duration(1200)
   .postMove()
   .trajectory((context) => {
     const { prevPlayer } = getPassNeighbors(context)
@@ -87,7 +87,7 @@ const isOtherPlayerReveal = (move: any, context: MaterialContext) => {
 }
 gameAnimations
   .configure(isOtherPlayerReveal)
-  .duration(2000)
+  .duration(2200)
   .trajectory({
     waypoints: [
       { at: 0, locator: onPlayerPanelLocator, location: (item) => ({ player: item.location.player, rotation: true }) },
@@ -179,10 +179,21 @@ const isCreateKrystallium = (move: MaterialMove) =>
   isCreateItemType(MaterialType.ResourceCube)(move) && move.item?.location?.type === LocationType.KrystalliumStock
 gameAnimations.configure(isCreateKrystallium).duration(300)
 
+// Skip animations when connected player places cubes or characters on a construction card
+const isMyPlaceOnConstruction = (move: MaterialMove, context: MaterialContext) => {
+  if (!isMoveItemType(MaterialType.ResourceCube)(move) && !isMoveItemType(MaterialType.CharacterToken)(move)) return false
+  if (move.location?.type !== LocationType.ConstructionCardCost) return false
+  return move.location?.player === undefined
+    ? context.rules.material(MaterialType.DevelopmentCard).getItem(move.location.parent!).location?.player === context.player
+    : move.location.player === context.player
+}
+gameAnimations.configure(isMyPlaceOnConstruction).skip()
+
 // Viewed player animations (other-player skip rules above take priority)
 gameAnimations.configure(isCreateItemType(MaterialType.ResourceCube)).duration(200)
 gameAnimations.configure(isDeleteItemType(MaterialType.ResourceCube)).duration(200)
 gameAnimations.configure(isDeleteItemTypeAtOnce(MaterialType.ResourceCube)).duration(300)
 gameAnimations.configure(isMoveItemType(MaterialType.ResourceCube)).duration(200)
 gameAnimations.configure(isMoveItemType(MaterialType.DevelopmentCard)).duration(500)
+gameAnimations.configure(isMoveItemType(MaterialType.CharacterToken)).duration(200)
 gameAnimations.configure(isCreateItemType(MaterialType.CharacterToken)).duration(500)
