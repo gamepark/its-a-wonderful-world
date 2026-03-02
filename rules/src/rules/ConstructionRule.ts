@@ -342,6 +342,8 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
       const player = card.location.player as Empire
 
+      const development = card.id.front as Development
+
       // Check if card is now complete
       if (this.getRemainingCostForCard(cardIndex).length === 0) {
         // Card is complete - move to constructed developments
@@ -363,14 +365,14 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         }
 
         // Award construction bonuses
-        const development = card.id.front as Development
         consequences.push(...this.getConstructionBonusMoves(development, player))
+      }
 
-        // Remember to check unplaceable resources after the card has moved and bonuses are resolved
-        this.memorize(Memory.CheckUnplaceableResources, player)
-      } else {
-        // Card not complete yet - check if any available resources can no longer be placed
-        consequences.push(...this.getUnplaceableResourceMoves(player))
+      // In both cases: only check resources of the color of the slot just covered
+      const space = move.location.x as number
+      const coveredRequired = getCost(development)[space]
+      if (isResource(coveredRequired)) {
+        consequences.push(...this.getUnplaceableMovesForResource(player, coveredRequired))
       }
     }
 
@@ -429,6 +431,27 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       }
     }
 
+    return moves
+  }
+
+  private getUnplaceableMovesForResource(player: Empire, resource: Resource): MaterialMove[] {
+    if (this.canResourceBePlaced(player, resource)) return []
+    const moves: MaterialMove[] = []
+    const available = this.material(MaterialType.ResourceCube).location(LocationType.AvailableResources).player(player)
+    for (const idx of available.getIndexes()) {
+      const item = available.getItem(idx)
+      if ((item.id as Resource) === resource) {
+        const quantity = item.quantity ?? 1
+        for (let i = 0; i < quantity; i++) {
+          moves.push(
+            this.material(MaterialType.ResourceCube).index(idx).moveItem({
+              type: LocationType.EmpireCardResources,
+              player
+            }, 1)
+          )
+        }
+      }
+    }
     return moves
   }
 
