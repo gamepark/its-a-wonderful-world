@@ -272,11 +272,18 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
 
       // If card is being recycled (moved to Discard), create recycling bonus resource
       if (move.location.type === LocationType.Discard && player !== undefined) {
-        consequences.push(...this.getRecyclingMoves(move.itemIndex))
-      }
-
-      // Remember the player so afterItemMove can check unplaceable resources once the card has moved
-      if (move.location.type !== LocationType.ConstructedDevelopments && player !== undefined) {
+        const recyclingMoves = this.getRecyclingMoves(move.itemIndex)
+        consequences.push(...recyclingMoves)
+        // If recycling creates a resource in AvailableResources, the isCreateItem handler will
+        // check for unplaceable resources with the correct post-move state. Don't double-trigger.
+        const createsAvailableResource = recyclingMoves.some(
+          (m) => isCreateItem(m) && m.item?.location?.type === LocationType.AvailableResources
+        )
+        if (!createsAvailableResource) {
+          this.memorize(Memory.CheckUnplaceableResources, player)
+        }
+      } else if (move.location.type !== LocationType.ConstructedDevelopments && player !== undefined) {
+        // Remember the player so afterItemMove can check unplaceable resources once the card has moved
         this.memorize(Memory.CheckUnplaceableResources, player)
       }
     }
