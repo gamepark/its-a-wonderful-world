@@ -14,6 +14,10 @@ class ConstructedDevelopmentsLocator extends ListLocator<Empire, MaterialType, L
     return item.location.player !== currentView
   }
 
+  getPositionDependencies(location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
+    return { count: super.getPositionDependencies(location, context), moveUp: shouldMoveUpEmpire(context) }
+  }
+
   // Constructed developments are positioned above the empire card
   getCoordinates(_location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
     const baseY = empireCardY - 7.4

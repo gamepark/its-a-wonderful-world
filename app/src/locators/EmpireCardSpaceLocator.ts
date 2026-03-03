@@ -29,6 +29,10 @@ export function shouldMoveUpEmpire(context: MaterialContext<Empire, MaterialType
 class EmpireCardSpaceLocator extends Locator<Empire, MaterialType, LocationType> {
   location = { type: LocationType.EmpireCardSpace }
 
+  getPositionDependencies(_location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
+    return shouldMoveUpEmpire(context)
+  }
+
   getCoordinates(_location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
     const y = shouldMoveUpEmpire(context) ? empireCardY - moveUpOffset : empireCardY
     return { x: empireCardX, y, z: 0 }

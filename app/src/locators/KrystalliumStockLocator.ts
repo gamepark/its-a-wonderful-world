@@ -18,6 +18,10 @@ class KrystalliumStockLocator extends ListLocator<Empire, MaterialType, Location
     return item.location.player !== currentView
   }
 
+  getPositionDependencies(location: Location<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {
+    return { count: super.getPositionDependencies(location, context), moveUp: shouldMoveUpEmpire(context) }
+  }
+
   getCoordinates(_location: Location<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {
     // Position to the left of the empire card, stacked from bottom to top
     const cubeWidth = resourceCubeDescription.width

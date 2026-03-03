@@ -87,6 +87,10 @@ class PlayerCharactersLocator extends DeckLocator<Empire, MaterialType, Location
     return item.location.player !== currentView
   }
 
+  getPositionDependencies(_location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
+    return shouldMoveUpEmpire(context)
+  }
+
   getCoordinates(location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>): Coordinates {
     const character = location.id as Character
     const x = character === Character.Financier ? empireCardX - 2 : empireCardX + 2

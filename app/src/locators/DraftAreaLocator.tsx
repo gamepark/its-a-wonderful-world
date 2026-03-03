@@ -50,9 +50,13 @@ class DraftAreaLocator extends ListLocator<Empire, MaterialType, LocationType> {
     return item.location.player !== currentView
   }
 
+  getPositionDependencies(location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
+    const ruleId = context.rules.game.rule?.id as RuleId | undefined
+    const isDraft = ruleId !== undefined && ruleId < RuleId.Planning
+    return { count: super.getPositionDependencies(location, context), isDraft }
+  }
+
   getCoordinates(_location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
-    // During Planning and Production phases, position draft area lower (1em above table bottom)
-    // Table yMax = 22, card height = 10, padding = 0.7*2, so center at yMax - 1 - height/2
     const ruleId = context.rules.game.rule?.id as RuleId | undefined
     const isDraftPhase = ruleId !== undefined && ruleId < RuleId.Planning
 

@@ -66,6 +66,10 @@ class ConstructionAreaLocator extends ListLocator<Empire, MaterialType, Location
     return item.location.player !== currentView
   }
 
+  getPositionDependencies(location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
+    return { count: super.getPositionDependencies(location, context), isDraft: isDraftPhase(context) }
+  }
+
   getCoordinates(_location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
     // During Planning and Production phases, position construction area above draft area
     if (isDraftPhase(context)) {
