@@ -396,7 +396,8 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     if (isCreateItem(move) && move.itemType === MaterialType.ResourceCube) {
       if (move.item.location?.type === LocationType.AvailableResources) {
         const player = move.item.location.player as Empire
-        consequences.push(...this.getUnplaceableResourceMoves(player))
+        const resource = move.item.id as Resource
+        consequences.push(...this.getUnplaceableMovesForResource(player, resource))
       } else if (move.item.location?.type === LocationType.EmpireCardResources) {
         const player = move.item.location.player as Empire
         consequences.push(...this.getKrystalliumConversionMoves(player))
