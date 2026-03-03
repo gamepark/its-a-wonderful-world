@@ -61,6 +61,7 @@ export class PlayerHandLocator extends HandLocator<Empire, MaterialType, Locatio
   }
 
   getHoverTransform(item: MaterialItem<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>): string[] {
+    if (item.location.player !== context.player) return []
     return ['translateZ(10em)', 'translateY(-5em)', `rotateZ(${-this.getItemRotateZ(item, context)}${this.rotationUnit})`, 'scale(2)']
   }
 }
