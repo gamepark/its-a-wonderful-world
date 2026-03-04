@@ -22,7 +22,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@fortawesome/react-fontawesome": "^3.2.0",
-    "@gamepark/react-game": "^7.5.0",
+    "@gamepark/react-game": "^7.5.1",
     "@gamepark/rules-api": "^7.5.0",
     "es-toolkit": "^1.44.0",
     "i18next": "^25.8.13",
