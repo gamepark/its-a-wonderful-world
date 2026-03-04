@@ -7,6 +7,7 @@ import { Development } from '@gamepark/its-a-wonderful-world/material/Developmen
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { DevelopmentCardHelp } from '../help/DevelopmentCardHelp'
+import { DevelopmentCardHelpDisplay } from '../help/DevelopmentCardHelpDisplay'
 
 // Import card back images
 import DevelopmentBack from '../images/developments/development-back.jpg'
@@ -171,6 +172,7 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
   borderRadius = 0.3
 
   help = DevelopmentCardHelp
+  helpDisplay = DevelopmentCardHelpDisplay
 
   canLongClick(move: MaterialMove<Empire, MaterialType, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {
     return isCustomMoveType(CustomMoveType.PlaceResources)(move) && move.data === context.index
