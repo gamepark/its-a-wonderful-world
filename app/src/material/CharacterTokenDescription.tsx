@@ -9,6 +9,7 @@ import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
 import { ItemContext, ItemMenuButton, MaterialContext, TokenDescription } from '@gamepark/react-game'
 import { isCreateItem, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { Trans } from 'react-i18next'
+import { CharacterTokenHelp } from '../help/CharacterTokenHelp'
 
 // Import character token images
 import Financier from '../images/characters/financier.jpg'
@@ -22,6 +23,8 @@ export class CharacterTokenDescription extends TokenDescription<Empire, Material
   width = 2.5
   height = 2.5
   borderRadius = 1.25
+
+  help = CharacterTokenHelp
 
   images = {
     [Character.Financier]: Financier,

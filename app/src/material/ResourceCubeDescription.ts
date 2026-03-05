@@ -1,5 +1,6 @@
-import { TokenDescription } from '@gamepark/react-game'
 import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
+import { TokenDescription } from '@gamepark/react-game'
+import { ResourceCubeHelp } from '../help/ResourceCubeHelp'
 
 // Import cube images
 import MaterialsCube from '../images/resources/materials-cube.png'
@@ -16,6 +17,8 @@ import KrystalliumCube from '../images/resources/krytallium-cube.png'
 export class ResourceCubeDescription extends TokenDescription {
   width = 0.93
   height = 0.9
+
+  help = ResourceCubeHelp
 
   images = {
     [Resource.Materials]: MaterialsCube,
