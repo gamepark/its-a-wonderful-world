@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
-import { useFocusContext, useRules } from '@gamepark/react-game'
-import { MaterialRules } from '@gamepark/rules-api'
+import { useFocusContext, usePlay, useRules } from '@gamepark/react-game'
+import { MaterialMoveBuilder, MaterialRules } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
 import circleMetal from '../images/circle-metal.png'
 import titleBlue from '../images/title-blue.png'
@@ -36,12 +36,14 @@ export const PhaseIndicator = () => {
   const phase = getPhaseFromRuleId(ruleId)
   const { focus } = useFocusContext()
   const playDown = focus?.highlight === true
+  const play = usePlay()
+  const openHelp = (ruleId: RuleId) => play(MaterialMoveBuilder.displayRulesHelp(ruleId), { transient: true })
 
   return (
     <div css={[containerStyle, playDown && playDownStyle]}>
-      <div css={[phaseStyle, draftStyle, phase === Phase.Draft && currentPhase]}><span>{t('Draft')}</span></div>
-      <div css={[phaseStyle, planningStyle, phase === Phase.Planning && currentPhase]}><span>{t('Planning')}</span></div>
-      <div css={[phaseStyle, productionStyle, phase === Phase.Production && currentPhase]}><span>{t('Production')}</span></div>
+      <div css={[phaseStyle, draftStyle, phase === Phase.Draft && currentPhase]} onClick={() => openHelp(RuleId.ChooseDevelopmentCard)}><span>{t('Draft')}</span></div>
+      <div css={[phaseStyle, planningStyle, phase === Phase.Planning && currentPhase]} onClick={() => openHelp(RuleId.Planning)}><span>{t('Planning')}</span></div>
+      <div css={[phaseStyle, productionStyle, phase === Phase.Production && currentPhase]} onClick={() => openHelp(RuleId.MaterialsProduction)}><span>{t('Production')}</span></div>
     </div>
   )
 }
@@ -70,6 +72,7 @@ const phaseStyle = css`
   font-weight: lighter;
   margin: 0;
   transform-origin: left;
+  cursor: pointer;
 
   &:after {
     position: absolute;
