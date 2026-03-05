@@ -504,6 +504,16 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       const remainingCost = this.getRemainingCostForCard(cardIndex)
       if (remainingCost.some((cost) => (isResource(cost.item) && cost.item === resource) || (resource === Resource.Krystallium && isResource(cost.item))))
         return true
+      // A space occupied by a Krystallium could be undone, so the resource is still placeable there
+      if (resource !== Resource.Krystallium) {
+        const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
+        const cost = getCost(card.id.front as Development)
+        const krystalliumCubes = this.getCubesOnCard(cardIndex).filter(item => item.id === Resource.Krystallium)
+        for (const cube of krystalliumCubes.getItems()) {
+          const space = cube.location.x ?? 0
+          if (isResource(cost[space]) && cost[space] === resource) return true
+        }
+      }
     }
 
     // Check draft area cards (all cost slots)
