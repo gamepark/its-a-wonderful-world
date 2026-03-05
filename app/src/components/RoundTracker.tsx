@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Memory } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldMemory'
-import { useFocusContext, useRules } from '@gamepark/react-game'
-import { MaterialRules } from '@gamepark/rules-api'
+import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
+import { useFocusContext, usePlay, useRules } from '@gamepark/react-game'
+import { MaterialMoveBuilder, MaterialRules } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
 import roundTrackerRecto from '../images/round-tracker-recto.png'
 import roundTrackerVerso from '../images/round-tracker-verso.png'
@@ -21,9 +22,13 @@ export const RoundTracker = () => {
   const round = rules?.remind<number>(Memory.Round) ?? 1
   const { focus } = useFocusContext()
   const playDown = focus?.highlight === true
+  const play = usePlay()
 
   return (
-    <div css={[containerStyle, playDown && playDownStyle]}>
+    <div
+      css={[containerStyle, playDown && playDownStyle]}
+      onClick={() => play(MaterialMoveBuilder.displayRulesHelp(RuleId.ChooseDevelopmentCard), { transient: true })}
+    >
       <img
         alt={t('Round-tracker token')}
         src={round % 2 ? roundTrackerRecto : roundTrackerVerso}
@@ -43,6 +48,7 @@ const containerStyle = css`
   left: ${x - xMin}em;
   top: ${y - yMin}em;
   transform: translate(-50%, -50%);
+  cursor: pointer;
 `
 
 const roundTrackerStyle = css`
