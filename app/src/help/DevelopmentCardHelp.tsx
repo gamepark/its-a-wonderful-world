@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import { Character, isCharacter } from '@gamepark/its-a-wonderful-world/material/Character'
 import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
-import { Development, getDevelopmentDetails } from '@gamepark/its-a-wonderful-world/material/Development'
+import { Development, getDevelopmentDetails, warAndPeaceDevelopmentCardIds } from '@gamepark/its-a-wonderful-world/material/Development'
 import { DevelopmentType } from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
@@ -14,7 +14,7 @@ import { MaterialHelpProps, Picture, PlayMoveButton, useLegalMoves, usePlayerId,
 import { isCustomMoveType, isMoveItemType, MaterialMove, MaterialRules, MoveItem } from '@gamepark/rules-api'
 import { ReactElement } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { characterIcons, developmentTypeIcons, resourceIcons } from '../panels/Images'
+import { characterIcons, corruptionIcon, developmentTypeIcons, resourceIcons } from '../panels/Images'
 
 const developmentTypeColors: Record<DevelopmentType, string> = {
   [DevelopmentType.Structure]: '#888',
@@ -79,7 +79,7 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
           <div css={iconRowCss}>
             <ProductionIcons production={details.production} />
           </div>
-          <ProductionDescription production={details.production} />
+          <ProductionDescription production={details.production} development={development} />
         </>
       )}
 
@@ -244,31 +244,56 @@ function ProductionIcons({ production }: { production: Production }) {
   ]
   for (const key of resourceOrder) {
     const count = (production as any)[key] ?? 0
-    for (let i = 0; i < count; i++) {
-      if (isCharacter(key)) {
-        icons.push(<Picture key={`${key}-${i}`} src={characterIcons[key]} css={roundIconCss} />)
-      } else {
-        icons.push(<Picture key={`${key}-${i}`} src={resourceIcons[key]} css={inlineIconCss} />)
+    if (count > 0) {
+      for (let i = 0; i < count; i++) {
+        if (isCharacter(key)) {
+          icons.push(<Picture key={`${key}-${i}`} src={characterIcons[key]} css={roundIconCss} />)
+        } else {
+          icons.push(<Picture key={`${key}-${i}`} src={resourceIcons[key]} css={inlineIconCss} />)
+        }
+      }
+    } else if (count < 0) {
+      for (let i = 0; i < -count; i++) {
+        icons.push(
+          <span key={`${key}-corrupt-${i}`} css={corruptionWrapperCss}>
+            <Picture src={resourceIcons[key as Resource]} css={inlineIconCss} />
+            <Picture src={corruptionIcon} css={corruptionOverlayCss} />
+          </span>
+        )
       }
     }
   }
   return <>{icons}</>
 }
 
-function ProductionDescription({ production }: { production: Production }) {
+function ProductionDescription({ production, development }: { production: Production; development: Development }) {
   const { t } = useTranslation()
-  if (isProductionFactor(production)) {
-    const typeName = getDevelopmentTypeName(t, production.factor)
-    return (
-      <p css={explanationCss}>
-        {t('help.development.production.factor', 'Produces 1 {resource} per {type} built.', {
-          resource: getResourceName(t, production.resource),
-          type: typeName
-        })}
-      </p>
-    )
-  }
-  return null
+  const isWarOrPeace = warAndPeaceDevelopmentCardIds.includes(development) && development !== Development.SecretForces
+  const hasCorruption = !isResource(production) && !isProductionFactor(production)
+    && Object.entries(production as { [key in Resource | Character]?: number }).some(([, v]) => v !== undefined && v < 0)
+
+  return (
+    <>
+      {isProductionFactor(production) && (
+        <p css={explanationCss}>
+          {t('help.development.production.factor', 'Produces 1 {resource} per {type} built.', {
+            resource: getResourceName(t, production.resource),
+            type: getDevelopmentTypeName(t, production.factor)
+          })}
+        </p>
+      )}
+      {hasCorruption && (
+        <p css={explanationCss}>
+          {t('help.development.production.corruption', 'Certain Corruption & Ascension cards produce Corruption. If you have any of these in your Empire, subtract the corrupted resources from your total production.')}
+        </p>
+      )}
+      {isWarOrPeace && (
+        <p css={explanationCss}>
+          {t('help.development.production.bonus', 'War or Peace campaign bonus cards produce Krystallium and character tokens during an additional production phase, after the Exploration production.')}
+        </p>
+      )}
+    </>
+  )
 }
 
 function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints }) {
@@ -450,4 +475,21 @@ const hintIconCss = css`
   width: 1em;
   height: 1.2em;
   object-fit: contain;
+`
+
+const corruptionWrapperCss = css`
+  position: relative;
+  display: inline-flex;
+  width: 1.5em;
+  height: 1.5em;
+`
+
+const corruptionOverlayCss = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1.5em;
+  height: 1.5em;
+  object-fit: contain;
+  opacity: 0.8;
 `
