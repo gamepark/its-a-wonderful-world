@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import { Character, isCharacter } from '@gamepark/its-a-wonderful-world/material/Character'
 import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
+import { DeckType } from '@gamepark/its-a-wonderful-world/material/DeckType'
 import { Development, getDevelopmentDetails, warAndPeaceDevelopmentCardIds } from '@gamepark/its-a-wonderful-world/material/Development'
 import { DevelopmentType } from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
@@ -10,11 +11,12 @@ import { isResource, Resource } from '@gamepark/its-a-wonderful-world/material/R
 import { isProductionFactor, Production } from '@gamepark/its-a-wonderful-world/Production'
 import { ConstructionRule } from '@gamepark/its-a-wonderful-world/rules/ConstructionRule'
 import { ComboVictoryPoints, VictoryPoints } from '@gamepark/its-a-wonderful-world/Scoring'
-import { MaterialHelpProps, Picture, PlayMoveButton, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
+import { MaterialHelpProps, Picture, PlayMoveButton, useLegalMoves, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { isCustomMoveType, isMoveItemType, MaterialMove, MaterialRules, MoveItem } from '@gamepark/rules-api'
 import { ReactElement } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { characterIcons, corruptionIcon, developmentTypeIcons, resourceIcons } from '../panels/Images'
+import { getDevelopmentTypeName, getResourceName } from './helpUtils'
 
 const developmentTypeColors: Record<DevelopmentType, string> = {
   [DevelopmentType.Structure]: '#888',
@@ -29,7 +31,7 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
   const { t } = useTranslation()
   const id = item.id as { front?: Development; back?: number } | undefined
   if (!id?.front) {
-    return <p>{t('help.development.hidden', 'Face-down Development card')}</p>
+    return <HiddenCardHelp item={item} />
   }
 
   const development = id.front
@@ -99,6 +101,66 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
   )
 }
 
+function HiddenCardHelp({ item }: { item: MaterialHelpProps['item'] }) {
+  const { t } = useTranslation()
+  const rules = useRules<MaterialRules>()
+  const locationType = item.location?.type
+  const player = item.location?.player
+  const playerName = usePlayerName(player)
+  const back = (item.id as { back?: number } | undefined)?.back
+  const playerCount = rules?.players.length ?? 2
+  const hasAscension = (rules?.material(MaterialType.DevelopmentCard).location(LocationType.AscensionDeck).length ?? 0) > 0
+    || rules?.material(MaterialType.DevelopmentCard).getItems().some(i => i.id?.back === DeckType.Ascension) === true
+
+  if (locationType === LocationType.Deck) {
+    const baseCards = !hasAscension
+      ? (playerCount === 2 ? 10 : 7)
+      : (playerCount === 2 ? 8 : playerCount === 7 ? 5 : 6)
+    return (
+      <>
+        <h2 css={titleCss('#666')}>{t('help.deck.title', 'Development card deck')}</h2>
+        <p>{t('help.deck.description', 'At the beginning of each round, {count} cards from this deck are dealt to each player.', { count: baseCards })}</p>
+      </>
+    )
+  }
+
+  if (locationType === LocationType.AscensionDeck || back === DeckType.Ascension) {
+    const ascensionCards = playerCount === 2 ? 4 : (playerCount <= 4 ? 3 : 2)
+    return (
+      <>
+        <h2 css={titleCss('#666')}>{t('help.deck.ascension.title', 'Corruption & Ascension card deck')}</h2>
+        <p>
+          {t(
+            'help.deck.ascension.description',
+            'At the beginning of each round, {count} cards from this deck are dealt to each player.',
+            { count: ascensionCards }
+          )}
+        </p>
+      </>
+    )
+  }
+
+  if (locationType === LocationType.PlayerHand && player !== undefined) {
+    return (
+      <>
+        <h2 css={titleCss('#666')}>{t('help.development.hidden.title', 'Development card')}</h2>
+        <p>{t('help.hidden.hand', 'This card is in the hand of {player}.', { player: playerName })}</p>
+      </>
+    )
+  }
+
+  if (locationType === LocationType.DraftArea && player !== undefined) {
+    return (
+      <>
+        <h2 css={titleCss('#666')}>{t('help.development.hidden.title', 'Development card')}</h2>
+        <p>{t('help.hidden.draft', 'This card is in the draft area of {player}.', { player: playerName })}</p>
+      </>
+    )
+  }
+
+  return <h2 css={titleCss('#666')}>{t('help.development.hidden.title', 'Development card')}</h2>
+}
+
 function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDialog: () => void }) {
   const { t } = useTranslation()
   const playerId = usePlayerId()
@@ -124,8 +186,8 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
   const placedResources =
     placeAllMove && constructionRule?.getPlaceResourcesMoves
       ? constructionRule
-          .getPlaceResourcesMoves(playerId, itemIndex)
-          .map((move) => rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource)
+        .getPlaceResourcesMoves(playerId, itemIndex)
+        .map((move) => rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource)
       : []
 
   const hasActions = selectMove || buildMove || recycleMove || constructMove || placeAllMove
@@ -269,8 +331,10 @@ function ProductionIcons({ production }: { production: Production }) {
 function ProductionDescription({ production, development }: { production: Production; development: Development }) {
   const { t } = useTranslation()
   const isWarOrPeace = warAndPeaceDevelopmentCardIds.includes(development) && development !== Development.SecretForces
-  const hasCorruption = !isResource(production) && !isProductionFactor(production)
-    && Object.entries(production as { [key in Resource | Character]?: number }).some(([, v]) => v !== undefined && v < 0)
+  const hasCorruption =
+    !isResource(production) &&
+    !isProductionFactor(production) &&
+    Object.entries(production as { [key in Resource | Character]?: number }).some(([, v]) => v !== undefined && v < 0)
 
   return (
     <>
@@ -284,12 +348,18 @@ function ProductionDescription({ production, development }: { production: Produc
       )}
       {hasCorruption && (
         <p css={explanationCss}>
-          {t('help.development.production.corruption', 'Certain Corruption & Ascension cards produce Corruption. If you have any of these in your Empire, subtract the corrupted resources from your total production.')}
+          {t(
+            'help.development.production.corruption',
+            'Certain Corruption & Ascension cards produce Corruption. If you have any of these in your Empire, subtract the corrupted resources from your total production.'
+          )}
         </p>
       )}
       {isWarOrPeace && (
         <p css={explanationCss}>
-          {t('help.development.production.bonus', 'War or Peace campaign bonus cards produce Krystallium and character tokens during an additional production phase, after the Exploration production.')}
+          {t(
+            'help.development.production.bonus',
+            'War or Peace campaign bonus cards produce Krystallium and character tokens during an additional production phase, after the Exploration production.'
+          )}
         </p>
       )}
     </>
@@ -327,39 +397,6 @@ function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints 
   )
 }
 
-function getDevelopmentTypeName(t: (key: string) => string, type: DevelopmentType): string {
-  switch (type) {
-    case DevelopmentType.Structure:
-      return t('Structure')
-    case DevelopmentType.Vehicle:
-      return t('Vehicle')
-    case DevelopmentType.Research:
-      return t('Research')
-    case DevelopmentType.Project:
-      return t('Project')
-    case DevelopmentType.Discovery:
-      return t('Discovery')
-    case DevelopmentType.Memorial:
-      return t('Memorial')
-  }
-}
-
-function getResourceName(t: (key: string) => string, resource: Resource): string {
-  switch (resource) {
-    case Resource.Materials:
-      return t('Materials')
-    case Resource.Energy:
-      return t('Energy')
-    case Resource.Science:
-      return t('Science')
-    case Resource.Gold:
-      return t('Gold')
-    case Resource.Exploration:
-      return t('Exploration')
-    case Resource.Krystallium:
-      return t('Krystallium')
-  }
-}
 
 // --- Styles ---
 

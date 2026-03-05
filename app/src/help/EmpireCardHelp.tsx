@@ -4,7 +4,6 @@ import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
 import { getPlayerName } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldOptions'
 import { Character, isCharacter } from '@gamepark/its-a-wonderful-world/material/Character'
 import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
-import { DevelopmentType } from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import { Empires } from '@gamepark/its-a-wonderful-world/material/Empires'
 import { EmpireSide } from '@gamepark/its-a-wonderful-world/material/EmpireSide'
 import { isResource, Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
@@ -15,6 +14,7 @@ import { isCustomMoveType } from '@gamepark/rules-api'
 import { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { characterIcons, corruptionIcon, developmentTypeIcons, resourceIcons } from '../panels/Images'
+import { getDevelopmentTypeName, getResourceName } from './helpUtils'
 
 type EmpireCardId = { empire: Empire; side: EmpireSide }
 
@@ -168,28 +168,6 @@ function EmpireVictoryPointsDisplay({ victoryPoints }: { victoryPoints: ComboVic
       </span>
     </div>
   )
-}
-
-function getDevelopmentTypeName(t: (key: string) => string, type: DevelopmentType): string {
-  switch (type) {
-    case DevelopmentType.Structure: return t('Structure')
-    case DevelopmentType.Vehicle: return t('Vehicle')
-    case DevelopmentType.Research: return t('Research')
-    case DevelopmentType.Project: return t('Project')
-    case DevelopmentType.Discovery: return t('Discovery')
-    case DevelopmentType.Memorial: return t('Memorial')
-  }
-}
-
-function getResourceName(t: (key: string) => string, resource: Resource): string {
-  switch (resource) {
-    case Resource.Materials: return t('Materials')
-    case Resource.Energy: return t('Energy')
-    case Resource.Science: return t('Science')
-    case Resource.Gold: return t('Gold')
-    case Resource.Exploration: return t('Exploration')
-    case Resource.Krystallium: return t('Krystallium')
-  }
 }
 
 const titleCss = css`
