@@ -7,6 +7,7 @@ import { EmpireSide } from '@gamepark/its-a-wonderful-world/material/EmpireSide'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { CardDescription, MaterialContext } from '@gamepark/react-game'
+import { EmpireCardHelp } from '../help/EmpireCardHelp'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -83,6 +84,8 @@ export class EmpireCardDescription extends CardDescription<Empire, MaterialType,
   width = 7
   height = (7 * 343) / 400 // ≈ 6
   borderRadius = 0.3
+
+  help = EmpireCardHelp
 
   // Flat images structure using computed keys
   images = {

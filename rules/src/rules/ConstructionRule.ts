@@ -163,6 +163,11 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       }
     }
 
+    // Custom move to place all available non-krystallium resources on empire card at once
+    if (availableResources.filter(item => item.id !== Resource.Krystallium).length > 0) {
+      moves.push(this.customMove(CustomMoveType.PlaceAllOnEmpire, playerId))
+    }
+
     return moves
   }
 
@@ -217,6 +222,25 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
       const player = card.location.player as Empire
       return this.getPlaceResourcesMoves(player, cardIndex)
+    }
+    if (isCustomMoveType(CustomMoveType.PlaceAllOnEmpire)(move)) {
+      const player = move.data as Empire
+      const moves: MaterialMove[] = []
+      const availableResources = this.material(MaterialType.ResourceCube).location(LocationType.AvailableResources).player(player)
+      for (const resourceIndex of availableResources.getIndexes()) {
+        const item = availableResources.getItem(resourceIndex)
+        if ((item.id as Resource) === Resource.Krystallium) continue
+        const quantity = item.quantity ?? 1
+        for (let i = 0; i < quantity; i++) {
+          moves.push(
+            this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
+              type: LocationType.EmpireCardResources,
+              player
+            }, 1)
+          )
+        }
+      }
+      return moves
     }
     return []
   }
