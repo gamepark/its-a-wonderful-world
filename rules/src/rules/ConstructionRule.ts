@@ -750,8 +750,8 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       charactersByType[item.id as Character].push({ index, remaining: item.quantity ?? 1 })
     }
 
-    // Track how much to delete from each index
-    const toDelete: Map<number, { type: MaterialType; quantity: number }> = new Map()
+    // Track how much to delete from each (materialType, index) pair
+    const toDelete: Map<string, { type: MaterialType; index: number; quantity: number }> = new Map()
 
     const useResource = (items: { index: number; remaining: number }[], materialType: MaterialType) => {
       if (items.length === 0) return false
@@ -761,11 +761,12 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         return useResource(items, materialType)
       }
       item.remaining--
-      const existing = toDelete.get(item.index)
+      const key = `${materialType}-${item.index}`
+      const existing = toDelete.get(key)
       if (existing) {
         existing.quantity++
       } else {
-        toDelete.set(item.index, { type: materialType, quantity: 1 })
+        toDelete.set(key, { type: materialType, index: item.index, quantity: 1 })
       }
       return true
     }
@@ -801,7 +802,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     }
 
     // Create delete moves
-    for (const [index, { type, quantity }] of toDelete) {
+    for (const [, { type, index, quantity }] of toDelete) {
       moves.push(this.material(type).index(index).deleteItem(quantity))
     }
 
