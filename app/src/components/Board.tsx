@@ -102,8 +102,9 @@ function ResourceCircle({ image, name, resource }: { image: string; name: string
   const helpText = useSupremacyHelpText(resource)
   const game = useGame<MaterialGame>()
   const playerId = usePlayerId<Empire>()
+  const viewedPlayer = game?.view ?? playerId
   const winners = game ? getSupremacyWinners(game, resource) : []
-  const hasMostProduction = playerId !== undefined && winners.includes(playerId)
+  const hasMostProduction = viewedPlayer !== undefined && winners.includes(viewedPlayer)
 
   return (
     <div css={circleContainerStyle}>
