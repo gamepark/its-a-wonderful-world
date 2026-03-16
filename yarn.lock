@@ -1090,7 +1090,7 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": "npm:^7.2.0"
     "@fortawesome/free-solid-svg-icons": "npm:^7.2.0"
     "@fortawesome/react-fontawesome": "npm:^3.2.0"
-    "@gamepark/react-game": "npm:^7.5.1"
+    "@gamepark/react-game": "npm:^7.5.12"
     "@gamepark/rules-api": "npm:^7.5.0"
     "@types/node": "npm:^25.3.1"
     "@types/react": "npm:^19.2.14"
@@ -1127,9 +1127,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gamepark/react-client@npm:^7.5.0":
-  version: 7.5.0
-  resolution: "@gamepark/react-client@npm:7.5.0"
+"@gamepark/react-client@npm:^7.5.2":
+  version: 7.5.2
+  resolution: "@gamepark/react-client@npm:7.5.2"
   dependencies:
     "@reduxjs/toolkit": "npm:^2.11.2"
     "@tanstack/react-query": "npm:^5.90.21"
@@ -1150,19 +1150,19 @@ __metadata:
     react-dom: ^19.2.4
     react-redux: ^9.2.0
     rxjs: ^7.8.2
-  checksum: 10c0/dc48e9284da8d33b30f840c77a536f9a82798991f9c03dfd174fef3a133d93a23a512eb5e682fc41cba3f57b9e2b25443ffde953b2682b3ea8b2ea2d9d42c13b
+  checksum: 10c0/919aaacfd09d20d41e3f67fc6129e5d99b582b3cb6f24b8cf2907a7f186079a22de790e8424e5d279e0c1188a025302d7366dd6b3990fbf8e0c9cfc0c06c590c
   languageName: node
   linkType: hard
 
-"@gamepark/react-game@npm:^7.5.1":
-  version: 7.5.1
-  resolution: "@gamepark/react-game@npm:7.5.1"
+"@gamepark/react-game@npm:^7.5.12":
+  version: 7.5.12
+  resolution: "@gamepark/react-game@npm:7.5.12"
   dependencies:
     "@datadog/browser-logs": "npm:^6.28.1"
     "@dnd-kit/modifiers": "npm:^9.0.0"
     "@gamepark/api-types": "npm:^1.0.0"
     "@gamepark/avataaars": "npm:^3.0.0"
-    "@gamepark/react-client": "npm:^7.5.0"
+    "@gamepark/react-client": "npm:^7.5.2"
     dayjs: "npm:^1.11.19"
     fscreen: "npm:^1.2.0"
     i18next-http-backend: "npm:^3.0.2"
@@ -1190,7 +1190,7 @@ __metadata:
     react-dom: 19.x
     react-i18next: 16.x
     react-redux: 9.x
-  checksum: 10c0/bf4f0b320e9738ba89a83b657b9e253063f39afb94e9aa90f349df1e4bd77b0098ddda73ae45994bf5b2f704978e16812518423416c5529e51d9dcc42b8442ac
+  checksum: 10c0/e852222329bab16cfc2711fb6b16ba99604e05461959124f3fb76c64df313a7212a517097efca7024012ce60ebf01ab03ae7f77be9cdadc31d2acfce11f8ce81
   languageName: node
   linkType: hard
 
