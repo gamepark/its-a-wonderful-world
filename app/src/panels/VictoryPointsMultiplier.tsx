@@ -58,7 +58,7 @@ const style = css`
 
 const numberStyle = css`
   background-image: url(${scoreIcon});
-  filter: drop-shadow(0 0 1px black);
+  filter: drop-shadow(0 0 0.1em black);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

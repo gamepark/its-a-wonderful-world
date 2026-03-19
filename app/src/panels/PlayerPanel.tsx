@@ -53,7 +53,7 @@ export const PlayerPanel: FC<Props> = ({
           {!gameOver && <PlayerTimer playerId={playerId} css={timerStyle} />}
         </h3>
         <PlayerResourceProduction playerId={playerId} small={small} />
-        {bestCombo && !gameOver && <VictoryPointsMultiplier combo={bestCombo} css={victoryPointsMultiplierStyle} />}
+        {bestCombo && <VictoryPointsMultiplier combo={bestCombo} css={victoryPointsMultiplierStyle} />}
         <PlayerConstructions playerId={playerId} />
       </div>
     </div>
@@ -66,7 +66,7 @@ const panelStyle = (empire: Empire) => css`
   background-image: url(${empireBackgrounds[empire]});
   background-size: cover;
   background-position: center;
-  border-radius: 3px;
+  border-radius: 0.3em;
 
   &:before {
     content: '';
@@ -77,7 +77,7 @@ const panelStyle = (empire: Empire) => css`
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 3px;
+    border-radius: 0.3em;
   }
 `
 

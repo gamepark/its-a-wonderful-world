@@ -81,7 +81,7 @@ const tokenContainer = css`
 const tokenImage = css`
   width: 100%;
   height: auto;
-  filter: drop-shadow(1px 1px 2px black);
+  filter: drop-shadow(0.1em 0.1em 0.2em black);
   border-radius: 50%;
 `
 

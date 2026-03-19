@@ -277,12 +277,12 @@ const buttonStyle = css`
 
   &:hover, &:focus {
     outline: 0;
-    transform: translateY(1px) scale(1.1);
+    transform: translateY(0.03em) scale(1.1);
     cursor: pointer;
   }
 
   &:active {
-    transform: translateY(1px);
+    transform: translateY(0.03em);
   }
 `
 
@@ -330,7 +330,7 @@ const extraContentWrapper = css`
   position: absolute;
   inset: 0;
   z-index: 10;
-  transform: translateZ(1px);
+  transform: translateZ(0.03em);
 `
 
 const placedItemStyle = css`

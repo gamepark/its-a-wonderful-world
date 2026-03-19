@@ -98,7 +98,7 @@ const buttonStyle = css`
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0.6em 1.5em rgba(0, 0, 0, 0.5);
   outline: 0;
   border-style: none;
 
@@ -141,7 +141,7 @@ const borderContainerStyle = css`
     top: 0;
     left: 0;
     width: 100%;
-    height: 2px;
+    height: 0.06em;
     background: linear-gradient(to left, rgba(8, 43, 43, 0), #26d9d9);
     animation: 2s ${animateTop} linear infinite;
   }
@@ -150,7 +150,7 @@ const borderContainerStyle = css`
     top: 0;
     right: 0;
     height: 100%;
-    width: 2px;
+    width: 0.06em;
     background: linear-gradient(to top, rgba(8, 43, 43, 0), #26d9d9);
     animation: 2s ${animateRight} linear -1s infinite;
   }
@@ -159,7 +159,7 @@ const borderContainerStyle = css`
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 2px;
+    height: 0.06em;
     background: linear-gradient(to right, rgba(8, 43, 43, 0), #26d9d9);
     animation: 2s ${animateBottom} linear infinite;
   }
@@ -168,7 +168,7 @@ const borderContainerStyle = css`
     top: 0;
     left: 0;
     height: 100%;
-    width: 2px;
+    width: 0.06em;
     background: linear-gradient(to bottom, rgba(8, 43, 43, 0), #26d9d9);
     animation: 2s ${animateLeft} linear -1s infinite;
   }

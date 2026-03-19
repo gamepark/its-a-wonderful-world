@@ -404,7 +404,7 @@ const titleCss = (color: string) => css`
   display: flex;
   align-items: center;
   gap: 0.3em;
-  border-bottom: 2px solid ${color};
+  border-bottom: 0.06em solid ${color};
   padding-bottom: 0.2em;
   margin: 0 !important;
 `

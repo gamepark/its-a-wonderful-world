@@ -42,7 +42,7 @@ const titleCss = css`
   display: flex;
   align-items: center;
   gap: 0.3em;
-  border-bottom: 2px solid #666;
+  border-bottom: 0.06em solid #666;
   padding-bottom: 0.2em;
   margin: 0 !important;
 `

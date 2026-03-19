@@ -62,10 +62,10 @@ class PlayerCharactersLocationDescription extends DropAreaDescription {
       color: white;
       opacity: 0.8;
       text-shadow:
-        2px 2px 0 #000,
-        -2px 2px 0 #000,
-        -2px -2px 0 #000,
-        2px -2px 0 #000;
+        0.06em 0.06em 0 #000,
+        -0.06em 0.06em 0 #000,
+        -0.06em -0.06em 0 #000,
+        0.06em -0.06em 0 #000;
     }
   `
 }

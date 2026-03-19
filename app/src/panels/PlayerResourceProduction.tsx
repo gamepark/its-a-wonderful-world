@@ -137,7 +137,7 @@ const productionStyle = (index: number) => {
       top: 5.5em;
       left: ${26 + index * 12}%;
       width: 11%;
-      filter: drop-shadow(1px 1px 3px black);
+      filter: drop-shadow(0.1em 0.1em 0.2em black);
     `
   } else {
     return css`
@@ -145,7 +145,7 @@ const productionStyle = (index: number) => {
       top: 9em;
       left: ${32 + (index - 6) * 12}%;
       width: 11%;
-      filter: drop-shadow(1px 1px 3px black);
+      filter: drop-shadow(0.03em 0.03em 0.09em black);
     `
   }
 }

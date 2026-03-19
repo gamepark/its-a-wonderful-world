@@ -65,7 +65,7 @@ const multiplierStyle = css`
   height: 40%;
   width: 100%;
   justify-content: center;
-  filter: drop-shadow(0 0 1px black);
+  filter: drop-shadow(0 0 0.1em black);
 
   & img {
     filter: none;

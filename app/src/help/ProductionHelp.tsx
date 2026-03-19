@@ -178,7 +178,7 @@ const titleCss = (color: string) => css`
   display: flex;
   align-items: center;
   gap: 0.5em;
-  border-bottom: 3px solid ${color};
+  border-bottom: 0.09em solid ${color};
   padding-bottom: 0.3em;
   margin: 0 !important;
 `

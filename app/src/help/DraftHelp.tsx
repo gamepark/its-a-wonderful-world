@@ -24,6 +24,6 @@ export function DraftHelp() {
 
 const titleCss = css`
   margin: 0 !important;
-  border-bottom: 2px solid #666;
+  border-bottom: 0.06em solid #666;
   padding-bottom: 0.2em;
 `

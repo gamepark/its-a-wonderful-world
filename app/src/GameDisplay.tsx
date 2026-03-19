@@ -33,5 +33,5 @@ export function GameDisplay() {
 }
 
 const tableBorder = css`
-  border: 1px solid white;
+  border: 0.03em solid white;
 `
