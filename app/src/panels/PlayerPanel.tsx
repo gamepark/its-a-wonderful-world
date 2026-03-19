@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
 import { getPlayerName } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldOptions'
 import { getBestVictoryPointsCombo } from '@gamepark/its-a-wonderful-world/Scoring'
-import { Avatar, PlayerTimer, useGame, usePlayer } from '@gamepark/react-game'
+import { Avatar, GamePoints, PlayerTimer, useGame, usePlayer } from '@gamepark/react-game'
 import { MaterialGame } from '@gamepark/rules-api'
 import { FC, HTMLAttributes, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -50,7 +50,7 @@ export const PlayerPanel: FC<Props> = ({
           <span css={[nameStyle, eliminated && eliminatedStyle]}>
             {playerInfo?.name || getPlayerName(playerId, t)}
           </span>
-          {!gameOver && <PlayerTimer playerId={playerId} css={timerStyle} />}
+          {gameOver ? <GamePoints playerId={playerId} css={timerStyle} /> : <PlayerTimer playerId={playerId} css={timerStyle} />}
         </h3>
         <PlayerResourceProduction playerId={playerId} small={small} />
         {bestCombo && <VictoryPointsMultiplier combo={bestCombo} css={victoryPointsMultiplierStyle} />}
