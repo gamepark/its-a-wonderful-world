@@ -11,7 +11,8 @@ const validateRules = [
   RuleId.EnergyProduction,
   RuleId.ScienceProduction,
   RuleId.GoldProduction,
-  RuleId.ExplorationProduction
+  RuleId.ExplorationProduction,
+  RuleId.KrystalliumProduction
 ]
 
 export const ValidateButton = () => {
