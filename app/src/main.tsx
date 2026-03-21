@@ -10,6 +10,7 @@ import { App } from './App'
 import { RulesHelp } from './help/RulesHelp'
 import { Locators } from './locators/Locators'
 import { Material, materialI18n } from './material/Material'
+import { ItsAWonderfulWorldScoring } from './scoring/ItsAWonderfulWorldScoring'
 import { Tutorial } from './tutorial/Tutorial'
 import { ai } from './tutorial/TutorialAI'
 
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
       locators={Locators}
       animations={gameAnimations}
       rulesHelp={RulesHelp}
+      scoring={new ItsAWonderfulWorldScoring()}
       tutorial={new Tutorial()}
       ai={ai}
     >
