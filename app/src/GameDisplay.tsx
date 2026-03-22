@@ -1,6 +1,6 @@
 import { pointerWithin } from '@dnd-kit/core'
 import { css } from '@emotion/react'
-import { GameTable, GameTableNavigation } from '@gamepark/react-game'
+import { DevToolsHub, GameTable, GameTableNavigation } from '@gamepark/react-game'
 import { Board } from './components/Board'
 import { PhaseIndicator } from './components/PhaseIndicator'
 import { PlanningButtons } from './components/PlanningButtons'
@@ -27,6 +27,7 @@ export function GameDisplay() {
         <PlanningButtons />
         <ValidateButton />
         <Board />
+        {process.env.NODE_ENV === 'development' && <DevToolsHub fabBottom="calc(1em + 6em * 1.7)" />}
       </GameTable>
     </>
   )
