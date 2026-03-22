@@ -107,8 +107,10 @@ export class ItsAWonderfulWorldRules
     const card = this.material(MaterialType.DevelopmentCard).getItem(move.location.parent!)
     if (card.location.type !== LocationType.ConstructionArea) return false
     if (move.itemType === MaterialType.CharacterToken) return true
-    const cube = this.material(move.itemType).getItem<Resource>(move.itemIndex)
-    return cube.id === Resource.Krystallium
+    const cube = this.material(move.itemType).location(
+      (l) => l.type === LocationType.ConstructionCardCost && l.parent === move.location.parent && l.x === move.location.x
+    )
+    return cube.length > 0 && cube.getItem<Resource>()?.id === Resource.Krystallium
   }
 
   giveTime(player: Empire): number {
