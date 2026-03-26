@@ -14,6 +14,8 @@ import { ItsAWonderfulWorldScoring } from './scoring/ItsAWonderfulWorldScoring'
 import { Tutorial } from './tutorial/Tutorial'
 import { ai } from './tutorial/TutorialAI'
 
+Error.stackTraceLimit = 30
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GameProvider
