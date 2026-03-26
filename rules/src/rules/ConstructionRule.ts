@@ -146,6 +146,29 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       }
     }
 
+    // Player can move Krystallium cubes back from construction cards to stock
+    for (const cardIndex of constructionArea.getIndexes()) {
+      moves.push(
+        ...this.getCubesOnCard(cardIndex)
+          .filter((item) => item.id === Resource.Krystallium)
+          .moveItems({ type: LocationType.KrystalliumStock, player: playerId })
+      )
+    }
+
+    // Player can move character tokens back from construction cards to their area
+    for (const cardIndex of constructionArea.getIndexes()) {
+      for (const tokenIndex of this.getCharactersOnCard(cardIndex).getIndexes()) {
+        const token = this.getCharactersOnCard(cardIndex).getItem(tokenIndex)
+        moves.push(
+          this.material(MaterialType.CharacterToken).index(tokenIndex).moveItem({
+            type: LocationType.PlayerCharacters,
+            player: playerId,
+            id: token.id
+          })
+        )
+      }
+    }
+
     // Player can place available resources on empire card (except krystallium which stays on empire)
     moves.push(
       ...availableResources

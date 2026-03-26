@@ -5,7 +5,7 @@ import { Development, getConstructionSpaceLocation, getCost, getRemainingCost } 
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { isResource, Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
-import { MaterialHelpProps, Picture, useLegalMoves, usePlay, usePlayerId, useRules, useUndo } from '@gamepark/react-game'
+import { MaterialHelpProps, Picture, useAnimations, useLegalMoves, usePlay, usePlayerId, useRules } from '@gamepark/react-game'
 import { isMoveItem, isMoveItemType, MaterialMove, MaterialRules, MoveItem } from '@gamepark/rules-api'
 import { Fragment } from 'react'
 import buttonArrow from '../images/button-arrow.png'
@@ -40,9 +40,13 @@ const costSpaceDeltaY = (column: number, index: number) => index * 0.93 + (colum
 export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
   const playerId = usePlayerId()
   const rules = useRules<MaterialRules>()!
-  const legalMoves = useLegalMoves()
+  const legalMoves = useLegalMoves<MaterialMove>()
   const play = usePlay()
-  const [undo, canUndo] = useUndo<MaterialMove>()
+  const animations = useAnimations<MoveItem>(({ move }) =>
+    isMoveItem(move) &&
+    (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
+    move.location.type !== LocationType.ConstructionCardCost
+  )
 
   if (itemIndex === undefined) return null
   if (item.location?.type !== LocationType.ConstructionArea) return null
@@ -51,30 +55,49 @@ export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
   if (!id?.front) return null
   const development = id.front
 
+  // Track items being animated away from this card (to avoid flicker)
+  const animatingAwaySpaces = new Set(
+    animations
+      .map(({ move }) => rules.material(move.itemType).getItem(move.itemIndex))
+      .filter(item => item?.location?.type === LocationType.ConstructionCardCost && item?.location?.parent === itemIndex)
+      .map(item => item.location.x as number)
+  )
+
   // Get the cost and figure out which spaces are filled
   const cost = getCost(development)
   const filledSpaces: (Resource | Character | undefined)[] = Array(cost.length).fill(undefined)
   const cubes = rules.material(MaterialType.ResourceCube).location(LocationType.ConstructionCardCost).parent(itemIndex).getItems()
   for (const cube of cubes) {
+    if (animatingAwaySpaces.has(cube.location.x ?? 0)) continue
     filledSpaces[cube.location.x ?? 0] = cube.id as Resource
   }
   for (const token of rules.material(MaterialType.CharacterToken).location(LocationType.ConstructionCardCost).parent(itemIndex).getItems()) {
+    if (animatingAwaySpaces.has(token.location.x ?? 0)) continue
     filledSpaces[token.location.x ?? 0] = token.id as Character
   }
 
-  // Render placed items on the card, with undo capability for krystallium and character tokens
+  // Render placed items on the card, with remove buttons for krystallium and character tokens
   const isMyCard = item.location?.player === playerId
-  const placedItems: { space: number; icon: string; isRound: boolean; undoable: boolean }[] = []
+  const removeMoves = isMyCard ? legalMoves.filter((move): move is MoveItem =>
+    isMoveItem(move) &&
+    (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
+    rules.material(move.itemType).getItem(move.itemIndex)?.location?.type === LocationType.ConstructionCardCost &&
+    rules.material(move.itemType).getItem(move.itemIndex)?.location?.parent === itemIndex &&
+    move.location.type !== LocationType.ConstructionCardCost
+  ) : []
+
+  const placedItems: { space: number; icon: string; isRound: boolean; removeMove?: MoveItem }[] = []
   for (let space = 0; space < filledSpaces.length; space++) {
     const placed = filledSpaces[space]
     if (placed === undefined) continue
-    const isUndoable = isMyCard && (isCharacter(placed) || placed === Resource.Krystallium) && canUndo(move =>
-      isMoveItem(move) && move.location.type === LocationType.ConstructionCardCost && move.location.parent === itemIndex && move.location.x === space
-    )
+    const removeMove = removeMoves.find(move => {
+      const moveItem = rules.material(move.itemType).getItem(move.itemIndex)
+      return moveItem?.location?.x === space
+    })
     if (isCharacter(placed)) {
-      placedItems.push({ space, icon: characterIcons[placed], isRound: true, undoable: isUndoable })
+      placedItems.push({ space, icon: characterIcons[placed], isRound: true, removeMove })
     } else {
-      placedItems.push({ space, icon: cubeImages[placed], isRound: false, undoable: isUndoable })
+      placedItems.push({ space, icon: cubeImages[placed], isRound: false, removeMove })
     }
   }
 
@@ -93,22 +116,20 @@ export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
 
   return (
     <div css={extraContentWrapper}>
-      {placedItems.map(({ space, icon, isRound, undoable }) => {
+      {placedItems.map(({ space, icon, isRound, removeMove }) => {
         const { column, index } = getConstructionSpaceLocation(development, space)
         const pos = getPlacedItemPosition(column, index)
-        if (undoable) {
+        if (removeMove) {
           const buttonPos = getButtonPosition(column, index)
           const arrowCss = column === 1 ? leftArrowCss : rightArrowCss
           return (
-            <Fragment key={`undo-${space}`}>
+            <Fragment key={`remove-${space}`}>
               <div css={[placedItemStyle, pos]}>
                 <Picture src={icon} css={isRound ? placedRoundStyle : placedCubeStyle} />
               </div>
               <button
                 css={[buttonStyle, buttonPos, arrowCss]}
-                onClick={() => undo(move =>
-                  isMoveItem(move) && move.location.type === LocationType.ConstructionCardCost && move.location.parent === itemIndex && move.location.x === space
-                )}
+                onClick={() => play(removeMove)}
               >
                 <Picture src={icon} css={isRound ? roundIconStyle : iconStyle} />
               </button>

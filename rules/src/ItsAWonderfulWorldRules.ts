@@ -1,9 +1,7 @@
 import {
-  Action,
   CompetitiveScore,
   hideFront,
   hideFrontToOthers,
-  isMoveItem,
   MaterialGame,
   MaterialItem,
   MaterialMove,
@@ -14,7 +12,6 @@ import { Empire } from './Empire'
 import { Memory } from './ItsAWonderfulWorldMemory'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
-import { Resource } from './material/Resource'
 import { ChooseDevelopmentCardRule } from './rules/ChooseDevelopmentCardRule'
 import { DealDevelopmentCardsRule } from './rules/DealDevelopmentCardsRule'
 import { DiscardLeftoverCardsRule } from './rules/DiscardLeftoverCardsRule'
@@ -94,24 +91,6 @@ export class ItsAWonderfulWorldRules
     }
   }
 
-  canUndo(
-    action: Action<MaterialMove<Empire, MaterialType, LocationType>, Empire>,
-    consecutiveActions: Action<MaterialMove<Empire, MaterialType, LocationType>, Empire>[]
-  ): boolean {
-    if (this.isUndoablePlacement(action.move)) return true
-    return super.canUndo(action, consecutiveActions)
-  }
-
-  private isUndoablePlacement(move: MaterialMove<Empire, MaterialType, LocationType>): boolean {
-    if (!isMoveItem(move) || move.location.type !== LocationType.ConstructionCardCost) return false
-    const card = this.material(MaterialType.DevelopmentCard).getItem(move.location.parent!)
-    if (card.location.type !== LocationType.ConstructionArea) return false
-    if (move.itemType === MaterialType.CharacterToken) return true
-    const cube = this.material(move.itemType).location(
-      (l) => l.type === LocationType.ConstructionCardCost && l.parent === move.location.parent && l.x === move.location.x
-    )
-    return cube.length > 0 && cube.getItem<Resource>()?.id === Resource.Krystallium
-  }
 
   giveTime(player: Empire): number {
     const ruleId = this.game.rule?.id
