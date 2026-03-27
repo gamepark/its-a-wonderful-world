@@ -7,7 +7,6 @@
   "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
   "license": "ISC",
   "devDependencies": {
-    "@datadog/datadog-ci": "^5.9.1",
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
