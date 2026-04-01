@@ -58,7 +58,7 @@ export function EmpireCardHelp({ item, closeDialog }: MaterialHelpProps) {
         </div>
       )}
 
-      <h3 css={sectionTitleCss}>{t('Production')}</h3>
+      <h3 css={sectionTitleCss}>{t('phase.production')}</h3>
       <div css={iconRowCss}>
         <EmpireProductionIcons production={details.production} />
       </div>
@@ -66,7 +66,7 @@ export function EmpireCardHelp({ item, closeDialog }: MaterialHelpProps) {
 
       {details.krystallium !== undefined && details.krystallium > 0 && (
         <>
-          <h3 css={sectionTitleCss}>{t('Krystallium')}</h3>
+          <h3 css={sectionTitleCss}>{t('resource.krystallium')}</h3>
           <div css={iconRowCss}>
             {[...Array(details.krystallium)].map((_, i) => (
               <Picture key={i} src={resourceIcons[Resource.Krystallium]} css={inlineIconCss} />
@@ -162,7 +162,7 @@ function EmpireVictoryPointsDisplay({ victoryPoints }: { victoryPoints: ComboVic
       <span css={factorLabelCss}>
         {items.map(item =>
           isCharacter(item)
-            ? (item === Character.Financier ? t('Financier token') : t('General token'))
+            ? (item === Character.Financier ? t('character.financier') : t('character.general'))
             : getDevelopmentTypeName(t, item)
         ).join(' + ')}
       </span>

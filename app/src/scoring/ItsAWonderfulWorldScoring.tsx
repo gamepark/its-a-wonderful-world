@@ -75,10 +75,10 @@ export class ItsAWonderfulWorldScoring implements ScoringDescription<Empire, Its
       return <span css={totalHeaderStyle}><img src={scoreIcon} alt="Score" css={headerIconStyle} /> =</span>
     }
     if (key === TB1_KEY) {
-      return <Trans defaults="Tie-breaker #1: # of developments" />
+      return <Trans i18nKey="score.tiebreaker.developments" defaults="Tie-breaker #1: # of developments" />
     }
     if (key === TB2_KEY) {
-      return <Trans defaults="Tie-breaker #2: # of characters" />
+      return <Trans i18nKey="score.tiebreaker.characters" defaults="Tie-breaker #2: # of characters" />
     }
 
     // Combo key

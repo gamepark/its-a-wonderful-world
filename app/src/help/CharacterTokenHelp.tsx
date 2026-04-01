@@ -14,7 +14,7 @@ export function CharacterTokenHelp({ item }: MaterialHelpProps) {
     <>
       <h2 css={titleCss}>
         <Picture src={characterIcons[character]} css={titleIconCss} />
-        {isFinancier ? t('Financier token') : t('General token')}
+        {isFinancier ? t('character.financier') : t('character.general')}
       </h2>
 
       <h3 css={sectionTitleCss}>{t('help.character.obtain', 'How to obtain')}</h3>

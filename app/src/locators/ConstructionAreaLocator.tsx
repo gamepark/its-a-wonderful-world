@@ -126,7 +126,7 @@ const ConstructionAreaContent = () => {
 
   return (
     <span css={constructionAreaTextStyle}>
-      {t('Construction area')}
+      {t('ui.construction-area')}
     </span>
   )
 }

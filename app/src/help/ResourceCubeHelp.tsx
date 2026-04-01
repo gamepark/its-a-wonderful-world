@@ -7,12 +7,12 @@ import { useTranslation } from 'react-i18next'
 import { developmentTypeIcons, resourceIcons } from '../panels/Images'
 
 const resourceNames: Record<Resource, string> = {
-  [Resource.Materials]: 'Materials',
-  [Resource.Energy]: 'Energy',
-  [Resource.Science]: 'Science',
-  [Resource.Gold]: 'Gold',
-  [Resource.Exploration]: 'Exploration',
-  [Resource.Krystallium]: 'Krystallium'
+  [Resource.Materials]: 'resource.materials',
+  [Resource.Energy]: 'resource.energy',
+  [Resource.Science]: 'resource.science',
+  [Resource.Gold]: 'resource.gold',
+  [Resource.Exploration]: 'resource.exploration',
+  [Resource.Krystallium]: 'resource.krystallium'
 }
 
 const resourceToDevelopmentType: Partial<Record<Resource, DevelopmentType>> = {

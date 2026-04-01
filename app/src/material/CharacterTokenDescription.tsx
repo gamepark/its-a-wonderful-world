@@ -91,7 +91,7 @@ export class CharacterTokenDescription extends TokenDescription<Empire, Material
     if (!choiceMove) return null
 
     return (
-      <ItemMenuButton move={choiceMove} label={<Trans i18nKey="take" defaults="Take"/>} angle={0} radius={2}>
+      <ItemMenuButton move={choiceMove} label={<Trans i18nKey="ui.take" defaults="Take"/>} angle={0} radius={2}>
         <FontAwesomeIcon icon={faHandBackFist} />
       </ItemMenuButton>
     )

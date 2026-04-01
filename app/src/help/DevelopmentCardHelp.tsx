@@ -77,7 +77,7 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
 
       {details.production && (
         <>
-          <h3 css={sectionTitleCss}>{t('Production')}</h3>
+          <h3 css={sectionTitleCss}>{t('phase.production')}</h3>
           <div css={iconRowCss}>
             <ProductionIcons production={details.production} />
           </div>
@@ -390,7 +390,7 @@ function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints 
       )}
       <span css={factorLabelCss}>
         {items
-          .map((item) => (isCharacter(item) ? (item === Character.Financier ? t('Financier token') : t('General token')) : getDevelopmentTypeName(t, item)))
+          .map((item) => (isCharacter(item) ? (item === Character.Financier ? t('character.financier') : t('character.general')) : getDevelopmentTypeName(t, item)))
           .join(' + ')}
       </span>
     </div>

@@ -113,7 +113,7 @@ const DraftAreaContent = () => {
 
   return (
     <span css={draftAreaTextStyle}>
-      {t('Draft area')}
+      {t('ui.draft-area')}
     </span>
   )
 }

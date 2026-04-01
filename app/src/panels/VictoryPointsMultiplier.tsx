@@ -112,24 +112,24 @@ const quantityStyle = css`
 const getCharacterDescription = (t: TFunction, character: Character) => {
   switch (character) {
     case Character.Financier:
-      return t('Financier token')
+      return t('character.financier')
     case Character.General:
-      return t('General token')
+      return t('character.general')
   }
 }
 
 const getDevelopmentTypeDescription = (t: TFunction, developmentType: DevelopmentType) => {
   switch (developmentType) {
     case DevelopmentType.Structure:
-      return t('Structure')
+      return t('type.structure')
     case DevelopmentType.Vehicle:
-      return t('Vehicle')
+      return t('type.vehicle')
     case DevelopmentType.Research:
-      return t('Research')
+      return t('type.research')
     case DevelopmentType.Project:
-      return t('Project')
+      return t('type.project')
     case DevelopmentType.Discovery:
-      return t('Discovery')
+      return t('type.discovery')
     case DevelopmentType.Memorial:
       return 'Memorial'
   }

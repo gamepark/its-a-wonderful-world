@@ -21,7 +21,7 @@ export const DraftDirectionIndicator: FC<Props> = ({ clockwise, ...props }) => {
   return (
     <div
       css={[containerStyle, clockwise ? scrollDownAnimation : scrollUpAnimation]}
-      title={t('Draft direction')}
+      title={t('ui.draft-direction')}
       {...props}
     >
       <div css={sliderContent}>

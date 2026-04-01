@@ -36,7 +36,7 @@ export const PlanningButtons = () => {
         <span css={borderContainerStyle}>
           <span /><span /><span /><span />
         </span>
-        {t('Build all')}
+        {t('ui.build-all')}
       </button>
       <button
         css={buttonStyle}
@@ -46,7 +46,7 @@ export const PlanningButtons = () => {
         <span css={borderContainerStyle}>
           <span /><span /><span /><span />
         </span>
-        {t('Recycle all')}
+        {t('ui.recycle-all')}
       </button>
     </div>
   )

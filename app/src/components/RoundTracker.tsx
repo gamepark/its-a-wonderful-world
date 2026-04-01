@@ -30,7 +30,7 @@ export const RoundTracker = () => {
       onClick={() => play(MaterialMoveBuilder.displayRulesHelp(RuleId.ChooseDevelopmentCard), { transient: true })}
     >
       <img
-        alt={t('Round-tracker token')}
+        alt={t('ui.round-tracker')}
         src={round % 2 ? roundTrackerRecto : roundTrackerVerso}
         css={roundTrackerStyle}
       />

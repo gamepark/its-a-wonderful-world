@@ -42,7 +42,7 @@ export const PlayerPanel: FC<Props> = ({
         ) : (
           <img
             src={empireAvatars[playerId]}
-            alt={t('Player avatar')}
+            alt={t('ui.player-avatar')}
             css={fallbackAvatarStyle}
           />
         )}

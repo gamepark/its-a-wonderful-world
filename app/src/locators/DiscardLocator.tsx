@@ -40,7 +40,7 @@ class DiscardLocator extends DeckLocator<Empire, MaterialType, LocationType> {
 
 const DiscardContent = () => {
   const { t } = useTranslation()
-  return <span css={textStyle}>&rarr; {t('Recycle')}</span>
+  return <span css={textStyle}>&rarr; {t('ui.recycle')}</span>
 }
 
 const textStyle = css`

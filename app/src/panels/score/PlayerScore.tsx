@@ -40,7 +40,7 @@ export const PlayerScore = ({ playerId, displayScore, setDisplayScore, animation
         <button
           css={[arrowStyle, animation && fadeInAnimation, displayScore ? arrowStandardStyle : arrowReverseStyle]}
           onClick={() => setDisplayScore(!displayScore)}
-          title={displayScore ? t('Hide Scores') : t('Display Scores')}
+          title={displayScore ? t('ui.hide-scores') : t('ui.display-scores')}
         />
         <div css={[scorePartsWrapperStyle, animation && growAnimation, displayScore ? displayParts : hideParts]}>
           <div css={scorePartsInnerStyle}>
