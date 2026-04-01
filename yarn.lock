@@ -314,7 +314,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/core@npm:^6.3.1":
+"@dnd-kit/core@npm:~6.3.1":
   version: 6.3.1
   resolution: "@dnd-kit/core@npm:6.3.1"
   dependencies:
@@ -718,7 +718,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@gamepark/its-a-wonderful-world-app@workspace:app"
   dependencies:
-    "@dnd-kit/core": "npm:^6.3.1"
+    "@dnd-kit/core": "npm:~6.3.1"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/js": "npm:^10.0.1"
     "@fontsource/oswald": "npm:^5.2.8"
