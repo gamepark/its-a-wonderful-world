@@ -32,12 +32,12 @@ export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOption
   corruptionAndAscension: {
     label: (t) => t('c&a'),
     help: t => t('c&a.help'),
-    subscriberRequired: false
+    subscriberRequired: true
   },
   warAndPeace: {
     label: (t) => t('w&p'),
     help: t => t('w&p.help'),
-    subscriberRequired: false
+    subscriberRequired: true
   },
   empiresSide: {
     label: (t) => t('Empire cards side'),
