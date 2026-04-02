@@ -690,6 +690,15 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
         ),
         position: { x: -10, y: -21 }
       },
+      focus: (game) => ({
+        materials: [
+          this.material(game, MaterialType.DevelopmentCard)
+            .location(LocationType.DraftArea)
+            .player(me)
+            .filter<CardId>((item) => item.id.front === Development.PropagandaCenter)
+        ],
+        highlight: true
+      }),
       move: { player: me, filter: slateCard(Development.PropagandaCenter) }
     },
 
@@ -732,6 +741,15 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
         ),
         position: { x: -10, y: -23 }
       },
+      focus: (game) => ({
+        materials: [
+          this.material(game, MaterialType.DevelopmentCard)
+            .location(LocationType.DraftArea)
+            .player(me)
+            .filter<CardId>((item) => item.id.front === Development.HarborZone)
+        ],
+        highlight: true
+      }),
       move: { player: me, filter: slateCard(Development.HarborZone) }
     },
 
