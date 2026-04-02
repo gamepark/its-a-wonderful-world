@@ -127,11 +127,14 @@ const isOtherPlayerDraftCard = (move: any, context: MaterialContext) => {
 gameAnimations.configure(isOtherPlayerDraftCard).skip()
 
 // Skip reveal animation for the viewing player's own drafted card (they already see it)
+// But do NOT skip the auto-draft of the 7th card (card moving FROM hand TO draft area)
 const isMyReveal = (move: any, context: MaterialContext) => {
   if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return false
   if (move.location?.type !== LocationType.DraftArea) return false
   if (move.location?.rotation !== true) return false
-  return move.location?.player === context.player
+  if (move.location?.player !== context.player) return false
+  const item = context.rules.material(MaterialType.DevelopmentCard).getItem(move.itemIndex)
+  return item?.location?.type === LocationType.DraftArea
 }
 gameAnimations.configure(isMyReveal).skip()
 
