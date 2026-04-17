@@ -25,6 +25,7 @@ node_modules/
 # Claude Code temporary files
 tmpclaude-*
 
+# Yarn v2+/Berry
 .yarn/*
 !.yarn/cache
 !.yarn/patches
