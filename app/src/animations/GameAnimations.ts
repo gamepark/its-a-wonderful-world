@@ -14,6 +14,19 @@ export const gameAnimations = new MaterialGameAnimations()
 // Helper: get the player whose perspective we're viewing
 const getViewPlayer = (context: MaterialContext): Empire => context.rules.game.view ?? context.player ?? context.rules.players[0]
 
+// Helper: a location belongs to another player if its `player` field is set to one,
+// or if its parent (a development card) belongs to one. Returns false when ownership is unknown.
+const isLocationForOtherPlayer = (location: any, context: MaterialContext): boolean => {
+  if (!location) return false
+  const viewPlayer = getViewPlayer(context)
+  if (location.player !== undefined) return location.player !== viewPlayer
+  if (location.type === LocationType.ConstructionCardCost && location.parent !== undefined) {
+    const parent = context.rules.material(MaterialType.DevelopmentCard).getItem(location.parent)
+    return parent?.location?.player !== undefined && parent.location.player !== viewPlayer
+  }
+  return false
+}
+
 // Deal phase: only animate cards dealt to the viewing player
 const isDealToViewedHand = and(
   isRule(RuleId.DealDevelopmentCards),
@@ -145,28 +158,34 @@ const isCardToOtherPlayerArea = (move: any, context: MaterialContext) => {
 }
 gameAnimations.configure(isCardToOtherPlayerArea).skip()
 
-// Skip animations for cubes moved or created for other players
+// Skip animations for cubes moved or created for other players.
+// Covers destinations like ConstructionCardCost (no player on the location, owner is the parent card),
+// and also moves whose SOURCE is on another player's card (e.g. cube going back to stock from a hidden card).
 const isOtherPlayerCube = (move: any, context: MaterialContext) => {
   if (isMoveItemType(MaterialType.ResourceCube)(move)) {
-    return move.location?.player !== undefined && move.location.player !== getViewPlayer(context)
+    if (isLocationForOtherPlayer(move.location, context)) return true
+    const item = context.rules.material(MaterialType.ResourceCube).getItem(move.itemIndex)
+    return item ? isLocationForOtherPlayer(item.location, context) : false
   }
   if (isCreateItemType(MaterialType.ResourceCube)(move)) {
-    return move.item?.location?.player !== undefined && move.item.location.player !== getViewPlayer(context)
+    return isLocationForOtherPlayer(move.item?.location, context)
   }
   return false
 }
 gameAnimations.configure(isOtherPlayerCube).skip()
 
-// Character tokens: skip moves to other players' constructions, animate creates toward their panel
+// Character tokens: skip moves to/from other players' constructions, animate creates toward their panel
 const isOtherPlayerTokenMove = (move: MaterialMove, context: MaterialContext) => {
   if (!isMoveItemType(MaterialType.CharacterToken)(move)) return false
-  return move.location?.player !== undefined && move.location.player !== getViewPlayer(context)
+  if (isLocationForOtherPlayer(move.location, context)) return true
+  const item = context.rules.material(MaterialType.CharacterToken).getItem(move.itemIndex)
+  return item ? isLocationForOtherPlayer(item.location, context) : false
 }
 gameAnimations.configure(isOtherPlayerTokenMove).skip()
 
 const isOtherPlayerTokenCreate = (move: MaterialMove, context: MaterialContext) => {
   if (!isCreateItemType(MaterialType.CharacterToken)(move)) return false
-  return move.item?.location?.player !== undefined && move.item.location.player !== getViewPlayer(context)
+  return isLocationForOtherPlayer(move.item?.location, context)
 }
 gameAnimations
   .configure(isOtherPlayerTokenCreate)
