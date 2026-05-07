@@ -11,9 +11,10 @@ import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
 import {FailuresDialog, FullscreenDialog, Menu, useContrastTheme, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
 import {Header, ImagesLoader, LoadingScreen} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
+import {HTML5toTouch} from 'rdndmb-html5-to-touch'
 import {useEffect, useState} from 'react'
-import {DndProvider} from 'react-dnd-multi-backend'
-import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
+import {DndProvider} from 'react-dnd'
+import {MultiBackend} from 'react-dnd-multi-backend'
 import ConfirmPopup from './ConfirmPopup'
 import GameDisplay from './GameDisplay'
 import HeaderText from './HeaderText'
@@ -50,7 +51,7 @@ export default function App() {
     play(tellYouAreReadyMove(playerId))
   }
   return (
-    <DndProvider options={HTML5ToTouch}>
+    <DndProvider backend={MultiBackend} options={HTML5toTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedPlayer)]}/>
         <LoadingScreen author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} developer="Game Park"

@@ -29,3 +29,7 @@ yarn-error.log*
 
 # Visual Studio Code
 .vscode
+
+# Claude Code
+.claude/settings.local.json
+.claude/*.local.json

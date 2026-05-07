@@ -18,13 +18,13 @@
     "prepublishOnly": "tsc"
   },
   "peerDependencies": {
-    "@gamepark/rules-api": ">=5.23",
+    "@gamepark/rules-api": ">=5.24",
     "lodash": ">=4.17"
   },
   "devDependencies": {
-    "@gamepark/rules-api": "~5.23.0",
+    "@gamepark/rules-api": "~5.24.0",
     "@types/lodash": "^4.17.7",
-    "i18next": "^21.3.2",
+    "i18next": "^22.5.1",
     "lodash": "^4.17.21"
   }
 }

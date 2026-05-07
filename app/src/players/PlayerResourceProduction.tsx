@@ -1,12 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import {EmotionJSX} from '@emotion/react/types/jsx-namespace'
 import Resource, {resources} from '@gamepark/its-a-wonderful-world/material/Resource'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {getProductionAndCorruption} from '@gamepark/its-a-wonderful-world/Production'
 import {Picture} from '@gamepark/react-components'
-import {FC, HTMLAttributes} from 'react'
+import {FC, HTMLAttributes, ReactElement} from 'react'
 import {useTranslation} from 'react-i18next'
 import Images from '../material/Images'
 import {getDescription} from '../material/resources/ResourceCube'
@@ -54,7 +53,7 @@ export default function PlayerResourceProduction({player, small}: Props) {
   return (
     <>
       {Array.from(productionDisplay.entries()).flatMap(([resource, productionDisplay]) => {
-        const children: EmotionJSX.Element[] = []
+        const children: ReactElement[] = []
         if (productionDisplay.multiplier) {
           children.push(<Picture key={resource + 'Multiplied'} src={resourceIcon[resource]} draggable="false" alt={getDescription(t, resource)}
                                  css={productionStyle(productionDisplay.index!)}/>)

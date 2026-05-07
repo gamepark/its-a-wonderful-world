@@ -12,6 +12,10 @@ module.exports = (config, env) => {
       }
     }]
   })
+  config.module.rules.push({
+    test: /\.m?js$/,
+    resolve: {fullySpecified: false}
+  })
   return override(
     addWebpackPlugin(new ImageminWebpWebpackPlugin()),
     aliasDangerous(configPaths('./tsconfig.paths.json'))
