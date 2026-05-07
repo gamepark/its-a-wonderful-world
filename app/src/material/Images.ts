@@ -1,4 +1,3 @@
-import {isSafari} from 'react-device-detect'
 import boardCircleBlack from './board/board-circle-black.png'
 import boardCircleBlue from './board/board-circle-blue.png'
 import boardCircleGreen from './board/board-circle-green.png'
@@ -190,6 +189,8 @@ const Images = {
   energy, energyCube, exploration, explorationCube, gold, goldCube, krystallium, krystalliumCube, materials, materialsCube, science, scienceCube,
   coverArtwork, scoreBackground, scoreIcon
 }
+
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 
 if (!isSafari) {
   for (const image in Images) {

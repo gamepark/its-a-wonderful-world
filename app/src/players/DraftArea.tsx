@@ -53,7 +53,7 @@ export default function DraftArea({game, player}: Props) {
   const removeIndex = player.draftArea.findIndex(card => card === slatingForConstruction?.card)
   const chosenCard = choosingDevelopment ? isChosenDevelopmentCardVisible(choosingDevelopment) ? choosingDevelopment.card : true : player.chosenCard
   const canDrop = (monitor: DropTargetMonitor<DropItem>, card = monitor.getItem().card) => monitor.getItemType() === DragItemType.DEVELOPMENT_FROM_HAND
-    || (canUndo(slateForConstructionMove(playerId!, card)))
+    || (canUndo(move => isSlateForConstruction(move) && move.card === card))
   const [{dragItemType, isValidTarget, isOver}, ref] = useDrop({
     accept: [DragItemType.DEVELOPMENT_FROM_HAND, DragItemType.DEVELOPMENT_FROM_CONSTRUCTION_AREA],
     canDrop: (item: DropItem, monitor) => canDrop(monitor, item.card),

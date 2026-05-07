@@ -8,8 +8,10 @@ import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Develop
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Resource, {isResource} from '@gamepark/its-a-wonderful-world/material/Resource'
 import CompleteConstruction, {isCompleteConstruction} from '@gamepark/its-a-wonderful-world/moves/CompleteConstruction'
-import PlaceCharacter, {placeCharacterMove} from '@gamepark/its-a-wonderful-world/moves/PlaceCharacter'
-import {isPlaceResource, PlaceResourceOnConstruction, placeResourceOnConstructionMove} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
+import PlaceCharacter, {isPlaceCharacter, placeCharacterMove} from '@gamepark/its-a-wonderful-world/moves/PlaceCharacter'
+import {
+  isPlaceResource, isPlaceResourceOnConstruction, PlaceResourceOnConstruction, placeResourceOnConstructionMove
+} from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
 import Recycle, {isRecycle, recycleMove} from '@gamepark/its-a-wonderful-world/moves/Recycle'
 import SlateForConstruction, {isSlateForConstruction, slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
@@ -115,13 +117,14 @@ export default function ConstructionArea({game, gameOver, player}: Props) {
       )}
       {isPlayer(player) && !gameOver && construction.costSpaces.map((item, index) => {
         if (!item) return null
-        const move: PlaceResourceOnConstruction | PlaceCharacter = isResource(item) ?
-          placeResourceOnConstructionMove(player.empire, item, construction.card, index) :
-          placeCharacterMove(player.empire, item, construction.card, index)
-        if (!canUndo(move)) return null
+        const movePredicate = (move: any) => {
+          if (!isPlaceResourceOnConstruction(move) && !isPlaceCharacter(move)) return false
+          return move.playerId === player.empire && move.card === construction.card && move.space === index
+        }
+        if (!canUndo(movePredicate)) return null
         return (
           <button key={index} css={[itemButtonStyle, undoPlaceItemButton, itemButtonPosition(index)]}
-                  onClick={() => undo(move)}>
+                  onClick={() => undo(movePredicate)}>
             {isResource(item) ? <ResourceCube resource={item} css={buttonItemStyle}/> : <CharacterToken character={item} css={buttonItemStyle}/>}
           </button>
         )

@@ -2,7 +2,6 @@ import {css, keyframes, Theme} from '@emotion/react'
 import {numberOfCardsToDraft} from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorld'
 import EmpireName from '@gamepark/its-a-wonderful-world/material/EmpireName'
 import Images from '../material/Images'
-import {LightTheme} from '../Theme'
 
 export const screenRatio = 16 / 9
 export const boardWidth = 66
@@ -118,13 +117,13 @@ export const empireBackground: Record<EmpireName, string> = {
 }
 
 export const textColor = (theme: Theme) => css`
-  color: ${theme.color === LightTheme ? '#333' : '#FFF'};
-  fill: ${theme.color === LightTheme ? '#333' : '#FFF'};
+  color: ${theme.light ? '#333' : '#FFF'};
+  fill: ${theme.light ? '#333' : '#FFF'};
 `
 
 export const backgroundColor = (theme: Theme) => css`
   &:before {
-    background-color: ${theme.color === LightTheme ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 30, 0.7)'};
+    background-color: ${theme.light ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 30, 0.7)'};
     transition: background-color 1s ease-in;
   }
 `

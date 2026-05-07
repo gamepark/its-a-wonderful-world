@@ -18,7 +18,7 @@ import {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/Sl
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {TutorialDescription} from '@gamepark/react-client'
-import shuffle from 'lodash.shuffle'
+import {shuffle} from 'lodash'
 
 const harborZone = developmentCards.findIndex(development => development === HarborZone)
 const centerOfEarth = developmentCards.findIndex(development => development === CenterOfTheEarth)

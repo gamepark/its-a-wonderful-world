@@ -2,6 +2,7 @@
   "name": "@gamepark/its-a-wonderful-world",
   "version": "1.7.0",
   "description": "It's a Wonderful World rules for Game Park",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -12,14 +13,18 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@gamepark/rules-api": "~5.10.0"
-  },
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "tsc"
   },
+  "peerDependencies": {
+    "@gamepark/rules-api": ">=5.24",
+    "lodash": ">=4.17"
+  },
   "devDependencies": {
-    "i18next": "^20.2.4"
+    "@gamepark/rules-api": "~5.24.0",
+    "@types/lodash": "^4.17.7",
+    "i18next": "^22.5.1",
+    "lodash": "^4.17.21"
   }
 }

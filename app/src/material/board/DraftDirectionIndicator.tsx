@@ -2,7 +2,6 @@
 import {css, keyframes, useTheme} from '@emotion/react'
 import {FC, HTMLAttributes} from 'react'
 import {useTranslation} from 'react-i18next'
-import {LightTheme} from '../../Theme'
 import DownArrowIcon from '../../util/DownArrowIcon'
 import {headerHeight, playerPanelHeight, playerPanelMargin} from '../../util/Styles'
 import UpArrowIcon from '../../util/UpArrowIcon'
@@ -15,8 +14,8 @@ type Props = {
 export default function DraftDirectionIndicator({clockwise, players}: Props) {
   const {t} = useTranslation()
   const theme = useTheme()
-  const greenColor = theme.color === LightTheme ? 'forestgreen' : 'lightgreen'
-  const purpleColor = theme.color === LightTheme ? 'purple' : 'lightpink'
+  const greenColor = theme.light ? 'forestgreen' : 'lightgreen'
+  const purpleColor = theme.light ? 'purple' : 'lightpink'
   return (
     <>
       {[...Array(players - 1)].map((_, index) => clockwise ?

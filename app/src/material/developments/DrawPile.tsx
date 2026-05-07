@@ -3,7 +3,6 @@ import {css} from '@emotion/react'
 import GameView from '@gamepark/its-a-wonderful-world/GameView'
 import {developmentCards} from '@gamepark/its-a-wonderful-world/material/Developments'
 import {useTranslation} from 'react-i18next'
-import ReactTooltip from 'react-tooltip'
 import {cardHeight, cardStyle, cardWidth, headerHeight, topMargin} from '../../util/Styles'
 import DevelopmentCard from './DevelopmentCard'
 
@@ -24,10 +23,7 @@ export default function DrawPile({game}: Props) {
         box-shadow: 0 0 3px black;
       }
     `]}/>)}
-    <div css={drawPileTooltip} data-tip/>
-    <ReactTooltip type="warning" effect="solid" place="left">
-      <span>{t('Number of cards: {nbDeck}/{nbCards}', {nbDeck, nbCards})}  </span>
-    </ReactTooltip>
+    <div css={drawPileTooltip} title={t('Number of cards: {nbDeck}/{nbCards}', {nbDeck, nbCards})}/>
   </>
 }
 

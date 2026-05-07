@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
-import {useNow} from '@gamepark/react-client'
-import PlayerTime from '@gamepark/react-client/dist/Types/PlayerTime'
+import {PlayerTime, useNow} from '@gamepark/react-client'
 import {humanize} from '../util/TimeUtil'
 
 type Props = { time: PlayerTime }

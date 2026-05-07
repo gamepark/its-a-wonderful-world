@@ -8,7 +8,6 @@ import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {usePlayer} from '@gamepark/react-client'
 import {useTranslation} from 'react-i18next'
 import EmpireCard from './material/empires/EmpireCard'
-import {LightTheme} from './Theme'
 import Button from './util/Button'
 import {closePopupStyle, popupDarkStyle, popupLightStyle, popupOverlayStyle, popupPosition, popupStyle, showPopupOverlayStyle} from './util/Styles'
 
@@ -23,7 +22,7 @@ export default function WelcomePopup({player, close}: Props) {
   const playerInfo = usePlayer(player.empire)
   return (
     <div css={[popupOverlayStyle, showPopupOverlayStyle, style]} onClick={close}>
-      <div css={[popupStyle, popupPosition, css`width: 60%`, theme.color === LightTheme ? popupLightStyle : popupDarkStyle]}
+      <div css={[popupStyle, popupPosition, css`width: 60%`, theme.light ? popupLightStyle : popupDarkStyle]}
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={close}><FontAwesomeIcon icon={faTimes}/></div>
         <h2>{t('Welcome {playerName}', {playerName: playerInfo?.name})}</h2>

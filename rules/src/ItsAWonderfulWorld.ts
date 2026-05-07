@@ -1,5 +1,5 @@
-import {Action, Competitive, Eliminations, SecretInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
-import shuffle from 'lodash.shuffle'
+import {Action, Competitive, Eliminations, Rules, SecretInformation, TimeLimit, Undo} from '@gamepark/rules-api'
+import {shuffle} from 'lodash'
 import canUndo from './canUndo'
 import GameState from './GameState'
 import GameView from './GameView'
@@ -44,11 +44,11 @@ export const numberOfRounds = 4
 const defaultEmpireCardsSide = EmpireSide.A
 
 // noinspection JSUnusedGlobalSymbols
-export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move, EmpireName>
-  implements SecretInformation<GameState, GameView, Move, MoveView, EmpireName>,
+export default class ItsAWonderfulWorld extends Rules<GameState, Move, EmpireName>
+  implements SecretInformation<GameView, Move, MoveView, EmpireName>,
     Undo<GameState, Move, EmpireName>,
     Competitive<GameState, Move, EmpireName>,
-    Eliminations<GameState, Move, EmpireName>,
+    Eliminations<Move, EmpireName>,
     TimeLimit<GameState, Move, EmpireName> {
 
   constructor(state: GameState)
@@ -83,7 +83,12 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
     return isOver(this.state)
   }
 
-  getAutomaticMove(): Move | void {
+  getAutomaticMoves(): Move[] {
+    const move = this.getAutomaticMove()
+    return move ? [move] : []
+  }
+
+  getAutomaticMove(): Move | undefined {
     switch (this.state.phase) {
       case Phase.Draft:
         const anyPlayer = this.state.players.filter(player => !player.eliminated)[0]
@@ -136,41 +141,58 @@ export default class ItsAWonderfulWorld extends SimultaneousGame<GameState, Move
     return getLegalMoves(player, this.state.phase)
   }
 
-  play(move: Move) {
+  play(move: Move): Move[] {
     switch (move.type) {
       case MoveType.DealDevelopmentCards:
-        return dealDevelopmentCards(this.state)
+        dealDevelopmentCards(this.state)
+        break
       case MoveType.ChooseDevelopmentCard:
-        return chooseDevelopmentCard(this.state, move)
+        chooseDevelopmentCard(this.state, move)
+        break
       case MoveType.RevealChosenCards:
-        return revealChosenCards(this.state)
+        revealChosenCards(this.state)
+        break
       case MoveType.PassCards:
-        return passCards(this.state)
+        passCards(this.state)
+        break
       case MoveType.DiscardLeftoverCards:
-        return discardLeftOverCards(this.state)
+        discardLeftOverCards(this.state)
+        break
       case MoveType.StartPhase:
-        return startPhase(this.state, move)
+        startPhase(this.state, move)
+        break
       case MoveType.SlateForConstruction:
-        return slateForConstruction(this.state, move)
+        slateForConstruction(this.state, move)
+        break
       case MoveType.Recycle:
-        return recycle(this.state, move)
+        recycle(this.state, move)
+        break
       case MoveType.PlaceResource:
-        return placeResource(this.state, move)
+        placeResource(this.state, move)
+        break
       case MoveType.CompleteConstruction:
-        return completeConstruction(this.state, move)
+        completeConstruction(this.state, move)
+        break
       case MoveType.TransformIntoKrystallium:
-        return transformIntoKrystallium(this.state, move)
+        transformIntoKrystallium(this.state, move)
+        break
       case MoveType.TellYouAreReady:
-        return tellYouAreReady(this.state, move)
+        tellYouAreReady(this.state, move)
+        break
       case MoveType.Produce:
-        return produce(this.state, move)
+        produce(this.state, move)
+        break
       case MoveType.ReceiveCharacter:
-        return receiveCharacter(this.state, move)
+        receiveCharacter(this.state, move)
+        break
       case MoveType.PlaceCharacter:
-        return placeCharacter(this.state, move)
+        placeCharacter(this.state, move)
+        break
       case MoveType.Concede:
-        return concede(this.state, move)
+        concede(this.state, move)
+        break
     }
+    return []
   }
 
   getScore(empire: EmpireName): number {
@@ -283,7 +305,7 @@ function setupPlayer(empire: EmpireName, empireSide: EmpireSide = defaultEmpireC
   }
 }
 
-export function getPredictableAutomaticMoves(state: GameState | GameView): Move & MoveView | void {
+export function getPredictableAutomaticMoves(state: GameState | GameView): Move & MoveView | undefined {
   for (const player of state.players) {
     for (const construction of player.constructionArea) {
       if (construction.costSpaces.every(space => space !== null)) {
@@ -307,6 +329,7 @@ export function getPredictableAutomaticMoves(state: GameState | GameView): Move 
       }
     }
   }
+  return
 }
 
 export function getLegalMoves(player: Player, phase: Phase) {

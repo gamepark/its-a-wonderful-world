@@ -3,7 +3,7 @@ import {css} from '@emotion/react'
 import Development from '@gamepark/its-a-wonderful-world/material/Development'
 import {useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import {Swipeable} from 'react-swipeable'
+import {useSwipeable} from 'react-swipeable'
 import {cardHeight, cardWidth, popupBackgroundStyle} from '../../util/Styles'
 import Images from '../Images'
 import DevelopmentCard, {cardTitleFontSize} from './DevelopmentCard'
@@ -26,18 +26,22 @@ export default function DevelopmentCardsCatalog({initialIndex = 0, onClose, deve
   const discardLength = developments.length
   const disableLeftArrow = focusedIndex === 0
   const disableRightArrow = focusedIndex >= (developments.length - 1)
+  const swipeHandlers = useSwipeable({
+    trackMouse: true,
+    delta: 3,
+    onSwiping: event => setDeltaX(event.deltaX),
+    onSwiped: event => slide(event.deltaX, event.velocity)
+  })
   return (
     <>
       <div css={popupBackgroundStyle} onClick={onClose}/>
       {discardLength > 3 &&
       <button disabled={disableLeftArrow} css={[arrowStyle, leftArrowStyle]} onClick={() => slide(-manualShift, 3)} title={t('Swipe cards')}/>}
-      <Swipeable css={swipeZoneStyle} trackMouse={true} preventDefaultTouchmoveEvent={true} delta={3}
-                 onSwiping={event => setDeltaX(event.deltaX)}
-                 onSwiped={event => slide(event.deltaX, event.velocity)}>
+      <div {...swipeHandlers} css={swipeZoneStyle}>
         {developments.map((development, index) =>
           <DevelopmentCard key={index} development={development} css={[cardStyle, cardPosition(index, focusedIndex, deltaX), deltaX === 0 && cardTransition]}/>
         )}
-      </Swipeable>
+      </div>
       {discardLength > 3 &&
       <button disabled={disableRightArrow} css={[arrowStyle, rightArrowStyle]} onClick={() => slide(manualShift, 3)} title={t('Swipe cards')}/>}
     </>

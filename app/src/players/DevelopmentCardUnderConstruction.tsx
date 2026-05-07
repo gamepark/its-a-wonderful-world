@@ -11,11 +11,11 @@ import CompleteConstruction, {isCompleteConstruction} from '@gamepark/its-a-wond
 import MoveType from '@gamepark/its-a-wonderful-world/moves/MoveType'
 import MoveView from '@gamepark/its-a-wonderful-world/moves/MoveView'
 import PlaceCharacter, {isPlaceCharacter, placeCharacterMove} from '@gamepark/its-a-wonderful-world/moves/PlaceCharacter'
-import PlaceResource, {
+import {
   isPlaceResourceOnConstruction, PlaceResourceOnConstruction, placeResourceOnConstructionMove
 } from '@gamepark/its-a-wonderful-world/moves/PlaceResource'
 import Recycle, {isRecycle} from '@gamepark/its-a-wonderful-world/moves/Recycle'
-import SlateForConstruction, {slateForConstructionMove} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
+import SlateForConstruction, {isSlateForConstruction} from '@gamepark/its-a-wonderful-world/moves/SlateForConstruction'
 import Player from '@gamepark/its-a-wonderful-world/Player'
 import PlayerView from '@gamepark/its-a-wonderful-world/PlayerView'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
@@ -112,17 +112,18 @@ export default function DevelopmentCardUnderConstruction({game, gameOver, player
 
   const drop = (move: Recycle | CompleteConstruction | SlateForConstruction) => {
     if (isRecycle(move)) {
-      construction.costSpaces.forEach((item, index) => {
-        if (!item) return
-        const move: PlaceResource | PlaceCharacter = isResource(item) ?
-          placeResourceOnConstructionMove(player.empire, item, construction.card, index) :
-          placeCharacterMove(player.empire, item, construction.card, index)
-        if (canUndo(move)) {
-          undo(move)
+      construction.costSpaces.forEach((_, index) => {
+        const placeItemMove = (m: any) => {
+          if (!isPlaceResourceOnConstruction(m) && !isPlaceCharacter(m)) return false
+          return m.playerId === player.empire && m.card === construction.card && m.space === index
+        }
+        if (canUndo(placeItemMove)) {
+          undo(placeItemMove)
         }
       })
-      if (canUndo(slateForConstructionMove(player.empire, construction.card))) {
-        undo(slateForConstructionMove(player.empire, construction.card))
+      const slateMovePredicate = (m: any) => isSlateForConstruction(m) && m.playerId === player.empire && m.card === construction.card
+      if (canUndo(slateMovePredicate)) {
+        undo(slateMovePredicate)
       }
       play(move)
     } else if (isCompleteConstruction(move)) {
@@ -130,8 +131,8 @@ export default function DevelopmentCardUnderConstruction({game, gameOver, player
     } else {
       // First undo the item placed on the card if any
       const placeItemsOnCard = actions!.filter(action => action.playerId === player.empire && isPlaceItemOnCard(action.move, construction.card))
-      placeItemsOnCard.map(action => action.move).reverse().forEach(move => undo(move))
-      undo(move)
+      placeItemsOnCard.map(action => action.move).reverse().forEach(undoneMove => undo((m: any) => isPlaceItemOnCard(m, construction.card) && m.space === (undoneMove as any).space))
+      undo((m: any) => isSlateForConstruction(m) && m.playerId === player.empire && m.card === construction.card)
     }
   }
 
