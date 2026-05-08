@@ -47,7 +47,7 @@ export default function HeaderText({game, loading, validate}: Props) {
       setScoreSuspense(true)
     }
   }, [game, gameOver, setScoreSuspense])
-  if (loading) return <>{t('Game loading...')}</>
+  if (loading) return <>{t('Game loading...', {ns: 'common'})}</>
   if (gameOver) {
     if (scoreSuspense) return <>{t('Score calculation… Who will be the Supreme Leader?')}</>
     else return <>{getEndOfGameText(t, players, game!, empire)}</>

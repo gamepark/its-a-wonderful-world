@@ -6,11 +6,10 @@ import {createRoot} from 'react-dom/client'
 import ItsAWonderfulAnimations from './Animations'
 import App from './App'
 import ItsAWonderfulWorldView from './ItsAWonderfulWorldView'
-import translations from './translations.json'
 import ItsAWonderfulTutorial from './tutorial/Tutorial'
 import {ai} from './tutorial/TutorialAI.worker'
 
-setupTranslation(translations)
+setupTranslation('its-a-wonderful-world')
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

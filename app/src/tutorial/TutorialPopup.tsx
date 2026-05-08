@@ -84,7 +84,7 @@ export default function TutorialPopup({game, tutorial}: Props) {
           {currentMessage && <h2>{currentMessage.title(t)}</h2>}
           {currentMessage && <p>{currentMessage.text(t)}</p>}
           {tutorialIndex > 0 && <Button css={buttonStyle} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
-          <Button onClick={() => moveTutorial(1)}>{t('OK')}</Button>
+          <Button onClick={() => moveTutorial(1)}>{t('OK', {ns: 'common'})}</Button>
         </div>
       </div>
       {
@@ -102,7 +102,7 @@ export default function TutorialPopup({game, tutorial}: Props) {
           <div css={closePopupStyle} onClick={() => setHideThirdTurnInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
           <h2>{thirdTurnInfo.title(t)}</h2>
           <p>{thirdTurnInfo.text(t)}</p>
-          <Button onClick={() => setHideThirdTurnInfo(true)}>{t('OK')}</Button>
+          <Button onClick={() => setHideThirdTurnInfo(true)}>{t('OK', {ns: 'common'})}</Button>
         </div>
       }
       {
@@ -111,7 +111,7 @@ export default function TutorialPopup({game, tutorial}: Props) {
           <div css={closePopupStyle} onClick={() => setHideLastTurnInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
           <h2>{lastTurnInfo.title(t)}</h2>
           <p>{lastTurnInfo.text(t)}</p>
-          <Button onClick={() => setHideLastTurnInfo(true)}>{t('OK')}</Button>
+          <Button onClick={() => setHideLastTurnInfo(true)}>{t('OK', {ns: 'common'})}</Button>
         </div>
       }
       {
@@ -124,7 +124,7 @@ export default function TutorialPopup({game, tutorial}: Props) {
             <p>{tutorialEndGame.text(t)}</p>
           </>
           }
-          <Button css={buttonStyle} onClick={() => resetTutorial()}>{t('Restart the tutorial')}</Button>
+          <Button css={buttonStyle} onClick={() => resetTutorial()}>{t('Restart the tutorial', {ns: 'common'})}</Button>
           <Button css={buttonStyle} onClick={() => window.location.href = platformUri}>{t('Play with friends')}</Button>
           <Button onClick={() => window.location.href = discordUri}>{t('Find players')}</Button>
         </div>

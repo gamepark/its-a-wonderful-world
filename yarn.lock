@@ -1428,10 +1428,10 @@
   resolved "https://registry.yarnpkg.com/@gamepark/avataaars/-/avataaars-3.0.0.tgz#6e85e066693fb75c0082b437bfe8513e77f66917"
   integrity sha512-MOe/jtEe2UkxQSfZ2TyqfRnihVBpGUeFwbM9aFZYVQoe5Jdw4kRx0bEKHHw2XnXaYJ2UEJOYys4iAdjBTv4tEg==
 
-"@gamepark/react-client@~5.24.0":
-  version "5.24.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.24.0.tgz#6bb7fc88cecf60c3466294a70c6f244603ac0d9e"
-  integrity sha512-U6A3itYq5SKdQjJ60lSOaOJiWrclI1bROjLPXwJCq2bmqEdRLgheDoV9A786gNMqczWCXSOoy/1p7MSMLbmQ7w==
+"@gamepark/react-client@~5.25.0":
+  version "5.25.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.25.0.tgz#f70a0a7e8ff83d89db57c7002e15886cb64b88d0"
+  integrity sha512-1EwP11Prx+g/G4zwRwf01qulbmaHagLebWb/asxqkQneASu9x3/+6uVj5x3temU57YjSJBtxsy5eaPvz8/EKAQ==
   dependencies:
     "@datadog/browser-logs" "^3.6.11"
     "@fortawesome/free-regular-svg-icons" "^6.1.0"
@@ -1445,6 +1445,7 @@
     "@trpc/server" "^11.10.0"
     assert "^2.0.0"
     fscreen "^1.2.0"
+    i18next-http-backend "^3.0.6"
     i18next-icu "^2.0.2"
     immer "^9.0.2"
     intl-messageformat "^9.5.2"
@@ -1457,10 +1458,10 @@
     redux ">=4.0.5"
     superjson "^2.2.6"
 
-"@gamepark/react-components@~5.24.0":
-  version "5.24.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-5.24.0.tgz#b19df7570085876aa70f401e7da165a0410cc364"
-  integrity sha512-kaDIMCmL+WhQTLw4+v5oFSl9pnIc+lYcHdfxHLgGUoYdNFbs0x6l/KgcEIjJbBAybrhnIdrQbe3mWJGTRDUk5A==
+"@gamepark/react-components@~5.25.0":
+  version "5.25.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-5.25.0.tgz#687a9959d5913cd6d111f92df823bd9f89254011"
+  integrity sha512-aPdGXX/2k1IZ3JAOntczsTeQUuYmFBuOSPC37sSBfoH/r1eHTM0GY0CT4idxx0hq4rGtpPxJGOLLrB7bZ/k5vQ==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.0"
     "@fortawesome/free-solid-svg-icons" "^6.1.0"
@@ -5065,6 +5066,13 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+cross-fetch@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-4.1.0.tgz#8f69355007ee182e47fa692ecbaa37a52e43c3d2"
+  integrity sha512-uKm5PU+MHTootlWEY+mZ4vvXoCn4fLQxT9dSc1sXVMSFkINTJVN8cAQROpwcKm8bJ/c7rgZVIBWzH5T78sNZZw==
+  dependencies:
+    node-fetch "^2.7.0"
+
 cross-spawn@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -7550,6 +7558,13 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
+i18next-http-backend@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/i18next-http-backend/-/i18next-http-backend-3.0.6.tgz#653f298ebdea94bb70d30f46cf03dd2ec71167e4"
+  integrity sha512-mBOqy8993jtqAoj6XaI1XeC/8/9v6EPS+681ziegrPvTB0DoaCY7PpTS0SpY56qLMoS4OI1TZEM2Zf59zNh05w==
+  dependencies:
+    cross-fetch "4.1.0"
+
 i18next-icu@^2.0.2:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/i18next-icu/-/i18next-icu-2.4.3.tgz#61be8d42a091d28e9245cc3f61edfa34e2b0f5a1"
@@ -9689,7 +9704,7 @@ node-exports-info@^1.6.0:
     object.entries "^1.1.9"
     semver "^6.3.1"
 
-node-fetch@^2.6.1, node-fetch@^2.6.7:
+node-fetch@^2.6.1, node-fetch@^2.6.7, node-fetch@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
   integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==

@@ -17,7 +17,7 @@ export default function ConfirmPopup({cancel, confirm}: Props) {
            onClick={event => event.stopPropagation()}>
         <div css={closePopupStyle} onClick={cancel}><FontAwesomeIcon icon={faTimes}/></div>
         <p>{t('You can still build a card. Are you sure you want to finish the game without building it?')}</p>
-        <Button css={buttonStyle} onClick={cancel}>{t('Cancel')}</Button>
+        <Button css={buttonStyle} onClick={cancel}>{t('Cancel', {ns: 'common'})}</Button>
         <Button css={buttonStyle} onClick={confirm}>{t('Confirm')}</Button>
       </div>
     </div>

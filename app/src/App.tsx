@@ -8,8 +8,8 @@ import Move from '@gamepark/its-a-wonderful-world/moves/Move'
 import {tellYouAreReadyMove} from '@gamepark/its-a-wonderful-world/moves/TellYouAreReady'
 import Phase from '@gamepark/its-a-wonderful-world/Phase'
 import {isPlayer} from '@gamepark/its-a-wonderful-world/typeguards'
-import {FailuresDialog, FullscreenDialog, Menu, useContrastTheme, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
-import {Header, ImagesLoader, LoadingScreen} from '@gamepark/react-components'
+import {FailuresDialog, FullscreenDialog, LoadingScreen, Menu, useContrastTheme, useGame, usePlay, usePlayerId} from '@gamepark/react-client'
+import {Header, ImagesLoader} from '@gamepark/react-components'
 import normalize from 'emotion-normalize'
 import {HTML5toTouch} from 'rdndmb-html5-to-touch'
 import {useEffect, useState} from 'react'
@@ -54,8 +54,7 @@ export default function App() {
     <DndProvider backend={MultiBackend} options={HTML5toTouch}>
       <ThemeProvider theme={theme}>
         <Global styles={(theme: Theme) => [globalStyle, themeStyle(theme), backgroundImage(displayedPlayer)]}/>
-        <LoadingScreen author="Frédéric Guérard" artist="Anthony Wolff" publisher={['La Boite de Jeu', 'Origames']} developer="Game Park"
-                       display={loading} css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
+        <LoadingScreen display={loading} css={[loadingScreenStyle, textColor(theme), backgroundColor(theme)]}/>
         {!loading && <GameDisplay game={game!} validate={validate}/>}
         <Header css={[headerStyle, theme.light && lightHeader]}><HeaderText game={game} loading={loading} validate={validate}/></Header>
         <Menu/>
