@@ -1,5 +1,5 @@
-import { Production } from '../Production'
-import { VictoryPoints } from '../Scoring'
+import type { Production } from '../Production'
+import type { VictoryPoints } from '../Scoring'
 import { Character } from './Character'
 import { DeckType } from './DeckType'
 import { DevelopmentType } from './DevelopmentType'

@@ -1,5 +1,5 @@
-import { Production } from '../Production'
-import { ComboVictoryPoints } from '../Scoring'
+import type { Production } from '../Production'
+import type { ComboVictoryPoints } from '../Scoring'
 import { EmpireSide } from './EmpireSide'
 
 export type EmpireDetails = {
