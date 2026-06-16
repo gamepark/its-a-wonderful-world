@@ -24,9 +24,7 @@ export const PlayerScore = ({ playerId, displayScore, setDisplayScore, animation
   const scoringDetails = useMemo(() => {
     if (!game) return undefined
     const details = getScoringDetails(game, playerId)
-    details.comboVictoryPoints.sort((comboA, comboB) =>
-      Array.isArray(comboA.per) ? 1 : Array.isArray(comboB.per) ? -1 : comboA.per - comboB.per
-    )
+    details.comboVictoryPoints.sort((comboA, comboB) => (Array.isArray(comboA.per) ? 1 : Array.isArray(comboB.per) ? -1 : comboA.per - comboB.per))
     return details
   }, [game, playerId])
 

@@ -4,7 +4,7 @@ import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationT
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
 import { and, isRule, MaterialContext, MaterialGameAnimations } from '@gamepark/react-game'
-import { isCreateItemType, isDeleteItemType, isDeleteItemTypeAtOnce, isMoveItemType, isMoveItemTypeAtOnce, MaterialMove } from '@gamepark/rules-api'
+import { isCreateItemType, isDeleteItemType, isDeleteItemTypeAtOnce, isMoveItemType, isMoveItemTypeAtOnce, Location, MaterialMove } from '@gamepark/rules-api'
 import { handFaceDownLocator } from '../locators/HandFaceDownLocator'
 import { onPlayerPanelLocator } from '../locators/OnPlayerPanelLocator'
 import { revealedCardLocator } from '../locators/RevealedCardLocator'
@@ -16,7 +16,7 @@ const getViewPlayer = (context: MaterialContext): Empire => context.rules.game.v
 
 // Helper: a location belongs to another player if its `player` field is set to one,
 // or if its parent (a development card) belongs to one. Returns false when ownership is unknown.
-const isLocationForOtherPlayer = (location: any, context: MaterialContext): boolean => {
+const isLocationForOtherPlayer = (location: Partial<Location> | undefined, context: MaterialContext): boolean => {
   if (!location) return false
   const viewPlayer = getViewPlayer(context)
   if (location.player !== undefined) return location.player !== viewPlayer
@@ -92,7 +92,7 @@ gameAnimations.configure(isRule(RuleId.PassCards)).skip()
 
 // Reveal phase - other players' drafted cards: card peeks out from panel at full size
 // v2 per-card duration was ~1.75s; we use 2500ms for the panel→full-size→panel peek
-const isOtherPlayerReveal = (move: any, context: MaterialContext) => {
+const isOtherPlayerReveal = (move: MaterialMove, context: MaterialContext) => {
   if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return false
   if (move.location?.type !== LocationType.DraftArea) return false
   if (move.location?.rotation !== true) return false
@@ -111,13 +111,14 @@ gameAnimations
   })
 
 // Discard by other players: animate from their player panel to the discard pile
-const isOtherPlayerDiscard = (move: any, context: MaterialContext) => {
-  if (move.location?.type !== LocationType.Discard) return false
+const isOtherPlayerDiscard = (move: MaterialMove, context: MaterialContext) => {
   if (isMoveItemType(MaterialType.DevelopmentCard)(move)) {
+    if (move.location?.type !== LocationType.Discard) return false
     const item = context.rules.material(MaterialType.DevelopmentCard).getItem(move.itemIndex)
     return item?.location?.player !== undefined && item.location.player !== getViewPlayer(context)
   }
   if (isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move)) {
+    if (move.location?.type !== LocationType.Discard) return false
     const item = context.rules.material(MaterialType.DevelopmentCard).getItem(move.indexes[0])
     return item?.location?.player !== undefined && item.location.player !== getViewPlayer(context)
   }
@@ -127,13 +128,11 @@ gameAnimations
   .configure(isOtherPlayerDiscard)
   .duration(500)
   .trajectory({
-    waypoints: [
-      { at: 0, locator: onPlayerPanelLocator, location: (item) => ({ player: item.location.player }) }
-    ]
+    waypoints: [{ at: 0, locator: onPlayerPanelLocator, location: (item) => ({ player: item.location.player }) }]
   })
 
 // Skip animations for cards moving to other players' draft area (choose phase)
-const isOtherPlayerDraftCard = (move: any, context: MaterialContext) => {
+const isOtherPlayerDraftCard = (move: MaterialMove, context: MaterialContext) => {
   if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return false
   return move.location?.type === LocationType.DraftArea && move.location?.player !== getViewPlayer(context)
 }
@@ -141,7 +140,7 @@ gameAnimations.configure(isOtherPlayerDraftCard).skip()
 
 // Skip reveal animation for the viewing player's own drafted card (they already see it)
 // But do NOT skip the auto-draft of the 7th card (card moving FROM hand TO draft area)
-const isMyReveal = (move: any, context: MaterialContext) => {
+const isMyReveal = (move: MaterialMove, context: MaterialContext) => {
   if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return false
   if (move.location?.type !== LocationType.DraftArea) return false
   if (move.location?.rotation !== true) return false
@@ -152,7 +151,7 @@ const isMyReveal = (move: any, context: MaterialContext) => {
 gameAnimations.configure(isMyReveal).skip()
 
 // Skip animations for cards moving to another player's area (construction, constructed, etc.)
-const isCardToOtherPlayerArea = (move: any, context: MaterialContext) => {
+const isCardToOtherPlayerArea = (move: MaterialMove, context: MaterialContext) => {
   if (!isMoveItemType(MaterialType.DevelopmentCard)(move) && !isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move)) return false
   return move.location?.player !== undefined && move.location.player !== getViewPlayer(context)
 }
@@ -161,7 +160,7 @@ gameAnimations.configure(isCardToOtherPlayerArea).skip()
 // Skip animations for cubes moved or created for other players.
 // Covers destinations like ConstructionCardCost (no player on the location, owner is the parent card),
 // and also moves whose SOURCE is on another player's card (e.g. cube going back to stock from a hidden card).
-const isOtherPlayerCube = (move: any, context: MaterialContext) => {
+const isOtherPlayerCube = (move: MaterialMove, context: MaterialContext) => {
   if (isMoveItemType(MaterialType.ResourceCube)(move)) {
     if (isLocationForOtherPlayer(move.location, context)) return true
     const item = context.rules.material(MaterialType.ResourceCube).getItem(move.itemIndex)
@@ -191,9 +190,7 @@ gameAnimations
   .configure(isOtherPlayerTokenCreate)
   .duration(500)
   .trajectory({
-    waypoints: [
-      { at: 1, locator: onPlayerPanelLocator, location: (item) => ({ player: item.location.player }) }
-    ]
+    waypoints: [{ at: 1, locator: onPlayerPanelLocator, location: (item) => ({ player: item.location.player }) }]
   })
 
 // Krystallium creation (from cube transformation): 300ms

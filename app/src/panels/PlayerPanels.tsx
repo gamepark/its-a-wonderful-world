@@ -4,27 +4,22 @@ import { Memory } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldMemory
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
 import { useGame, usePlay, usePlayers, useRules } from '@gamepark/react-game'
 import { LocalMoveType, MaterialGame, MaterialRules, MoveKind } from '@gamepark/rules-api'
-import { useRef } from 'react'
+import { useState } from 'react'
 import { DraftDirectionIndicator } from '../components/DraftDirectionIndicator'
 import { PlayerPanel } from './PlayerPanel'
 import { ScorePanel } from './score/ScorePanel'
 
 // Panel dimensions in em (converted from v2 percentages: height% * 0.435, width% * 0.773)
 const playerPanelWidth = 15
-const playerPanelHeight = (players: number) => players > 5 ? 5 : 7.3
+const playerPanelHeight = (players: number) => (players > 5 ? 5 : 7.3)
 const playerPanelMargin = 0.65
 const playerPanelRightMargin = 0.8
 
 // Calculate panel Y position based on index and total players
-const playerPanelY = (index: number, players: number) =>
-  playerPanelMargin + index * (playerPanelHeight(players) + playerPanelMargin)
+const playerPanelY = (index: number, players: number) => playerPanelMargin + index * (playerPanelHeight(players) + playerPanelMargin)
 
 // Draft phase rule IDs
-const draftRuleIds = [
-  RuleId.ChooseDevelopmentCard,
-  RuleId.RevealChosenCards,
-  RuleId.PassCards
-]
+const draftRuleIds = [RuleId.ChooseDevelopmentCard, RuleId.RevealChosenCards, RuleId.PassCards]
 
 export const PlayerPanels = () => {
   const players = usePlayers<Empire>({ sortFromMe: true })
@@ -49,8 +44,8 @@ export const PlayerPanels = () => {
   // Detect game over: no active rule but players exist
   const gameOver = rules?.game.rule === undefined && !!rules?.game.players?.length
   // Track if game was live (not game over when component first mounted) to control animation
-  const wasLive = useRef(!gameOver)
-  const animate = gameOver && wasLive.current
+  const [wasLive] = useState(!gameOver)
+  const animate = gameOver && wasLive
 
   return (
     <>
@@ -62,31 +57,23 @@ export const PlayerPanels = () => {
             playerId={player.id}
             small={isSmall}
             gameOver={gameOver}
-            css={[
-              panelPosition(index, players.length),
-              isActive ? activePanel : (canDisplayOtherPlayers && clickablePanel)
-            ]}
+            css={[panelPosition(index, players.length), isActive ? activePanel : canDisplayOtherPlayers && clickablePanel]}
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
               if (canDisplayOtherPlayers) {
-                play(
-                  { kind: MoveKind.LocalMove, type: LocalMoveType.ChangeView, view: player.id },
-                  { transient: true }
-                )
+                play({ kind: MoveKind.LocalMove, type: LocalMoveType.ChangeView, view: player.id }, { transient: true })
               }
             }}
           />
         )
       })}
       {/* Draft direction indicators between panels - only show for 3+ players during draft */}
-      {isDraftPhase && players.length > 2 && players.slice(0, -1).map((_, index) => (
-        <DraftDirectionIndicator
-          key={`arrow-${index}`}
-          clockwise={isClockwise}
-          css={arrowPosition(index, players.length)}
-        />
-      ))}
+      {isDraftPhase &&
+        players.length > 2 &&
+        players
+          .slice(0, -1)
+          .map((_, index) => <DraftDirectionIndicator key={`arrow-${index}`} clockwise={isClockwise} css={arrowPosition(index, players.length)} />)}
       {gameOver && <ScorePanel animation={animate} playerCount={players.length} />}
     </>
   )

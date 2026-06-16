@@ -6,20 +6,32 @@ import { ItsAWonderfulWorldOptions } from '@gamepark/its-a-wonderful-world/ItsAW
 
 // Cards dealt to NoramStates (player)
 const noramCards = [
-  Development.SecretSociety, Development.Zeppelin, Development.FinancialCenter,
-  Development.HarborZone, Development.OffshoreOilRig, Development.MilitaryBase,
+  Development.SecretSociety,
+  Development.Zeppelin,
+  Development.FinancialCenter,
+  Development.HarborZone,
+  Development.OffshoreOilRig,
+  Development.MilitaryBase,
   Development.ArkOfTheCovenant
 ]
 // Cards dealt to Republic of Europe
 const europeCards = [
-  Development.CenterOfTheEarth, Development.TransportationNetwork, Development.PropagandaCenter,
-  Development.WorldCongress, Development.UniversalExposition, Development.RecyclingPlant,
+  Development.CenterOfTheEarth,
+  Development.TransportationNetwork,
+  Development.PropagandaCenter,
+  Development.WorldCongress,
+  Development.UniversalExposition,
+  Development.RecyclingPlant,
   Development.AirborneLaboratory
 ]
 // Cards dealt to Federation of Asia
 const asiaCards = [
-  Development.WindTurbines, Development.HumanCloning, Development.IndustrialComplex,
-  Development.LunarBase, Development.ResearchCenter, Development.Juggernaut,
+  Development.WindTurbines,
+  Development.HumanCloning,
+  Development.IndustrialComplex,
+  Development.LunarBase,
+  Development.ResearchCenter,
+  Development.Juggernaut,
   Development.CityOfAgartha
 ]
 
@@ -36,7 +48,10 @@ export class TutorialSetup extends ItsAWonderfulWorldSetup {
     // The deck deals 7 cards per player in game.players order: NoramStates, RepublicOfEurope, FederationOfAsia
     // Top of deck = highest x values. deal() takes from the top.
     const maxX = Math.max(
-      ...this.material(MaterialType.DevelopmentCard).location(LocationType.Deck).getItems().map(item => item.location.x ?? 0)
+      ...this.material(MaterialType.DevelopmentCard)
+        .location(LocationType.Deck)
+        .getItems()
+        .map((item) => item.location.x ?? 0)
     )
 
     const allTutorialCards = [...noramCards, ...europeCards, ...asiaCards]
@@ -44,7 +59,7 @@ export class TutorialSetup extends ItsAWonderfulWorldSetup {
       // Re-query deck each iteration to get fresh state after previous moves
       this.material(MaterialType.DevelopmentCard)
         .location(LocationType.Deck)
-        .id<CardId>(id => id.front === allTutorialCards[i])
+        .id<CardId>((id) => id.front === allTutorialCards[i])
         .moveItem({ type: LocationType.Deck, x: maxX + allTutorialCards.length - i })
     }
   }

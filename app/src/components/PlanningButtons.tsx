@@ -28,23 +28,21 @@ export const PlanningButtons = () => {
 
   return (
     <div css={containerStyle}>
-      <button
-        css={buttonStyle}
-        onClick={() => slateAllMove && play(slateAllMove)}
-        disabled={!slateAllMove}
-      >
+      <button css={buttonStyle} onClick={() => slateAllMove && play(slateAllMove)} disabled={!slateAllMove}>
         <span css={borderContainerStyle}>
-          <span /><span /><span /><span />
+          <span />
+          <span />
+          <span />
+          <span />
         </span>
         {t('ui.build-all')}
       </button>
-      <button
-        css={buttonStyle}
-        onClick={() => recycleAllMove && play(recycleAllMove)}
-        disabled={!recycleAllMove}
-      >
+      <button css={buttonStyle} onClick={() => recycleAllMove && play(recycleAllMove)} disabled={!recycleAllMove}>
         <span css={borderContainerStyle}>
-          <span /><span /><span /><span />
+          <span />
+          <span />
+          <span />
+          <span />
         </span>
         {t('ui.recycle-all')}
       </button>
@@ -111,7 +109,7 @@ const buttonStyle = css`
     height: 100%;
     background-color: #85adad;
     opacity: 0;
-    transition: .2s opacity ease-in-out;
+    transition: 0.2s opacity ease-in-out;
   }
 
   &:hover:before {

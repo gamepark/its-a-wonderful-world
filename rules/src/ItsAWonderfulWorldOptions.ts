@@ -31,12 +31,12 @@ export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOption
   },
   corruptionAndAscension: {
     label: (t) => t('c&a'),
-    help: t => t('c&a.help'),
+    help: (t) => t('c&a.help'),
     subscriberRequired: true
   },
   warAndPeace: {
     label: (t) => t('w&p'),
-    help: t => t('w&p.help'),
+    help: (t) => t('w&p.help'),
     subscriberRequired: true
   },
   empiresSide: {

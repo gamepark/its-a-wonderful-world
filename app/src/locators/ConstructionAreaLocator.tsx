@@ -117,18 +117,11 @@ const ConstructionAreaContent = () => {
   const { t } = useTranslation()
   const context = useMaterialContext<Empire, MaterialType, LocationType>()
   const currentView = context.rules.game.view ?? context.player ?? context.rules.players[0]
-  const cardsInConstruction = context.rules.material(MaterialType.DevelopmentCard)
-    .location(LocationType.ConstructionArea)
-    .player(currentView)
-    .length
+  const cardsInConstruction = context.rules.material(MaterialType.DevelopmentCard).location(LocationType.ConstructionArea).player(currentView).length
 
   if (cardsInConstruction > 0) return null
 
-  return (
-    <span css={constructionAreaTextStyle}>
-      {t('ui.construction-area')}
-    </span>
-  )
+  return <span css={constructionAreaTextStyle}>{t('ui.construction-area')}</span>
 }
 
 const constructionAreaTextStyle = css`

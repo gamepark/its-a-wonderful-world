@@ -13,16 +13,17 @@ import { useMemo } from 'react'
  */
 export function usePlayerProduction(playerId: Empire): Map<Resource, number> {
   const rules = useRules<MaterialRules>()
+  const game = rules?.game
 
   return useMemo(() => {
     const production = new Map<Resource, number>()
-    if (!rules?.game) return production
+    if (!game) return production
 
     for (const resource of resources) {
-      production.set(resource, getProductionAndCorruption(rules.game, playerId, resource))
+      production.set(resource, getProductionAndCorruption(game, playerId, resource))
     }
     return production
-  }, [rules?.game, playerId])
+  }, [game, playerId])
 }
 
 /**
@@ -31,6 +32,7 @@ export function usePlayerProduction(playerId: Empire): Map<Resource, number> {
  */
 export function usePlayerCharacters(playerId: Empire): Record<Character, number> {
   const rules = useRules<MaterialRules>()
+  const game = rules?.game
 
   return useMemo(() => {
     const characters = {
@@ -38,12 +40,11 @@ export function usePlayerCharacters(playerId: Empire): Record<Character, number>
       [Character.General]: 0
     }
 
-    if (!rules?.game?.items?.[MaterialType.CharacterToken]) return characters
+    if (!game?.items?.[MaterialType.CharacterToken]) return characters
 
     // Player-owned tokens are in PlayerCharacters
-    const playerTokens = rules.game.items[MaterialType.CharacterToken].filter(
-      item => item.location?.player === playerId &&
-              item.location?.type === LocationType.PlayerCharacters
+    const playerTokens = game.items[MaterialType.CharacterToken].filter(
+      (item) => item.location?.player === playerId && item.location?.type === LocationType.PlayerCharacters
     )
 
     for (const token of playerTokens) {
@@ -56,7 +57,7 @@ export function usePlayerCharacters(playerId: Empire): Record<Character, number>
     }
 
     return characters
-  }, [rules?.game, playerId])
+  }, [game, playerId])
 }
 
 /**

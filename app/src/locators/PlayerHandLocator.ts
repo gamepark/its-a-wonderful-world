@@ -22,13 +22,13 @@ export class PlayerHandLocator extends HandLocator<Empire, MaterialType, Locatio
 
     let x: number
     if ((!hasAscension && players > 2) || players > 4) {
-      x = 0         // Many panels on the right, hand shifted left
+      x = 0 // Many panels on the right, hand shifted left
     } else if ((!hasAscension && players === 2) || players === 3) {
-      x = 8          // Few/no panels, hand shifted right
+      x = 8 // Few/no panels, hand shifted right
     } else if (players === 2) {
-      x = 4          // Ascension + 2 players, hand centered
+      x = 4 // Ascension + 2 players, hand centered
     } else {
-      x = -4         // Ascension + 4 players, hand shifted left for panels
+      x = -4 // Ascension + 4 players, hand shifted left for panels
     }
 
     return { x, y: 15.7, z: 10 }

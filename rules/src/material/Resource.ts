@@ -11,6 +11,6 @@ export enum Resource {
 
 export const resources = getEnumValues(Resource)
 
-export function isResource(item: any): item is Resource {
-  return resources.indexOf(item) !== -1
+export function isResource(item: unknown): item is Resource {
+  return resources.indexOf(item as Resource) !== -1
 }

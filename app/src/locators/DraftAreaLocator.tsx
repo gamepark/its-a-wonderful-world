@@ -104,18 +104,11 @@ const DraftAreaContent = () => {
   const { t } = useTranslation()
   const context = useMaterialContext<Empire, MaterialType, LocationType>()
   const currentView = context.rules.game.view ?? context.player ?? context.rules.players[0]
-  const cardsInDraft = context.rules.material(MaterialType.DevelopmentCard)
-    .location(LocationType.DraftArea)
-    .player(currentView)
-    .length
+  const cardsInDraft = context.rules.material(MaterialType.DevelopmentCard).location(LocationType.DraftArea).player(currentView).length
 
   if (cardsInDraft > 0) return null
 
-  return (
-    <span css={draftAreaTextStyle}>
-      {t('ui.draft-area')}
-    </span>
-  )
+  return <span css={draftAreaTextStyle}>{t('ui.draft-area')}</span>
 }
 
 const draftAreaTextStyle = css`

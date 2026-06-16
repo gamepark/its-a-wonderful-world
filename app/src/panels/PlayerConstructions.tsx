@@ -16,16 +16,8 @@ export const PlayerConstructions: FC<Props> = ({ playerId }) => {
 
   return (
     <div css={[extraInfoPosition, reverseOrder && reverseOrderStyle]}>
-      <CharacterTokenNumber
-        character={Character.Financier}
-        quantity={characters[Character.Financier]}
-        css={itemPosition}
-      />
-      <CharacterTokenNumber
-        character={Character.General}
-        quantity={characters[Character.General]}
-        css={itemPosition}
-      />
+      <CharacterTokenNumber character={Character.Financier} quantity={characters[Character.Financier]} css={itemPosition} />
+      <CharacterTokenNumber character={Character.General} quantity={characters[Character.General]} css={itemPosition} />
     </div>
   )
 }
@@ -57,7 +49,9 @@ const extraInfoPosition = css`
   bottom: 1em;
   width: 24%;
   height: 30%;
-  transition: width 0.5s ease-out, height 0.5s ease-in;
+  transition:
+    width 0.5s ease-out,
+    height 0.5s ease-in;
 `
 
 const reverseOrderStyle = css`
@@ -90,5 +84,7 @@ const quantityStyle = css`
   font-size: 2.5em;
   font-weight: bold;
   color: white;
-  text-shadow: 0 0 0.2em black, 0 0 0.2em black;
+  text-shadow:
+    0 0 0.2em black,
+    0 0 0.2em black;
 `

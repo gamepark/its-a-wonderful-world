@@ -11,9 +11,7 @@ import { RuleId } from './RuleId'
 export class ChooseDevelopmentCardRule extends SimultaneousRule<Empire, MaterialType, LocationType> {
   onRuleStart(): MaterialMove[] {
     // Count total cards in all players' hands
-    const totalCardsInHands = this.material(MaterialType.DevelopmentCard)
-      .location(LocationType.PlayerHand)
-      .length
+    const totalCardsInHands = this.material(MaterialType.DevelopmentCard).location(LocationType.PlayerHand).length
 
     // If each player has exactly one card left, choose them all automatically (revealed)
     if (totalCardsInHands === this.game.players.length) {

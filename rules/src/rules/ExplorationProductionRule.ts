@@ -17,9 +17,7 @@ export class ExplorationProductionRule extends ProductionRule {
   supremacyCharacter = Character.General
 
   getMovesAfterPlayersDone(): MaterialMove[] {
-    const playersWithProduction = this.game.players.filter(
-      (empire: Empire) => hasKrystalliumOrCharacterProduction(this.game, empire)
-    )
+    const playersWithProduction = this.game.players.filter((empire: Empire) => hasKrystalliumOrCharacterProduction(this.game, empire))
 
     if (playersWithProduction.length > 0) {
       return [this.startSimultaneousRule(RuleId.KrystalliumProduction, playersWithProduction)]

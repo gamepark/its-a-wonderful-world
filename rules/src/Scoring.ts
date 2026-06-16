@@ -22,15 +22,9 @@ export type ScoringDetails = {
 export function getScoringDetails(game: MaterialGame, playerId: Empire, ignoreBaseCharacterValue = false): ScoringDetails {
   // Count character tokens
   const characters = game.items[MaterialType.CharacterToken] ?? []
-  const playerCharacters = characters.filter(
-    (item) => item?.location?.type === LocationType.PlayerCharacters && item?.location?.player === playerId
-  )
-  const financierCount = playerCharacters
-    .filter((item) => item?.id === Character.Financier)
-    .reduce((sum, item) => sum + (item?.quantity ?? 1), 0)
-  const generalCount = playerCharacters
-    .filter((item) => item?.id === Character.General)
-    .reduce((sum, item) => sum + (item?.quantity ?? 1), 0)
+  const playerCharacters = characters.filter((item) => item?.location?.type === LocationType.PlayerCharacters && item?.location?.player === playerId)
+  const financierCount = playerCharacters.filter((item) => item?.id === Character.Financier).reduce((sum, item) => sum + (item?.quantity ?? 1), 0)
+  const generalCount = playerCharacters.filter((item) => item?.id === Character.General).reduce((sum, item) => sum + (item?.quantity ?? 1), 0)
 
   const scoringDetails: ScoringDetails = {
     flatVictoryPoints: 0,
@@ -44,10 +38,12 @@ export function getScoringDetails(game: MaterialGame, playerId: Empire, ignoreBa
       [Character.Financier]: financierCount,
       [Character.General]: generalCount
     },
-    comboVictoryPoints: ignoreBaseCharacterValue ? [] : [
-      { quantity: 1, per: Character.Financier },
-      { quantity: 1, per: Character.General }
-    ]
+    comboVictoryPoints: ignoreBaseCharacterValue
+      ? []
+      : [
+          { quantity: 1, per: Character.Financier },
+          { quantity: 1, per: Character.General }
+        ]
   }
 
   // Get empire card scoring from memory (empire cards are static items, not in game.items)
@@ -95,25 +91,15 @@ export function getScoringDetails(game: MaterialGame, playerId: Empire, ignoreBa
 
 export function getScoreFromScoringDetails(scoringDetails: ScoringDetails): number {
   return (
-    scoringDetails.flatVictoryPoints +
-    scoringDetails.comboVictoryPoints.reduce(
-      (sum, combo) => sum + getComboValue(combo, scoringDetails.scoreMultipliers),
-      0
-    )
+    scoringDetails.flatVictoryPoints + scoringDetails.comboVictoryPoints.reduce((sum, combo) => sum + getComboValue(combo, scoringDetails.scoreMultipliers), 0)
   )
 }
 
-export function getComboValue(
-  combo: ComboVictoryPoints,
-  scoreMultipliers: { [key in ScoreMultiplier]: number }
-): number {
+export function getComboValue(combo: ComboVictoryPoints, scoreMultipliers: { [key in ScoreMultiplier]: number }): number {
   return combo.quantity * getComboMultiplier(combo, scoreMultipliers)
 }
 
-export function getComboMultiplier(
-  combo: ComboVictoryPoints,
-  scoreMultipliers: { [key in ScoreMultiplier]: number }
-): number {
+export function getComboMultiplier(combo: ComboVictoryPoints, scoreMultipliers: { [key in ScoreMultiplier]: number }): number {
   if (Array.isArray(combo.per)) {
     return Math.min(...combo.per.map((scoreMultiplier) => scoreMultipliers[scoreMultiplier]))
   } else {

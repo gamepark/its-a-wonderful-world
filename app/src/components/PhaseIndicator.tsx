@@ -41,9 +41,15 @@ export const PhaseIndicator = () => {
 
   return (
     <div css={[containerStyle, playDown && playDownStyle]}>
-      <div css={[phaseStyle, draftStyle, phase === Phase.Draft && currentPhase]} onClick={() => openHelp(RuleId.ChooseDevelopmentCard)}><span>{t('phase.draft')}</span></div>
-      <div css={[phaseStyle, planningStyle, phase === Phase.Planning && currentPhase]} onClick={() => openHelp(RuleId.Planning)}><span>{t('phase.planning')}</span></div>
-      <div css={[phaseStyle, productionStyle, phase === Phase.Production && currentPhase]} onClick={() => openHelp(RuleId.MaterialsProduction)}><span>{t('phase.production')}</span></div>
+      <div css={[phaseStyle, draftStyle, phase === Phase.Draft && currentPhase]} onClick={() => openHelp(RuleId.ChooseDevelopmentCard)}>
+        <span>{t('phase.draft')}</span>
+      </div>
+      <div css={[phaseStyle, planningStyle, phase === Phase.Planning && currentPhase]} onClick={() => openHelp(RuleId.Planning)}>
+        <span>{t('phase.planning')}</span>
+      </div>
+      <div css={[phaseStyle, productionStyle, phase === Phase.Production && currentPhase]} onClick={() => openHelp(RuleId.MaterialsProduction)}>
+        <span>{t('phase.production')}</span>
+      </div>
     </div>
   )
 }
@@ -86,7 +92,7 @@ const phaseStyle = css`
     height: 120%;
     padding: 7% 6% 6% 8%;
   }
-  
+
   > span {
     font-size: 0.7em;
   }

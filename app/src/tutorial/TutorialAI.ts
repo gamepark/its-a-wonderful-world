@@ -1,12 +1,5 @@
 import { sample } from 'es-toolkit'
-import {
-  isCreateItem,
-  isCustomMoveType,
-  isEndPlayerTurn,
-  isMoveItemType,
-  MaterialGame,
-  MaterialMove
-} from '@gamepark/rules-api'
+import { isCreateItem, isCustomMoveType, isEndPlayerTurn, isMoveItemType, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
 import { ItsAWonderfulWorldRules } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldRules'
 import { Memory } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldMemory'
@@ -21,13 +14,7 @@ import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialT
 import { isResource, Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
 import { getProduction, isProductionFactor, Production } from '@gamepark/its-a-wonderful-world/Production'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
-import {
-  ComboVictoryPoints,
-  getBestVictoryPointsCombo,
-  getComboValue,
-  getScoringDetails,
-  ScoreMultiplier
-} from '@gamepark/its-a-wonderful-world/Scoring'
+import { ComboVictoryPoints, getBestVictoryPointsCombo, getComboValue, getScoringDetails, ScoreMultiplier } from '@gamepark/its-a-wonderful-world/Scoring'
 
 // ─── Strategy ────────────────────────────────────────────────────────
 
@@ -77,7 +64,7 @@ function getEmpireProductionResources(production: Production): Resource[] {
   }
 
   return ([Resource.Materials, Resource.Energy, Resource.Science, Resource.Gold, Resource.Exploration] as Resource[])
-    .filter(r => (amounts[r] ?? 0) > 0)
+    .filter((r) => (amounts[r] ?? 0) > 0)
     .sort((a, b) => (amounts[b] ?? 0) - (amounts[a] ?? 0))
 }
 
@@ -109,10 +96,7 @@ function getStrategy(game: MaterialGame, player: Empire): Strategy {
   // Start with resources the empire produces (sorted by amount), then fill in remaining resources
   const empireProducedResources = getEmpireProductionResources(empireDetails.production)
   const allNonKrystallium = [Resource.Materials, Resource.Energy, Resource.Science, Resource.Gold, Resource.Exploration]
-  const targetResources = [
-    ...empireProducedResources,
-    ...allNonKrystallium.filter(r => !empireProducedResources.includes(r))
-  ]
+  const targetResources = [...empireProducedResources, ...allNonKrystallium.filter((r) => !empireProducedResources.includes(r))]
 
   return { valuableTypes, targetResources, valuableCharacter, bestCombo: empireCombo ?? bestCombo, empireComboQuantity }
 }
@@ -134,8 +118,12 @@ function getExpectedProduction(game: MaterialGame, player: Empire): Record<Resou
 /** Current available resources (cubes in AvailableResources) + krystallium stock. */
 function getAvailableResourceCounts(game: MaterialGame, player: Empire): Record<Resource, number> {
   const counts = {
-    [Resource.Materials]: 0, [Resource.Energy]: 0, [Resource.Science]: 0,
-    [Resource.Gold]: 0, [Resource.Exploration]: 0, [Resource.Krystallium]: 0
+    [Resource.Materials]: 0,
+    [Resource.Energy]: 0,
+    [Resource.Science]: 0,
+    [Resource.Gold]: 0,
+    [Resource.Exploration]: 0,
+    [Resource.Krystallium]: 0
   } as Record<Resource, number>
 
   const cubes = game.items[MaterialType.ResourceCube] ?? []
@@ -154,10 +142,7 @@ function getAvailableResourceCounts(game: MaterialGame, player: Empire): Record<
 }
 
 /** Remaining cost for a card from actual game state (cubes/tokens already placed). */
-function getCardRemainingCostFromGame(
-  game: MaterialGame,
-  cardIndex: number
-): { item: Resource | Character; space: number }[] {
+function getCardRemainingCostFromGame(game: MaterialGame, cardIndex: number): { item: Resource | Character; space: number }[] {
   const card = game.items[MaterialType.DevelopmentCard]?.[cardIndex]
   if (!card) return []
   const development = card.id?.front as Development
@@ -185,8 +170,12 @@ function getCardRemainingCostFromGame(
 /** Convert remaining cost array to resource need counts. */
 function getRemainingResourceNeeds(remaining: { item: Resource | Character; space: number }[]): Record<Resource, number> {
   const needs = {
-    [Resource.Materials]: 0, [Resource.Energy]: 0, [Resource.Science]: 0,
-    [Resource.Gold]: 0, [Resource.Exploration]: 0, [Resource.Krystallium]: 0
+    [Resource.Materials]: 0,
+    [Resource.Energy]: 0,
+    [Resource.Science]: 0,
+    [Resource.Gold]: 0,
+    [Resource.Exploration]: 0,
+    [Resource.Krystallium]: 0
   } as Record<Resource, number>
 
   for (const { item } of remaining) {
@@ -225,7 +214,7 @@ function canCompleteCardThisRound(
   }
 
   // Krystallium can fill any unmet need
-  const krystalliumAvailable = (available[Resource.Krystallium] ?? 0)
+  const krystalliumAvailable = available[Resource.Krystallium] ?? 0
   return unmet <= krystalliumAvailable
 }
 
@@ -255,13 +244,13 @@ function getCardProductionValue(production: Production | undefined, game: Materi
   if (isProductionFactor(production)) {
     // Count existing cards of that type
     const cards = game.items[MaterialType.DevelopmentCard] ?? []
-    const count = cards.filter(
-      (item) => item?.location?.type === LocationType.ConstructedDevelopments && item?.location?.player === player
-    ).reduce((sum, item) => {
-      const dev = item?.id?.front as Development | undefined
-      if (!dev) return sum
-      return getDevelopmentDetails(dev).type === production.factor ? sum + 1 : sum
-    }, 0)
+    const count = cards
+      .filter((item) => item?.location?.type === LocationType.ConstructedDevelopments && item?.location?.player === player)
+      .reduce((sum, item) => {
+        const dev = item?.id?.front as Development | undefined
+        if (!dev) return sum
+        return getDevelopmentDetails(dev).type === production.factor ? sum + 1 : sum
+      }, 0)
     return remainingRounds * count
   }
 
@@ -320,8 +309,9 @@ function getConstructionBonusValue(details: ReturnType<typeof getDevelopmentDeta
   let value = 0
   // Check if empire combo counts characters as multipliers
   const comboCountsCharacters = strategy.bestCombo
-    ? (Array.isArray(strategy.bestCombo.per) ? strategy.bestCombo.per : [strategy.bestCombo.per])
-      .some(p => p === Character.Financier || p === Character.General)
+    ? (Array.isArray(strategy.bestCombo.per) ? strategy.bestCombo.per : [strategy.bestCombo.per]).some(
+        (p) => p === Character.Financier || p === Character.General
+      )
     : false
 
   for (const bonus of details.constructionBonus) {
@@ -339,13 +329,7 @@ function getConstructionBonusValue(details: ReturnType<typeof getDevelopmentDeta
 
 // ─── Draft phase scoring ─────────────────────────────────────────────
 
-function scoreDraftCard(
-  development: Development,
-  game: MaterialGame,
-  player: Empire,
-  strategy: Strategy,
-  round: number
-): number {
+function scoreDraftCard(development: Development, game: MaterialGame, player: Empire, strategy: Strategy, round: number): number {
   const details = getDevelopmentDetails(development)
   const scoringDetails = getScoringDetails(game, player)
 
@@ -370,7 +354,7 @@ function scoreDraftCard(
     const comboPer = Array.isArray(details.victoryPoints.per) ? details.victoryPoints.per : [details.victoryPoints.per]
     if (strategy.bestCombo) {
       const stratPer = Array.isArray(strategy.bestCombo.per) ? strategy.bestCombo.per : [strategy.bestCombo.per]
-      if (comboPer.some(p => stratPer.includes(p))) {
+      if (comboPer.some((p) => stratPer.includes(p))) {
         strategyBonus += 2
       }
     }
@@ -392,9 +376,7 @@ function scoreDraftCard(
   let synergyBonus = 0
   const constructionCards = (game.items[MaterialType.DevelopmentCard] ?? [])
     .map((item, index) => ({ item, index }))
-    .filter(({ item }) =>
-      item?.location?.type === LocationType.ConstructionArea && item?.location?.player === player
-    )
+    .filter(({ item }) => item?.location?.type === LocationType.ConstructionArea && item?.location?.player === player)
 
   if (constructionCards.length > 0) {
     // Recycle synergy: this card's recycling bonus matches a resource needed by an existing construction
@@ -424,7 +406,7 @@ function scoreDraftCard(
   }
 
   // Late-round penalty: halve score for infeasible cards in rounds 3-4
-  const lateRoundPenalty = (round >= 3 && feasibility < 0.3) ? 0.5 : 1
+  const lateRoundPenalty = round >= 3 && feasibility < 0.3 ? 0.5 : 1
 
   const rawScore = productionValue * productionWeight + vpValue * vpWeight + bonusValue + strategyBonus + recycleValue + synergyBonus - costPenalty
   return rawScore * lateRoundPenalty
@@ -515,17 +497,10 @@ type CardPlan = {
  * Decide which draft cards to build vs recycle, considering the entire group.
  * Returns a plan sorted so highest-priority actions come first.
  */
-function buildRoundPlan(
-  game: MaterialGame,
-  player: Empire,
-  strategy: Strategy,
-  round: number
-): CardPlan[] {
+function buildRoundPlan(game: MaterialGame, player: Empire, strategy: Strategy, round: number): CardPlan[] {
   const draftCards = (game.items[MaterialType.DevelopmentCard] ?? [])
     .map((item, index) => ({ item, index }))
-    .filter(({ item }) =>
-      item?.location?.type === LocationType.DraftArea && item?.location?.player === player
-    )
+    .filter(({ item }) => item?.location?.type === LocationType.DraftArea && item?.location?.player === player)
 
   if (draftCards.length === 0) return []
 
@@ -534,10 +509,9 @@ function buildRoundPlan(
   const scoringDetails = getScoringDetails(game, player)
 
   // Count existing constructions to limit total in-progress cards
-  const existingConstructions = (game.items[MaterialType.DevelopmentCard] ?? [])
-    .filter(item =>
-      item?.location?.type === LocationType.ConstructionArea && item?.location?.player === player
-    ).length
+  const existingConstructions = (game.items[MaterialType.DevelopmentCard] ?? []).filter(
+    (item) => item?.location?.type === LocationType.ConstructionArea && item?.location?.player === player
+  ).length
 
   // Score each draft card for build value vs recycle value
   const candidates = draftCards.map(({ item, index }) => {
@@ -579,13 +553,13 @@ function buildRoundPlan(
   })
 
   // Sort by net build value (build - recycle opportunity cost)
-  candidates.sort((a, b) => (b.buildValue - b.recycleValue) - (a.buildValue - a.recycleValue))
+  candidates.sort((a, b) => b.buildValue - b.recycleValue - (a.buildValue - a.recycleValue))
 
   // Greedy selection: max cards to build depends on round and existing constructions
   const maxBuild = round <= 2 ? Math.max(0, 5 - existingConstructions) : Math.max(0, 3 - existingConstructions)
   let buildCount = 0
 
-  const plan: CardPlan[] = candidates.map(c => {
+  const plan: CardPlan[] = candidates.map((c) => {
     const shouldBuild = buildCount < maxBuild && c.buildValue > c.recycleValue && c.feasibility > 0.1
     if (shouldBuild) {
       buildCount++
@@ -609,21 +583,15 @@ function selectBestMove(scoredMoves: { move: MaterialMove; score: number }[]): M
   if (scoredMoves.length === 0) throw new Error('No moves to select from')
   if (scoredMoves.length === 1) return scoredMoves[0].move
 
-  const maxScore = Math.max(...scoredMoves.map(m => m.score))
+  const maxScore = Math.max(...scoredMoves.map((m) => m.score))
   const threshold = maxScore > 0 ? maxScore * 0.85 : maxScore * 1.15
-  const topMoves = scoredMoves.filter(m => m.score >= threshold)
+  const topMoves = scoredMoves.filter((m) => m.score >= threshold)
   return sample(topMoves)!.move
 }
 
 // ─── Production phase helpers ────────────────────────────────────────
 
-const productionOrder: Resource[] = [
-  Resource.Materials,
-  Resource.Energy,
-  Resource.Science,
-  Resource.Gold,
-  Resource.Exploration
-]
+const productionOrder: Resource[] = [Resource.Materials, Resource.Energy, Resource.Science, Resource.Gold, Resource.Exploration]
 
 const ruleToResource: Partial<Record<RuleId, Resource>> = {
   [RuleId.MaterialsProduction]: Resource.Materials,
@@ -633,10 +601,7 @@ const ruleToResource: Partial<Record<RuleId, Resource>> = {
   [RuleId.ExplorationProduction]: Resource.Exploration
 }
 
-function wouldIncreaseUpcomingProduction(
-  development: Development,
-  currentResource: Resource
-): boolean {
+function wouldIncreaseUpcomingProduction(development: Development, currentResource: Resource): boolean {
   const details = getDevelopmentDetails(development)
   if (!details.production) return false
 
@@ -697,21 +662,13 @@ export const ai = (game: MaterialGame, player: Empire): Promise<MaterialMove[]> 
 
 // ─── Phase handlers ──────────────────────────────────────────────────
 
-function handleDraft(
-  legalMoves: MaterialMove[],
-  game: MaterialGame,
-  player: Empire,
-  strategy: Strategy,
-  round: number
-): MaterialMove {
+function handleDraft(legalMoves: MaterialMove[], game: MaterialGame, player: Empire, strategy: Strategy, round: number): MaterialMove {
   // Legal moves are: move a card from PlayerHand to DraftArea
-  const cardMoves = legalMoves.filter(
-    m => isMoveItemType(MaterialType.DevelopmentCard)(m) && m.location.type === LocationType.DraftArea
-  )
+  const cardMoves = legalMoves.filter((m) => isMoveItemType(MaterialType.DevelopmentCard)(m) && m.location.type === LocationType.DraftArea)
 
   if (cardMoves.length <= 1) return cardMoves[0] ?? legalMoves[0]
 
-  const scoredMoves = cardMoves.map(move => {
+  const scoredMoves = cardMoves.map((move) => {
     if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return { move, score: 0 }
     const card = game.items[MaterialType.DevelopmentCard]?.[move.itemIndex]
     const development = card?.id?.front as Development | undefined
@@ -724,19 +681,11 @@ function handleDraft(
   return selectBestMove(scoredMoves)
 }
 
-function handlePlanning(
-  legalMoves: MaterialMove[],
-  game: MaterialGame,
-  player: Empire,
-  strategy: Strategy,
-  round: number
-): MaterialMove {
+function handlePlanning(legalMoves: MaterialMove[], game: MaterialGame, player: Empire, strategy: Strategy, round: number): MaterialMove {
   // Check if there are cards in draft area
   const draftCards = (game.items[MaterialType.DevelopmentCard] ?? [])
     .map((item, index) => ({ item, index }))
-    .filter(({ item }) =>
-      item?.location?.type === LocationType.DraftArea && item?.location?.player === player
-    )
+    .filter(({ item }) => item?.location?.type === LocationType.DraftArea && item?.location?.player === player)
 
   // Use group-based planning to decide build vs recycle for all draft cards
   if (draftCards.length > 0) {
@@ -746,16 +695,12 @@ function handlePlanning(
     for (const entry of plan) {
       if (entry.action === 'recycle') {
         const recycleMove = legalMoves.find(
-          m => isMoveItemType(MaterialType.DevelopmentCard)(m) &&
-            m.itemIndex === entry.cardIndex &&
-            m.location.type === LocationType.Discard
+          (m) => isMoveItemType(MaterialType.DevelopmentCard)(m) && m.itemIndex === entry.cardIndex && m.location.type === LocationType.Discard
         )
         if (recycleMove) return recycleMove
       } else {
         const slateMove = legalMoves.find(
-          m => isMoveItemType(MaterialType.DevelopmentCard)(m) &&
-            m.itemIndex === entry.cardIndex &&
-            m.location.type === LocationType.ConstructionArea
+          (m) => isMoveItemType(MaterialType.DevelopmentCard)(m) && m.itemIndex === entry.cardIndex && m.location.type === LocationType.ConstructionArea
         )
         if (slateMove) return slateMove
       }
@@ -764,21 +709,17 @@ function handlePlanning(
     // Fallback: process first draft card (shouldn't normally reach here)
     const { index: cardIndex } = draftCards[0]
     const slateMove = legalMoves.find(
-      m => isMoveItemType(MaterialType.DevelopmentCard)(m) &&
-        m.itemIndex === cardIndex &&
-        m.location.type === LocationType.ConstructionArea
+      (m) => isMoveItemType(MaterialType.DevelopmentCard)(m) && m.itemIndex === cardIndex && m.location.type === LocationType.ConstructionArea
     )
     if (slateMove) return slateMove
     const recycleMove = legalMoves.find(
-      m => isMoveItemType(MaterialType.DevelopmentCard)(m) &&
-        m.itemIndex === cardIndex &&
-        m.location.type === LocationType.Discard
+      (m) => isMoveItemType(MaterialType.DevelopmentCard)(m) && m.itemIndex === cardIndex && m.location.type === LocationType.Discard
     )
     if (recycleMove) return recycleMove
   }
 
   // No draft cards left. Place all resources at once if possible.
-  const placeAllMove = legalMoves.find(m => isCustomMoveType(CustomMoveType.PlaceResources)(m))
+  const placeAllMove = legalMoves.find((m) => isCustomMoveType(CustomMoveType.PlaceResources)(m))
   if (placeAllMove) return placeAllMove
 
   // Place available resources on constructions individually.
@@ -790,38 +731,28 @@ function handlePlanning(
   if (directConstructMove) return directConstructMove
 
   // End turn
-  const endTurnMove = legalMoves.find(m => isEndPlayerTurn(m))
+  const endTurnMove = legalMoves.find((m) => isEndPlayerTurn(m))
   if (endTurnMove) return endTurnMove
 
   // Fallback: pick any legal move
   return legalMoves[0]
 }
 
-function handleProduction(
-  legalMoves: MaterialMove[],
-  game: MaterialGame,
-  player: Empire,
-  strategy: Strategy,
-  rule: RuleId
-): MaterialMove {
+function handleProduction(legalMoves: MaterialMove[], game: MaterialGame, player: Empire, strategy: Strategy, rule: RuleId): MaterialMove {
   const currentResource = ruleToResource[rule]!
   const round = (game.memory?.[Memory.Round] as number | undefined) ?? 1
 
   // Handle science bonus character choice
-  const characterCreates = legalMoves.filter(
-    m => isCreateItem(m) && m.itemType === MaterialType.CharacterToken
-  )
+  const characterCreates = legalMoves.filter((m) => isCreateItem(m) && m.itemType === MaterialType.CharacterToken)
   if (characterCreates.length > 0) {
     // Pick the preferred character
-    const preferred = characterCreates.find(
-      m => isCreateItem(m) && m.item?.id === strategy.valuableCharacter
-    )
+    const preferred = characterCreates.find((m) => isCreateItem(m) && m.item?.id === strategy.valuableCharacter)
     if (preferred) return preferred
     return characterCreates[0]
   }
 
   // Place all resources at once if possible
-  const placeAllMove = legalMoves.find(m => isCustomMoveType(CustomMoveType.PlaceResources)(m))
+  const placeAllMove = legalMoves.find((m) => isCustomMoveType(CustomMoveType.PlaceResources)(m))
   if (placeAllMove) return placeAllMove
 
   // Place resources on constructions (with phase-aware scoring)
@@ -830,11 +761,10 @@ function handleProduction(
 
   // Direct construction: prefer cards that would increase upcoming production
   const directConstructMoves = legalMoves.filter(
-    m => isMoveItemType(MaterialType.DevelopmentCard)(m) &&
-      m.location.type === LocationType.ConstructedDevelopments
+    (m) => isMoveItemType(MaterialType.DevelopmentCard)(m) && m.location.type === LocationType.ConstructedDevelopments
   )
   if (directConstructMoves.length > 0) {
-    const scoredConstructs = directConstructMoves.map(move => {
+    const scoredConstructs = directConstructMoves.map((move) => {
       if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return { move, score: 0 }
       const card = game.items[MaterialType.DevelopmentCard]?.[move.itemIndex]
       const development = card?.id?.front as Development | undefined
@@ -853,7 +783,7 @@ function handleProduction(
   }
 
   // End turn
-  const endTurnMove = legalMoves.find(m => isEndPlayerTurn(m))
+  const endTurnMove = legalMoves.find((m) => isEndPlayerTurn(m))
   if (endTurnMove) return endTurnMove
 
   return legalMoves[0]
@@ -870,9 +800,9 @@ function findBestResourcePlacement(
   currentResource?: Resource
 ): MaterialMove | undefined {
   // Resource placement moves: ResourceCube or CharacterToken → ConstructionCardCost
-  const placementMoves = legalMoves.filter(m =>
-    (isMoveItemType(MaterialType.ResourceCube)(m) || isMoveItemType(MaterialType.CharacterToken)(m)) &&
-    m.location.type === LocationType.ConstructionCardCost
+  const placementMoves = legalMoves.filter(
+    (m) =>
+      (isMoveItemType(MaterialType.ResourceCube)(m) || isMoveItemType(MaterialType.CharacterToken)(m)) && m.location.type === LocationType.ConstructionCardCost
   )
 
   if (placementMoves.length === 0) return undefined
@@ -888,7 +818,7 @@ function findBestResourcePlacement(
   }
 
   // Score each placement move
-  const scoredMoves = placementMoves.map(move => {
+  const scoredMoves = placementMoves.map((move) => {
     if (!isMoveItemType(MaterialType.ResourceCube)(move) && !isMoveItemType(MaterialType.CharacterToken)(move)) {
       return { move, score: 0 }
     }
@@ -906,33 +836,26 @@ function findBestResourcePlacement(
   })
 
   // Filter out zero/negative-scored moves
-  const constructionPlacements = scoredMoves.filter(m => m.score > 0)
+  const constructionPlacements = scoredMoves.filter((m) => m.score > 0)
   if (constructionPlacements.length > 0) {
     return selectBestMove(constructionPlacements)
   }
 
   // If no good construction placements, place on empire card
-  const empirePlacements = legalMoves.filter(m =>
-    isMoveItemType(MaterialType.ResourceCube)(m) && m.location.type === LocationType.EmpireCardResources
-  )
+  const empirePlacements = legalMoves.filter((m) => isMoveItemType(MaterialType.ResourceCube)(m) && m.location.type === LocationType.EmpireCardResources)
   if (empirePlacements.length > 0) return empirePlacements[0]
 
   return undefined
 }
 
-function findDirectConstruction(
-  legalMoves: MaterialMove[],
-  game: MaterialGame,
-  strategy: Strategy
-): MaterialMove | undefined {
+function findDirectConstruction(legalMoves: MaterialMove[], game: MaterialGame, strategy: Strategy): MaterialMove | undefined {
   const directConstructMoves = legalMoves.filter(
-    m => isMoveItemType(MaterialType.DevelopmentCard)(m) &&
-      m.location.type === LocationType.ConstructedDevelopments
+    (m) => isMoveItemType(MaterialType.DevelopmentCard)(m) && m.location.type === LocationType.ConstructedDevelopments
   )
 
   if (directConstructMoves.length === 0) return undefined
 
-  const scoredMoves = directConstructMoves.map(move => {
+  const scoredMoves = directConstructMoves.map((move) => {
     if (!isMoveItemType(MaterialType.DevelopmentCard)(move)) return { move, score: 0 }
     const card = game.items[MaterialType.DevelopmentCard]?.[move.itemIndex]
     const development = card?.id?.front as Development | undefined

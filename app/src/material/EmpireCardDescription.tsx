@@ -133,10 +133,15 @@ export class EmpireCardDescription extends CardDescription<Empire, MaterialType,
     [empireKey(Empire.NorthHegemony, EmpireSide.F)]: NorthHegemonyF
   }
 
-  content = (props: { itemId: EmpireCardId, children?: ReactNode }) => {
+  content = (props: { itemId: EmpireCardId; children?: ReactNode }) => {
     return this.contentWithBackChildren({
       ...props,
-      children: <>{props.children}<EmpireCardTitle itemId={props.itemId}/></>
+      children: (
+        <>
+          {props.children}
+          <EmpireCardTitle itemId={props.itemId} />
+        </>
+      )
     })
   }
 
@@ -181,11 +186,13 @@ const empireCardTitleStyle = css`
   bottom: 11%;
   left: 6%;
   width: 80%;
-  color: #EEE;
+  color: #eee;
   text-align: center;
   font-size: 0.5em;
   font-weight: lighter;
-  text-shadow: 0 0 0.3em #000, 0 0 0.3em #000;
+  text-shadow:
+    0 0 0.3em #000,
+    0 0 0.3em #000;
   text-transform: uppercase;
   pointer-events: none;
 `

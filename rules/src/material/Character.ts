@@ -7,6 +7,6 @@ export enum Character {
 
 export const characters = getEnumValues(Character)
 
-export function isCharacter(item: any): item is Character {
-  return characters.includes(item)
+export function isCharacter(item: unknown): item is Character {
+  return characters.includes(item as Character)
 }

@@ -42,10 +42,11 @@ export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
   const rules = useRules<MaterialRules>()!
   const legalMoves = useLegalMoves<MaterialMove>()
   const play = usePlay()
-  const animations = useAnimations<MoveItem>(({ move }) =>
-    isMoveItem(move) &&
-    (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
-    move.location.type !== LocationType.ConstructionCardCost
+  const animations = useAnimations<MoveItem>(
+    ({ move }) =>
+      isMoveItem(move) &&
+      (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
+      move.location.type !== LocationType.ConstructionCardCost
   )
 
   if (itemIndex === undefined) return null
@@ -59,8 +60,8 @@ export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
   const animatingAwaySpaces = new Set(
     animations
       .map(({ move }) => rules.material(move.itemType).getItem(move.itemIndex))
-      .filter(item => item?.location?.type === LocationType.ConstructionCardCost && item?.location?.parent === itemIndex)
-      .map(item => item.location.x as number)
+      .filter((item) => item?.location?.type === LocationType.ConstructionCardCost && item?.location?.parent === itemIndex)
+      .map((item) => item.location.x as number)
   )
 
   // Get the cost and figure out which spaces are filled
@@ -78,19 +79,22 @@ export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
 
   // Render placed items on the card, with remove buttons for krystallium and character tokens
   const isMyCard = item.location?.player === playerId
-  const removeMoves = isMyCard ? legalMoves.filter((move): move is MoveItem =>
-    isMoveItem(move) &&
-    (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
-    rules.material(move.itemType).getItem(move.itemIndex)?.location?.type === LocationType.ConstructionCardCost &&
-    rules.material(move.itemType).getItem(move.itemIndex)?.location?.parent === itemIndex &&
-    move.location.type !== LocationType.ConstructionCardCost
-  ) : []
+  const removeMoves = isMyCard
+    ? legalMoves.filter(
+        (move): move is MoveItem =>
+          isMoveItem(move) &&
+          (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
+          rules.material(move.itemType).getItem(move.itemIndex)?.location?.type === LocationType.ConstructionCardCost &&
+          rules.material(move.itemType).getItem(move.itemIndex)?.location?.parent === itemIndex &&
+          move.location.type !== LocationType.ConstructionCardCost
+      )
+    : []
 
   const placedItems: { space: number; icon: string; isRound: boolean; removeMove?: MoveItem }[] = []
   for (let space = 0; space < filledSpaces.length; space++) {
     const placed = filledSpaces[space]
     if (placed === undefined) continue
-    const removeMove = removeMoves.find(move => {
+    const removeMove = removeMoves.find((move) => {
       const moveItem = rules.material(move.itemType).getItem(move.itemIndex)
       return moveItem?.location?.x === space
     })
@@ -104,15 +108,16 @@ export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
   // Buttons: only for current player's card with legal moves
   const remainingCost = getRemainingCost(development, filledSpaces)
 
-  const placeMoves = isMyCard ? legalMoves.filter((move): move is MoveItem =>
-    (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
-    (move as MoveItem).location?.type === LocationType.ConstructionCardCost &&
-    (move as MoveItem).location?.parent === itemIndex
-  ) : []
-
-  const buttons = placeMoves.length > 0 && remainingCost.length > 0
-    ? getSmartPlaceMoves(development, remainingCost, placeMoves, rules)
+  const placeMoves = isMyCard
+    ? legalMoves.filter(
+        (move): move is MoveItem =>
+          (isMoveItemType(MaterialType.ResourceCube)(move) || isMoveItemType(MaterialType.CharacterToken)(move)) &&
+          (move as MoveItem).location?.type === LocationType.ConstructionCardCost &&
+          (move as MoveItem).location?.parent === itemIndex
+      )
     : []
+
+  const buttons = placeMoves.length > 0 && remainingCost.length > 0 ? getSmartPlaceMoves(development, remainingCost, placeMoves, rules) : []
 
   return (
     <div css={extraContentWrapper}>
@@ -127,10 +132,7 @@ export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
               <div css={[placedItemStyle, pos]}>
                 <Picture src={icon} css={isRound ? placedRoundStyle : placedCubeStyle} />
               </div>
-              <button
-                css={[buttonStyle, buttonPos, arrowCss]}
-                onClick={() => play(removeMove)}
-              >
+              <button css={[buttonStyle, buttonPos, arrowCss]} onClick={() => play(removeMove)}>
                 <Picture src={icon} css={isRound ? roundIconStyle : iconStyle} />
               </button>
             </Fragment>
@@ -147,11 +149,7 @@ export function ConstructionButtons({ item, itemIndex }: MaterialHelpProps) {
         const pos = getButtonPosition(column, index)
         const arrowCss = column === 1 ? rightArrowCss : leftArrowCss
         return (
-          <button
-            key={space}
-            css={[buttonStyle, pos, arrowCss]}
-            onClick={() => play(move)}
-          >
+          <button key={space} css={[buttonStyle, pos, arrowCss]} onClick={() => play(move)}>
             <Picture src={icon} css={isRound ? roundIconStyle : iconStyle} />
           </button>
         )
@@ -180,7 +178,7 @@ function getSmartPlaceMoves(
     const id = moveItem.id
     if (move.itemType === MaterialType.ResourceCube) {
       if (id === Resource.Krystallium) {
-        if (!availableKrystallium.some(k => k.index === move.itemIndex)) {
+        if (!availableKrystallium.some((k) => k.index === move.itemIndex)) {
           availableKrystallium.push({ index: move.itemIndex, remaining: moveItem.quantity ?? 1 })
         }
       } else {
@@ -213,7 +211,7 @@ function getSmartPlaceMoves(
   }
 
   const findMoveForSpace = (space: number, itemType: number, itemIndex: number) =>
-    placeMoves.find(m => m.itemType === itemType && m.itemIndex === itemIndex && m.location.x === space)
+    placeMoves.find((m) => m.itemType === itemType && m.itemIndex === itemIndex && m.location.x === space)
 
   const consumeFromPool = (pool: { index: number; remaining: number }[]): number | undefined => {
     while (pool.length > 0) {
@@ -296,7 +294,8 @@ const buttonStyle = css`
   cursor: pointer;
   filter: drop-shadow(0.1em 0.1em 0.5em black);
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     outline: 0;
     transform: translateY(0.03em) scale(1.1);
     cursor: pointer;

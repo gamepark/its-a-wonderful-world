@@ -23,12 +23,7 @@ export const VictoryPointsMultiplier = ({ combo, quantity, ...props }: Props) =>
       {quantity !== undefined && <span css={quantityStyle}>{quantity}</span>}
       {items.map((item) =>
         isCharacter(item) ? (
-          <img
-            key={item}
-            src={characterIcons[item as Character]}
-            alt={getCharacterDescription(t, item as Character)}
-            css={characterImageStyle}
-          />
+          <img key={item} src={characterIcons[item as Character]} alt={getCharacterDescription(t, item as Character)} css={characterImageStyle} />
         ) : (
           <img
             key={item}

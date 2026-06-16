@@ -58,14 +58,12 @@ const placeResourceOrAll =
   (dev: Development, space?: number): Filter =>
   (move, game) =>
     placeResource(dev, space)(move, game) ||
-    (isCustomMoveType(CustomMoveType.PlaceResources)(move) &&
-      cardFront(game, MaterialType.DevelopmentCard, move.data as number) === dev)
+    (isCustomMoveType(CustomMoveType.PlaceResources)(move) && cardFront(game, MaterialType.DevelopmentCard, move.data as number) === dev)
 
 const buildCard =
   (dev: Development): Filter =>
   (move, game) =>
-    (isCustomMoveType(CustomMoveType.PlaceResources)(move) &&
-      cardFront(game, MaterialType.DevelopmentCard, move.data as number) === dev) ||
+    (isCustomMoveType(CustomMoveType.PlaceResources)(move) && cardFront(game, MaterialType.DevelopmentCard, move.data as number) === dev) ||
     (isMoveItemType(MaterialType.DevelopmentCard)(move) &&
       move.location.type === LocationType.ConstructedDevelopments &&
       cardFront(game, MaterialType.DevelopmentCard, move.itemIndex) === dev)
@@ -1107,7 +1105,11 @@ export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationTyp
       popup: {
         text: (t) => (
           <>
-            <img src={resourceIcons[Resource.Krystallium]} alt={t('resource.krystallium')} style={{ width: '1.7em', verticalAlign: 'middle', marginRight: '0.2em' }} />
+            <img
+              src={resourceIcons[Resource.Krystallium]}
+              alt={t('resource.krystallium')}
+              style={{ width: '1.7em', verticalAlign: 'middle', marginRight: '0.2em' }}
+            />
             <strong>{t('tuto.krystallium.use.title', 'Use of Krystallium')}</strong>
             <br />
             {t('tuto.krystallium.use', 'The Krystallium can replace any cube to build a card, and can be used at any time.')}

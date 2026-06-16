@@ -26,7 +26,7 @@ export const PlayerResourceProduction: FC<Props> = ({ playerId, small = false })
   const production = usePlayerProduction(playerId)
 
   // Build display data
-  let productionDisplay = new Map<Resource, ProductionDisplay>()
+  const productionDisplay = new Map<Resource, ProductionDisplay>()
   let productionDisplaySize = 0
 
   for (const resource of resources) {
@@ -49,9 +49,7 @@ export const PlayerResourceProduction: FC<Props> = ({ playerId, small = false })
 
   const reduceProductionDisplay = (maxSize: number) => {
     while (productionDisplaySize > maxSize) {
-      const maxProduction = Math.max(
-        ...Array.from(productionDisplay.values()).map(d => d.size)
-      )
+      const maxProduction = Math.max(...Array.from(productionDisplay.values()).map((d) => d.size))
       for (const resource of resources) {
         displayMultiplierForHighProduction(resource, maxProduction)
       }
@@ -74,44 +72,16 @@ export const PlayerResourceProduction: FC<Props> = ({ playerId, small = false })
     const display = productionDisplay.get(resource)!
 
     if (display.multiplier) {
-      elements.push(
-        <img
-          key={resource + 'Multiplied'}
-          src={resourceIcons[resource]}
-          draggable="false"
-          alt=""
-          css={productionStyle(display.index!)}
-        />
-      )
+      elements.push(<img key={resource + 'Multiplied'} src={resourceIcons[resource]} draggable="false" alt="" css={productionStyle(display.index!)} />)
       if (display.corruption) {
         elements.push(
-          <img
-            key={resource + 'Corruption'}
-            src={corruptionIcon}
-            draggable="false"
-            alt=""
-            css={[productionStyle(display.index!), corruptionStyle]}
-          />
+          <img key={resource + 'Corruption'} src={corruptionIcon} draggable="false" alt="" css={[productionStyle(display.index!), corruptionStyle]} />
         )
       }
-      elements.push(
-        <ProductionMultiplier
-          key={resource + 'Multiplier'}
-          quantity={display.multiplier}
-          css={productionMultiplierStyle(display.index!)}
-        />
-      )
+      elements.push(<ProductionMultiplier key={resource + 'Multiplier'} quantity={display.multiplier} css={productionMultiplierStyle(display.index!)} />)
     } else {
       for (let i = 0; i < display.size; i++) {
-        elements.push(
-          <img
-            key={resource + '_' + i}
-            src={resourceIcons[resource]}
-            draggable="false"
-            alt=""
-            css={productionStyle(display.index! + i)}
-          />
-        )
+        elements.push(<img key={resource + '_' + i} src={resourceIcons[resource]} draggable="false" alt="" css={productionStyle(display.index! + i)} />)
         if (display.corruption) {
           elements.push(
             <img
@@ -154,17 +124,17 @@ const corruptionStyle = css`
   opacity: 0.8;
 `
 
-const ProductionMultiplier: FC<{ quantity: number } & HTMLAttributes<HTMLDivElement>> = ({
-  quantity,
-  ...props
-}) => <div {...props}>{quantity}</div>
+const ProductionMultiplier: FC<{ quantity: number } & HTMLAttributes<HTMLDivElement>> = ({ quantity, ...props }) => <div {...props}>{quantity}</div>
 
 const productionMultiplierStyle = (index: number) => {
   const base = css`
     font-size: 3em;
     font-weight: bold;
     color: white;
-    text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
+    text-shadow:
+      0 0 0.2em black,
+      0 0 0.2em black,
+      0 0 0.2em black;
     text-align: center;
     width: 11%;
   `

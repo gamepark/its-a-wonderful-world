@@ -27,7 +27,13 @@ const AvailableResourcesContent = ({ location }: { location: Location }) => {
   if (count === 0) return null
 
   return (
-    <span css={css`color: ${resourceColor[resource]};`}>{count}</span>
+    <span
+      css={css`
+        color: ${resourceColor[resource]};
+      `}
+    >
+      {count}
+    </span>
   )
 }
 
@@ -48,7 +54,11 @@ class AvailableResourcesLocationDescription extends LocationDescription {
       transform: translate(-50%, -50%);
       font-size: 1.2em;
       font-weight: bold;
-      text-shadow: 0 0 0.15em black, 0 0 0.15em black, 0 0 0.15em black, 0 0 0.15em black;
+      text-shadow:
+        0 0 0.15em black,
+        0 0 0.15em black,
+        0 0 0.15em black,
+        0 0 0.15em black;
       pointer-events: none;
     }
   `
@@ -64,9 +74,7 @@ class AvailableResourcesLocator extends PileLocator<Empire, MaterialType, Locati
   getLocations(context: MaterialContext<Empire, MaterialType, LocationType>) {
     const currentView = context.rules.game.view ?? context.player ?? context.rules.players[0]
     if (currentView === undefined) return []
-    return resources
-      .filter(r => r !== Resource.Krystallium)
-      .map(resource => ({ type: LocationType.AvailableResources, player: currentView, id: resource }))
+    return resources.filter((r) => r !== Resource.Krystallium).map((resource) => ({ type: LocationType.AvailableResources, player: currentView, id: resource }))
   }
 
   hide(item: MaterialItem<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>) {

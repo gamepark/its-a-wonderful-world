@@ -29,11 +29,7 @@ export const RoundTracker = () => {
       css={[containerStyle, playDown && playDownStyle]}
       onClick={() => play(MaterialMoveBuilder.displayRulesHelp(RuleId.ChooseDevelopmentCard), { transient: true })}
     >
-      <img
-        alt={t('ui.round-tracker')}
-        src={round % 2 ? roundTrackerRecto : roundTrackerVerso}
-        css={roundTrackerStyle}
-      />
+      <img alt={t('ui.round-tracker')} src={round % 2 ? roundTrackerRecto : roundTrackerVerso} css={roundTrackerStyle} />
       <span css={roundTextStyle}>{round}</span>
     </div>
   )
@@ -64,5 +60,9 @@ const roundTextStyle = css`
   font-size: 2em;
   color: white;
   font-weight: bold;
-  text-shadow: 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black, 0 0 0.2em black;
+  text-shadow:
+    0 0 0.2em black,
+    0 0 0.2em black,
+    0 0 0.2em black,
+    0 0 0.2em black;
 `

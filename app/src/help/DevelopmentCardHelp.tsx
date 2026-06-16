@@ -109,13 +109,15 @@ function HiddenCardHelp({ item }: { item: MaterialHelpProps['item'] }) {
   const playerName = usePlayerName(player)
   const back = (item.id as { back?: number } | undefined)?.back
   const playerCount = rules?.players.length ?? 2
-  const hasAscension = (rules?.material(MaterialType.DevelopmentCard).location(LocationType.AscensionDeck).length ?? 0) > 0
-    || rules?.material(MaterialType.DevelopmentCard).getItems().some(i => i.id?.back === DeckType.Ascension) === true
+  const hasAscension =
+    (rules?.material(MaterialType.DevelopmentCard).location(LocationType.AscensionDeck).length ?? 0) > 0 ||
+    rules
+      ?.material(MaterialType.DevelopmentCard)
+      .getItems()
+      .some((i) => i.id?.back === DeckType.Ascension) === true
 
   if (locationType === LocationType.Deck) {
-    const baseCards = !hasAscension
-      ? (playerCount === 2 ? 10 : 7)
-      : (playerCount === 2 ? 8 : playerCount === 7 ? 5 : 6)
+    const baseCards = !hasAscension ? (playerCount === 2 ? 10 : 7) : playerCount === 2 ? 8 : playerCount === 7 ? 5 : 6
     return (
       <>
         <h2 css={titleCss('#666')}>{t('help.deck.title', 'Development card deck')}</h2>
@@ -125,16 +127,14 @@ function HiddenCardHelp({ item }: { item: MaterialHelpProps['item'] }) {
   }
 
   if (locationType === LocationType.AscensionDeck || back === DeckType.Ascension) {
-    const ascensionCards = playerCount === 2 ? 4 : (playerCount <= 4 ? 3 : 2)
+    const ascensionCards = playerCount === 2 ? 4 : playerCount <= 4 ? 3 : 2
     return (
       <>
         <h2 css={titleCss('#666')}>{t('help.deck.ascension.title', 'Corruption & Ascension card deck')}</h2>
         <p>
-          {t(
-            'help.deck.ascension.description',
-            'At the beginning of each round, {count} cards from this deck are dealt to each player.',
-            { count: ascensionCards }
-          )}
+          {t('help.deck.ascension.description', 'At the beginning of each round, {count} cards from this deck are dealt to each player.', {
+            count: ascensionCards
+          })}
         </p>
       </>
     )
@@ -186,8 +186,8 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
   const placedResources =
     placeAllMove && constructionRule?.getPlaceResourcesMoves
       ? constructionRule
-        .getPlaceResourcesMoves(playerId, itemIndex)
-        .map((move) => rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource)
+          .getPlaceResourcesMoves(playerId, itemIndex)
+          .map((move) => rules.material(MaterialType.ResourceCube).getItem((move as MoveItem).itemIndex).id as Resource)
       : []
 
   const hasActions = selectMove || buildMove || recycleMove || constructMove || placeAllMove
@@ -305,7 +305,7 @@ function ProductionIcons({ production }: { production: Production }) {
     Character.General
   ]
   for (const key of resourceOrder) {
-    const count = (production as any)[key] ?? 0
+    const count = production[key] ?? 0
     if (count > 0) {
       for (let i = 0; i < count; i++) {
         if (isCharacter(key)) {
@@ -390,13 +390,14 @@ function VictoryPointsDisplay({ victoryPoints }: { victoryPoints: VictoryPoints 
       )}
       <span css={factorLabelCss}>
         {items
-          .map((item) => (isCharacter(item) ? (item === Character.Financier ? t('character.financier') : t('character.general')) : getDevelopmentTypeName(t, item)))
+          .map((item) =>
+            isCharacter(item) ? (item === Character.Financier ? t('character.financier') : t('character.general')) : getDevelopmentTypeName(t, item)
+          )
           .join(' + ')}
       </span>
     </div>
   )
 }
-
 
 // --- Styles ---
 

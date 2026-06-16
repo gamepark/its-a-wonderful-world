@@ -30,10 +30,7 @@ class ConstructionCardCostLocator extends Locator<Empire, MaterialType, Location
 
   locationDescription = new ConstructionCardCostDropArea()
 
-  getPositionOnParent(
-    location: Location<Empire, LocationType>,
-    context: MaterialContext<Empire, MaterialType, LocationType>
-  ) {
+  getPositionOnParent(location: Location<Empire, LocationType>, context: MaterialContext<Empire, MaterialType, LocationType>) {
     const parentIndex = location.parent
     if (!isItemContext(context) || parentIndex === undefined) return { x: 50, y: 50 }
 
@@ -69,15 +66,14 @@ class ConstructionCardCostLocator extends Locator<Empire, MaterialType, Location
     return card?.location?.player !== currentView
   }
 
-  getItemCoordinates(
-    _item: MaterialItem<Empire, LocationType>,
-    _context: ItemContext<Empire, MaterialType, LocationType>
-  ) {
+  getItemCoordinates(_item: MaterialItem<Empire, LocationType>, _context: ItemContext<Empire, MaterialType, LocationType>) {
     // z-index to ensure cubes appear above the card
     return { z: 5 }
   }
 
-  getDropLocations(moves: (MoveItem<Empire, MaterialType, LocationType> | MoveItemsAtOnce<Empire, MaterialType, LocationType>)[]): Location<Empire, LocationType>[] {
+  getDropLocations(
+    moves: (MoveItem<Empire, MaterialType, LocationType> | MoveItemsAtOnce<Empire, MaterialType, LocationType>)[]
+  ): Location<Empire, LocationType>[] {
     // One drop zone per card (not per cost slot)
     const parents = new Set<number>()
     const locations: Location<Empire, LocationType>[] = []
@@ -120,7 +116,7 @@ class ConstructionCardCostDropArea extends DropAreaDescription<Empire, MaterialT
 
     if (resource === Resource.Krystallium) {
       // Krystallium: prefer slots that specifically require Krystallium
-      const krystalliumSlot = sortedMoves.find(m => cost[m.location.x ?? 0] === Resource.Krystallium)
+      const krystalliumSlot = sortedMoves.find((m) => cost[m.location.x ?? 0] === Resource.Krystallium)
       if (krystalliumSlot) return krystalliumSlot
     }
 

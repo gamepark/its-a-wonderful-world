@@ -33,9 +33,7 @@ export function EmpireCardHelp({ item, closeDialog }: MaterialHelpProps) {
 
   const letter = String.fromCharCode(64 + side)
 
-  const placeAllMove = legalMoves.find(
-    move => isCustomMoveType(CustomMoveType.PlaceAllOnEmpire)(move) && move.data === playerId
-  )
+  const placeAllMove = legalMoves.find((move) => isCustomMoveType(CustomMoveType.PlaceAllOnEmpire)(move) && move.data === playerId)
 
   return (
     <>
@@ -43,12 +41,8 @@ export function EmpireCardHelp({ item, closeDialog }: MaterialHelpProps) {
         ({letter}) {getPlayerName(empire, t)}
       </h2>
 
-      <p css={explanationCss}>
-        {t('help.empire.description', 'Each player starts with an Empire card that provides a base production.')}
-      </p>
-      <p css={explanationCss}>
-        {t('help.empire.conversion', 'Every 5 resource cubes placed on the Empire card are converted into 1 Krystallium.')}
-      </p>
+      <p css={explanationCss}>{t('help.empire.description', 'Each player starts with an Empire card that provides a base production.')}</p>
+      <p css={explanationCss}>{t('help.empire.conversion', 'Every 5 resource cubes placed on the Empire card are converted into 1 Krystallium.')}</p>
 
       {placeAllMove && (
         <div css={actionsCss}>
@@ -100,12 +94,9 @@ function EmpireProductionIcons({ production }: { production: Production }) {
     )
   }
   const icons: ReactElement[] = []
-  const resourceOrder: Resource[] = [
-    Resource.Materials, Resource.Energy, Resource.Science,
-    Resource.Gold, Resource.Exploration, Resource.Krystallium
-  ]
+  const resourceOrder: Resource[] = [Resource.Materials, Resource.Energy, Resource.Science, Resource.Gold, Resource.Exploration, Resource.Krystallium]
   for (const key of resourceOrder) {
-    const count = (production as any)[key] ?? 0
+    const count = production[key] ?? 0
     if (count > 0) {
       for (let i = 0; i < count; i++) {
         icons.push(<Picture key={`${key}-${i}`} src={resourceIcons[key]} css={inlineIconCss} />)
@@ -126,8 +117,10 @@ function EmpireProductionIcons({ production }: { production: Production }) {
 
 function EmpireProductionDescription({ production }: { production: Production }) {
   const { t } = useTranslation()
-  const hasCorruption = !isResource(production) && !isProductionFactor(production)
-    && Object.entries(production as { [key in Resource | Character]?: number }).some(([, v]) => v !== undefined && v < 0)
+  const hasCorruption =
+    !isResource(production) &&
+    !isProductionFactor(production) &&
+    Object.entries(production as { [key in Resource | Character]?: number }).some(([, v]) => v !== undefined && v < 0)
   return (
     <>
       {isProductionFactor(production) && (
@@ -140,7 +133,10 @@ function EmpireProductionDescription({ production }: { production: Production })
       )}
       {hasCorruption && (
         <p css={explanationCss}>
-          {t('help.development.production.corruption', 'Certain Corruption & Ascension cards produce Corruption. If you have any of these in your Empire, subtract the corrupted resources from your total production.')}
+          {t(
+            'help.development.production.corruption',
+            'Certain Corruption & Ascension cards produce Corruption. If you have any of these in your Empire, subtract the corrupted resources from your total production.'
+          )}
         </p>
       )}
     </>
@@ -154,17 +150,19 @@ function EmpireVictoryPointsDisplay({ victoryPoints }: { victoryPoints: ComboVic
     <div css={iconRowCss}>
       <strong>{victoryPoints.quantity}</strong>
       <span css={factorCss}>x</span>
-      {items.map(item =>
-        isCharacter(item)
-          ? <Picture key={item} src={characterIcons[item]} css={roundIconCss} />
-          : <Picture key={item} src={developmentTypeIcons[item]} css={typeIconSmallCss} />
+      {items.map((item) =>
+        isCharacter(item) ? (
+          <Picture key={item} src={characterIcons[item]} css={roundIconCss} />
+        ) : (
+          <Picture key={item} src={developmentTypeIcons[item]} css={typeIconSmallCss} />
+        )
       )}
       <span css={factorLabelCss}>
-        {items.map(item =>
-          isCharacter(item)
-            ? (item === Character.Financier ? t('character.financier') : t('character.general'))
-            : getDevelopmentTypeName(t, item)
-        ).join(' + ')}
+        {items
+          .map((item) =>
+            isCharacter(item) ? (item === Character.Financier ? t('character.financier') : t('character.general')) : getDevelopmentTypeName(t, item)
+          )
+          .join(' + ')}
       </span>
     </div>
   )

@@ -1,6 +1,16 @@
 import { css, Global } from '@emotion/react'
 import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
-import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialGameSounds, MaterialHeader, MaterialImageLoader, Menu, useGame, usePlayerId } from '@gamepark/react-game'
+import {
+  FailuresDialog,
+  FullscreenDialog,
+  LoadingScreen,
+  MaterialGameSounds,
+  MaterialHeader,
+  MaterialImageLoader,
+  Menu,
+  useGame,
+  usePlayerId
+} from '@gamepark/react-game'
 import { MaterialGame } from '@gamepark/rules-api'
 import { useEffect, useState } from 'react'
 import { GameDisplay } from './GameDisplay'

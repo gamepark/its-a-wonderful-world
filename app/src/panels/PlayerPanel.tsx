@@ -19,20 +19,12 @@ type Props = {
   gameOver?: boolean
 } & HTMLAttributes<HTMLDivElement>
 
-export const PlayerPanel: FC<Props> = ({
-  playerId,
-  small = false,
-  gameOver = false,
-  ...props
-}) => {
+export const PlayerPanel: FC<Props> = ({ playerId, small = false, gameOver = false, ...props }) => {
   const { t } = useTranslation()
   const playerInfo = usePlayer(playerId)
   const eliminated = usePlayerEliminated(playerId)
   const game = useGame<MaterialGame>()
-  const bestCombo = useMemo(
-    () => !small && game ? getBestVictoryPointsCombo(game, playerId) : undefined,
-    [game, playerId, small]
-  )
+  const bestCombo = useMemo(() => (!small && game ? getBestVictoryPointsCombo(game, playerId) : undefined), [game, playerId, small])
 
   return (
     <div css={panelStyle(playerId)} {...props}>
@@ -40,16 +32,10 @@ export const PlayerPanel: FC<Props> = ({
         {playerInfo?.avatar ? (
           <Avatar playerId={playerId} css={avatarStyle} />
         ) : (
-          <img
-            src={empireAvatars[playerId]}
-            alt={t('ui.player-avatar')}
-            css={fallbackAvatarStyle}
-          />
+          <img src={empireAvatars[playerId]} alt={t('ui.player-avatar')} css={fallbackAvatarStyle} />
         )}
         <h3 css={titleStyle}>
-          <span css={[nameStyle, eliminated && eliminatedStyle]}>
-            {playerInfo?.name || getPlayerName(playerId, t)}
-          </span>
+          <span css={[nameStyle, eliminated && eliminatedStyle]}>{playerInfo?.name || getPlayerName(playerId, t)}</span>
           {gameOver ? <GamePoints playerId={playerId} css={timerStyle} /> : <PlayerTimer playerId={playerId} css={timerStyle} />}
         </h3>
         <PlayerResourceProduction playerId={playerId} small={small} />

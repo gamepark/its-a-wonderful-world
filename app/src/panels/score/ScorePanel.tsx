@@ -11,13 +11,12 @@ type Props = {
 }
 
 // Panel dimensions must match PlayerPanels.tsx
-const playerPanelHeight = (players: number) => players > 5 ? 5 : 7.3
+const playerPanelHeight = (players: number) => (players > 5 ? 5 : 7.3)
 const playerPanelMargin = 0.65
 const playerPanelRightMargin = 0.8
 const playerPanelWidth = 15
 
-const playerPanelY = (index: number, players: number) =>
-  playerPanelMargin + index * (playerPanelHeight(players) + playerPanelMargin)
+const playerPanelY = (index: number, players: number) => playerPanelMargin + index * (playerPanelHeight(players) + playerPanelMargin)
 
 export const ScorePanel = ({ animation, playerCount }: Props) => {
   const players = usePlayers<Empire>({ sortFromMe: true })

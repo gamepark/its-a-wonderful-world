@@ -19,11 +19,7 @@ export const DraftDirectionIndicator: FC<Props> = ({ clockwise, ...props }) => {
   const arrowSrc = clockwise ? arrowGreen : arrowWhite
 
   return (
-    <div
-      css={[containerStyle, clockwise ? scrollDownAnimation : scrollUpAnimation]}
-      title={t('ui.draft-direction')}
-      {...props}
-    >
+    <div css={[containerStyle, clockwise ? scrollDownAnimation : scrollUpAnimation]} title={t('ui.draft-direction')} {...props}>
       <div css={sliderContent}>
         <img src={arrowSrc} alt="" css={[arrowStyle, clockwise ? arrowDown : arrowUp]} style={{ top: 0 }} />
         <img src={arrowSrc} alt="" css={[arrowStyle, clockwise ? arrowDown : arrowUp]} style={{ top: '25%' }} />

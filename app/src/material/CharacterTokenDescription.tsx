@@ -62,9 +62,6 @@ export class CharacterTokenDescription extends TokenDescription<Empire, Material
     const ruleId = context.rules.game.rule?.id as RuleId | undefined
     const isDraftPhase = ruleId !== undefined && ruleId < RuleId.Planning
     return isDraftPhase ? [] : this.staticItems
-
-
-
   }
 
   /**
@@ -81,17 +78,12 @@ export class CharacterTokenDescription extends TokenDescription<Empire, Material
     const character = item.id as Character
 
     // Find the createItem move for this character type
-    const choiceMove = legalMoves.find(
-      (move) =>
-        isCreateItem(move) &&
-        move.itemType === MaterialType.CharacterToken &&
-        move.item.id === character
-    )
+    const choiceMove = legalMoves.find((move) => isCreateItem(move) && move.itemType === MaterialType.CharacterToken && move.item.id === character)
 
     if (!choiceMove) return null
 
     return (
-      <ItemMenuButton move={choiceMove} label={<Trans i18nKey="ui.take" defaults="Take"/>} angle={0} radius={2}>
+      <ItemMenuButton move={choiceMove} label={<Trans i18nKey="ui.take" defaults="Take" />} angle={0} radius={2}>
         <FontAwesomeIcon icon={faHandBackFist} />
       </ItemMenuButton>
     )

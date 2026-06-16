@@ -1,4 +1,14 @@
-import { CustomMove, isCreateItem, isCustomMoveType, isDeleteItemType, isMoveItemType, isMoveItemTypeAtOnce, ItemMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
+import {
+  CustomMove,
+  isCreateItem,
+  isCustomMoveType,
+  isDeleteItemType,
+  isMoveItemType,
+  isMoveItemTypeAtOnce,
+  ItemMove,
+  MaterialMove,
+  SimultaneousRule
+} from '@gamepark/rules-api'
 import { Empire } from '../Empire'
 import { Memory } from '../ItsAWonderfulWorldMemory'
 import { Character, isCharacter } from '../material/Character'
@@ -97,11 +107,14 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
 
         for (const { space } of validSpaces) {
           moves.push(
-            this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
-              type: LocationType.ConstructionCardCost,
-              parent: cardIndex,
-              x: space
-            }, 1)
+            this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem(
+              {
+                type: LocationType.ConstructionCardCost,
+                parent: cardIndex,
+                x: space
+              },
+              1
+            )
           )
         }
       }
@@ -112,11 +125,14 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         for (const krystalliumIndex of krystalliumStock.getIndexes()) {
           for (const { space } of resourceCostSpaces) {
             moves.push(
-              this.material(MaterialType.ResourceCube).index(krystalliumIndex).moveItem({
-                type: LocationType.ConstructionCardCost,
-                parent: cardIndex,
-                x: space
-              }, 1)
+              this.material(MaterialType.ResourceCube).index(krystalliumIndex).moveItem(
+                {
+                  type: LocationType.ConstructionCardCost,
+                  parent: cardIndex,
+                  x: space
+                },
+                1
+              )
             )
           }
         }
@@ -136,11 +152,14 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
 
         for (const { space } of validSpaces) {
           moves.push(
-            this.material(MaterialType.CharacterToken).index(tokenIndex).moveItem({
-              type: LocationType.ConstructionCardCost,
-              parent: cardIndex,
-              x: space
-            }, 1)
+            this.material(MaterialType.CharacterToken).index(tokenIndex).moveItem(
+              {
+                type: LocationType.ConstructionCardCost,
+                parent: cardIndex,
+                x: space
+              },
+              1
+            )
           )
         }
       }
@@ -173,10 +192,13 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     moves.push(
       ...availableResources
         .filter((item) => item.id !== Resource.Krystallium)
-        .moveItems({
-          type: LocationType.EmpireCardResources,
-          player: playerId
-        }, 1)
+        .moveItems(
+          {
+            type: LocationType.EmpireCardResources,
+            player: playerId
+          },
+          1
+        )
     )
 
     // Custom move to place all available non-krystallium resources on a card at once
@@ -187,7 +209,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     }
 
     // Custom move to place all available non-krystallium resources on empire card at once
-    if (availableResources.filter(item => item.id !== Resource.Krystallium).length > 0) {
+    if (availableResources.filter((item) => item.id !== Resource.Krystallium).length > 0) {
       moves.push(this.customMove(CustomMoveType.PlaceAllOnEmpire, playerId))
     }
 
@@ -229,11 +251,14 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       usedPerItem.set(resourceIndex, used + 1)
       usedSpaces.add(space)
       result.push(
-        this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
-          type: LocationType.ConstructionCardCost,
-          parent: cardIndex,
-          x: space
-        }, 1)
+        this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem(
+          {
+            type: LocationType.ConstructionCardCost,
+            parent: cardIndex,
+            x: space
+          },
+          1
+        )
       )
     }
     return result
@@ -256,10 +281,13 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         const quantity = item.quantity ?? 1
         for (let i = 0; i < quantity; i++) {
           moves.push(
-            this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
-              type: LocationType.EmpireCardResources,
-              player
-            }, 1)
+            this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem(
+              {
+                type: LocationType.EmpireCardResources,
+                player
+              },
+              1
+            )
           )
         }
       }
@@ -323,9 +351,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         consequences.push(...recyclingMoves)
         // If recycling creates a resource in AvailableResources, the isCreateItem handler will
         // check for unplaceable resources with the correct post-move state. Don't double-trigger.
-        const createsAvailableResource = recyclingMoves.some(
-          (m) => isCreateItem(m) && m.item?.location?.type === LocationType.AvailableResources
-        )
+        const createsAvailableResource = recyclingMoves.some((m) => isCreateItem(m) && m.item?.location?.type === LocationType.AvailableResources)
         if (!createsAvailableResource) {
           this.memorize(Memory.CheckUnplaceableResources, player)
         }
@@ -360,10 +386,13 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         if (remaining > 0 && !this.canResourceBePlaced(player, resource)) {
           for (let i = 0; i < remaining; i++) {
             consequences.push(
-              this.material(MaterialType.ResourceCube).index(move.itemIndex).moveItem({
-                type: LocationType.EmpireCardResources,
-                player
-              }, 1)
+              this.material(MaterialType.ResourceCube).index(move.itemIndex).moveItem(
+                {
+                  type: LocationType.EmpireCardResources,
+                  player
+                },
+                1
+              )
             )
           }
         }
@@ -470,10 +499,13 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         const quantity = resourceItem.quantity ?? 1
         for (let i = 0; i < quantity; i++) {
           moves.push(
-            this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem({
-              type: LocationType.EmpireCardResources,
-              player
-            }, 1)
+            this.material(MaterialType.ResourceCube).index(resourceIndex).moveItem(
+              {
+                type: LocationType.EmpireCardResources,
+                player
+              },
+              1
+            )
           )
         }
       }
@@ -492,10 +524,13 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         const quantity = item.quantity ?? 1
         for (let i = 0; i < quantity; i++) {
           moves.push(
-            this.material(MaterialType.ResourceCube).index(idx).moveItem({
-              type: LocationType.EmpireCardResources,
-              player
-            }, 1)
+            this.material(MaterialType.ResourceCube).index(idx).moveItem(
+              {
+                type: LocationType.EmpireCardResources,
+                player
+              },
+              1
+            )
           )
         }
       }
@@ -531,7 +566,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       if (resource !== Resource.Krystallium) {
         const card = this.material(MaterialType.DevelopmentCard).getItem(cardIndex)
         const cost = getCost(card.id.front as Development)
-        const krystalliumCubes = this.getCubesOnCard(cardIndex).filter(item => item.id === Resource.Krystallium)
+        const krystalliumCubes = this.getCubesOnCard(cardIndex).filter((item) => item.id === Resource.Krystallium)
         for (const cube of krystalliumCubes.getItems()) {
           const space = cube.location.x ?? 0
           if (isResource(cost[space]) && cost[space] === resource) return true

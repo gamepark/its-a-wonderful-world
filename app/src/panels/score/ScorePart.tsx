@@ -17,8 +17,9 @@ export const ScorePart = ({ combo, scoreMultipliers, score }: Props) => {
   if (!displayedScore) return null
   return (
     <div css={style}>
-      {combo && scoreMultipliers &&
-        <VictoryPointsMultiplier css={[multiplierStyle, isMultiCombo && comboStyle]} combo={combo} quantity={getComboMultiplier(combo, scoreMultipliers)} />}
+      {combo && scoreMultipliers && (
+        <VictoryPointsMultiplier css={[multiplierStyle, isMultiCombo && comboStyle]} combo={combo} quantity={getComboMultiplier(combo, scoreMultipliers)} />
+      )}
       <div css={scoreStyle}>{displayedScore}</div>
     </div>
   )

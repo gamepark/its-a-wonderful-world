@@ -51,7 +51,10 @@ const textStyle = css`
   text-align: center;
   color: antiquewhite;
   font-size: 6em;
-  text-shadow: 0 0 0.15em black, 0 0 0.3em black, 0 0 0.6em black;
+  text-shadow:
+    0 0 0.15em black,
+    0 0 0.3em black,
+    0 0 0.6em black;
 `
 
 class DiscardDropAreaDescription extends DropAreaDescription<Empire, MaterialType, LocationType> {

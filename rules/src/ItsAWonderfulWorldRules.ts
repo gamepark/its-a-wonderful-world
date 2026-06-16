@@ -91,7 +91,6 @@ export class ItsAWonderfulWorldRules
     }
   }
 
-
   giveTime(player: Empire): number {
     const ruleId = this.game.rule?.id
     switch (ruleId) {

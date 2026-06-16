@@ -6,13 +6,7 @@ import { Character, isCharacter } from '@gamepark/its-a-wonderful-world/material
 import { DevelopmentType } from '@gamepark/its-a-wonderful-world/material/DevelopmentType'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
-import {
-  ComboVictoryPoints,
-  getComboValue,
-  getScoreFromScoringDetails,
-  getScoringDetails,
-  ScoreMultiplier
-} from '@gamepark/its-a-wonderful-world/Scoring'
+import { ComboVictoryPoints, getComboValue, getScoreFromScoringDetails, getScoringDetails, ScoreMultiplier } from '@gamepark/its-a-wonderful-world/Scoring'
 import { ScoringDescription } from '@gamepark/react-game'
 import { Trans } from 'react-i18next'
 import { characterIcons, developmentTypeIcons, scoreIcon } from '../panels/Images'
@@ -38,7 +32,6 @@ function parseComboKey(key: string): ScoreMultiplier | ScoreMultiplier[] {
 }
 
 export class ItsAWonderfulWorldScoring implements ScoringDescription<Empire, ItsAWonderfulWorldRules, ScoringKey> {
-
   getScoringKeys(rules: ItsAWonderfulWorldRules): ScoringKey[] {
     const players = rules.players
     const allComboKeys = new Set<string>()
@@ -58,13 +51,7 @@ export class ItsAWonderfulWorldScoring implements ScoringDescription<Empire, Its
       return a.localeCompare(b, undefined, { numeric: true })
     })
 
-    return [
-      FLAT_KEY,
-      ...sortedComboKeys,
-      TOTAL_KEY,
-      TB1_KEY,
-      TB2_KEY
-    ]
+    return [FLAT_KEY, ...sortedComboKeys, TOTAL_KEY, TB1_KEY, TB2_KEY]
   }
 
   getScoringHeader(key: ScoringKey, _rules: ItsAWonderfulWorldRules) {
@@ -72,7 +59,11 @@ export class ItsAWonderfulWorldScoring implements ScoringDescription<Empire, Its
       return <img src={scoreIcon} alt="VP" css={headerIconStyle} />
     }
     if (key === TOTAL_KEY) {
-      return <span css={totalHeaderStyle}><img src={scoreIcon} alt="Score" css={headerIconStyle} /> =</span>
+      return (
+        <span css={totalHeaderStyle}>
+          <img src={scoreIcon} alt="Score" css={headerIconStyle} /> =
+        </span>
+      )
     }
     if (key === TB1_KEY) {
       return <Trans i18nKey="score.tiebreaker.developments" defaults="Tie-breaker #1: # of developments" />
@@ -84,15 +75,19 @@ export class ItsAWonderfulWorldScoring implements ScoringDescription<Empire, Its
     // Combo key
     const per = parseComboKey(key)
     const items = Array.isArray(per) ? per : [per]
-    return <span css={comboHeaderStyle}>
-      <img src={scoreIcon} alt="VP" css={headerIconStyle} />
-      <span css={multiplierSignStyle}>×</span>
-      {items.map(item =>
-        isCharacter(item)
-          ? <img key={item} src={characterIcons[item as Character]} alt="" css={[headerIconStyle, characterIconStyle]} />
-          : <img key={item} src={developmentTypeIcons[item as DevelopmentType]} alt="" css={headerIconStyle} />
-      )}
-    </span>
+    return (
+      <span css={comboHeaderStyle}>
+        <img src={scoreIcon} alt="VP" css={headerIconStyle} />
+        <span css={multiplierSignStyle}>×</span>
+        {items.map((item) =>
+          isCharacter(item) ? (
+            <img key={item} src={characterIcons[item as Character]} alt="" css={[headerIconStyle, characterIconStyle]} />
+          ) : (
+            <img key={item} src={developmentTypeIcons[item as DevelopmentType]} alt="" css={headerIconStyle} />
+          )
+        )}
+      </span>
+    )
   }
 
   getScoringPlayerData(key: ScoringKey, player: Empire, rules: ItsAWonderfulWorldRules) {
@@ -102,14 +97,11 @@ export class ItsAWonderfulWorldScoring implements ScoringDescription<Empire, Its
     }
 
     if (key === TB1_KEY) {
-      return rules.material(MaterialType.DevelopmentCard)
-        .location(LocationType.ConstructedDevelopments)
-        .player(player).length
+      return rules.material(MaterialType.DevelopmentCard).location(LocationType.ConstructedDevelopments).player(player).length
     }
 
     if (key === TB2_KEY) {
-      return rules.material(MaterialType.CharacterToken)
-        .player(player).getQuantity()
+      return rules.material(MaterialType.CharacterToken).player(player).getQuantity()
     }
 
     const details = getScoringDetails(rules.game, player)
@@ -119,25 +111,23 @@ export class ItsAWonderfulWorldScoring implements ScoringDescription<Empire, Its
     }
 
     // Combo key
-    const combo = details.comboVictoryPoints.find(c => comboKey(c.per) === key)
+    const combo = details.comboVictoryPoints.find((c) => comboKey(c.per) === key)
     if (!combo) return null
     return <ComboCell combo={combo} scoreMultipliers={details.scoreMultipliers} />
   }
 }
 
-const ComboCell = ({ combo, scoreMultipliers }: {
-  combo: ComboVictoryPoints
-  scoreMultipliers: { [key in ScoreMultiplier]: number }
-}) => {
+const ComboCell = ({ combo, scoreMultipliers }: { combo: ComboVictoryPoints; scoreMultipliers: { [key in ScoreMultiplier]: number } }) => {
   const value = getComboValue(combo, scoreMultipliers)
   if (!value) return null
-  return <span css={comboCellStyle}>
-    <span css={comboDetailStyle}>{combo.quantity} x {Array.isArray(combo.per)
-      ? Math.min(...combo.per.map(p => scoreMultipliers[p]))
-      : scoreMultipliers[combo.per]
-    }</span>
-    <span> = {value}</span>
-  </span>
+  return (
+    <span css={comboCellStyle}>
+      <span css={comboDetailStyle}>
+        {combo.quantity} x {Array.isArray(combo.per) ? Math.min(...combo.per.map((p) => scoreMultipliers[p])) : scoreMultipliers[combo.per]}
+      </span>
+      <span> = {value}</span>
+    </span>
+  )
 }
 
 const headerIconStyle = css`

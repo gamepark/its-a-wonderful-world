@@ -31,12 +31,12 @@ export const ValidateButton = () => {
 
   return (
     <div css={containerStyle}>
-      <button
-        css={buttonStyle}
-        onClick={() => play(endTurnMove)}
-      >
+      <button css={buttonStyle} onClick={() => play(endTurnMove)}>
         <span css={borderContainerStyle}>
-          <span /><span /><span /><span />
+          <span />
+          <span />
+          <span />
+          <span />
         </span>
         {t('Validate', { ns: 'common' })}
       </button>
@@ -101,7 +101,7 @@ const buttonStyle = css`
     height: 100%;
     background-color: #85adad;
     opacity: 0;
-    transition: .2s opacity ease-in-out;
+    transition: 0.2s opacity ease-in-out;
   }
 
   &:hover:before {

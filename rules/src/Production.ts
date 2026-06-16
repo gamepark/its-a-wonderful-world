@@ -46,9 +46,10 @@ export function getProductionAndCorruption(game: MaterialGame, empire: Empire, r
   let total = getResourceProduction(game, empire, resource, empireDetails.production)
 
   // Get production from constructed developments
-  const constructedDevelopments = game.items[MaterialType.DevelopmentCard]?.filter(
-    (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
-  ) ?? []
+  const constructedDevelopments =
+    game.items[MaterialType.DevelopmentCard]?.filter(
+      (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
+    ) ?? []
 
   for (const card of constructedDevelopments) {
     const development = card.id.front
@@ -83,9 +84,10 @@ function getResourceProduction(game: MaterialGame, empire: Empire, resource: Res
   if (isProductionFactor(production)) {
     if (production.resource === resource) {
       // Count constructed developments of the specified type
-      const constructedDevelopments = game.items[MaterialType.DevelopmentCard]?.filter(
-        (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
-      ) ?? []
+      const constructedDevelopments =
+        game.items[MaterialType.DevelopmentCard]?.filter(
+          (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
+        ) ?? []
 
       return constructedDevelopments.reduce((sum, card) => {
         const development = card.id.front
@@ -109,9 +111,10 @@ type KrystalliumAndCharacterProduction = { [key in Resource.Krystallium | Charac
 export function getKrystalliumAndCharacterProduction(game: MaterialGame, empire: Empire): KrystalliumAndCharacterProduction {
   const result: KrystalliumAndCharacterProduction = {}
 
-  const constructedDevelopments = game.items[MaterialType.DevelopmentCard]?.filter(
-    (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
-  ) ?? []
+  const constructedDevelopments =
+    game.items[MaterialType.DevelopmentCard]?.filter(
+      (item) => item.location?.type === LocationType.ConstructedDevelopments && item.location?.player === empire
+    ) ?? []
 
   const keys: (Resource.Krystallium | Character)[] = [Resource.Krystallium, Character.Financier, Character.General]
 
