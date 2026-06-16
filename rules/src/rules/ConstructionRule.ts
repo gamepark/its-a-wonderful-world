@@ -101,7 +101,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
               type: LocationType.ConstructionCardCost,
               parent: cardIndex,
               x: space
-            })
+            }, 1)
           )
         }
       }
@@ -116,7 +116,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
                 type: LocationType.ConstructionCardCost,
                 parent: cardIndex,
                 x: space
-              })
+              }, 1)
             )
           }
         }
@@ -140,7 +140,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
               type: LocationType.ConstructionCardCost,
               parent: cardIndex,
               x: space
-            })
+            }, 1)
           )
         }
       }
@@ -176,7 +176,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         .moveItems({
           type: LocationType.EmpireCardResources,
           player: playerId
-        })
+        }, 1)
     )
 
     // Custom move to place all available non-krystallium resources on a card at once
