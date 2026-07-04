@@ -78,6 +78,8 @@ const validate: Filter = (move) => isEndPlayerTurn(move)
 // ── Tutorial class ──────────────────────────────────────────────────────
 
 export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationType> {
+  version = 2
+
   options: ItsAWonderfulWorldOptions = {
     players: [{ id: me }, { id: player2 }, { id: player3 }],
     empiresSide: EmpireSide.A,
