@@ -210,6 +210,8 @@
   "help.character.use.description": "Character tokens can be placed on Development cards that require them as part of their construction cost. They can also be used to directly build a card by paying its full remaining cost at once.",
   "help.deck.ascension.description": "At the beginning of each round, {count} cards from this deck are dealt to each player.",
   "help.deck.ascension.title": "Corruption & Ascension card deck",
+  "help.deck.description": "At the beginning of each round, {count} cards from this deck are dealt to each player.",
+  "help.deck.title": "Development card deck",
   "help.development.constructionBonus": "Construction bonus",
   "help.development.constructionBonus.description": "Received immediately when the Development is built.",
   "help.development.copies": "{copies, plural, one {# copy} other {# copies}}",

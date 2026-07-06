@@ -210,6 +210,8 @@
   "help.character.use.description": "I segnalini personaggio possono essere posizionati sulle carte Sviluppo che li richiedono come parte del loro costo di costruzione. Possono anche essere usati per costruire direttamente una carta pagando l'intero costo rimanente in una volta.",
   "help.deck.ascension.description": "All'inizio di ogni round, {count} carte di questo mazzo vengono distribuite a ciascun giocatore.",
   "help.deck.ascension.title": "Mazzo di carte Corruzione e Ascensione",
+  "help.deck.description": "All'inizio di ogni round, {count} carte di questo mazzo vengono distribuite a ciascun giocatore.",
+  "help.deck.title": "Mazzo di carte Sviluppo",
   "help.development.constructionBonus": "Bonus di costruzione",
   "help.development.constructionBonus.description": "Ricevuto immediatamente quando lo Sviluppo viene costruito.",
   "help.development.copies": "{copies, plural, one {# copia} other {# copie}}",

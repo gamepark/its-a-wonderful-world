@@ -210,6 +210,8 @@
   "help.character.use.description": "Las fichas de personaje se pueden colocar en cartas de Desarrollo que las requieran como parte de su coste de construcción. También se pueden usar para construir directamente una carta pagando su coste restante completo de una vez.",
   "help.deck.ascension.description": "Al comienzo de cada ronda, se reparten {count} cartas de este mazo a cada jugador.",
   "help.deck.ascension.title": "Mazo de cartas de Corrupción y Ascensión",
+  "help.deck.description": "Al comienzo de cada ronda, se reparten {count} cartas de este mazo a cada jugador.",
+  "help.deck.title": "Mazo de cartas de Desarrollo",
   "help.development.constructionBonus": "Bonificación de construcción",
   "help.development.constructionBonus.description": "Se recibe inmediatamente al construir el Desarrollo.",
   "help.development.copies": "{copies, plural, one {# copia} other {# copias}}",

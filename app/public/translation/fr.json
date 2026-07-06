@@ -210,6 +210,8 @@
   "help.character.use.description": "Les jetons de personnage peuvent être placés sur des cartes de Développement qui les nécessitent comme partie de leur coût de construction. Ils peuvent également être utilisés pour construire directement une carte en payant son coût total restant d'un seul coup.",
   "help.deck.ascension.description": "Au début de chaque tour, {count} cartes de ce deck sont distribuées à chaque joueur.",
   "help.deck.ascension.title": "Deck de cartes Corruption & Ascension",
+  "help.deck.description": "Au début de chaque tour, {count} cartes de ce deck sont distribuées à chaque joueur.",
+  "help.deck.title": "Deck de cartes Développement",
   "help.development.constructionBonus": "Bonus de construction",
   "help.development.constructionBonus.description": "Reçu immédiatement après la construction du Développement.",
   "help.development.copies": "{copies, plural, one {# copie} other {# copies}}",

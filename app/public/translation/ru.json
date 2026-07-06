@@ -210,6 +210,8 @@
   "help.character.use.description": "Жетоны персонажей могут быть размещены на картах Развития, которые требуют их как часть своей стоимости строительства. Их также можно использовать для непосредственной постройки карты, заплатив ее полную оставшуюся стоимость сразу.",
   "help.deck.ascension.description": "В начале каждого раунда {count} карт из этой колоды раздаются каждому игроку.",
   "help.deck.ascension.title": "Колода карт Коррупции и Восхождения",
+  "help.deck.description": "В начале каждого раунда {count} карт из этой колоды раздаются каждому игроку.",
+  "help.deck.title": "Колода карт Развития",
   "help.development.constructionBonus": "Бонус за строительство",
   "help.development.constructionBonus.description": "Получено сразу после завершения разработки.",
   "help.development.copies": "{copies, plural, one {# копия} other {# копий}}",

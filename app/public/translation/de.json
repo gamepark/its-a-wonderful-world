@@ -210,6 +210,8 @@
   "help.character.use.description": "Charaktertoken können auf Entwicklungskarten platziert werden, die sie als Teil ihrer Baukosten benötigen. Sie können auch verwendet werden, um eine Karte direkt zu bauen, indem man die gesamten verbleibenden Kosten auf einmal bezahlt.",
   "help.deck.ascension.description": "Zu Beginn jeder Runde werden {count} Karten aus diesem Deck an jeden Spieler verteilt.",
   "help.deck.ascension.title": "Korruption & Aufstieg Kartendeck",
+  "help.deck.description": "Zu Beginn jeder Runde werden {count} Karten aus diesem Deck an jeden Spieler verteilt.",
+  "help.deck.title": "Entwicklungskartendeck",
   "help.development.constructionBonus": "Bau-Bonus",
   "help.development.constructionBonus.description": "Wird sofort nach Fertigstellung der Entwicklung empfangen.",
   "help.development.copies": "{copies, plural, one {# Kopie} other {# Kopien}}",
