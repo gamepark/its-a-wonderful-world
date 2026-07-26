@@ -200,7 +200,7 @@
   "help.action.place": "Place",
   "help.action.place.hint": "You can long-click on the card to place <resources/> at once.",
   "help.action.recycle": "Recycle",
-  "help.action.select": "Select",
+  "help.action.select": "Choose",
   "help.character.obtain": "How to obtain",
   "help.character.obtain.construction": "Some Development cards also give a character token as a construction bonus when built.",
   "help.character.obtain.supremacy": "Character tokens are awarded as supremacy bonuses during the Production phase. The player who produces the most of a given resource, alone, receives a token.",

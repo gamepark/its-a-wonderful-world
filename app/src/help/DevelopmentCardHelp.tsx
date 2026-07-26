@@ -16,6 +16,7 @@ import { isCustomMoveType, isMoveItemType, MaterialMove, MaterialRules, MoveItem
 import { ReactElement } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { characterIcons, corruptionIcon, developmentTypeIcons, resourceIcons } from '../panels/Images'
+import { HelpActions, helpActionButtonCss, HelpContent } from './HelpActions'
 import { getDevelopmentTypeName, getResourceName } from './helpUtils'
 
 const developmentTypeColors: Record<DevelopmentType, string> = {
@@ -42,7 +43,7 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
   const copies = details.numberOfCopies ?? 1
 
   return (
-    <>
+    <HelpContent>
       <h2 css={titleCss(color)}>
         {developmentTypeIcons[details.type] && <Picture src={developmentTypeIcons[details.type]} css={typeIconCss} />}
         {t(`card.${development}`)}
@@ -51,8 +52,6 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
         {typeName}
         {copies > 1 && <> — {t('help.development.copies', '{copies, plural, one {# copy} other {# copies}}', { copies })}</>}
       </p>
-
-      <CardActions itemIndex={itemIndex} closeDialog={closeDialog} />
 
       <h3 css={sectionTitleCss}>{t('help.development.cost', 'Construction cost')}</h3>
       <div css={iconRowCss}>
@@ -97,7 +96,9 @@ export function DevelopmentCardHelp({ item, itemIndex, closeDialog }: MaterialHe
         <Picture src={resourceIcons[details.recyclingBonus]} css={inlineIconCss} />
       </div>
       <p css={explanationCss}>{t('help.development.recyclingBonus.description', 'Received when discarding this card during the Planning phase.')}</p>
-    </>
+
+      <CardActions itemIndex={itemIndex} closeDialog={closeDialog} />
+    </HelpContent>
   )
 }
 
@@ -193,56 +194,53 @@ function CardActions({ itemIndex, closeDialog }: { itemIndex?: number; closeDial
   const hasActions = selectMove || buildMove || recycleMove || constructMove || placeAllMove
   if (!hasActions) return null
 
-  return (
-    <>
-      <div css={actionsCss}>
-        {selectMove && (
-          <PlayMoveButton move={selectMove} onPlay={closeDialog}>
-            {t('help.action.select', 'Select')}
-          </PlayMoveButton>
-        )}
-        {buildMove && (
-          <PlayMoveButton move={buildMove} onPlay={closeDialog}>
-            {t('help.action.build', 'Slate for construction')}
-          </PlayMoveButton>
-        )}
-        {constructMove && (
-          <PlayMoveButton move={constructMove} onPlay={closeDialog}>
-            {t('help.action.construct', 'Build')}
-          </PlayMoveButton>
-        )}
-        {placeAllMove && (
-          <PlayMoveButton css={placeButtonCss} move={placeAllMove} onPlay={closeDialog}>
-            {t('help.action.place', 'Place')}{' '}
+  const hint = placeAllMove ? (
+    <Trans
+      i18nKey="help.action.place.hint"
+      defaults="You can long-click on the card to place <resources/> at once."
+      components={{
+        resources: (
+          <span css={hintResourcesCss}>
             {placedResources.map((resource, i) => (
-              <Picture key={i} src={resourceIcons[resource]} css={buttonIconCss} />
+              <Picture key={i} src={resourceIcons[resource]} css={hintIconCss} />
             ))}
-          </PlayMoveButton>
-        )}
-        {recycleMove && (
-          <PlayMoveButton move={recycleMove} onPlay={closeDialog}>
-            {t('help.action.recycle', 'Recycle')}
-          </PlayMoveButton>
-        )}
-      </div>
-      {placeAllMove && (
-        <p css={hintCss}>
-          <Trans
-            i18nKey="help.action.place.hint"
-            defaults="You can long-click on the card to place <resources/> at once."
-            components={{
-              resources: (
-                <span css={hintResourcesCss}>
-                  {placedResources.map((resource, i) => (
-                    <Picture key={i} src={resourceIcons[resource]} css={hintIconCss} />
-                  ))}
-                </span>
-              )
-            }}
-          />
-        </p>
+          </span>
+        )
+      }}
+    />
+  ) : undefined
+
+  return (
+    <HelpActions hint={hint}>
+      {selectMove && (
+        <PlayMoveButton css={helpActionButtonCss} move={selectMove} onPlay={closeDialog}>
+          {t('help.action.select', 'Choose')}
+        </PlayMoveButton>
       )}
-    </>
+      {buildMove && (
+        <PlayMoveButton css={helpActionButtonCss} move={buildMove} onPlay={closeDialog}>
+          {t('help.action.build', 'Slate for construction')}
+        </PlayMoveButton>
+      )}
+      {constructMove && (
+        <PlayMoveButton css={helpActionButtonCss} move={constructMove} onPlay={closeDialog}>
+          {t('help.action.construct', 'Build')}
+        </PlayMoveButton>
+      )}
+      {placeAllMove && (
+        <PlayMoveButton css={helpActionButtonCss} move={placeAllMove} onPlay={closeDialog}>
+          {t('help.action.place', 'Place')}{' '}
+          {placedResources.map((resource, i) => (
+            <Picture key={i} src={resourceIcons[resource]} css={buttonIconCss} />
+          ))}
+        </PlayMoveButton>
+      )}
+      {recycleMove && (
+        <PlayMoveButton css={helpActionButtonCss} move={recycleMove} onPlay={closeDialog}>
+          {t('help.action.recycle', 'Recycle')}
+        </PlayMoveButton>
+      )}
+    </HelpActions>
   )
 }
 
@@ -470,35 +468,11 @@ const sectionTitleCss = css`
   margin: 0.4em 0 0.1em;
 `
 
-const actionsCss = css`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3em;
-  margin: 0.5em 0;
-`
-
-const placeButtonCss = css`
-  display: inline-flex !important;
-  align-items: center;
-  gap: 0.15em;
-`
-
 const buttonIconCss = css`
   width: 1.2em;
   height: 1.2em;
   object-fit: contain;
   vertical-align: middle;
-`
-
-const hintCss = css`
-  font-size: 0.85em;
-  color: #777;
-  font-style: italic;
-  margin: 0.3em 0 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.1em;
 `
 
 const hintResourcesCss = css`

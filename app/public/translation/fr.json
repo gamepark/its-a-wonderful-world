@@ -200,7 +200,7 @@
   "help.action.place": "Placer",
   "help.action.place.hint": "Vous pouvez cliquer longtemps sur la carte pour placer <resources/> d'un coup.",
   "help.action.recycle": "Recycler",
-  "help.action.select": "Sélectionner",
+  "help.action.select": "Choisir",
   "help.character.obtain": "Comment obtenir",
   "help.character.obtain.construction": "Certaines cartes de Développement donnent également un jeton de personnage comme bonus de construction lorsqu'elles sont construites.",
   "help.character.obtain.supremacy": "Les jetons de personnage sont attribués comme bonus de suprématie pendant la phase de Production. Le joueur qui produit le plus d'une ressource donnée, seul, reçoit un jeton.",

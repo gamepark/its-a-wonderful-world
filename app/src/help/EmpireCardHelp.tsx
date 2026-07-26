@@ -14,6 +14,7 @@ import { isCustomMoveType } from '@gamepark/rules-api'
 import { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { characterIcons, corruptionIcon, developmentTypeIcons, resourceIcons } from '../panels/Images'
+import { HelpActions, helpActionButtonCss, HelpContent } from './HelpActions'
 import { getDevelopmentTypeName, getResourceName } from './helpUtils'
 
 type EmpireCardId = { empire: Empire; side: EmpireSide }
@@ -36,21 +37,13 @@ export function EmpireCardHelp({ item, closeDialog }: MaterialHelpProps) {
   const placeAllMove = legalMoves.find((move) => isCustomMoveType(CustomMoveType.PlaceAllOnEmpire)(move) && move.data === playerId)
 
   return (
-    <>
+    <HelpContent>
       <h2 css={titleCss}>
         ({letter}) {getPlayerName(empire, t)}
       </h2>
 
       <p css={explanationCss}>{t('help.empire.description', 'Each player starts with an Empire card that provides a base production.')}</p>
       <p css={explanationCss}>{t('help.empire.conversion', 'Every 5 resource cubes placed on the Empire card are converted into 1 Krystallium.')}</p>
-
-      {placeAllMove && (
-        <div css={actionsCss}>
-          <PlayMoveButton move={placeAllMove} onPlay={closeDialog}>
-            {t('help.empire.placeAll', 'Place all resources on empire')}
-          </PlayMoveButton>
-        </div>
-      )}
 
       <h3 css={sectionTitleCss}>{t('phase.production')}</h3>
       <div css={iconRowCss}>
@@ -76,7 +69,15 @@ export function EmpireCardHelp({ item, closeDialog }: MaterialHelpProps) {
           <EmpireVictoryPointsDisplay victoryPoints={details.victoryPoints} />
         </>
       )}
-    </>
+
+      {placeAllMove && (
+        <HelpActions>
+          <PlayMoveButton css={helpActionButtonCss} move={placeAllMove} onPlay={closeDialog}>
+            {t('help.empire.placeAll', 'Place all resources on empire')}
+          </PlayMoveButton>
+        </HelpActions>
+      )}
+    </HelpContent>
   )
 }
 
@@ -219,13 +220,6 @@ const explanationCss = css`
   font-size: 0.9em;
   color: #555;
   margin-top: 0.1em;
-`
-
-const actionsCss = css`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3em;
-  margin: 0.5em 0;
 `
 
 const corruptionWrapperCss = css`
