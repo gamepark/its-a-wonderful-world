@@ -633,9 +633,11 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
     const development = card.id.front as Development
     const details = getDevelopmentDetails(development)
 
-    // Check if this card was drafted this round
-    const draftedCardsForPlayer = this.remind<Development[]>(Memory.DraftedCards, player)
-    const isDraftedThisRound = draftedCardsForPlayer?.includes(development) ?? false
+    // Check if this card was drafted this round.
+    // Compare card indexes, not developments: a player may very well own two copies of the same
+    // development, one drafted this round and one slated for construction on a previous round.
+    const draftedCardsForPlayer = this.remind<number[]>(Memory.DraftedCards, player)
+    const isDraftedThisRound = draftedCardsForPlayer?.includes(cardIndex) ?? false
 
     const recyclingBonusDestination = isDraftedThisRound
       ? { type: LocationType.AvailableResources, player, id: details.recyclingBonus }

@@ -8,9 +8,11 @@ export enum Memory {
   Round = 1,
 
   /**
-   * Cards drafted by each player in the current round.
-   * Used to determine recycling bonus destination (AvailableResources vs EmpireCardResources)
-   * Stored per player: Development[]
+   * Indexes of the development card items drafted by each player in the current round.
+   * Used to determine recycling bonus destination (AvailableResources vs EmpireCardResources),
+   * and whether the cubes already placed on a recycled card are recovered or lost.
+   * Indexes are stable: development card items are never deleted.
+   * Stored per player: number[]
    */
   DraftedCards,
 

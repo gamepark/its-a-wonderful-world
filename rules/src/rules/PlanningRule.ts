@@ -2,7 +2,6 @@ import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 import { Empire } from '../Empire'
 import { Memory } from '../ItsAWonderfulWorldMemory'
 import { CustomMoveType } from '../material/CustomMoveType'
-import { Development } from '../material/Development'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { ConstructionRule } from './ConstructionRule'
@@ -20,13 +19,9 @@ import { RuleId } from './RuleId'
  */
 export class PlanningRule extends ConstructionRule {
   onRuleStart(): MaterialMove[] {
-    // Memorize the 7 cards drafted by each player this round
+    // Memorize the indexes of the 7 cards drafted by each player this round
     for (const empire of this.game.players) {
-      const draftedCards = this.material(MaterialType.DevelopmentCard)
-        .location(LocationType.DraftArea)
-        .player(empire)
-        .getItems()
-        .map((item) => item.id.front as Development)
+      const draftedCards = this.material(MaterialType.DevelopmentCard).location(LocationType.DraftArea).player(empire).getIndexes()
 
       this.memorize(Memory.DraftedCards, draftedCards, empire)
     }
