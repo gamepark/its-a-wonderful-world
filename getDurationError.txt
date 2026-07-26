@@ -1,0 +1,1920 @@
+animatePlayedAction: animations.getDuration threw - skipping animation (move evaluated against an inconsistent state). {
+  "error": {
+    "message": "Cannot read properties of undefined (reading 'kind')",
+    "stack": "TypeError: Cannot read properties of undefined (reading 'kind')
+    at Gt (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:18882)
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:18945
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:3555:39764
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1368:8490
+    at Array.every (<anonymous>)
+    at nP.matches (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1368:8481)
+    at Cae.getAnimationBuilder (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1368:10013)
+    at Cae.getDuration (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1368:9848)
+    at f (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:67:22053)
+    at d (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:67:21841)
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:67:15335
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:207861
+    at If.produce (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:202553)
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:207853
+    at Array.reduce (<anonymous>)
+    at o (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:207767)
+    at Object.f [as dispatch] (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:193891)
+    at dispatch (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:206482)
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:204581
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:2:31732
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:2:33666
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:208953
+    at Object.dispatch (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:195082)
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:2:32344
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:2:33666
+    at https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:1:208953
+    at a (https://its-a-wonderful-world.game-park.com/assets/index-Bpdk96v1.js:67:25909)"
+  },
+  "step": 1,
+  "viewerPlayerId": 4,
+  "animationsSpeed": 1,
+  "gameRule": {
+    "id": 2,
+    "players": [
+      4
+    ],
+    "interleaving": {
+      "players": [
+        3,
+        4
+      ],
+      "availableIndexes": {
+        "1": [
+          226
+        ],
+        "3": [
+          2,
+          4
+        ],
+        "4": [
+          2,
+          5,
+          8,
+          11
+        ]
+      }
+    }
+  },
+  "action": {
+    "id": "ml-wj2Pt",
+    "playerId": 3,
+    "played": 2,
+    "consequencesCount": 1,
+    "move": {
+      "kind": 1,
+      "type": 1,
+      "itemType": 1,
+      "itemIndex": 203,
+      "location": {
+        "type": 11,
+        "player": 3
+      }
+    },
+    "consequences": [
+      {
+        "kind": 2,
+        "type": 2,
+        "player": 3
+      }
+    ]
+  },
+  "allActions": [
+    {
+      "id": "ml-wj2Pt",
+      "playerId": 3,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "quQORrUs",
+      "playerId": 4,
+      "played": 15,
+      "consequencesCount": 14
+    },
+    {
+      "id": "RFQ_BPMG",
+      "playerId": 4,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "p01o86sq",
+      "playerId": 3,
+      "played": 17,
+      "consequencesCount": 16
+    },
+    {
+      "id": "qQkU7gI_",
+      "playerId": 3,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "fU30eNhx",
+      "playerId": 4,
+      "played": 19,
+      "consequencesCount": 18
+    },
+    {
+      "id": "uIJLxsEv",
+      "playerId": 4,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "5dQhGgRY",
+      "playerId": 3,
+      "played": 21,
+      "consequencesCount": 20
+    },
+    {
+      "id": "WUU3Xrlh",
+      "playerId": 4,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "hCurFFn6",
+      "playerId": 3,
+      "played": 22,
+      "consequencesCount": 21
+    },
+    {
+      "id": "kdK1sahz",
+      "playerId": 3,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "BSzjVvTQ",
+      "playerId": 4,
+      "played": 24,
+      "consequencesCount": 23
+    },
+    {
+      "id": "4JMuAFfp",
+      "playerId": 4,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "qy1uNkiV",
+      "playerId": 3,
+      "played": 21,
+      "consequencesCount": 20
+    },
+    {
+      "id": "mCwkVaiu",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "XtSXYd2O",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "B1nnUqLU",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "pl69ahw4",
+      "playerId": 4,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "AQjCRfYc",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "D2SsdY1P",
+      "playerId": 3,
+      "played": 5,
+      "consequencesCount": 4
+    },
+    {
+      "id": "x2QyrbpA",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "GtBIjTI_",
+      "playerId": 3,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "4zHIMAmn",
+      "playerId": 3,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "PyjmjwZ1",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "V3fJqfrf",
+      "playerId": 4,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "n4esoDUY",
+      "playerId": 3,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "s3OND2tr",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "t4N_kYqA",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "xNwyalra",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "fnZOZ2uy",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "EaIHySRH",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "fDiL--ik",
+      "playerId": 4,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "Idg0ohYN",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "QtcT2mE7",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "Afa2TJyV",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "MaTCSMav",
+      "playerId": 4,
+      "played": 8,
+      "consequencesCount": 7
+    },
+    {
+      "id": "xVnZ7BQx",
+      "playerId": 4,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "giokg7RO",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "aAxr55_n",
+      "playerId": 4,
+      "played": 5,
+      "consequencesCount": 4
+    },
+    {
+      "id": "2Nz4_An-",
+      "playerId": 3,
+      "played": 4,
+      "consequencesCount": 3
+    },
+    {
+      "id": "XnjHdq_K",
+      "playerId": 3,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "ExeLiDSm",
+      "playerId": 4,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "4M3c_Uvf",
+      "playerId": 3,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "iupMyL4k",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "Dv9oWuO6",
+      "playerId": 4,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "3zTcmMUN",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "70cYHaac",
+      "playerId": 4,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "gS7dtCNA",
+      "playerId": 4,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "F4DZ9TGU",
+      "playerId": 4,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "-4gd4geX",
+      "playerId": 4,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "ueRx0NXs",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "wmRGLh0Y",
+      "playerId": 4,
+      "played": 5,
+      "consequencesCount": 4
+    },
+    {
+      "id": "WkvkToNR",
+      "playerId": 3,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "8wP_IDzZ",
+      "playerId": 3,
+      "played": 1,
+      "consequencesCount": 0
+    },
+    {
+      "id": "JHEy1x8M",
+      "playerId": 4,
+      "played": 4,
+      "consequencesCount": 3
+    },
+    {
+      "id": "puKpXa_M",
+      "playerId": 4,
+      "played": 3,
+      "consequencesCount": 2
+    },
+    {
+      "id": "BD6qqjsK",
+      "playerId": 3,
+      "played": 27,
+      "consequencesCount": 26
+    },
+    {
+      "id": "navpqtfr",
+      "playerId": 3,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "T9bhf6Us",
+      "playerId": 4,
+      "played": 15,
+      "consequencesCount": 14
+    },
+    {
+      "id": "2aOO36S-",
+      "playerId": 3,
+      "played": 2,
+      "consequencesCount": 1
+    },
+    {
+      "id": "ml-wj2Pt",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "quQORrUs",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 14,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "RFQ_BPMG",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "p01o86sq",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 16,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "qQkU7gI_",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "fU30eNhx",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 18,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "uIJLxsEv",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "5dQhGgRY",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 20,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "WUU3Xrlh",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "hCurFFn6",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 21,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "kdK1sahz",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "BSzjVvTQ",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 23,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "4JMuAFfp",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "qy1uNkiV",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 20,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "mCwkVaiu",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "XtSXYd2O",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "B1nnUqLU",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "pl69ahw4",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "AQjCRfYc",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "D2SsdY1P",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "x2QyrbpA",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "GtBIjTI_",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "4zHIMAmn",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "PyjmjwZ1",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "V3fJqfrf",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "n4esoDUY",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "s3OND2tr",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "t4N_kYqA",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "xNwyalra",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "fnZOZ2uy",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "EaIHySRH",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "fDiL--ik",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "Idg0ohYN",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "QtcT2mE7",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "Afa2TJyV",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "MaTCSMav",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 7,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "xVnZ7BQx",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "giokg7RO",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "aAxr55_n",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "2Nz4_An-",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "XnjHdq_K",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "ExeLiDSm",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "4M3c_Uvf",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "iupMyL4k",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "Dv9oWuO6",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "3zTcmMUN",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "70cYHaac",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "gS7dtCNA",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "F4DZ9TGU",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "-4gd4geX",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "ueRx0NXs",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "wmRGLh0Y",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "WkvkToNR",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "8wP_IDzZ",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "JHEy1x8M",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "puKpXa_M",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "BD6qqjsK",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 26,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "navpqtfr",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "T9bhf6Us",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 14,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "2aOO36S-",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "Fxb-qVi4",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 16,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "j1dR0DUE",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "18NpFOuz",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 18,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "xH3hSgKk",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "My-NI3mM",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 20,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "sqAVSSpk",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "c7JAg60o",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 22,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "rcr0zv6n",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "Q2OVSDui",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 23,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "F6cnDkHG",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "4BP8NspR",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 20,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "GvwJQhYS",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "gQ4bqnNI",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "7DTWQXwA",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "1vYC2-sF",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "iiMdvscA",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "PuVU40KZ",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "uh7hNNmZ",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "Y-ZC5Y8W",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "-hKiRtBx",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "a4tEKAT3",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "TaR3lVzk",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "S39x-IpO",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "rWYQPuQY",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "uWjX38Xt",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "fHAJcN8s",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "9PFMDS6k",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "4V954yHS",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "7n4FN5--",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "jhcl3YNG",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "N0fhujIz",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "OeJIzO-w",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "aNAu21at",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "czEn-yPr",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "sCsPsQE4",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "1qjNsRJN",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "q39_bzJU",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "WzKX5arl",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "mqZOdUa9",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "53Z05jal",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "NwD8qFKJ",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "UpoAJ_D8",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "5A3BwkMO",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "hJ9ZNaZ1",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "6DUBOJ11",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "4uGwyYwd",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "9MCwwGH5",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "EbM2xPqv",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "mxoiQkVH",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 26,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "dCEHoPIV",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "se8kzwkO",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 14,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "K-df7K3E",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "RmvFuKGa",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 16,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "40fYIV5q",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "nclY5BVF",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 18,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "OTlmu8oH",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "yuvv3byC",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 19,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "H_E0g-rm",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "ile-qUSt",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 21,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "L_Q4jDsd",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "AcUmgDOd",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 23,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "LJSIYFmr",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "f-hzG46X",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 20,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "6aHPmA6T",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "BiMNUz6V",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "mWx_OQeP",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "UFizMAVU",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "Tjt3nREr",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "fZ12KU3C",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "JwRa5Bn0",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "T_yNRuO1",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "cZPcRBQV",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "xjtltmhz",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "YdiZKVRH",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "mozvIiqe",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "lX-fZ7c-",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "MBasZQmF",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "Mojdc_lk",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "JoYv1-R0",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "QA_o1izJ",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "RGG_5kmR",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "_c580alp",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "ksapvjcG",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "orA86G6j",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "sW8MPwhc",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "i7CV0OVQ",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "Jq1LOGZv",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "e1jOJluR",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "-FfQVoD_",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "KZksHSbV",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "MeqTJw1I",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "wlcNPkNH",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "QfXVzHfJ",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "9dgLp3AU",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "om1ZsBDn",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "IAolZqtt",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "1lHKFW5D",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 5,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "WgzJAvAG",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "WWUpauNX",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "VW_8r2r7",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "6_AadwAY",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "ERIFjEKD",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "iU2L7rlc",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "BU3O5u9N",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 8
+    },
+    {
+      "id": "PUJYsA-Z",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "96sExZhB",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 26,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "Qhr4vbgp",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "-XQgZwi-",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 14,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "5Bg3BUhl",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "Qt2kPSSu",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 16,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "16eIwKIB",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "jt4waDOH",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 18,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "x80pruKM",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "vxMuZZK0",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 20,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "uUuZjntE",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "1POYSU6P",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 22,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "0UbaTGDd",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "p_ZTPoKL",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 24,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "EMNp6E02",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "xQdvfLL_",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 20,
+      "sequentialFrom": 2
+    },
+    {
+      "id": "VoE1km-z",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "1IMMpuTz",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "c-7crBgM",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "Ri54RYV7",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "QpEoYZ9T",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "VF7kPmYO",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "ZwNCDi6O",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "FHNTx_5S",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "S70h1KnU",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "pqXvxkci",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "Mw3HuqwO",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "9lu4D_bO",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "iSPQ1FqX",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "HRi5ORqX",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "7VpbahaL",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "U4ljvz4N",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "R6Fl-grV",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "n7RL7281",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "GB6_YZ5r",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "w4t6497G",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "jVYspuwL",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 5
+    },
+    {
+      "id": "AuUzYdaJ",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "RERjHfi4",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "pnghX59x",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "pTH7jBpe",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "gIr3l5WN",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 9
+    },
+    {
+      "id": "I7W2lqrU",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "yWxKRgWM",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "r8P7JTAT",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "xOwnxbyg",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "vnglkzhF",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "9CwGBCwD",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 3,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "Ffmh9R8Q",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "24vJtt9a",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "RdsXZD6C",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "jvOdDsc8",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "_HAOpETJ",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "BGkvym_4",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "Zut-D340",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "5KmYdKOJ",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "Wf4wFVWE",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 1
+    },
+    {
+      "id": "GfXDlDCs",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "WN_RbBQF",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "cW372GCA",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "9I0fGT-A",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 7
+    },
+    {
+      "id": "VkfQVwff",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "9wGCDNXv",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 4,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "eqJi-BoX",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 12
+    },
+    {
+      "id": "gnJuM-v7",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "hi9LKmx5",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 4
+    },
+    {
+      "id": "_8BD8iTh",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "mvg5RBxc",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2
+    },
+    {
+      "id": "lVQ_ydWL",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 3
+    },
+    {
+      "id": "5DrRHTKL",
+      "playerId": 4,
+      "played": 0,
+      "consequencesCount": 0
+    },
+    {
+      "id": "JcZi_L20",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 2,
+      "sequentialFrom": 1
+    },
+    {
+      "id": "RcuaBzvT",
+      "playerId": 3,
+      "played": 0,
+      "consequencesCount": 1,
+      "sequentialFrom": 1
+    }
+  ]
+}
