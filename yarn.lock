@@ -298,7 +298,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/browser-logs@npm:^7.5.0":
+"@datadog/browser-logs@npm:^7.6.1":
   version: 7.6.1
   resolution: "@datadog/browser-logs@npm:7.6.1"
   dependencies:
@@ -675,12 +675,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gamepark/api-types@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@gamepark/api-types@npm:1.0.2"
+"@gamepark/api-types@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@gamepark/api-types@npm:1.0.3"
   peerDependencies:
     "@trpc/server": ^11.8.0
-  checksum: 10c0/fdee73ae8a7778ea22fd9374382b08e5cae74e74185c2d3c41e0680577e6e9846f67fbddd6dbe5f7686158dd2aa86c438e942483397fcc07ae5f214e30e7d9ad
+  checksum: 10c0/7da4c167fe073c8ea66e499bc7300e8895abc31b29fbbf8a6daf8fc28115d80ca425af20cc4a51b6a5a90eb66e70aecd62cf28a66dfe1f4ff60d867587c87d1d
   languageName: node
   linkType: hard
 
@@ -705,7 +705,7 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": "npm:^7.3.1"
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
-    "@gamepark/react-game": "npm:~7.7.38"
+    "@gamepark/react-game": "npm:~7.7.40"
     "@gamepark/rules-api": "npm:~7.6.5"
     "@types/node": "npm:^26.1.1"
     "@types/react": "npm:^19.2.17"
@@ -742,18 +742,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gamepark/react-client@npm:^7.7.2":
-  version: 7.7.2
-  resolution: "@gamepark/react-client@npm:7.7.2"
+"@gamepark/react-client@npm:^7.7.3":
+  version: 7.7.3
+  resolution: "@gamepark/react-client@npm:7.7.3"
   dependencies:
     "@reduxjs/toolkit": "npm:^2.12.0"
-    "@tanstack/react-query": "npm:^5.101.2"
+    "@tanstack/react-query": "npm:^5.101.4"
     "@trpc/client": "npm:^11.18.0"
     "@trpc/react-query": "npm:^11.18.0"
     "@trpc/server": "npm:^11.18.0"
     assert: "npm:^2.1.0"
-    immer: "npm:^11.1.11"
-    pusher-js: "npm:^8.5.0"
+    immer: "npm:^11.1.15"
+    pusher-js: "npm:^8.6.0"
     redux: "npm:^5.0.1"
     superjson: "npm:^2.2.6"
   peerDependencies:
@@ -765,25 +765,25 @@ __metadata:
     react-dom: ^19.2.4
     react-redux: ^9.2.0
     rxjs: ^7.8.2
-  checksum: 10c0/308fda410a9e447a227c68e5730d3757be9114d9c80443bda0394022a5e985ec0b11b44a1f971546541de2661631570b7346a9c6b5ba4547a774eeed4c3510d5
+  checksum: 10c0/b764742e6776ff41eb56d32acce408bbf05d857ba737d5c5ad2826c033d49f8aa7a9ccc4ac9dd2e1642903f1658cbf98bd3f656b6da280b1d88e0e44266c36f3
   languageName: node
   linkType: hard
 
-"@gamepark/react-game@npm:~7.7.38":
-  version: 7.7.38
-  resolution: "@gamepark/react-game@npm:7.7.38"
+"@gamepark/react-game@npm:~7.7.40":
+  version: 7.7.40
+  resolution: "@gamepark/react-game@npm:7.7.40"
   dependencies:
-    "@datadog/browser-logs": "npm:^7.5.0"
+    "@datadog/browser-logs": "npm:^7.6.1"
     "@dnd-kit/modifiers": "npm:^9.0.0"
-    "@gamepark/api-types": "npm:^1.0.2"
+    "@gamepark/api-types": "npm:^1.0.3"
     "@gamepark/avataaars": "npm:^3.0.0"
-    "@gamepark/react-client": "npm:^7.7.2"
+    "@gamepark/react-client": "npm:^7.7.3"
     dayjs: "npm:^1.11.21"
     fscreen: "npm:^1.2.0"
     i18next-http-backend: "npm:^3.0.6"
     i18next-icu: "npm:^2.4.4"
-    immer: "npm:^11.1.11"
-    intl-messageformat: "npm:^11.2.10"
+    immer: "npm:^11.1.15"
+    intl-messageformat: "npm:^11.2.12"
     nosleep.js: "npm:^0.12.0"
     o9n: "npm:^2.1.1"
     react-infinite-scroll-component: "npm:^7.2.1"
@@ -805,7 +805,7 @@ __metadata:
     react-dom: 19.x
     react-i18next: 16.x
     react-redux: 9.x
-  checksum: 10c0/d15f62218752b97c154175c4c62e51845c0eb72f6829622fcae3a3acc4185626d10ec78d3774361408436ab26d8155c8822165e2d7b39d223ab7e62a9f79b803
+  checksum: 10c0/2145b192773744f801fe4a0fedd17d63d9f21e3f3d5e58de2afe6e75292bc8ec24fdee5ba42b9453da6682d0e19ef71050cda4bf86020142e6a71038286252ef
   languageName: node
   linkType: hard
 
@@ -1725,7 +1725,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.101.2":
+"@tanstack/react-query@npm:^5.101.4":
   version: 5.101.4
   resolution: "@tanstack/react-query@npm:5.101.4"
   dependencies:
@@ -3246,7 +3246,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immer@npm:^11.1.11":
+"immer@npm:^11.1.15":
   version: 11.1.15
   resolution: "immer@npm:11.1.15"
   checksum: 10c0/5215eaec9641ad786ae8940a489514c26ce3726f8c49f0191a754902800f3ddd102b0653e894cabe7049d93e77b86d67d19953e778ffebba56848739a31b3b79
@@ -3277,7 +3277,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"intl-messageformat@npm:^11.2.10":
+"intl-messageformat@npm:^11.2.12":
   version: 11.2.12
   resolution: "intl-messageformat@npm:11.2.12"
   dependencies:
@@ -4160,12 +4160,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pusher-js@npm:^8.5.0":
-  version: 8.5.0
-  resolution: "pusher-js@npm:8.5.0"
+"pusher-js@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "pusher-js@npm:8.6.0"
   dependencies:
     tweetnacl: "npm:^1.0.3"
-  checksum: 10c0/572f2b9f041ee7880745a4d96e553a8db7e95ec528fa65de409d215082f1a4903820872867c75dd4711ef27243ce6927eaacb2b20dcbaf683d4839a8d0ca0514
+  checksum: 10c0/93ed5ecc9eb30c2b3d8bd17eeb3b18a7a2e54480129eebb848c1837e9f7ea19d2cda124c833a6a6a460eb33b70b97976a7355f6f83193f43f7838f8511d34982
   languageName: node
   linkType: hard
 

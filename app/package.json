@@ -24,7 +24,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@fortawesome/react-fontawesome": "^3.5.0",
-    "@gamepark/react-game": "~7.7.38",
+    "@gamepark/react-game": "~7.7.40",
     "@gamepark/rules-api": "~7.6.5",
     "es-toolkit": "^1.50.0",
     "i18next": "^26.3.5",
