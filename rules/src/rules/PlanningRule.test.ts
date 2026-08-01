@@ -1,4 +1,4 @@
-import { MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { applyAutomaticMoves, MaterialGame } from '@gamepark/rules-api'
 import { describe, expect, it } from 'vitest'
 import { Empire } from '../Empire'
 import { ItsAWonderfulWorldRules } from '../ItsAWonderfulWorldRules'
@@ -40,20 +40,14 @@ function setupGame(): MaterialGame {
   }
 }
 
-/** Play a move and all the consequences the rules trigger, like the server does. */
-function play(rules: ItsAWonderfulWorldRules, move: MaterialMove) {
-  for (const consequence of rules.play(move)) {
-    play(rules, consequence)
-  }
-}
-
 function recycle(cardIndex: number) {
   const game = setupGame()
   // Memorizes the cards drafted this round
   new PlanningRule(game).onRuleStart()
 
   const rules = new ItsAWonderfulWorldRules(game)
-  play(rules, rules.material(MaterialType.DevelopmentCard).index(cardIndex).moveItem({ type: LocationType.Discard }))
+  // Plays the move, its consequences and the automatic moves, exactly like the server does
+  applyAutomaticMoves(rules, [rules.material(MaterialType.DevelopmentCard).index(cardIndex).moveItem({ type: LocationType.Discard })])
   return rules
 }
 

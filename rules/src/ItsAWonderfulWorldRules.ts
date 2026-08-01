@@ -13,6 +13,7 @@ import { Memory } from './ItsAWonderfulWorldMemory'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { ChooseDevelopmentCardRule } from './rules/ChooseDevelopmentCardRule'
+import { ConstructionRule } from './rules/ConstructionRule'
 import { DealDevelopmentCardsRule } from './rules/DealDevelopmentCardsRule'
 import { DiscardLeftoverCardsRule } from './rules/DiscardLeftoverCardsRule'
 import { EnergyProductionRule } from './rules/EnergyProductionRule'
@@ -104,6 +105,20 @@ export class ItsAWonderfulWorldRules
       default:
         return 10
     }
+  }
+
+  /**
+   * A resource that cannot be placed on any card anymore automatically goes on the empire card.
+   *
+   * This is played as an automatic move, and not as a consequence of the move that makes the resource
+   * unplaceable, because the framework computes all the consequences of a move before playing any of them:
+   * a consequence computed too early can plan to move cubes that another consequence of the same move
+   * already moved. Automatic moves are computed once every consequence is played, and computed again until
+   * there is none left, so they always see an up-to-date state.
+   */
+  getAutomaticMoves(): MaterialMove[] {
+    const rule = this.rulesStep
+    return rule instanceof ConstructionRule ? rule.getUnplaceableResourceMoves() : []
   }
 
   /**

@@ -33,11 +33,5 @@ export enum Memory {
    * Used to distinguish construction bonuses from science supremacy choice.
    * Stored per player: number
    */
-  PendingConstructionBonusTokens,
-
-  /**
-   * Player whose resources should be checked for unplaceability after a card move.
-   * Set in beforeItemMove (where we still know the card's owner), read in afterItemMove (where the state is updated).
-   */
-  CheckUnplaceableResources
+  PendingConstructionBonusTokens
 }

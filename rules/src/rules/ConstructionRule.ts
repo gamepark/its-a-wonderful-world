@@ -2,7 +2,6 @@ import {
   CustomMove,
   isCreateItem,
   isCustomMoveType,
-  isDeleteItemType,
   isMoveItemType,
   isMoveItemTypeAtOnce,
   ItemMove,
@@ -347,17 +346,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
 
       // If card is being recycled (moved to Discard), create recycling bonus resource
       if (move.location.type === LocationType.Discard && player !== undefined) {
-        const recyclingMoves = this.getRecyclingMoves(move.itemIndex)
-        consequences.push(...recyclingMoves)
-        // If recycling creates a resource in AvailableResources, the isCreateItem handler will
-        // check for unplaceable resources with the correct post-move state. Don't double-trigger.
-        const createsAvailableResource = recyclingMoves.some((m) => isCreateItem(m) && m.item?.location?.type === LocationType.AvailableResources)
-        if (!createsAvailableResource) {
-          this.memorize(Memory.CheckUnplaceableResources, player)
-        }
-      } else if (move.location.type !== LocationType.ConstructedDevelopments && player !== undefined) {
-        // Remember the player so afterItemMove can check unplaceable resources once the card has moved
-        this.memorize(Memory.CheckUnplaceableResources, player)
+        consequences.push(...this.getRecyclingMoves(move.itemIndex))
       }
     }
 
@@ -366,45 +355,32 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       for (const cardIndex of move.indexes) {
         consequences.push(...this.getRecyclingMoves(cardIndex))
       }
-      // Remember the player for unplaceable resource check in afterItemMove
-      if (move.indexes.length > 0) {
-        const card = this.material(MaterialType.DevelopmentCard).getItem(move.indexes[0])
-        const player = card.location.player as Empire | undefined
-        if (player !== undefined) {
-          this.memorize(Memory.CheckUnplaceableResources, player)
-        }
-      }
-    }
-
-    // Before a cube is deleted, check if remaining cubes of the same resource will be unplaceable
-    if (isDeleteItemType(MaterialType.ResourceCube)(move)) {
-      const item = this.material(MaterialType.ResourceCube).getItem(move.itemIndex)
-      if (item.location.type === LocationType.AvailableResources) {
-        const player = item.location.player as Empire
-        const resource = item.id as Resource
-        const remaining = (item.quantity ?? 1) - (move.quantity ?? item.quantity ?? 1)
-        if (remaining > 0 && !this.canResourceBePlaced(player, resource)) {
-          for (let i = 0; i < remaining; i++) {
-            consequences.push(
-              this.material(MaterialType.ResourceCube).index(move.itemIndex).moveItem(
-                {
-                  type: LocationType.EmpireCardResources,
-                  player
-                },
-                1
-              )
-            )
-          }
-        }
-      }
     }
 
     return consequences
   }
 
   /**
-   * Handle krystallium transformation when a resource is placed on empire card.
-   * Also auto-move resources that can't be placed anywhere after a card move.
+   * Resources that cannot be placed on any card anymore must go on the empire card.
+   * Played as automatic moves by {@link ItsAWonderfulWorldRules.getAutomaticMoves}: they must never be
+   * returned as the consequence of the move that makes a resource unplaceable (recycling a card, covering
+   * the last cost space of that color...) because the framework computes all the consequences of a move
+   * before playing any of them, so a consequence computed too early can plan to move cubes that another
+   * consequence of the same move already moved.
+   *
+   * Only one player at a time: the moves must stay valid until they are all played.
+   */
+  getUnplaceableResourceMoves(): MaterialMove[] {
+    for (const player of this.game.players) {
+      const moves = this.getPlayerUnplaceableResourceMoves(player)
+      if (moves.length > 0) return moves
+    }
+    return []
+  }
+
+  /**
+   * Construct a card as soon as its cost is fully covered, and transform 5 resources on the empire card
+   * into a Krystallium.
    */
   afterItemMove(move: ItemMove): MaterialMove[] {
     const consequences: MaterialMove[] = []
@@ -443,13 +419,6 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
         // Award construction bonuses
         consequences.push(...this.getConstructionBonusMoves(development, player))
       }
-
-      // In both cases: only check resources of the color of the slot just covered
-      const space = move.location.x as number
-      const coveredRequired = getCost(development)[space]
-      if (isResource(coveredRequired)) {
-        consequences.push(...this.getUnplaceableMovesForResource(player, coveredRequired))
-      }
     }
 
     if (isMoveItemType(MaterialType.ResourceCube)(move)) {
@@ -459,26 +428,13 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       }
     }
 
-    // After a card move, check unplaceable resources for the player who owned the card (set in beforeItemMove)
-    if (isMoveItemType(MaterialType.DevelopmentCard)(move) || isMoveItemTypeAtOnce(MaterialType.DevelopmentCard)(move)) {
-      const player = this.remind<Empire | undefined>(Memory.CheckUnplaceableResources)
-      if (player !== undefined) {
-        this.forget(Memory.CheckUnplaceableResources)
-        consequences.push(...this.getUnplaceableResourceMoves(player))
-      }
+    // After a resource is created on the empire card, it may complete a Krystallium
+    if (isCreateItem(move) && move.itemType === MaterialType.ResourceCube && move.item.location?.type === LocationType.EmpireCardResources) {
+      const player = move.item.location.player as Empire
+      consequences.push(...this.getKrystalliumConversionMoves(player))
     }
 
-    // After a resource is created, handle consequences based on destination
-    if (isCreateItem(move) && move.itemType === MaterialType.ResourceCube) {
-      if (move.item.location?.type === LocationType.AvailableResources) {
-        const player = move.item.location.player as Empire
-        const resource = move.item.id as Resource
-        consequences.push(...this.getUnplaceableMovesForResource(player, resource))
-      } else if (move.item.location?.type === LocationType.EmpireCardResources) {
-        const player = move.item.location.player as Empire
-        consequences.push(...this.getKrystalliumConversionMoves(player))
-      }
-    }
+    // Resources that became unplaceable are handled by getAutomaticMoves, once every consequence is played
 
     return consequences
   }
@@ -487,7 +443,7 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
    * Get moves to send unplaceable available resources to empire card.
    * A resource is unplaceable if it cannot be placed on any construction or draft card.
    */
-  private getUnplaceableResourceMoves(player: Empire): MaterialMove[] {
+  private getPlayerUnplaceableResourceMoves(player: Empire): MaterialMove[] {
     const moves: MaterialMove[] = []
     const availableResources = this.material(MaterialType.ResourceCube).location(LocationType.AvailableResources).player(player)
 
@@ -511,30 +467,6 @@ export abstract class ConstructionRule extends SimultaneousRule<Empire, Material
       }
     }
 
-    return moves
-  }
-
-  private getUnplaceableMovesForResource(player: Empire, resource: Resource): MaterialMove[] {
-    if (this.canResourceBePlaced(player, resource)) return []
-    const moves: MaterialMove[] = []
-    const available = this.material(MaterialType.ResourceCube).location(LocationType.AvailableResources).player(player)
-    for (const idx of available.getIndexes()) {
-      const item = available.getItem(idx)
-      if ((item.id as Resource) === resource) {
-        const quantity = item.quantity ?? 1
-        for (let i = 0; i < quantity; i++) {
-          moves.push(
-            this.material(MaterialType.ResourceCube).index(idx).moveItem(
-              {
-                type: LocationType.EmpireCardResources,
-                player
-              },
-              1
-            )
-          )
-        }
-      }
-    }
     return moves
   }
 
