@@ -1,0 +1,22 @@
+{
+  "face.e.f.requires.c&a": "«Corruzione e Ascesa» è necessaria per giocare le facce E o F delle carte Impero",
+  "identities": "Impero",
+  "identities.1": "Impero Azteco",
+  "identities.2": "Federazione dell'Asia",
+  "identities.3": "Stati di Noram",
+  "identities.4": "Unione Panafricana",
+  "identities.5": "Repubblica d'Europa",
+  "identities.6": "Nazioni dell'Oceania",
+  "identities.7": "Egemonia del Nord",
+  "option.corruptionAndAscension": "Corruzione e Ascesa",
+  "option.corruptionAndAscension.help": "Questa espansione aggiunge nuove carte, nuove meccaniche come la corruzione, e permette di giocare fino a 7 giocatori!",
+  "option.empiresSide": "Faccia delle carte Impero",
+  "option.empiresSide.1": "Faccia A",
+  "option.empiresSide.2": "Faccia B",
+  "option.empiresSide.3": "Faccia C",
+  "option.empiresSide.4": "Faccia D",
+  "option.empiresSide.5": "Faccia E",
+  "option.empiresSide.6": "Faccia F",
+  "option.warAndPeace": "Guerra o pace",
+  "option.warAndPeace.help": "Gioca con le 20 carte bonus alla fine della campagna \"Guerra o Pace\"!"
+}

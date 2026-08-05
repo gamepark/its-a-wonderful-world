@@ -1,0 +1,22 @@
+{
+  "face.e.f.requires.c&a": "«Corrupción y Ascenso» es necesario para jugar las caras E o F de las cartas de Imperio",
+  "identities": "Imperio",
+  "identities.1": "Imperio Azteca",
+  "identities.2": "Federación de Asia",
+  "identities.3": "Estados de Noram",
+  "identities.4": "Unión Panafricana",
+  "identities.5": "República de Europa",
+  "identities.6": "Naciones de Oceanía",
+  "identities.7": "Hegemonía del Norte",
+  "option.corruptionAndAscension": "Corrupción y Ascenso",
+  "option.corruptionAndAscension.help": "¡Esta expansión añade nuevas cartas, nuevas mecánicas como la corrupción, y permite jugar hasta 7 jugadores!",
+  "option.empiresSide": "Cara de las cartas de Imperio",
+  "option.empiresSide.1": "Cara A",
+  "option.empiresSide.2": "Cara B",
+  "option.empiresSide.3": "Cara C",
+  "option.empiresSide.4": "Cara D",
+  "option.empiresSide.5": "Cara E",
+  "option.empiresSide.6": "Cara F",
+  "option.warAndPeace": "Guerra o paz",
+  "option.warAndPeace.help": "¡Juega con las 20 cartas extra del final de la campaña «Guerra o paz»!"
+}

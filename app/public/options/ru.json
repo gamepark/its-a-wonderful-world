@@ -1,0 +1,22 @@
+{
+  "face.e.f.requires.c&a": "Дополнение \"Кризис и Процветание\" необходимо для выбора сторон E и F карт империи.",
+  "identities": "Империя",
+  "identities.1": "Империя Ацтеков",
+  "identities.2": "Федерация Азии",
+  "identities.3": "Североамериканские Штаты",
+  "identities.4": "Панафриканский Союз",
+  "identities.5": "Европейская Республика",
+  "identities.6": "Народы Океании",
+  "identities.7": "Гегемония Севера",
+  "option.corruptionAndAscension": "Кризис и Процветание",
+  "option.corruptionAndAscension.help": "Это дополнение добавляет в игру новые карты, новые механики (например, кризис) и увеличивает максимальное число игроков до 7!",
+  "option.empiresSide": "Сторона карты Империи",
+  "option.empiresSide.1": "Сторона A",
+  "option.empiresSide.2": "Сторона B",
+  "option.empiresSide.3": "Сторона C",
+  "option.empiresSide.4": "Сторона D",
+  "option.empiresSide.5": "Сторона E",
+  "option.empiresSide.6": "Сторона F",
+  "option.warAndPeace": "Война или мир",
+  "option.warAndPeace.help": "Играйте с 20 бонусными картами из финала кампании «Война или мир»!"
+}

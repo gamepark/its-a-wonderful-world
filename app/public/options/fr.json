@@ -1,0 +1,22 @@
+{
+  "face.e.f.requires.c&a": "\"Corruption & Ascension\" est nécessaire pour jouer les faces E ou F des cartes Empire",
+  "identities": "Empire",
+  "identities.1": "Empire d’Azteca",
+  "identities.2": "Fédération d’Asie",
+  "identities.3": "États du Noram",
+  "identities.4": "Union Panafricaine",
+  "identities.5": "République d’Europa",
+  "identities.6": "Nations d’Océanie",
+  "identities.7": "Hégémonie du Nord",
+  "option.corruptionAndAscension": "Corruption & Ascension",
+  "option.corruptionAndAscension.help": "Cette extension ajoute de nouvelles cartes, de nouvelles mécaniques comme la corruption, et permet de jouer jusqu’à 7 joueurs !",
+  "option.empiresSide": "Faces des cartes Empire",
+  "option.empiresSide.1": "Face A",
+  "option.empiresSide.2": "Face B",
+  "option.empiresSide.3": "Face C",
+  "option.empiresSide.4": "Face D",
+  "option.empiresSide.5": "Face E",
+  "option.empiresSide.6": "Face F",
+  "option.warAndPeace": "Guerre ou Paix",
+  "option.warAndPeace.help": "Jouez avec les 20 cartes bonus de la fin de la campagne \"Guerre ou Paix\" !"
+}

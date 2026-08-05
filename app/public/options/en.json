@@ -1,0 +1,22 @@
+{
+  "face.e.f.requires.c&a": "\"Corruption & Ascension\" is required to play Empire cards sides E or F",
+  "identities": "Empire",
+  "identities.1": "Aztec Empire",
+  "identities.2": "Federation of Asia",
+  "identities.3": "Noram States",
+  "identities.4": "Panafrican Union",
+  "identities.5": "Republic of Europe",
+  "identities.6": "Nations of Oceania",
+  "identities.7": "North Hegemony",
+  "option.corruptionAndAscension": "Corruption & Ascension",
+  "option.corruptionAndAscension.help": "This expansion adds new cards, new game mechanics such as corruption, and allows up to 7 players!",
+  "option.empiresSide": "Empire cards side",
+  "option.empiresSide.1": "Side A",
+  "option.empiresSide.2": "Side B",
+  "option.empiresSide.3": "Side C",
+  "option.empiresSide.4": "Side D",
+  "option.empiresSide.5": "Side E",
+  "option.empiresSide.6": "Side F",
+  "option.warAndPeace": "War or Peace",
+  "option.warAndPeace.help": "Play with the 20 bonus cards from the end of the \"War or Peace\" campaign!"
+}
