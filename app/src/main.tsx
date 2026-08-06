@@ -1,5 +1,5 @@
 import '@fontsource/oswald'
-import { ItsAWonderfulWorldOptionsSpec } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldOptions'
+import { ItsAWonderfulWorldOptionsSpecV2 } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldOptions'
 import { ItsAWonderfulWorldRules } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldRules'
 import { ItsAWonderfulWorldSetup } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldSetup'
 import { GameProvider } from '@gamepark/react-game'
@@ -22,7 +22,7 @@ createRoot(document.getElementById('root')!).render(
       game="its-a-wonderful-world"
       version={3}
       Rules={ItsAWonderfulWorldRules}
-      optionsSpec={ItsAWonderfulWorldOptionsSpec}
+      optionsSpec={ItsAWonderfulWorldOptionsSpecV2}
       GameSetup={ItsAWonderfulWorldSetup}
       material={Material}
       materialI18n={materialI18n}

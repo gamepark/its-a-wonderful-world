@@ -1,4 +1,4 @@
-import { getEnumValues, OptionsSpec, OptionsSpecV2, OptionsValidationError, TFunction } from '@gamepark/rules-api'
+import { getEnumValues, OptionsSpecV2 } from '@gamepark/rules-api'
 import { Empire, empires } from './Empire'
 import { EmpireSide } from './material/EmpireSide'
 
@@ -55,74 +55,6 @@ export const ItsAWonderfulWorldOptionsSpecV2: OptionsSpecV2 = {
       message: 'face.e.f.requires.c&a'
     }
   ]
-}
-
-/**
- * The legacy declaration, superseded by `ItsAWonderfulWorldOptionsSpecV2`.
- *
- * Kept exported only because a few platform screens still read the v1 spec for
- * its labels and help texts; nothing here should be edited any more, and the
- * whole object goes once those screens have moved.
- *
- * `subscriberRequired` is dead here too: which sides a subscription unlocks is a
- * commercial decision, and it lives in `BoardGame.optionsPolicy` on the platform,
- * which overrides whatever this file says. It is left in place as documentation
- * of the intent, not as something that takes effect.
- */
-export const ItsAWonderfulWorldOptionsSpec: OptionsSpec<ItsAWonderfulWorldOptions> = {
-  players: {
-    id: {
-      label: (t) => t('Empire'),
-      values: empires,
-      valueSpec: (empire) => ({ label: (t) => getPlayerName(empire, t) })
-    }
-  },
-  corruptionAndAscension: {
-    label: (t) => t('c&a'),
-    help: (t) => t('c&a.help'),
-    subscriberRequired: true
-  },
-  warAndPeace: {
-    label: (t) => t('w&p'),
-    help: (t) => t('w&p.help'),
-    subscriberRequired: true
-  },
-  empiresSide: {
-    label: (t) => t('Empire cards side'),
-    values: getEnumValues(EmpireSide),
-    valueSpec: (side) => ({
-      label: (t) => t('Side {side}', { side: String.fromCharCode(64 + (side ?? 1)) }),
-      help: (t) => getEmpireSideHelp(side, t),
-      subscriberRequired: side !== EmpireSide.A && side !== EmpireSide.B
-    })
-  },
-  validate: (options, t) => {
-    if (options.corruptionAndAscension === false) {
-      if (options.players && options.players.length > 5) {
-        throw new OptionsValidationError(t('6.players.requires.c&a'), ['corruptionAndAscension', 'players'])
-      }
-      if (options.empiresSide === EmpireSide.E || options.empiresSide === EmpireSide.F) {
-        throw new OptionsValidationError(t('face.e.f.requires.c&a'), ['corruptionAndAscension', 'empiresSide'])
-      }
-    }
-  }
-}
-
-function getEmpireSideHelp(side: EmpireSide, t: TFunction): string {
-  switch (side) {
-    case EmpireSide.A:
-      return t('sideA.help')
-    case EmpireSide.B:
-      return t('sideB.help')
-    case EmpireSide.C:
-      return t('sideC.help')
-    case EmpireSide.D:
-      return t('sideD.help')
-    case EmpireSide.E:
-      return t('sideE.help')
-    case EmpireSide.F:
-      return t('sideF.help')
-  }
 }
 
 export function getPlayerName(empire: Empire, t: (key: string) => string): string {
