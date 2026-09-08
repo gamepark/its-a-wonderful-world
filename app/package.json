@@ -13,7 +13,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "upload-sourcemaps": "datadog-ci sourcemaps upload dist/assets --service=its-a-wonderful-world --release-version=$npm_package_version --minified-path-prefix=/assets/",
-    "sync": "npx rimraf dist/assets/*.map && rclone sync dist its-a-wonderful-world:its-a-wonderful-world.game-park.com --progress --s3-acl=public-read",
+    "sync:hashed": "rclone sync dist its-a-wonderful-world:its-a-wonderful-world.game-park.com --progress --s3-acl=public-read --include \"assets/**\" -M --metadata-set \"cache-control=public, max-age=31536000, immutable\"",
+    "sync:other": "rclone sync dist its-a-wonderful-world:its-a-wonderful-world.game-park.com --progress --s3-acl=public-read --exclude \"assets/**\" -M --metadata-set \"cache-control=no-cache\"",
+    "sync": "npx rimraf dist/assets/*.map && yarn sync:hashed && yarn sync:other",
     "deploy": "yarn build && node -e \"if(process.env.DATADOG_API_KEY){require('child_process').execSync('yarn upload-sourcemaps',{stdio:'inherit'})}\" && yarn sync"
   },
   "dependencies": {
