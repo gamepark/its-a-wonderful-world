@@ -30,7 +30,7 @@ export const PlayerPanel: FC<Props> = ({ playerId, small = false, gameOver = fal
     <div css={panelStyle(playerId)} {...props}>
       <div css={contentScale}>
         {playerInfo?.avatar ? (
-          <Avatar playerId={playerId} css={avatarStyle} />
+          <Avatar playerId={playerId} css={avatarStyle} speechBubble />
         ) : (
           <img src={empireAvatars[playerId]} alt={t('ui.player-avatar')} css={fallbackAvatarStyle} />
         )}
