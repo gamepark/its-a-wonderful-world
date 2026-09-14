@@ -4,8 +4,9 @@ import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { Resource, resources } from '@gamepark/its-a-wonderful-world/material/Resource'
-import { isLocationSubset, ItemContext, LocationDescription, MaterialContext, PileLocator, useRules } from '@gamepark/react-game'
+import { isLocationSubset, ItemContext, LocationDescription, Locator, MaterialContext, useRules } from '@gamepark/react-game'
 import { Coordinates, Location, MaterialItem, MaterialRules, XYCoordinates } from '@gamepark/rules-api'
+import { resourceCubeDescription } from '../material/ResourceCubeDescription'
 
 const resourceColor: Record<number, string> = {
   [Resource.Materials]: '#ddd6c5',
@@ -64,11 +65,7 @@ class AvailableResourcesLocationDescription extends LocationDescription {
   `
 }
 
-class AvailableResourcesLocator extends PileLocator<Empire, MaterialType, LocationType> {
-  radius = 2.6
-  maxAngle = 0
-  minimumDistance = 0.8
-
+class AvailableResourcesLocator extends Locator<Empire, MaterialType, LocationType> {
   locationDescription = new AvailableResourcesLocationDescription()
 
   getLocations(context: MaterialContext<Empire, MaterialType, LocationType>) {
@@ -82,15 +79,16 @@ class AvailableResourcesLocator extends PileLocator<Empire, MaterialType, Locati
     return item.location.player !== currentView
   }
 
-  generateItemPosition(item: MaterialItem<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>): XYCoordinates {
-    const distance = Math.random()
-    // Restrict angle to ~270° arc avoiding bottom center (π/2) where the count is displayed
-    const direction = Math.random() * 1.5 * Math.PI + 0.75 * Math.PI // from 3π/4 to 9π/4 (avoids π/2)
-    const radius = this.getRadius(item.location, context)
-    const r = typeof radius === 'number' ? radius : radius.x
+  /**
+   * Cubes fill a hexagonal spiral: the first one in the center (slightly above the count), then rings of 6, 12, 18...
+   */
+  getItemCoordinates(item: MaterialItem<Empire, LocationType>, context: ItemContext<Empire, MaterialType, LocationType>): Coordinates {
+    const { x, y, z } = this.getCoordinates(item.location)
+    const { x: dx, y: dy } = toHexagonalSpiralPosition(context.displayIndex)
     return {
-      x: Math.cos(direction) * Math.sqrt(distance) * r,
-      y: Math.sin(direction) * Math.sqrt(distance) * r
+      x: x + (dx * resourceCubeDescription.width) / 2,
+      y: y + hexagonCenterDeltaY + dy * resourceCubeDescription.height,
+      z
     }
   }
 
@@ -100,6 +98,37 @@ class AvailableResourcesLocator extends PileLocator<Empire, MaterialType, Locati
     const circleX = -22.1 + resourceIndex * 10.38
 
     return { x: circleX, y: -7.3, z: 2 }
+  }
+}
+
+const hexagonCenterDeltaY = -0.3
+
+/**
+ * Position of the nth cube in a hexagonal spiral, in half cube widths on x and cube heights on y.
+ * Index 0 is the center, then each ring at distance d holds 6d cubes.
+ */
+const toHexagonalSpiralPosition = (index: number): XYCoordinates => {
+  if (index === 0) return { x: 0, y: 0 }
+  index--
+  let distance = 1
+  while (distance <= index / 6) {
+    index -= distance * 6
+    distance++
+  }
+  const xFactor = 2 / Math.sqrt(3)
+  switch (Math.floor(index / distance)) {
+    case 0:
+      return { x: (distance + index) * -xFactor, y: distance - index }
+    case 1:
+      return { x: (index - distance * 3) * xFactor, y: distance - index }
+    case 2:
+      return { x: (index * 2 - distance * 5) * xFactor, y: -distance }
+    case 3:
+      return { x: (index - distance * 2) * xFactor, y: index - distance * 4 }
+    case 4:
+      return { x: (distance * 6 - index) * xFactor, y: index - distance * 4 }
+    default:
+      return { x: (distance * 11 - index * 2) * xFactor, y: distance }
   }
 }
 
