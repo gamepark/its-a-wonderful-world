@@ -1,5 +1,8 @@
+/** @jsxImportSource @emotion/react */
+import { faArrowDown, faArrowUp, faCheck, faHammer, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CardDescription, ItemContext } from '@gamepark/react-game'
-import { isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMoveType, isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
 import { CustomMoveType } from '@gamepark/its-a-wonderful-world/material/CustomMoveType'
 import { DeckType } from '@gamepark/its-a-wonderful-world/material/DeckType'
@@ -8,6 +11,7 @@ import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationT
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { DevelopmentCardHelp } from '../help/DevelopmentCardHelp'
 import { DevelopmentCardHelpDisplay } from '../help/DevelopmentCardHelpDisplay'
+import { MenuButtonTone, WonderfulMenuButton } from '../theme/WonderfulMenuButton'
 
 // Import card back images
 import DevelopmentBack from '../images/developments/development-back.jpg'
@@ -182,6 +186,85 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
     return false
   }
 
+  /**
+   * The buttons stand on every card that has moves, rather than on the clicked one: a click on a card
+   * keeps opening its help.
+   */
+  menuAlwaysVisible = true
+
+  /**
+   * Buttons laid over the artwork, right of the cost column:
+   * - in hand: choose the card, at the top of the card;
+   * - in the draft area: slate it for construction, recycle it below;
+   * - under construction: place as many resources as possible, and below, build it if it can be paid, recycle it otherwise.
+   */
+  getItemMenu(
+    item: MaterialItem<Empire, LocationType>,
+    context: ItemContext<Empire, MaterialType, LocationType>,
+    legalMoves: MaterialMove<Empire, MaterialType, LocationType>[]
+  ) {
+    const moveTo = (type: LocationType) =>
+      legalMoves.find((move) => isMoveItemType(MaterialType.DevelopmentCard)(move) && move.itemIndex === context.index && move.location.type === type)
+    switch (item.location.type) {
+      case LocationType.PlayerHand: {
+        const choose = moveTo(LocationType.DraftArea)
+        if (!choose) return null
+        return (
+          <WonderfulMenuButton move={choose} x={0.6} y={-5.5} tone={MenuButtonTone.Draft} title="help.action.select">
+            <FontAwesomeIcon icon={faArrowUp} />
+          </WonderfulMenuButton>
+        )
+      }
+      case LocationType.DraftArea: {
+        const build = moveTo(LocationType.ConstructionArea)
+        const recycle = moveTo(LocationType.Discard)
+        if (!build && !recycle) return null
+        return (
+          <>
+            {build && (
+              <WonderfulMenuButton move={build} x={2} y={-1.8} tone={MenuButtonTone.Construction} title="help.action.build">
+                <FontAwesomeIcon icon={faHammer} />
+              </WonderfulMenuButton>
+            )}
+            {recycle && (
+              <WonderfulMenuButton move={recycle} x={2} y={0.8} tone={MenuButtonTone.Recycle} title="help.action.recycle">
+                <FontAwesomeIcon icon={faXmark} />
+              </WonderfulMenuButton>
+            )}
+          </>
+        )
+      }
+      case LocationType.ConstructionArea: {
+        const place = legalMoves.find((move) => isCustomMoveType(CustomMoveType.PlaceResources)(move) && move.data === context.index)
+        const construct = moveTo(LocationType.ConstructedDevelopments)
+        const recycle = moveTo(LocationType.Discard)
+        if (!place && !construct && !recycle) return null
+        return (
+          <>
+            {place && (
+              <WonderfulMenuButton move={place} x={2} y={-1.8} title="help.action.place">
+                <FontAwesomeIcon icon={faArrowDown} />
+              </WonderfulMenuButton>
+            )}
+            {construct ? (
+              <WonderfulMenuButton move={construct} x={2} y={0.8} tone={MenuButtonTone.Draft} title="help.action.construct">
+                <FontAwesomeIcon icon={faCheck} />
+              </WonderfulMenuButton>
+            ) : (
+              recycle && (
+                <WonderfulMenuButton move={recycle} x={2} y={0.8} tone={MenuButtonTone.Recycle} title="help.action.recycle">
+                  <FontAwesomeIcon icon={faXmark} />
+                </WonderfulMenuButton>
+              )
+            )}
+          </>
+        )
+      }
+      default:
+        return null
+    }
+  }
+
   backImages = {
     [DeckType.Default]: DevelopmentBack,
     [DeckType.Ascension]: AscensionBack
@@ -319,5 +402,6 @@ export class DevelopmentCardDescription extends CardDescription<Empire, Material
     [Development.SecretForces]: SecretForces_EN
   }
 }
+
 
 export const developmentCardDescription = new DevelopmentCardDescription()
