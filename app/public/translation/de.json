@@ -193,6 +193,7 @@
   "header.production.player": "{player} muss die produzierten Ressourcen verteilen",
   "header.production.players": "Alle müssen die produzierten Ressourcen verteilen",
   "header.production.you": "Verteile deine produzierten Ressourcen auf die Karten in deinem Baubereich oder lege sie auf deine Imperiumskarte ",
+  "header.validate.confirm": "Du kannst noch eine Karte bauen. Bist du sicher, dass du das Spiel beenden möchtest, ohne sie zu bauen?",
   "header.validate.produce": "Klicke auf <validate>Bestätigen</validate>, wenn du bereit für den Produktionsabschnitt {resource, select, 1{Baumaterial} 2{Energie} 3{Wissen} 4{Gold} 5{Erkundung} other{Krystallium}} bist",
   "header.validate.round": "Klicke auf <validate>Bestätigen</validate>, wenn du bereit für die nächste Runde bist",
   "header.validate.scoring": "Klicke auf <validate>Bestätigen</validate>, um zur Wertung überzugehen",

@@ -11,6 +11,7 @@ import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
 import { HeaderText, MaterialComponent, PlayMoveButton, useLegalMove, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
 import { isCreateItem, isEndPlayerTurn, MaterialRules } from '@gamepark/rules-api'
 import { Trans } from 'react-i18next'
+import { useCanStillBuildBeforeGameEnd, useEndGameConfirmationText } from '../components/EndGameConfirmation'
 
 const characterIconCss = css`
   display: inline-block;
@@ -33,6 +34,8 @@ export const ProductionHeader = () => {
   const playerId = usePlayerId()
   const endTurn = useLegalMove(isEndPlayerTurn)
   const legalMoves = useLegalMoves()
+  const canStillBuild = useCanStillBuildBeforeGameEnd()
+  const confirmationText = useEndGameConfirmationText()
 
   // For player/players case, use a single translation key
   if (playerId === undefined || !rules.activePlayers.includes(playerId)) {
@@ -98,7 +101,7 @@ export const ProductionHeader = () => {
       <Trans
         i18nKey="header.validate.scoring"
         defaults="Click on <validate>Validate</validate> to proceed to the calculation of the scores"
-        components={{ validate: <PlayMoveButton move={endTurn} /> }}
+        components={{ validate: <PlayMoveButton move={endTurn} confirmation={canStillBuild ? { text: confirmationText } : undefined} /> }}
       />
     )
   }

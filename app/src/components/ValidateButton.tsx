@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css, keyframes } from '@emotion/react'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
-import { useLegalMove, usePlay, useRules } from '@gamepark/react-game'
-import { isEndPlayerTurn, MaterialRules } from '@gamepark/rules-api'
+import { useRules } from '@gamepark/react-game'
+import { MaterialRules } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
+import { useValidateWithConfirmation } from './EndGameConfirmation'
 
 const validateRules = [
   RuleId.Planning,
@@ -18,12 +19,11 @@ const validateRules = [
 export const ValidateButton = () => {
   const { t } = useTranslation()
   const rules = useRules<MaterialRules>()
-  const play = usePlay()
 
   const ruleId = rules?.game.rule?.id as RuleId | undefined
   const showValidate = ruleId !== undefined && validateRules.includes(ruleId)
 
-  const endTurnMove = useLegalMove(isEndPlayerTurn)
+  const { endTurn: endTurnMove, validate, dialog } = useValidateWithConfirmation()
 
   if (!showValidate || !endTurnMove) {
     return null
@@ -31,7 +31,7 @@ export const ValidateButton = () => {
 
   return (
     <div css={containerStyle}>
-      <button css={buttonStyle} onClick={() => play(endTurnMove)}>
+      <button css={buttonStyle} onClick={validate}>
         <span css={borderContainerStyle}>
           <span />
           <span />
@@ -40,6 +40,7 @@ export const ValidateButton = () => {
         </span>
         {t('Validate', { ns: 'common' })}
       </button>
+      {dialog}
     </div>
   )
 }

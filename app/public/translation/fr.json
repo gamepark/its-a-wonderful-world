@@ -193,6 +193,7 @@
   "header.production.player": "{player} doit utiliser les ressources produites",
   "header.production.players": "Les joueurs doivent utiliser les ressources produites",
   "header.production.you": "Placez les ressources produites sur vos développements en construction ou votre carte Empire",
+  "header.validate.confirm": "Vous pouvez encore construire une carte. Êtes-vous sûr de vouloir finir la partie sans la construire ?",
   "header.validate.produce": "Cliquez sur <validate>Valider</validate> si vous êtes prêt à passer à la production {resource, select, 1{de Matériaux} 2{d’Énergie} 3{de Science} 4{d’Or} 5{d’Exploration} other{Krystallium}}",
   "header.validate.round": "Cliquez sur <validate>Valider</validate> si vous êtes prêt à passer au tour suivant",
   "header.validate.scoring": "Cliquez sur <validate>Valider</validate> pour passer au calcul des scores",

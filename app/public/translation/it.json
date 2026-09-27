@@ -193,6 +193,7 @@
   "header.production.player": "{player} deve utilizzare le risorse prodotte",
   "header.production.players": "I giocatori devono utilizzare le risorse prodotte",
   "header.production.you": "Posiziona le risorse prodotte sui tuoi sviluppi in costruzione o sulla tua carta Impero",
+  "header.validate.confirm": "Puoi ancora costruire una carta. Sei sicuro di voler terminare la partita senza costruirla?",
   "header.validate.produce": "Clicca su <validate>Conferma</validate> se sei pronto a procedere alla produzione di {resource, select, 1{Materiali} 2{Energia} 3{Scienza} 4{Oro} 5{Esplorazione} other{Krystallium}}",
   "header.validate.round": "Clicca su <validate>Conferma</validate> se sei pronto a procedere al prossimo round",
   "header.validate.scoring": "Clicca su <validate>Conferma</validate> per procedere ai punteggi",

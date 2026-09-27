@@ -4,10 +4,11 @@ import { Empire } from '@gamepark/its-a-wonderful-world/Empire'
 import { Memory } from '@gamepark/its-a-wonderful-world/ItsAWonderfulWorldMemory'
 import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
-import { useFocusContext, useGame, useLegalMove, usePlay, usePlayerName, usePlayerId, useRules } from '@gamepark/react-game'
-import { isEndPlayerTurn, MaterialGame, MaterialMoveBuilder, MaterialRules } from '@gamepark/rules-api'
+import { useFocusContext, useGame, usePlay, usePlayerName, usePlayerId, useRules } from '@gamepark/react-game'
+import { MaterialGame, MaterialMoveBuilder, MaterialRules } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
 import { getSupremacyWinners } from '../utils/getSupremacyWinners'
+import { useValidateWithConfirmation } from './EndGameConfirmation'
 import arrowGreen from '../images/arrow-green.png'
 import arrowWhite from '../images/arrow-white.png'
 import boardCircleBlack from '../images/board-circle-black.png'
@@ -141,8 +142,7 @@ export const Board = () => {
   const currentProductionResource = ruleId !== undefined ? ruleIdToResource[ruleId] : undefined
 
   // End turn move for validation
-  const endTurn = useLegalMove(isEndPlayerTurn)
-  const play = usePlay()
+  const { endTurn, validate, dialog } = useValidateWithConfirmation()
   const { focus } = useFocusContext()
   const playDown = focus?.highlight === true
 
@@ -158,11 +158,12 @@ export const Board = () => {
             key={`arrow-${resourceData.name}`}
             css={[arrowStyle(index), isActive && arrowActiveStyle]}
             disabled={!isActive}
-            onClick={() => isActive && play(endTurn)}
+            onClick={() => isActive && validate()}
             title={t('Validate', { ns: 'common' })}
           />
         )
       })}
+      {dialog}
     </div>
   )
 }

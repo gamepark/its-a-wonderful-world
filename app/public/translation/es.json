@@ -193,6 +193,7 @@
   "header.production.player": "{player} debe usar los recursos producidos",
   "header.production.players": "Los jugadores deben usar los recursos producidos",
   "header.production.you": "Coloca los recursos producidos sobre tus desarrollos en construcción o tu carta de Imperio",
+  "header.validate.confirm": "Todavía puedes construir una carta. ¿Seguro que quieres terminar la partida sin construirla?",
   "header.validate.produce": "Haz clic en <validate>Validar</validate> si estás listo para pasar a la producción de {resource, select, 1{Materiales} 2{Energía} 3{Ciencia} 4{Oro} 5{Exploración} other{Krystallium}}",
   "header.validate.round": "Haz clic en <validate>Validar</validate> si estás listo para pasar a la siguiente ronda",
   "header.validate.scoring": "Haz clic en <validate>Validar</validate> para pasar a las puntuaciones",
