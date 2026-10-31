@@ -7,6 +7,7 @@ import { EmpireSide } from '@gamepark/its-a-wonderful-world/material/EmpireSide'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
+import { isScienceCharacterChoice } from '@gamepark/its-a-wonderful-world/rules/ScienceProductionRule'
 import { MaterialTutorial, TutorialStep } from '@gamepark/react-game'
 import { isCreateItem, isCustomMoveType, isEndPlayerTurn, isMoveItemType, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { characterTokenDescription } from '../material/CharacterTokenDescription.tsx'
@@ -71,14 +72,14 @@ const buildCard =
 const chooseCharacter =
   (character: Character): Filter =>
   (move) =>
-    isCreateItem(move) && move.itemType === MaterialType.CharacterToken && move.item?.id === character
+    isScienceCharacterChoice(character)(move)
 
 const validate: Filter = (move) => isEndPlayerTurn(move)
 
 // ── Tutorial class ──────────────────────────────────────────────────────
 
 export class Tutorial extends MaterialTutorial<Empire, MaterialType, LocationType> {
-  version = 2
+  version = 3
 
   options: ItsAWonderfulWorldOptions = {
     players: [{ id: me }, { id: player2 }, { id: player3 }],

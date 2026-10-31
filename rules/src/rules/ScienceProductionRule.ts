@@ -1,12 +1,29 @@
-import { isCreateItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 import { Empire } from '../Empire'
 import { Memory } from '../ItsAWonderfulWorldMemory'
 import { Character } from '../material/Character'
+import { CustomMoveType } from '../material/CustomMoveType'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { Resource } from '../material/Resource'
 import { ProductionRule } from './ProductionRule'
 import { RuleId } from './RuleId'
+
+/**
+ * Data of the {@link CustomMoveType.ChooseScienceCharacter} move
+ */
+export type ScienceCharacterChoice = {
+  player: Empire
+  character: Character
+}
+
+/**
+ * Filter the moves choosing the given character as the Science supremacy bonus
+ */
+export const isScienceCharacterChoice =
+  (character: Character) =>
+  (move: MaterialMove): move is CustomMove<CustomMoveType, ScienceCharacterChoice> =>
+    isCustomMoveType(CustomMoveType.ChooseScienceCharacter)(move) && (move.data as ScienceCharacterChoice).character === character
 
 /**
  * Science production phase (3rd of 5)
@@ -25,31 +42,15 @@ export class ScienceProductionRule extends ProductionRule {
 
   /**
    * Override to add character choice moves for players who need to choose.
+   * The choice is a custom move, so that it cannot be mistaken for a character awarded by a construction bonus.
    */
   getActivePlayerLegalMoves(playerId: Empire): MaterialMove[] {
     const moves = super.getActivePlayerLegalMoves(playerId)
 
-    // If player needs to choose a character, add the two choice moves
-    const needsToChoose = this.remind<boolean>(Memory.ScienceBonus, playerId)
-    if (needsToChoose) {
-      moves.push(
-        this.material(MaterialType.CharacterToken).createItem({
-          id: Character.Financier,
-          location: {
-            type: LocationType.PlayerCharacters,
-            player: playerId,
-            id: Character.Financier
-          }
-        }),
-        this.material(MaterialType.CharacterToken).createItem({
-          id: Character.General,
-          location: {
-            type: LocationType.PlayerCharacters,
-            player: playerId,
-            id: Character.General
-          }
-        })
-      )
+    if (this.remind<boolean>(Memory.ScienceBonus, playerId)) {
+      for (const character of [Character.Financier, Character.General]) {
+        moves.push(this.customMove(CustomMoveType.ChooseScienceCharacter, { player: playerId, character } satisfies ScienceCharacterChoice))
+      }
     }
 
     return moves
@@ -64,39 +65,30 @@ export class ScienceProductionRule extends ProductionRule {
     return super.canEndTurn(playerId)
   }
 
+  onCustomMove(move: CustomMove): MaterialMove[] {
+    if (isCustomMoveType(CustomMoveType.ChooseScienceCharacter)(move)) {
+      const { player, character } = move.data as ScienceCharacterChoice
+      this.forget(Memory.ScienceBonus, player)
+      return [
+        this.material(MaterialType.CharacterToken).createItem({
+          id: character,
+          location: {
+            type: LocationType.PlayerCharacters,
+            player,
+            id: character
+          }
+        })
+      ]
+    }
+    return super.onCustomMove(move)
+  }
+
   /**
-   * After a character token is created in player's PlayerCharacters, clear the science bonus flag.
-   * Must distinguish construction bonus tokens (consequences) from the actual supremacy choice.
+   * Games recorded before the choice became a custom move cleared the flag on the character creation:
+   * make sure the flag never outlives the phase when they are replayed.
    */
-  afterItemMove(move: ItemMove): MaterialMove[] {
-    const consequences = super.afterItemMove(move)
-
-    // Track construction bonus character tokens in consequences so we can skip them later
-    for (const consequence of consequences) {
-      if (isCreateItem(consequence) && consequence.itemType === MaterialType.CharacterToken) {
-        const player = consequence.item?.location?.player as Empire | undefined
-        if (player !== undefined) {
-          const count = this.remind<number>(Memory.PendingConstructionBonusTokens, player) ?? 0
-          this.memorize(Memory.PendingConstructionBonusTokens, count + 1, player)
-        }
-      }
-    }
-
-    // Check if a character was created in player's PlayerCharacters
-    if (isCreateItem(move) && move.itemType === MaterialType.CharacterToken) {
-      const player = move.item?.location?.player as Empire | undefined
-      if (player !== undefined && move.item?.location?.type === LocationType.PlayerCharacters) {
-        const pending = this.remind<number>(Memory.PendingConstructionBonusTokens, player) ?? 0
-        if (pending > 0) {
-          // This is a construction bonus, not the supremacy choice
-          this.memorize(Memory.PendingConstructionBonusTokens, pending - 1, player)
-        } else {
-          // This is the actual supremacy choice
-          this.forget(Memory.ScienceBonus, player)
-        }
-      }
-    }
-
-    return consequences
+  onRuleEnd() {
+    this.forget(Memory.ScienceBonus)
+    return []
   }
 }

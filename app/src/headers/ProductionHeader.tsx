@@ -8,8 +8,9 @@ import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialT
 import { Resource } from '@gamepark/its-a-wonderful-world/material/Resource'
 import { hasKrystalliumOrCharacterProduction } from '@gamepark/its-a-wonderful-world/Production'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
+import { isScienceCharacterChoice } from '@gamepark/its-a-wonderful-world/rules/ScienceProductionRule'
 import { HeaderText, MaterialComponent, PlayMoveButton, useLegalMove, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
-import { isCreateItem, isEndPlayerTurn, MaterialRules } from '@gamepark/rules-api'
+import { isEndPlayerTurn, MaterialRules } from '@gamepark/rules-api'
 import { Trans } from 'react-i18next'
 import { useCanStillBuildBeforeGameEnd, useEndGameConfirmationText } from '../components/EndGameConfirmation'
 
@@ -55,8 +56,8 @@ export const ProductionHeader = () => {
   const needsToChooseCharacter = rules.remind<boolean>(Memory.ScienceBonus, playerId as Empire)
 
   if (needsToChooseCharacter) {
-    const takeFinancier = legalMoves.find((move) => isCreateItem(move) && move.itemType === MaterialType.CharacterToken && move.item.id === Character.Financier)
-    const takeGeneral = legalMoves.find((move) => isCreateItem(move) && move.itemType === MaterialType.CharacterToken && move.item.id === Character.General)
+    const takeFinancier = legalMoves.find(isScienceCharacterChoice(Character.Financier))
+    const takeGeneral = legalMoves.find(isScienceCharacterChoice(Character.General))
     return (
       <Trans
         i18nKey="header.bonus.choice"

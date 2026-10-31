@@ -6,8 +6,9 @@ import { Character } from '@gamepark/its-a-wonderful-world/material/Character'
 import { LocationType } from '@gamepark/its-a-wonderful-world/material/LocationType'
 import { MaterialType } from '@gamepark/its-a-wonderful-world/material/MaterialType'
 import { RuleId } from '@gamepark/its-a-wonderful-world/rules/RuleId'
+import { isScienceCharacterChoice } from '@gamepark/its-a-wonderful-world/rules/ScienceProductionRule'
 import { ItemContext, ItemMenuButton, MaterialContext, TokenDescription } from '@gamepark/react-game'
-import { isCreateItem, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { Trans } from 'react-i18next'
 import { CharacterTokenHelp } from '../help/CharacterTokenHelp'
 
@@ -77,8 +78,8 @@ export class CharacterTokenDescription extends TokenDescription<Empire, Material
 
     const character = item.id as Character
 
-    // Find the createItem move for this character type
-    const choiceMove = legalMoves.find((move) => isCreateItem(move) && move.itemType === MaterialType.CharacterToken && move.item.id === character)
+    // Find the Science supremacy choice move for this character type
+    const choiceMove = legalMoves.find(isScienceCharacterChoice(character))
 
     if (!choiceMove) return null
 
