@@ -170,4 +170,10 @@ const borderContainerStyle = css`
     background: linear-gradient(to bottom, rgba(8, 43, 43, 0), #26d9d9);
     animation: 2s ${animateLeft} linear -1s infinite;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    & > span {
+      animation: none;
+    }
+  }
 `

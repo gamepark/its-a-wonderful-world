@@ -265,4 +265,8 @@ const arrowActiveStyle = css`
   opacity: 1;
   cursor: pointer;
   animation: ${pulse} 0.8s linear alternate infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `

@@ -37,21 +37,27 @@ const containerStyle = css`
   height: 4em;
   overflow: hidden;
   pointer-events: none;
-  filter: drop-shadow(0 0 0.3em rgba(0, 0, 0, 0.7));
 `
 
 const sliderContent = css`
   position: relative;
   width: 100%;
   height: 200%;
+  will-change: transform;
 `
 
+/**
+ * The shadow stands on each arrow, inside the sliding layer, and never on an ancestor of the animation:
+ * a filter over an animated child is computed again on every frame, endlessly during the whole draft,
+ * which made the game lag on iPad.
+ */
 const arrowStyle = css`
   position: absolute;
   width: 100%;
   height: auto;
   transform: translateY(-50%);
   opacity: 0.9;
+  filter: drop-shadow(0 0 0.3em rgba(0, 0, 0, 0.7));
 `
 
 const arrowDown = css`
@@ -75,6 +81,12 @@ const scrollDownAnimation = css`
   & > div {
     animation: ${scrollDown} 2s linear infinite;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    & > div {
+      animation: none;
+    }
+  }
 `
 
 const scrollUp = keyframes`
@@ -89,5 +101,11 @@ const scrollUp = keyframes`
 const scrollUpAnimation = css`
   & > div {
     animation: ${scrollUp} 2s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & > div {
+      animation: none;
+    }
   }
 `
