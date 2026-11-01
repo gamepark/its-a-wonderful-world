@@ -1,4 +1,4 @@
-# Game Park - Board Game Template
+# Game Park - Board It's a Wonderful World
 
 Template to adapt board games for [Game Park](https://game-park.com/).
 
@@ -16,7 +16,7 @@ Template to adapt board games for [Game Park](https://game-park.com/).
 
 ```bash
 yarn install
-yarn start
+yarn dev
 ```
 
 The game opens at http://localhost:3000.
@@ -33,9 +33,9 @@ game.undo()               // Undo last move
 
 Search and replace in all files:
 
-- `Game Template` → `Your Game Name`
+- `It's a Wonderful World` → `Your Game Name`
 - `GameTemplate` → `YourGameName`
-- `game-template` → `your-game-name`
+- `its-a-wonderful-world` → `your-game-name`
 
 ## Deployment
 
