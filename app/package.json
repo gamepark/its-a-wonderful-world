@@ -26,7 +26,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@fortawesome/react-fontawesome": "^3.5.0",
-    "@gamepark/react-game": "~7.10.0",
+    "@gamepark/react-game": "~7.10.2",
     "@gamepark/rules-api": "~7.10.0",
     "es-toolkit": "^1.53.2",
     "i18next": "^27.1.1",
@@ -41,8 +41,8 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react-swc": "^4.3.3",
     "typescript": "^7.0.2",
-    "vite": "^8.3.7",
-    "vite-imagetools": "^12.0.1",
+    "vite": "^8.3.8",
+    "vite-imagetools": "^12.0.2",
     "vitest": "^5.1.0"
   }
 }
