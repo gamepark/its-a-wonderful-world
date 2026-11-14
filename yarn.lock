@@ -1423,22 +1423,27 @@
   dependencies:
     prop-types "^15.8.1"
 
+"@gamepark/api-types@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@gamepark/api-types/-/api-types-1.0.3.tgz#7bcd671b63bb097a31d612324dc415f27667b25c"
+  integrity sha512-8+yTd77wrSfAgQk7QSph+TXhWpFjuJ1uRJy9jW0CSSoHk9lQeLOMEC4EEUxWBaVEeFZtPF16nDhiusZcfIhvvg==
+
 "@gamepark/avataaars@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@gamepark/avataaars/-/avataaars-3.0.0.tgz#6e85e066693fb75c0082b437bfe8513e77f66917"
   integrity sha512-MOe/jtEe2UkxQSfZ2TyqfRnihVBpGUeFwbM9aFZYVQoe5Jdw4kRx0bEKHHw2XnXaYJ2UEJOYys4iAdjBTv4tEg==
 
-"@gamepark/react-client@~5.25.0":
-  version "5.25.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.25.0.tgz#f70a0a7e8ff83d89db57c7002e15886cb64b88d0"
-  integrity sha512-1EwP11Prx+g/G4zwRwf01qulbmaHagLebWb/asxqkQneASu9x3/+6uVj5x3temU57YjSJBtxsy5eaPvz8/EKAQ==
+"@gamepark/react-client@~5.28.0":
+  version "5.28.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.28.0.tgz#61505571cc9f1bfd35cb56be2a93e7dd49dd4039"
+  integrity sha512-lCBMVdMjiXQ7Ex4rYMLAzczJsnwS6Xe3PdWS+Rv9sdjaHJSXtQy6molrfnOg3dIEfjPoWbHPwvC+uXdaQNv20Q==
   dependencies:
     "@datadog/browser-logs" "^3.6.11"
     "@fortawesome/free-regular-svg-icons" "^6.1.0"
     "@fortawesome/free-solid-svg-icons" "^6.1.0"
     "@fortawesome/react-fontawesome" "^0.2.6"
     "@gamepark/avataaars" "^3.0.0"
-    "@gamepark/rules-api" "^5.24.0"
+    "@gamepark/rules-api" "^5.26.0"
     "@tanstack/react-query" "^5.90.21"
     "@trpc/client" "^11.10.0"
     "@trpc/react-query" "^11.10.0"
@@ -1449,10 +1454,8 @@
     i18next-icu "^2.0.2"
     immer "^9.0.2"
     intl-messageformat "^9.5.2"
-    lodash.shuffle "^4.2.0"
     moment "^2.30.1"
     nosleep.js "^0.12.0"
-    o9n "^2.1.0"
     pusher-js "^7.0.0"
     react-infinite-scroll-component "^6.1.0"
     redux ">=4.0.5"
@@ -1469,7 +1472,14 @@
     "@react-dnd/shallowequal" "^2.0.0"
     supports-webp "^2.0.1"
 
-"@gamepark/rules-api@^5.24.0", "@gamepark/rules-api@~5.24.0":
+"@gamepark/rules-api@^5.26.0":
+  version "5.26.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-5.26.0.tgz#21f0f9bd87252e4d0a7951fb8ed59d0d45a8aad7"
+  integrity sha512-TUmXuqpwISa8FZzy/3XP/PEzaOb8DXDWMpvVSDASgo8PexWEiQb+1oKHDPFwGbwP0a/XsRimeRqlAHJrDh4i2Q==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+
+"@gamepark/rules-api@~5.24.0":
   version "5.24.0"
   resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-5.24.0.tgz#2f7426b2ac5ea50d1a49bd4f7191a15d73f05536"
   integrity sha512-h/7EKEmMO+cTqfWx9yOREKCeIaINVfU1F1JuVbN1CQTGj3DKMghTeHvlWvcgdg1fQZkWdap/aieq2plNqpAACQ==
@@ -9161,11 +9171,6 @@ lodash.merge@^4.6.2:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-lodash.shuffle@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/lodash.shuffle/-/lodash.shuffle-4.2.0.tgz#145b5053cf875f6f5c2a33f48b6e9948c6ec7b4b"
-  integrity sha512-V/rTAABKLFjoecTZjKSv+A1ZomG8hZg8hlgeG6wwQVD9AGv+10zqqSf6mFq2tVA703Zd5R0YhSuSlXA+E/Ei+Q==
-
 lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
@@ -9961,11 +9966,6 @@ nwsapi@^2.2.0:
   version "2.2.23"
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.23.tgz#59712c3a88e6de2bb0b6ccc1070397267019cf6c"
   integrity sha512-7wfH4sLbt4M0gCDzGE6vzQBo0bfTKjU7Sfpqy/7gs1qBfYz2vEJH6vXcBKpO3+6Yu1telwd0t9HpyOoLEQQbIQ==
-
-o9n@^2.1.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/o9n/-/o9n-2.1.1.tgz#ef172b692405f748e2d55ec94b12cadbb94db0de"
-  integrity sha512-R6NCwtdFWAOXE5JE/FUF4ZX4akpXdOrGH7K3cDf5tbNtpY1x9r7Lo+n7rwcr+8e5B67dN0aVw3Yu+CCpo5lZFw==
 
 oauth-sign@~0.9.0:
   version "0.9.0"
