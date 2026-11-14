@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/its-a-wonderful-world-app",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "description": "React application",
   "author": "Romain Fromi <romain@game-park.com> (https://game-park.com/)",
@@ -11,7 +11,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@gamepark/api-types": "^1.0.3",
-    "@gamepark/its-a-wonderful-world": "^1.7.0",
+    "@gamepark/its-a-wonderful-world": "^1.7.1",
     "@gamepark/react-client": "~5.28.0",
     "@gamepark/react-components": "~5.25.0",
     "@gamepark/rules-api": "^5.26.0",
