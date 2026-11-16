@@ -444,7 +444,7 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": "npm:^7.3.1"
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
-    "@gamepark/react-game": "npm:~7.10.3"
+    "@gamepark/react-game": "npm:~7.10.4"
     "@gamepark/rules-api": "npm:~7.10.0"
     "@types/node": "npm:^26.6.6"
     "@types/react": "npm:^19.3.0"
@@ -478,9 +478,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gamepark/react-client@npm:^7.10.2":
-  version: 7.10.2
-  resolution: "@gamepark/react-client@npm:7.10.2"
+"@gamepark/react-client@npm:^7.10.3":
+  version: 7.10.3
+  resolution: "@gamepark/react-client@npm:7.10.3"
   dependencies:
     "@gamepark/api-types": "npm:^1.0.3"
     "@reduxjs/toolkit": "npm:^2.14.0"
@@ -498,18 +498,18 @@ __metadata:
     es-toolkit: ^1.44.0
     react: ^19.2.4
     react-redux: ^9.2.0
-  checksum: 10c0/28244a611ecc8f777009adaa0e6c54832ff07c3a8042646329c0544a2a6cd442835e9db445ef6f4c71d1f52fd7c218ebce093a22cdf7596b147c8d9b2f98e0d9
+  checksum: 10c0/86feeb2c7adca682b845ecaffa832ad23e68ae2554329a7f7fb74d55f44312a38e5ba1e0998f7692beba6603fdceb239c555ceba373982d8f9c4f9eb9e85e4e1
   languageName: node
   linkType: hard
 
-"@gamepark/react-game@npm:~7.10.3":
-  version: 7.10.3
-  resolution: "@gamepark/react-game@npm:7.10.3"
+"@gamepark/react-game@npm:~7.10.4":
+  version: 7.10.4
+  resolution: "@gamepark/react-game@npm:7.10.4"
   dependencies:
     "@datadog/browser-logs": "npm:^7.17.1"
     "@dnd-kit/modifiers": "npm:^9.0.0"
     "@gamepark/avataaars": "npm:^3.0.0"
-    "@gamepark/react-client": "npm:^7.10.2"
+    "@gamepark/react-client": "npm:^7.10.3"
     "@trpc/client": "npm:^11.28.0"
     "@trpc/server": "npm:^11.28.0"
     dayjs: "npm:^1.11.23"
@@ -538,7 +538,7 @@ __metadata:
     react-i18next: 18.x
     react-redux: 9.x
     typescript: ">=5.7.2"
-  checksum: 10c0/bb866dbcd8fc4f45961cf1b4eb6ebfd146f9989d5293d93832da1920ebaf73dd9013e8f600ce39ac2b407a79eeac4aa387bd51e18d757b9c59e46bdb09ee2f0d
+  checksum: 10c0/072c40e2dbd824480f87d00458c67dfbd21723eeb16cc36076e3cd72f334766f482120113c7c2682276a97c91f18f6f0e8f1f045d36ce2a0f4ecdfd9e5156d29
   languageName: node
   linkType: hard
 
